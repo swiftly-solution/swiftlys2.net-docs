@@ -47,10 +47,6 @@ jobs:
       - name: Install docfx
         run: dotnet tool install -g docfx
 
-      - name: Restore swiftlys2
-        working-directory: swiftlys2-src
-        run: dotnet restore
-
       - name: Resolve docfx metadata output directory
         id: docfx-dest
         working-directory: swiftlys2-src
