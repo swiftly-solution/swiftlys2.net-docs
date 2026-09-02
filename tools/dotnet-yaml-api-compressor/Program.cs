@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using DotnetYamlApiCompressor;
 
 if (args.Length != 3)
@@ -17,15 +17,15 @@ if (!Directory.Exists(inputDir))
     return 1;
 }
 
-var (items, references) = YamlDocumentLoader.LoadDirectory(inputDir);
+var pages = YamlDocumentLoader.LoadDirectory(inputDir);
 
-if (items.Count == 0)
+if (!pages.Any(p => p.ContainsKey("uid") && p.ContainsKey("type")))
 {
-    Console.Error.WriteLine($"Input directory exists but contains no usable docfx metadata items (checked for *.yml files other than toc.yml): {inputDir}");
+    Console.Error.WriteLine($"Input directory exists but contains no usable docfx metadata items (checked for *.yml/*.yaml files other than toc.yml): {inputDir}");
     return 1;
 }
 
-var root = ApiTreeBuilder.Build(items, references, branchLabel);
+var root = ApiTreeBuilder.Build(pages, branchLabel);
 
 var outputDir = Path.GetDirectoryName(Path.GetFullPath(outputFile));
 if (!string.IsNullOrEmpty(outputDir))

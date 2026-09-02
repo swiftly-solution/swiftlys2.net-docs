@@ -9,50 +9,91 @@ public static class YamlDocumentLoader
         .WithAttemptingUnquotedStringTypeDeserialization()
         .Build();
 
-    public static (List<JsonObject> Items, List<JsonObject> References) LoadDirectory(string inputDir)
+    public static List<JsonObject> LoadDirectory(string inputDir)
     {
-        var items = new List<JsonObject>();
-        var references = new List<JsonObject>();
+        var pages = new List<JsonObject>();
 
         if (!Directory.Exists(inputDir))
         {
-            return (items, references);
+            return pages;
         }
 
-        var files = Directory.GetFiles(inputDir, "*.yml", SearchOption.TopDirectoryOnly)
-            .Where(f => !string.Equals(Path.GetFileName(f), "toc.yml", StringComparison.OrdinalIgnoreCase))
+        var files = Directory.EnumerateFiles(inputDir, "*.*", SearchOption.TopDirectoryOnly)
+            .Where(f => f.EndsWith(".yml", StringComparison.OrdinalIgnoreCase) || f.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
+            .Where(f => !string.Equals(Path.GetFileNameWithoutExtension(f), "toc", StringComparison.OrdinalIgnoreCase))
             .OrderBy(f => f, StringComparer.Ordinal);
 
         foreach (var file in files)
         {
             var raw = Deserializer.Deserialize<object>(File.ReadAllText(file));
-            if (JsonNodeConverter.ToJsonNode(raw) is not JsonObject root)
+            if (JsonNodeConverter.ToJsonNode(raw) is not JsonObject page)
             {
                 continue;
             }
 
-            DrainArrayInto(root, "items", items);
-            DrainArrayInto(root, "references", references);
+            Annotate(page);
+            pages.Add(page);
         }
 
-        return (items, references);
+        return pages;
     }
 
-    private static void DrainArrayInto(JsonObject root, string propertyName, List<JsonObject> target)
+    private static void Annotate(JsonObject page)
     {
-        if (root[propertyName] is not JsonArray array)
+        var title = page["title"]?.GetValue<string>();
+        if (title is null || page["body"] is not JsonArray body)
         {
             return;
         }
 
-        while (array.Count > 0)
+        page["type"] = title.Split(' ', 2)[0];
+
+        var uid = FindPageUid(body);
+        if (uid is not null)
         {
-            var node = array[0];
-            array.RemoveAt(0);
-            if (node is JsonObject obj)
+            page["uid"] = uid;
+        }
+
+        var namespaceUid = FindNamespaceFact(body);
+        if (namespaceUid is not null)
+        {
+            page["parent"] = namespaceUid;
+        }
+
+        page["body"] = ApiPageParser.Parse(body);
+    }
+
+    private static string? FindPageUid(JsonArray body)
+    {
+        if (body.Count == 0 || body[0] is not JsonObject header || header["metadata"] is not JsonObject metadata)
+        {
+            return null;
+        }
+
+        return metadata["uid"]?.GetValue<string>();
+    }
+
+    private static string? FindNamespaceFact(JsonArray body)
+    {
+        foreach (var block in body)
+        {
+            if (block is not JsonObject obj || obj["facts"] is not JsonArray facts)
             {
-                target.Add(obj);
+                continue;
+            }
+
+            foreach (var fact in facts)
+            {
+                if (fact is JsonObject factObj
+                    && factObj["name"]?.GetValue<string>() == "Namespace"
+                    && factObj["value"] is JsonObject value
+                    && value["text"]?.GetValue<string>() is string namespaceUid)
+                {
+                    return namespaceUid;
+                }
             }
         }
+
+        return null;
     }
 }

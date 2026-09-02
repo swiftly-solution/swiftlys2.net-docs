@@ -1,0 +1,136 @@
+### YamlMime:ApiPage
+title: Interface ICommandContext
+body:
+- api1: Interface ICommandContext
+  id: SwiftlyS2_Shared_Commands_ICommandContext
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L5
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext
+    commentId: T:SwiftlyS2.Shared.Commands.ICommandContext
+- facts:
+  - name: Namespace
+    value:
+      text: SwiftlyS2.Shared.Commands
+      url: SwiftlyS2.Shared.Commands.html
+  - name: Assembly
+    value: SwiftlyS2.CS2.dll
+- code: public interface ICommandContext
+- h2: Properties
+- api3: Args
+  id: SwiftlyS2_Shared_Commands_ICommandContext_Args
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L35
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.Args
+    commentId: P:SwiftlyS2.Shared.Commands.ICommandContext.Args
+- markdown: Gets the array of arguments passed with the command.
+- code: string[] Args { get; }
+- h4: Property Value
+- parameters:
+  - type:
+    - text: string
+      url: https://learn.microsoft.com/dotnet/api/system.string
+    - '['
+    - ']'
+- api3: CommandName
+  id: SwiftlyS2_Shared_Commands_ICommandContext_CommandName
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L30
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.CommandName
+    commentId: P:SwiftlyS2.Shared.Commands.ICommandContext.CommandName
+- markdown: Gets the command name itself.
+- code: string CommandName { get; }
+- h4: Property Value
+- parameters:
+  - type:
+    - text: string
+      url: https://learn.microsoft.com/dotnet/api/system.string
+- api3: IsSentByPlayer
+  id: SwiftlyS2_Shared_Commands_ICommandContext_IsSentByPlayer
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L10
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.IsSentByPlayer
+    commentId: P:SwiftlyS2.Shared.Commands.ICommandContext.IsSentByPlayer
+- markdown: Gets a value indicating whether the command was sent by a player.
+- code: bool IsSentByPlayer { get; }
+- h4: Property Value
+- parameters:
+  - type:
+    - text: bool
+      url: https://learn.microsoft.com/dotnet/api/system.boolean
+- api3: IsSlient
+  id: SwiftlyS2_Shared_Commands_ICommandContext_IsSlient
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L25
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.IsSlient
+    commentId: P:SwiftlyS2.Shared.Commands.ICommandContext.IsSlient
+- markdown: Gets a value indicating whether the command should be executed silently without broadcasting to other players.
+- code: bool IsSlient { get; }
+- h4: Property Value
+- parameters:
+  - type:
+    - text: bool
+      url: https://learn.microsoft.com/dotnet/api/system.boolean
+- api3: Prefix
+  id: SwiftlyS2_Shared_Commands_ICommandContext_Prefix
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L20
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.Prefix
+    commentId: P:SwiftlyS2.Shared.Commands.ICommandContext.Prefix
+- markdown: Gets the command prefix.
+- code: string Prefix { get; }
+- h4: Property Value
+- parameters:
+  - type:
+    - text: string
+      url: https://learn.microsoft.com/dotnet/api/system.string
+- api3: Sender
+  id: SwiftlyS2_Shared_Commands_ICommandContext_Sender
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L15
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.Sender
+    commentId: P:SwiftlyS2.Shared.Commands.ICommandContext.Sender
+- markdown: Gets the player who sent the command, or null if the command was not sent by a player.
+- code: IPlayer? Sender { get; }
+- h4: Property Value
+- parameters:
+  - type:
+    - text: IPlayer
+      url: SwiftlyS2.Shared.Players.IPlayer.html
+    - '?'
+- h2: Methods
+- api3: Reply(string)
+  id: SwiftlyS2_Shared_Commands_ICommandContext_Reply_System_String_
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L41
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.Reply(System.String)
+    commentId: M:SwiftlyS2.Shared.Commands.ICommandContext.Reply(System.String)
+- markdown: Sends a reply message to the command sender.
+- code: void Reply(string message)
+- h4: Parameters
+- parameters:
+  - name: message
+    type:
+    - text: string
+      url: https://learn.microsoft.com/dotnet/api/system.string
+    description: The message to send as a reply.
+- api3: ReplyAsync(string)
+  id: SwiftlyS2_Shared_Commands_ICommandContext_ReplyAsync_System_String_
+  src: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Commands/ICommandContext.cs#L47
+  metadata:
+    uid: SwiftlyS2.Shared.Commands.ICommandContext.ReplyAsync(System.String)
+    commentId: M:SwiftlyS2.Shared.Commands.ICommandContext.ReplyAsync(System.String)
+- markdown: Sends a reply message to the command sender asynchronously.
+- code: Task ReplyAsync(string message)
+- h4: Parameters
+- parameters:
+  - name: message
+    type:
+    - text: string
+      url: https://learn.microsoft.com/dotnet/api/system.string
+    description: The message to send as a reply.
+- h4: Returns
+- parameters:
+  - type:
+    - text: Task
+      url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+languageId: csharp
