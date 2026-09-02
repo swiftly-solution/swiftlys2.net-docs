@@ -1,0 +1,84 @@
+name: Build API Docs
+
+on:
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: [swiftlys2-updated]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-api-docs
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        include:
+          - label: stable
+            ref: master
+          - label: beta
+            ref: beta
+    steps:
+      - name: Checkout swiftlys2.net-docs
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SWIFTLYCHAN_PAT }}
+
+      - name: Checkout swiftly-solution/swiftlys2 (${{ matrix.ref }})
+        uses: actions/checkout@v4
+        with:
+          repository: swiftly-solution/swiftlys2
+          ref: ${{ matrix.ref }}
+          token: ${{ secrets.SWIFTLYCHAN_PAT }}
+          path: swiftlys2-src
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Install docfx
+        run: dotnet tool install -g docfx
+
+      - name: Restore swiftlys2
+        working-directory: swiftlys2-src
+        run: dotnet restore
+
+      - name: Resolve docfx metadata output directory
+        id: docfx-dest
+        working-directory: swiftlys2-src
+        run: |
+          DEST=$(python3 -c "import json; d=json.load(open('docfx.json')); print(d.get('metadata', [{}])[0].get('dest', 'api'))")
+          echo "dest=$DEST" >> "$GITHUB_OUTPUT"
+
+      - name: Run docfx metadata
+        working-directory: swiftlys2-src
+        run: docfx metadata ./docfx.json
+
+      - name: Compress API metadata to JSON
+        env:
+          DOCFX_DEST: ${{ steps.docfx-dest.outputs.dest }}
+        run: |
+          dotnet run -c Release --project tools/dotnet-yaml-api-compressor -- \
+            "swiftlys2-src/$DOCFX_DEST" \
+            "api/${{ matrix.label }}.json" \
+            "${{ matrix.label }}"
+
+      - name: Commit and push
+        run: |
+          git config --global user.name "swiftlychan"
+          git config --global user.email "swiftlychan@swiftlys2.net"
+          git add api/${{ matrix.label }}.json
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "docs(api): update ${{ matrix.label }} API reference"
+            git push
+          fi
