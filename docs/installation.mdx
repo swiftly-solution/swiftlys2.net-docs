@@ -1,0 +1,64 @@
+---
+title: Installation
+---
+
+This guide will walk you through installing **SwiftlyS2** on your **Counter-Strike 2 server**.
+
+## Prerequisites
+
+- [Latest Swiftly Release](https://github.com/swiftly-solution/swiftlys2/releases)
+
+<Callout type="note">
+  SwiftlyS2 does not need **MetaMod:Source** to run.
+</Callout>
+
+## Installing SwiftlyS2
+
+1. Download the latest release for your operating system.
+
+<Box class="grid grid-cols-2">
+    <Download version="latest-runtimes-stable" os="windows" />
+    <Download version="latest-runtimes-stable" os="linux" />
+    <Download version="latest-runtimes-beta" os="windows" />
+    <Download version="latest-runtimes-beta" os="linux" />
+    <Download version="latest-stable" os="windows" />
+    <Download version="latest-stable" os="linux" />
+    <Download version="latest-beta" os="windows" />
+    <Download version="latest-beta" os="linux" />
+</Box>
+
+2. Extract the archive. In it you'll find an `addons/` directory. Copy the directory into your server's `game/csgo`.
+
+<Callout type="warning">
+    If this is your first time installing SwiftlyS2, make sure to download the release with the Runtimes.
+</Callout>
+
+The **Loader** is the simplest and the only way to run SwiftlyS2.
+
+## Make SwiftlyS2 Load
+
+1. Locate your `gameinfo.gi` file inside `game/csgo` and open it.
+2. Find the line:  
+   ```
+   Game_LowViolence csgo_lv
+   ```
+   and add the following line **below** it:
+   ```
+   Game csgo/addons/swiftlys2
+   ```
+3. Save the file and restart your server.
+4. Run the command `sw` in your server console to verify the installation.
+
+<Callout type="warning">
+If you also have MetaMod:Source installed, add it after it's entry inside `gameinfo.gi`. See below for the example.
+</Callout>
+
+```
+    ...
+    Game csgo/addons/metamod
+    Game csgo/addons/swiftlys2
+    ...
+```
+
+**You’re done!** 
+SwiftlyS2 is now installed and ready to enhance your server!
