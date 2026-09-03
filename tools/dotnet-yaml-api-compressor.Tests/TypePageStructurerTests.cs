@@ -188,7 +188,39 @@ public class TypePageStructurerTests
         Assert.Equal(
             "Fires an event to all players. Thread unsafe, use async variant instead for non-main thread context.",
             S(method["summary"]));
-        Assert.Equal("[ThreadUnsafe] void Fire<T>() where T : IGameEvent<T>", S(method["declaration"]));
+        Assert.Equal("[ThreadUnsafe]\nvoid Fire<T>() where T : IGameEvent<T>", S(method["declaration"]));
+    }
+
+    [Fact]
+    public void KeepsRealLineBreaksInMultiLineDeclarationsAndDropsOnlyEmptyLines()
+    {
+        var body = ParseBody("""
+            title: Struct FriendsGroupID_t
+            body:
+            - api1: Struct FriendsGroupID_t
+              metadata:
+                uid: SwiftlyS2.Shared.SteamAPI.FriendsGroupID_t
+            - facts:
+              - name: Namespace
+                value:
+                  text: SwiftlyS2.Shared.SteamAPI
+            - h2: Methods
+            - api3: CompareTo(FriendsGroupID_t)
+              metadata:
+                uid: SwiftlyS2.Shared.SteamAPI.FriendsGroupID_t.CompareTo(SwiftlyS2.Shared.SteamAPI.FriendsGroupID_t)
+            - code: |-
+                [Obsolete]
+
+                public int CompareTo(
+                    FriendsGroupID_t other)
+            """);
+
+        var result = TypePageStructurer.Structure(body);
+        var method = M(L(result["methods"])[0]);
+
+        Assert.Equal(
+            "[Obsolete]\npublic int CompareTo(\n    FriendsGroupID_t other)",
+            S(method["declaration"]));
     }
 
     [Fact]

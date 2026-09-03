@@ -18,6 +18,27 @@ public static class TypePageStructurer
         return RepeatedSpaces.Replace(collapsed, " ").Trim();
     }
 
+    private static object NormalizeDeclaration(object value)
+    {
+        if (value is not string text)
+        {
+            return value;
+        }
+
+        var kept = new List<string>();
+        foreach (var raw in text.Replace('\t', ' ').Split('\n'))
+        {
+            var line = raw.TrimEnd('\r', ' ');
+            if (line.Length == 0)
+            {
+                continue;
+            }
+            kept.Add(line);
+        }
+
+        return string.Join('\n', kept).Trim();
+    }
+
     public static Dictionary<object, object> Structure(List<object> body)
     {
         var result = new Dictionary<object, object>();
@@ -89,11 +110,11 @@ public static class TypePageStructurer
             {
                 if (currentMember is not null)
                 {
-                    currentMember["declaration"] = NormalizeText(codeValue);
+                    currentMember["declaration"] = NormalizeDeclaration(codeValue);
                 }
                 else
                 {
-                    result["declaration"] = NormalizeText(codeValue);
+                    result["declaration"] = NormalizeDeclaration(codeValue);
                 }
                 continue;
             }
