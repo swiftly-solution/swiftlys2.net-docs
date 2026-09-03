@@ -2193,7 +2193,10 @@ categories:
     uid: SwiftlyS2.Shared.Commands.ClientChatHookHandler
     parent: SwiftlyS2.Shared.Commands
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Commands/Attributes/ClientChatHookHandlerAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class ClientChatHookHandler : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class ClientChatHookHandler : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -2209,7 +2212,10 @@ categories:
     uid: SwiftlyS2.Shared.Commands.ClientCommandHookHandler
     parent: SwiftlyS2.Shared.Commands
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Commands/Attributes/ClientCommandHookHandlerAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class ClientCommandHookHandler : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class ClientCommandHookHandler : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -2225,7 +2231,10 @@ categories:
     uid: SwiftlyS2.Shared.Commands.Command
     parent: SwiftlyS2.Shared.Commands
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Commands/Attributes/CommandAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class Command : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class Command : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -2307,7 +2316,10 @@ categories:
     uid: SwiftlyS2.Shared.Commands.CommandAlias
     parent: SwiftlyS2.Shared.Commands
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Commands/Attributes/CommandAliasAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)] public class CommandAlias : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+
+      public class CommandAlias : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -2852,7 +2864,10 @@ categories:
     uid: SwiftlyS2.Shared.Convars.ConvarFlags
     parent: SwiftlyS2.Shared.Convars
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Convars/ConvarFlags.cs#L3
-    declaration: '[Flags] public enum ConvarFlags : ulong'
+    declaration: >-
+      [Flags]
+
+      public enum ConvarFlags : ulong
   - name: IConVar`1
     type: Interface
     uid: SwiftlyS2.Shared.Convars.IConVar`1
@@ -4959,7 +4974,10 @@ categories:
     uid: SwiftlyS2.Shared.EntitySystem.EntityInputHandlerAttribute`1
     parent: SwiftlyS2.Shared.EntitySystem
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/EntityInputHandlerAttribute.cs#L12
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class EntityInputHandlerAttribute<T> : EntityInputHandlerAttribute where T : class, ISchemaClass<T>'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class EntityInputHandlerAttribute<T> : EntityInputHandlerAttribute where T : class, ISchemaClass<T>
     typeParameters:
     - name: T
     inherits:
@@ -4985,7 +5003,10 @@ categories:
     uid: SwiftlyS2.Shared.EntitySystem.EntityInputHandlerAttribute
     parent: SwiftlyS2.Shared.EntitySystem
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/EntityInputHandlerAttribute.cs#L5
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class EntityInputHandlerAttribute : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class EntityInputHandlerAttribute : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -5025,7 +5046,10 @@ categories:
     uid: SwiftlyS2.Shared.EntitySystem.EntityOutputHandlerAttribute`1
     parent: SwiftlyS2.Shared.EntitySystem
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/EntityOutputHandlerAttribute.cs#L12
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class EntityOutputHandlerAttribute<T> : EntityOutputHandlerAttribute where T : class, ISchemaClass<T>'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class EntityOutputHandlerAttribute<T> : EntityOutputHandlerAttribute where T : class, ISchemaClass<T>
     typeParameters:
     - name: T
     inherits:
@@ -5051,7 +5075,10 @@ categories:
     uid: SwiftlyS2.Shared.EntitySystem.EntityOutputHandlerAttribute
     parent: SwiftlyS2.Shared.EntitySystem
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/EntityOutputHandlerAttribute.cs#L5
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class EntityOutputHandlerAttribute : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class EntityOutputHandlerAttribute : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -5711,21 +5738,30 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L133
     summary: Called when an entity ends touching another entity.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.EndTouch instead.")] public delegate void EventDelegates.OnEntityEndTouch(IOnEntityEndTouchEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.EndTouch instead.")]
+
+      public delegate void EventDelegates.OnEntityEndTouch(IOnEntityEndTouchEvent @event)
   - name: EventDelegates.OnEntityFireOutputHookEvent
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityFireOutputHookEvent
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L190
     summary: Called when an entity fires output.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.FireOutput instead.")] public delegate void EventDelegates.OnEntityFireOutputHookEvent(IOnEntityFireOutputHookEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.FireOutput instead.")]
+
+      public delegate void EventDelegates.OnEntityFireOutputHookEvent(IOnEntityFireOutputHookEvent @event)
   - name: EventDelegates.OnEntityIdentityAcceptInputHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityIdentityAcceptInputHook
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L184
     summary: Called when an entity identity accept input hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.AcceptInput instead.")] public delegate void EventDelegates.OnEntityIdentityAcceptInputHook(IOnEntityIdentityAcceptInputHookEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.AcceptInput instead.")]
+
+      public delegate void EventDelegates.OnEntityIdentityAcceptInputHook(IOnEntityIdentityAcceptInputHookEvent @event)
   - name: EventDelegates.OnEntityParentChanged
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityParentChanged
@@ -5746,28 +5782,40 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L121
     summary: Called when an entity starts touching another entity.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.StartTouch instead.")] public delegate void EventDelegates.OnEntityStartTouch(IOnEntityStartTouchEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.StartTouch instead.")]
+
+      public delegate void EventDelegates.OnEntityStartTouch(IOnEntityStartTouchEvent @event)
   - name: EventDelegates.OnEntityTakeDamage
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityTakeDamage
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L110
     summary: Called when an entity takes damage.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.TakeDamage instead.")] public delegate void EventDelegates.OnEntityTakeDamage(IOnEntityTakeDamageEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.TakeDamage instead.")]
+
+      public delegate void EventDelegates.OnEntityTakeDamage(IOnEntityTakeDamageEvent @event)
   - name: EventDelegates.OnEntityTouch
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityTouch
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L127
     summary: Called when an entity is touching another entity.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.Touch instead.")] public delegate void EventDelegates.OnEntityTouch(IOnEntityTouchEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.Touch instead.")]
+
+      public delegate void EventDelegates.OnEntityTouch(IOnEntityTouchEvent @event)
   - name: EventDelegates.OnItemServicesCanAcquireHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnItemServicesCanAcquireHook
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L139
     summary: Called when an item services can acquire hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Items.CanAcquire instead.")] public delegate void EventDelegates.OnItemServicesCanAcquireHook(IOnItemServicesCanAcquireHookEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Items.CanAcquire instead.")]
+
+      public delegate void EventDelegates.OnItemServicesCanAcquireHook(IOnItemServicesCanAcquireHookEvent @event)
   - name: EventDelegates.OnMapLoad
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMapLoad
@@ -5788,14 +5836,20 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L172
     summary: Called when the movement services run command hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Movement.RunCommand instead.")] public delegate void EventDelegates.OnMovementServicesRunCommandHook(IOnMovementServicesRunCommandHookEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Movement.RunCommand instead.")]
+
+      public delegate void EventDelegates.OnMovementServicesRunCommandHook(IOnMovementServicesRunCommandHookEvent @event)
   - name: EventDelegates.OnPlayerPawnPostThink
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnPlayerPawnPostThink
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L178
     summary: Called when the player pawn post think hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Pawn.PostThink instead.")] public delegate void EventDelegates.OnPlayerPawnPostThink(IOnPlayerPawnPostThinkHookEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Pawn.PostThink instead.")]
+
+      public delegate void EventDelegates.OnPlayerPawnPostThink(IOnPlayerPawnPostThinkHookEvent @event)
   - name: EventDelegates.OnPrecacheResource
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnPrecacheResource
@@ -5830,14 +5884,20 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L145
     summary: Called when a weapon services can use hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.CanUse instead.")] public delegate void EventDelegates.OnWeaponServicesCanUseHook(IOnWeaponServicesCanUseHookEvent @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.CanUse instead.")]
+
+      public delegate void EventDelegates.OnWeaponServicesCanUseHook(IOnWeaponServicesCanUseHookEvent @event)
   - name: EventDelegates.OnWeaponServicesDropWeaponHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnWeaponServicesDropWeaponHook
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L151
     summary: Called when a weapon services drop weapon hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.DropWeapon instead.")] public delegate void EventDelegates.OnWeaponServicesDropWeaponHook(IOnWeaponServicesDropWeaponHook @event)'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.DropWeapon instead.")]
+
+      public delegate void EventDelegates.OnWeaponServicesDropWeaponHook(IOnWeaponServicesDropWeaponHook @event)
   - name: EventDelegates.OnWorldUpdate
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnWorldUpdate
@@ -5860,7 +5920,10 @@ categories:
     uid: SwiftlyS2.Shared.Events.EventListener`1
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventHandlerAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class EventListener<T> : Attribute where T : Delegate'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class EventListener<T> : Attribute where T : Delegate
     typeParameters:
     - name: T
     inherits:
@@ -5878,7 +5941,10 @@ categories:
     uid: SwiftlyS2.Shared.Events.GameButtonFlags
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Misc/GameKeyKind.cs#L3
-    declaration: '[Flags] public enum GameButtonFlags : ulong'
+    declaration: >-
+      [Flags]
+
+      public enum GameButtonFlags : ulong
   - name: GameButtons
     type: Enum
     uid: SwiftlyS2.Shared.Events.GameButtons
@@ -5981,7 +6047,10 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientProcessUsercmdsEvent.cs#L9
     summary: Called when a client processes user commands. This callback is a hot path, be careful with it and don't do anything expensive.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")] public interface IOnClientProcessUsercmdsEvent'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")]
+
+      public interface IOnClientProcessUsercmdsEvent
     properties:
     - name: Margin
       uid: SwiftlyS2.Shared.Events.IOnClientProcessUsercmdsEvent.Margin
@@ -6561,7 +6630,10 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnEntityTakeDamageEvent.cs#L11
     summary: Called when an entity takes damage.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.TakeDamage instead.")] public interface IOnEntityTakeDamageEvent'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.TakeDamage instead.")]
+
+      public interface IOnEntityTakeDamageEvent
     properties:
     - name: DamageResult
       uid: SwiftlyS2.Shared.Events.IOnEntityTakeDamageEvent.DamageResult
@@ -6630,7 +6702,10 @@ categories:
     uid: SwiftlyS2.Shared.Events.IOnItemServicesCanAcquireHookEvent
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnItemServicesCanAcquireHookEvent.cs#L6
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")] public interface IOnItemServicesCanAcquireHookEvent'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")]
+
+      public interface IOnItemServicesCanAcquireHookEvent
     properties:
     - name: AcquireMethod
       uid: SwiftlyS2.Shared.Events.IOnItemServicesCanAcquireHookEvent.AcquireMethod
@@ -6729,7 +6804,10 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnMovementServicesRunCommandHookEvent.cs#L9
     summary: Called when the movement services run command hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")] public interface IOnMovementServicesRunCommandHookEvent'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")]
+
+      public interface IOnMovementServicesRunCommandHookEvent
     properties:
     - name: ButtonState
       uid: SwiftlyS2.Shared.Events.IOnMovementServicesRunCommandHookEvent.ButtonState
@@ -6764,7 +6842,10 @@ categories:
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnPlayerPawnPostThinkHookEvent.cs#L8
     summary: Called when the player pawn post think hook is triggered.
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")] public interface IOnPlayerPawnPostThinkHookEvent'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")]
+
+      public interface IOnPlayerPawnPostThinkHookEvent
     properties:
     - name: PlayerPawn
       uid: SwiftlyS2.Shared.Events.IOnPlayerPawnPostThinkHookEvent.PlayerPawn
@@ -6798,7 +6879,10 @@ categories:
     uid: SwiftlyS2.Shared.Events.IOnWeaponServicesCanUseHookEvent
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnWeaponServicesCanUseHookEvent.cs#L5
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")] public interface IOnWeaponServicesCanUseHookEvent'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")]
+
+      public interface IOnWeaponServicesCanUseHookEvent
     properties:
     - name: OriginalResult
       uid: SwiftlyS2.Shared.Events.IOnWeaponServicesCanUseHookEvent.OriginalResult
@@ -6843,7 +6927,10 @@ categories:
     uid: SwiftlyS2.Shared.Events.IOnWeaponServicesDropWeaponHook
     parent: SwiftlyS2.Shared.Events
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnWeaponServicesDropWeaponHook.cs#L6
-    declaration: '[Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")] public interface IOnWeaponServicesDropWeaponHook'
+    declaration: >-
+      [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks instead.")]
+
+      public interface IOnWeaponServicesDropWeaponHook
     properties:
     - name: Result
       uid: SwiftlyS2.Shared.Events.IOnWeaponServicesDropWeaponHook.Result
@@ -7207,7 +7294,10 @@ categories:
     uid: SwiftlyS2.Shared.GameEvents.GameEventHandler
     parent: SwiftlyS2.Shared.GameEvents
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameEvents/GameEventHandlerAttribute.cs#L5
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class GameEventHandler : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class GameEventHandler : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -7681,7 +7771,10 @@ categories:
       uid: SwiftlyS2.Shared.GameEvents.IGameEventService.Fire``1
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameEvents/IGameEventService.cs#L59
       summary: Fires an event to all players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void Fire<T>() where T : IGameEvent<T>'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void Fire<T>() where T : IGameEvent<T>
       typeParameters:
       - name: T
         description: The event type.
@@ -7689,7 +7782,10 @@ categories:
       uid: SwiftlyS2.Shared.GameEvents.IGameEventService.Fire``1(System.Action{``0})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameEvents/IGameEventService.cs#L69
       summary: Fires an event to all players with a configured event. Thread unsafe, use async variant instead for non-main thread context. <param name="configureEvent">The action to configure the event.</param>
-      declaration: '[ThreadUnsafe] void Fire<T>(Action<T> configureEvent) where T : IGameEvent<T>'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void Fire<T>(Action<T> configureEvent) where T : IGameEvent<T>
       parameters:
       - name: configureEvent
         type:
@@ -7737,7 +7833,10 @@ categories:
       uid: SwiftlyS2.Shared.GameEvents.IGameEventService.FireToPlayer``1(System.Int32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameEvents/IGameEventService.cs#L91
       summary: Fires an event to a player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void FireToPlayer<T>(int slot) where T : IGameEvent<T>'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void FireToPlayer<T>(int slot) where T : IGameEvent<T>
       parameters:
       - name: slot
         type:
@@ -7751,7 +7850,10 @@ categories:
       uid: SwiftlyS2.Shared.GameEvents.IGameEventService.FireToPlayer``1(System.Int32,System.Action{``0})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameEvents/IGameEventService.cs#L102
       summary: Fires an event to a player with a configured event. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void FireToPlayer<T>(int slot, Action<T> configureEvent) where T : IGameEvent<T>'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void FireToPlayer<T>(int slot, Action<T> configureEvent) where T : IGameEvent<T>
       parameters:
       - name: slot
         type:
@@ -7817,7 +7919,10 @@ categories:
       uid: SwiftlyS2.Shared.GameEvents.IGameEventService.FireToServer``1
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameEvents/IGameEventService.cs#L126
       summary: Fires an event to the server. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void FireToServer<T>() where T : IGameEvent<T>'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void FireToServer<T>() where T : IGameEvent<T>
       typeParameters:
       - name: T
         description: ''
@@ -7825,7 +7930,10 @@ categories:
       uid: SwiftlyS2.Shared.GameEvents.IGameEventService.FireToServer``1(System.Action{``0})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameEvents/IGameEventService.cs#L136
       summary: Fires an event to the server with a configured event. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void FireToServer<T>(Action<T> configureEvent) where T : IGameEvent<T>'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void FireToServer<T>(Action<T> configureEvent) where T : IGameEvent<T>
       parameters:
       - name: configureEvent
         type:
@@ -20123,7 +20231,10 @@ categories:
     uid: SwiftlyS2.Shared.GameHooks.GameHookHandler
     parent: SwiftlyS2.Shared.GameHooks
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/GameHooks/GameHookHandlerAttribute.cs#L5
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class GameHookHandler : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class GameHookHandler : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -37845,7 +37956,10 @@ categories:
     uid: SwiftlyS2.Shared.Menus.KeyBind
     parent: SwiftlyS2.Shared.Menus
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Menus/KeyBind.cs#L3
-    declaration: '[Flags] public enum KeyBind : uint'
+    declaration: >-
+      [Flags]
+
+      public enum KeyBind : uint
   - name: MenuConfiguration
     type: Class
     uid: SwiftlyS2.Shared.Menus.MenuConfiguration
@@ -38709,7 +38823,10 @@ categories:
     uid: SwiftlyS2.Shared.Misc.ThreadUnsafeAttribute
     parent: SwiftlyS2.Shared.Misc
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Misc/ThreadUnsafeAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class ThreadUnsafeAttribute : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class ThreadUnsafeAttribute : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -41926,7 +42043,10 @@ categories:
     - name: HitGroupId
       uid: SwiftlyS2.Shared.Natives.CTakeDamageInfo.HitGroupId
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Natives/Structs/CTakeDamageInfo.cs#L50
-      declaration: '[Obsolete("This field somehow holds garbage value in game. Use ActualHitGroup instead.")] public HitGroup_t HitGroupId'
+      declaration: >-
+        [Obsolete("This field somehow holds garbage value in game. Use ActualHitGroup instead.")]
+
+        public HitGroup_t HitGroupId
       valueType:
       - text: HitGroup_t
         url: SwiftlyS2.Shared.SchemaDefinitions.HitGroup_t.html
@@ -44702,7 +44822,10 @@ categories:
     uid: SwiftlyS2.Shared.Natives.CVFlags
     parent: SwiftlyS2.Shared.Natives
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Natives/Structs/CVariant.cs#L100
-    declaration: '[Flags] public enum CVFlags : ushort'
+    declaration: >-
+      [Flags]
+
+      public enum CVFlags : ushort
   - name: CVariant`1
     type: Struct
     uid: SwiftlyS2.Shared.Natives.CVariant`1
@@ -48092,7 +48215,10 @@ categories:
     uid: SwiftlyS2.Shared.Natives.MaskTrace
     parent: SwiftlyS2.Shared.Natives
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Natives/Structs/RnQueryShapeAttr_t.cs#L146
-    declaration: '[Flags] public enum MaskTrace : ulong'
+    declaration: >-
+      [Flags]
+
+      public enum MaskTrace : ulong
   - name: MeshTrace
     type: Struct
     uid: SwiftlyS2.Shared.Natives.MeshTrace
@@ -49474,7 +49600,10 @@ categories:
     uid: SwiftlyS2.Shared.Natives.ResourceBindingFlags_t
     parent: SwiftlyS2.Shared.Natives
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Natives/Structs/ResourceHandle.cs#L5
-    declaration: '[Flags] public enum ResourceBindingFlags_t : ushort'
+    declaration: >-
+      [Flags]
+
+      public enum ResourceBindingFlags_t : ushort
   - name: ResourceHandle
     type: Struct
     uid: SwiftlyS2.Shared.Natives.ResourceHandle
@@ -49647,7 +49776,10 @@ categories:
     uid: SwiftlyS2.Shared.Natives.RnQueryObjectSet
     parent: SwiftlyS2.Shared.Natives
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Natives/Structs/RnQueryShapeAttr_t.cs#L192
-    declaration: '[Flags] public enum RnQueryObjectSet : byte'
+    declaration: >-
+      [Flags]
+
+      public enum RnQueryObjectSet : byte
   - name: RnQueryShapeAttr_t
     type: Struct
     uid: SwiftlyS2.Shared.Natives.RnQueryShapeAttr_t
@@ -52279,7 +52411,10 @@ categories:
     uid: SwiftlyS2.Shared.NetMessages.ClientNetMessageHandler
     parent: SwiftlyS2.Shared.NetMessages
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/NetMessages/NetMessageHandlerAttribute.cs#L20
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class ClientNetMessageHandler : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class ClientNetMessageHandler : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -53775,7 +53910,10 @@ categories:
     uid: SwiftlyS2.Shared.NetMessages.ServerNetMessageHandler
     parent: SwiftlyS2.Shared.NetMessages
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/NetMessages/NetMessageHandlerAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class ServerNetMessageHandler : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class ServerNetMessageHandler : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -53791,7 +53929,10 @@ categories:
     uid: SwiftlyS2.Shared.NetMessages.ServerNetMessageInternalHandler
     parent: SwiftlyS2.Shared.NetMessages
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/NetMessages/NetMessageHandlerAttribute.cs#L11
-    declaration: '[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)] public class ServerNetMessageInternalHandler : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+
+      public class ServerNetMessageInternalHandler : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -53848,7 +53989,10 @@ categories:
       uid: SwiftlyS2.Shared.Permissions.IPermissionManager.ClearPermission(System.UInt64)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Permissions/IPermissionManager.cs#L59
       summary: Clears all permissions from a player (both base and temporary).
-      declaration: '[Obsolete("Use ClearPermissions instead.")] void ClearPermission(ulong steamId)'
+      declaration: >-
+        [Obsolete("Use ClearPermissions instead.")]
+
+        void ClearPermission(ulong steamId)
       parameters:
       - name: steamId
         type:
@@ -54185,7 +54329,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.ChangeTeam(SwiftlyS2.Shared.Players.Team)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L464
       summary: Changes the player's team. This will also kill the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void ChangeTeam(Team team)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void ChangeTeam(Team team)
       parameters:
       - name: team
         type:
@@ -54218,7 +54365,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.ExecuteCommand(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L484
       summary: Executes a command on behalf of the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void ExecuteCommand(string command)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void ExecuteCommand(string command)
       parameters:
       - name: command
         type:
@@ -54290,7 +54440,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.Kick(System.String,SwiftlyS2.Shared.ProtobufDefinitions.ENetworkDisconnectionReason)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L313
       summary: Disconnects the user from the network session, providing a specified reason and disconnection type. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void Kick(string reason, ENetworkDisconnectionReason gameReason)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void Kick(string reason, ENetworkDisconnectionReason gameReason)
       parameters:
       - name: reason
         type:
@@ -54337,7 +54490,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendAlert(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L171
       summary: Sends an alert message to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendAlert(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendAlert(string message)
       parameters:
       - name: message
         type:
@@ -54363,7 +54519,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendCenter(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L156
       summary: Sends a center message to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendCenter(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendCenter(string message)
       parameters:
       - name: message
         type:
@@ -54389,7 +54548,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendCenterHTML(System.String,System.Int32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L187
       summary: Sends a center HTML message to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendCenterHTML(string message, int duration = 5000)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendCenterHTML(string message, int duration = 5000)
       parameters:
       - name: message
         type:
@@ -54427,7 +54589,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendChat(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L141
       summary: Sends a chat message to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendChat(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendChat(string message)
       parameters:
       - name: message
         type:
@@ -54453,7 +54618,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendChatEOT(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L203
       summary: Sends an end-of-text chat message to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendChatEOT(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendChatEOT(string message)
       parameters:
       - name: message
         type:
@@ -54479,7 +54647,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendConsole(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L126
       summary: Sends a console message to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendConsole(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendConsole(string message)
       parameters:
       - name: message
         type:
@@ -54505,7 +54676,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendMessage(SwiftlyS2.Shared.Players.MessageType,System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L76
       summary: Sends a message of the specified type to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendMessage(MessageType kind, string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendMessage(MessageType kind, string message)
       parameters:
       - name: kind
         type:
@@ -54522,7 +54696,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendMessage(SwiftlyS2.Shared.Players.MessageType,System.String,System.Int32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L87
       summary: Sends a message of the specified type to the player with a custom HTML duration. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendMessage(MessageType kind, string message, int htmlDuration = 5000)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendMessage(MessageType kind, string message, int htmlDuration = 5000)
       parameters:
       - name: kind
         type:
@@ -54593,7 +54770,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SendNotify(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L111
       summary: Sends a notify message to the player. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendNotify(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendNotify(string message)
       parameters:
       - name: message
         type:
@@ -54654,7 +54834,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.SwitchTeam(SwiftlyS2.Shared.Players.Team)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L448
       summary: Switches the player's team. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SwitchTeam(Team team)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SwitchTeam(Team team)
       parameters:
       - name: team
         type:
@@ -54682,7 +54865,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.TakeDamage(SwiftlyS2.Shared.Natives.CTakeDamageInfo)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L370
       summary: Applies damage to the entity based on the specified damage information. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void TakeDamage(CTakeDamageInfo damageInfo)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void TakeDamage(CTakeDamageInfo damageInfo)
       parameters:
       - name: damageInfo
         type:
@@ -54696,7 +54882,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.TakeDamage(System.Single,SwiftlyS2.Shared.SchemaDefinitions.DamageTypes_t,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L390
       summary: Applies damage to the entity based on the specified damage information. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void TakeDamage(float damage, DamageTypes_t damageType, CBaseEntity? inflictor = null, CBaseEntity? attacker = null, CBaseEntity? ability = null)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void TakeDamage(float damage, DamageTypes_t damageType, CBaseEntity? inflictor = null, CBaseEntity? attacker = null, CBaseEntity? ability = null)
       parameters:
       - name: damage
         type:
@@ -54800,7 +54989,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.Teleport(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.Vector)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L411
       summary: Teleports the entity to the specified position, orientation, and velocity. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void Teleport(Vector pos, QAngle angle, Vector velocity)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void Teleport(Vector pos, QAngle angle, Vector velocity)
       parameters:
       - name: pos
         type:
@@ -54824,7 +55016,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayer.Teleport(System.Nullable{SwiftlyS2.Shared.Natives.Vector},System.Nullable{SwiftlyS2.Shared.Natives.QAngle},System.Nullable{SwiftlyS2.Shared.Natives.Vector})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L422
       summary: Teleports the entity to the specified position, orientation, and velocity. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void Teleport(Vector? pos = null, QAngle? angle = null, Vector? velocity = null)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void Teleport(Vector? pos = null, QAngle? angle = null, Vector? velocity = null)
       parameters:
       - name: pos
         type:
@@ -55288,7 +55483,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendAlert(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L172
       summary: Sends an alert message to the players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendAlert(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendAlert(string message)
       parameters:
       - name: message
         type:
@@ -55314,7 +55512,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendCenter(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L157
       summary: Sends a center message to the players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendCenter(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendCenter(string message)
       parameters:
       - name: message
         type:
@@ -55340,7 +55541,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendCenterHTML(System.String,System.Int32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L188
       summary: Sends a center HTML message to the players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendCenterHTML(string message, int duration = 5000)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendCenterHTML(string message, int duration = 5000)
       parameters:
       - name: message
         type:
@@ -55378,7 +55582,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendChat(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L142
       summary: Sends a chat message to the players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendChat(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendChat(string message)
       parameters:
       - name: message
         type:
@@ -55404,7 +55611,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendChatEOT(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L204
       summary: Sends an end-of-text chat message to the players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendChatEOT(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendChatEOT(string message)
       parameters:
       - name: message
         type:
@@ -55430,7 +55640,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendConsole(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L127
       summary: Sends a console message to the players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendConsole(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendConsole(string message)
       parameters:
       - name: message
         type:
@@ -55456,7 +55669,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendMessage(SwiftlyS2.Shared.Players.MessageType,System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L37
       summary: Broadcasts a message to players using different display methods based on the message type. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendMessage(MessageType kind, string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendMessage(MessageType kind, string message)
       parameters:
       - name: kind
         type:
@@ -55473,7 +55689,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendMessage(SwiftlyS2.Shared.Players.MessageType,System.String,System.Int32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L48
       summary: Sends a message of the specified type to the players with a custom HTML duration. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendMessage(MessageType kind, string message, int htmlDuration = 5000)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendMessage(MessageType kind, string message, int htmlDuration = 5000)
       parameters:
       - name: kind
         type:
@@ -55496,7 +55715,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendMessage(SwiftlyS2.Shared.Players.MessageType,System.Func{SwiftlyS2.Shared.Players.IPlayer,SwiftlyS2.Shared.Translation.ILocalizer,System.String})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L58
       summary: Broadcasts a message to players using different display methods based on the message type. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendMessage(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendMessage(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback)
       parameters:
       - name: kind
         type:
@@ -55527,7 +55749,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendMessage(SwiftlyS2.Shared.Players.MessageType,System.Func{SwiftlyS2.Shared.Players.IPlayer,SwiftlyS2.Shared.Translation.ILocalizer,System.String},System.Int32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L69
       summary: Sends a message of the specified type to the players with a custom HTML duration. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendMessage(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback, int htmlDuration = 5000)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendMessage(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback, int htmlDuration = 5000)
       parameters:
       - name: kind
         type:
@@ -55688,7 +55913,10 @@ categories:
       uid: SwiftlyS2.Shared.Players.IPlayerManagerService.SendNotify(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayerManager.cs#L112
       summary: Sends a notify message to the players. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] void SendNotify(string message)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        void SendNotify(string message)
       parameters:
       - name: message
         type:
@@ -55741,7 +55969,10 @@ categories:
     uid: SwiftlyS2.Shared.Players.TargetSearchMode
     parent: SwiftlyS2.Shared.Players
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/TargetSearchMode.cs#L3
-    declaration: '[Flags] public enum TargetSearchMode'
+    declaration: >-
+      [Flags]
+
+      public enum TargetSearchMode
   - name: Team
     type: Enum
     uid: SwiftlyS2.Shared.Players.Team
@@ -55753,7 +55984,10 @@ categories:
     uid: SwiftlyS2.Shared.Players.VoiceFlagValue
     parent: SwiftlyS2.Shared.Players
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L11
-    declaration: '[Flags] public enum VoiceFlagValue : uint'
+    declaration: >-
+      [Flags]
+
+      public enum VoiceFlagValue : uint
 - category: Plugins
   namespace: SwiftlyS2.Shared.Plugins
   types:
@@ -56280,7 +56514,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextTick(System.Func{System.Threading.Tasks.Task})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L17
       summary: Never use this! you should never calls async callback in next tick, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] void NextTick(Func<Task?> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        void NextTick(Func<Task?> task)
       parameters:
       - name: task
         type:
@@ -56300,7 +56537,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextTick``1(System.Func{System.Threading.Tasks.Task{``0}})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L25
       summary: Never use this! you should never calls async callback in next tick, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] void NextTick<T>(Func<Task<T?>> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        void NextTick<T>(Func<Task<T?>> task)
       parameters:
       - name: task
         type:
@@ -56340,7 +56580,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextTickAsync(System.Func{System.Threading.Tasks.Task})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L39
       summary: Never use this! you should never calls async callback in next tick, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] void NextTickAsync(Func<Task?> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        void NextTickAsync(Func<Task?> task)
       parameters:
       - name: task
         type:
@@ -56360,7 +56603,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextTickAsync``1(System.Func{System.Threading.Tasks.Task{``0}})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L47
       summary: Never use this! you should never calls async callback in next tick, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] void NextTickAsync<T>(Func<Task<T?>> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        void NextTickAsync<T>(Func<Task<T?>> task)
       parameters:
       - name: task
         type:
@@ -56419,7 +56665,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextWorldUpdate(System.Func{System.Threading.Tasks.Task})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L67
       summary: Never use this! you should never calls async callback in next world update, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] void NextWorldUpdate(Func<Task?> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        void NextWorldUpdate(Func<Task?> task)
       parameters:
       - name: task
         type:
@@ -56439,7 +56688,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextWorldUpdate``1(System.Func{System.Threading.Tasks.Task{``0}})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L75
       summary: Never use this! you should never calls async callback in next world update, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] void NextWorldUpdate<T>(Func<Task<T?>> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        void NextWorldUpdate<T>(Func<Task<T?>> task)
       parameters:
       - name: task
         type:
@@ -56479,7 +56731,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextWorldUpdateAsync(System.Func{System.Threading.Tasks.Task})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L89
       summary: Never use this! you should never calls async callback in next world update, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] void NextWorldUpdateAsync(Func<Task?> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        void NextWorldUpdateAsync(Func<Task?> task)
       parameters:
       - name: task
         type:
@@ -56499,7 +56754,10 @@ categories:
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.NextWorldUpdateAsync``1(System.Func{System.Threading.Tasks.Task{``0}})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L97
       summary: Never use this! you should never calls async callback in next world update, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
-      declaration: '[Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")] Task<T> NextWorldUpdateAsync<T>(Func<Task<T?>> task)'
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        Task<T> NextWorldUpdateAsync<T>(Func<Task<T?>> task)
       parameters:
       - name: task
         type:
@@ -57211,7 +57469,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.IEngineService.ExecuteCommandWithBuffer(System.String,System.Action{System.String})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L47
       summary: Executes the specified command string in the current context.
-      declaration: '[Obsolete("This method is planned to be removed.")] void ExecuteCommandWithBuffer(string command, Action<string> bufferCallback)'
+      declaration: >-
+        [Obsolete("This method is planned to be removed.")]
+
+        void ExecuteCommandWithBuffer(string command, Action<string> bufferCallback)
       parameters:
       - name: command
         type:
@@ -57231,7 +57492,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.IEngineService.ExecuteCommandWithBufferAsync(System.String,System.Action{System.String})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L55
       summary: Executes the specified command string in the current context with a buffer callback asynchronously.
-      declaration: '[Obsolete("This method is planned to be removed.")] Task ExecuteCommandWithBufferAsync(string command, Action<string> bufferCallback)'
+      declaration: >-
+        [Obsolete("This method is planned to be removed.")]
+
+        Task ExecuteCommandWithBufferAsync(string command, Action<string> bufferCallback)
       parameters:
       - name: command
         type:
@@ -57522,7 +57786,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.IGameService.EmitDecoy(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.SchemaDefinitions.CBasePlayerPawn)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Game/IGameService.cs#L214
       summary: Creates a decoy grenade projectile. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] CDecoyProjectile EmitDecoy(Vector pos, QAngle angle, Vector velocity, CBasePlayerPawn? owner)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        CDecoyProjectile EmitDecoy(Vector pos, QAngle angle, Vector velocity, CBasePlayerPawn? owner)
       parameters:
       - name: pos
         type:
@@ -57600,7 +57867,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.IGameService.EmitFlashbang(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.SchemaDefinitions.CBasePlayerPawn)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Game/IGameService.cs#L137
       summary: Creates a flashbang grenade projectile. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] CFlashbangProjectile EmitFlashbang(Vector pos, QAngle angle, Vector velocity, CBasePlayerPawn? owner)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        CFlashbangProjectile EmitFlashbang(Vector pos, QAngle angle, Vector velocity, CBasePlayerPawn? owner)
       parameters:
       - name: pos
         type:
@@ -57678,7 +57948,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.IGameService.EmitHEGrenade(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.SchemaDefinitions.CBasePlayerPawn)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Game/IGameService.cs#L114
       summary: Creates a HE grenade projectile. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] CHEGrenadeProjectile EmitHEGrenade(Vector pos, QAngle angle, Vector velocity, CBasePlayerPawn? owner)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        CHEGrenadeProjectile EmitHEGrenade(Vector pos, QAngle angle, Vector velocity, CBasePlayerPawn? owner)
       parameters:
       - name: pos
         type:
@@ -57756,7 +58029,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.IGameService.EmitMolotov(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Players.Team,SwiftlyS2.Shared.SchemaDefinitions.CBasePlayerPawn)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Game/IGameService.cs#L188
       summary: Creates a molotov grenade projectile. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] CMolotovProjectile EmitMolotov(Vector pos, QAngle angle, Vector velocity, Team team, CBasePlayerPawn? owner)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        CMolotovProjectile EmitMolotov(Vector pos, QAngle angle, Vector velocity, Team team, CBasePlayerPawn? owner)
       parameters:
       - name: pos
         type:
@@ -57846,7 +58122,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.IGameService.EmitSmokeGrenade(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Players.Team,SwiftlyS2.Shared.SchemaDefinitions.CBasePlayerPawn)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Game/IGameService.cs#L161
       summary: Creates a smoke grenade projectile. Thread unsafe, use async variant instead for non-main thread context.
-      declaration: '[ThreadUnsafe] CSmokeGrenadeProjectile EmitSmokeGrenade(Vector pos, QAngle angle, Vector velocity, Team team, CBasePlayerPawn? owner)'
+      declaration: >-
+        [ThreadUnsafe]
+
+        CSmokeGrenadeProjectile EmitSmokeGrenade(Vector pos, QAngle angle, Vector velocity, Team team, CBasePlayerPawn? owner)
       parameters:
       - name: pos
         type:
@@ -58184,7 +58463,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.ITraceManager.SimpleTrace(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.RayType_t,SwiftlyS2.Shared.Natives.RnQueryObjectSet,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.CollisionGroup,SwiftlyS2.Shared.Natives.CGameTrace@,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L85
       summary: Performs a simple trace shape operation from the specified start point to the end point, using the provided object query and trace mask. The result of the trace is stored in the provided trace object.
-      declaration: '[Obsolete("Use other TraceShape methods instead.")] void SimpleTrace(Vector start, Vector end, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)'
+      declaration: >-
+        [Obsolete("Use other TraceShape methods instead.")]
+
+        void SimpleTrace(Vector start, Vector end, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)
       parameters:
       - name: start
         type:
@@ -58262,7 +58544,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.ITraceManager.SimpleTrace(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.RayType_t,SwiftlyS2.Shared.Natives.RnQueryObjectSet,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.CollisionGroup,SwiftlyS2.Shared.Natives.CGameTrace@,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L104
       summary: Performs a simple trace shape operation from the specified start point in the direction defined by the given angle, using the provided object query and trace mask. The result of the trace is stored in the provided trace object.
-      declaration: '[Obsolete("Use other TraceShape methods instead.")] void SimpleTrace(Vector start, QAngle angle, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)'
+      declaration: >-
+        [Obsolete("Use other TraceShape methods instead.")]
+
+        void SimpleTrace(Vector start, QAngle angle, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)
       parameters:
       - name: start
         type:
@@ -58340,7 +58625,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.ITraceManager.TracePlayerBBox(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.BBox_t,SwiftlyS2.Shared.Natives.CTraceFilter,SwiftlyS2.Shared.Natives.CGameTrace@)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L21
       summary: Performs a collision trace of a player-sized bounding box from the specified start position to the end position, using the given filter and bounding box dimensions. The result of the trace is stored in the provided trace object.
-      declaration: '[Obsolete("Use TracePlayerBBox method with TraceParams instead.")] void TracePlayerBBox(Vector start, Vector end, BBox_t bounds, CTraceFilter filter, ref CGameTrace trace)'
+      declaration: >-
+        [Obsolete("Use TracePlayerBBox method with TraceParams instead.")]
+
+        void TracePlayerBBox(Vector start, Vector end, BBox_t bounds, CTraceFilter filter, ref CGameTrace trace)
       parameters:
       - name: start
         type:
@@ -58411,7 +58699,10 @@ categories:
       uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShape(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Ray_t,SwiftlyS2.Shared.Natives.CTraceFilter,SwiftlyS2.Shared.Natives.CGameTrace@)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L66
       summary: Performs a trace operation from the specified start point to the end point using the given ray and filter, and populates the trace result with collision information.
-      declaration: '[Obsolete("Use TraceShapeLine method with TraceParams instead.")] void TraceShape(Vector start, Vector end, Ray_t ray, CTraceFilter filter, ref CGameTrace trace)'
+      declaration: >-
+        [Obsolete("Use TraceShapeLine method with TraceParams instead.")]
+
+        void TraceShape(Vector start, Vector end, Ray_t ray, CTraceFilter filter, ref CGameTrace trace)
       parameters:
       - name: start
         type:
@@ -58635,7 +58926,10 @@ categories:
       uid: SwiftlyS2.Shared.Sounds.SoundEvent.Emit
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/Modules/Sounds/SoundEvent.cs#L144
       summary: Emit the sound event. Thread unsafe, use async variant instead for non-main thread context. <returns>The emitted sound event guid.</returns>
-      declaration: '[ThreadUnsafe] public uint Emit()'
+      declaration: >-
+        [ThreadUnsafe]
+
+        public uint Emit()
       returns:
         type:
         - text: uint
@@ -58825,7 +59119,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.AccountID_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTypes/AccountID_t.cs#L5
-    declaration: '[Serializable] public struct AccountID_t : IEquatable<AccountID_t>, IComparable<AccountID_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct AccountID_t : IEquatable<AccountID_t>, IComparable<AccountID_t>
     implements:
     - text: IEquatable<AccountID_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -59084,7 +59381,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.AppId_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTypes/AppId_t.cs#L5
-    declaration: '[Serializable] public struct AppId_t : IEquatable<AppId_t>, IComparable<AppId_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct AppId_t : IEquatable<AppId_t>, IComparable<AppId_t>
     implements:
     - text: IEquatable<AppId_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -59453,7 +59753,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.CGameID
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamClientPublic/CGameID.cs#L6
-    declaration: '[Serializable] public struct CGameID : IEquatable<CGameID>, IComparable<CGameID>'
+    declaration: >-
+      [Serializable]
+
+      public struct CGameID : IEquatable<CGameID>, IComparable<CGameID>
     implements:
     - text: IEquatable<CGameID>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -59729,7 +60032,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.CSteamID
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamClientPublic/CSteamID.cs#L155
-    declaration: '[Serializable] public struct CSteamID : IEquatable<CSteamID>, IComparable<CSteamID>'
+    declaration: >-
+      [Serializable]
+
+      public struct CSteamID : IEquatable<CSteamID>, IComparable<CSteamID>
     implements:
     - text: IEquatable<CSteamID>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -61890,7 +62196,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.DepotId_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTypes/DepotId_t.cs#L5
-    declaration: '[Serializable] public struct DepotId_t : IEquatable<DepotId_t>, IComparable<DepotId_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct DepotId_t : IEquatable<DepotId_t>, IComparable<DepotId_t>
     implements:
     - text: IEquatable<DepotId_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -62264,7 +62573,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EChatMemberStateChange
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L815
-    declaration: '[Flags] public enum EChatMemberStateChange'
+    declaration: >-
+      [Flags]
+
+      public enum EChatMemberStateChange
   - name: EChatRoomEnterResponse
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.EChatRoomEnterResponse
@@ -62276,7 +62588,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EChatSteamIDInstanceFlags
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L1768
-    declaration: '[Flags] public enum EChatSteamIDInstanceFlags'
+    declaration: >-
+      [Flags]
+
+      public enum EChatSteamIDInstanceFlags
   - name: ECheckFileSignature
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.ECheckFileSignature
@@ -62300,7 +62615,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EControllerHapticLocation
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L693
-    declaration: '[Flags] public enum EControllerHapticLocation'
+    declaration: >-
+      [Flags]
+
+      public enum EControllerHapticLocation
   - name: EControllerHapticType
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.EControllerHapticType
@@ -62348,7 +62666,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EFriendFlags
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L42
-    declaration: '[Flags] public enum EFriendFlags'
+    declaration: >-
+      [Flags]
+
+      public enum EFriendFlags
   - name: EFriendRelationship
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.EFriendRelationship
@@ -62384,7 +62705,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EHTMLKeyModifiers
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L190
-    declaration: '[Flags] public enum EHTMLKeyModifiers'
+    declaration: >-
+      [Flags]
+
+      public enum EHTMLKeyModifiers
   - name: EHTMLMouseButton
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.EHTMLMouseButton
@@ -62432,7 +62756,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EItemState
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L1340
-    declaration: '[Flags] public enum EItemState'
+    declaration: >-
+      [Flags]
+
+      public enum EItemState
   - name: EItemStatistic
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.EItemStatistic
@@ -62492,7 +62819,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EMarketNotAllowedReasonFlags
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L1824
-    declaration: '[Flags] public enum EMarketNotAllowedReasonFlags'
+    declaration: >-
+      [Flags]
+
+      public enum EMarketNotAllowedReasonFlags
   - name: EMatchMakingServerResponse
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.EMatchMakingServerResponse
@@ -62534,7 +62864,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.EPersonaChange
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L108
-    declaration: '[Flags] public enum EPersonaChange'
+    declaration: >-
+      [Flags]
+
+      public enum EPersonaChange
   - name: EPersonaState
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.EPersonaState
@@ -62594,7 +62927,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.ERemoteStoragePlatform
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L1120
-    declaration: '[Flags] public enum ERemoteStoragePlatform'
+    declaration: >-
+      [Flags]
+
+      public enum ERemoteStoragePlatform
   - name: ERemoteStoragePublishedFileVisibility
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.ERemoteStoragePublishedFileVisibility
@@ -62708,7 +63044,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.ESteamItemFlags
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/SteamEnums.cs#L769
-    declaration: '[Flags] public enum ESteamItemFlags'
+    declaration: >-
+      [Flags]
+
+      public enum ESteamItemFlags
   - name: ESteamNetConnectionEnd
     type: Enum
     uid: SwiftlyS2.Shared.SteamAPI.ESteamNetConnectionEnd
@@ -63374,7 +63713,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.FriendsGroupID_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamFriends/FriendsGroupID_t.cs#L5
-    declaration: '[Serializable] public struct FriendsGroupID_t : IEquatable<FriendsGroupID_t>, IComparable<FriendsGroupID_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct FriendsGroupID_t : IEquatable<FriendsGroupID_t>, IComparable<FriendsGroupID_t>
     implements:
     - text: IEquatable<FriendsGroupID_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -64735,7 +65077,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HAuthTicket
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamClientPublic/HAuthTicket.cs#L5
-    declaration: '[Serializable] public struct HAuthTicket : IEquatable<HAuthTicket>, IComparable<HAuthTicket>'
+    declaration: >-
+      [Serializable]
+
+      public struct HAuthTicket : IEquatable<HAuthTicket>, IComparable<HAuthTicket>
     implements:
     - text: IEquatable<HAuthTicket>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -64912,7 +65257,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HHTMLBrowser
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamHTMLSurface/HHTMLBrowser.cs#L5
-    declaration: '[Serializable] public struct HHTMLBrowser : IEquatable<HHTMLBrowser>, IComparable<HHTMLBrowser>'
+    declaration: >-
+      [Serializable]
+
+      public struct HHTMLBrowser : IEquatable<HHTMLBrowser>, IComparable<HHTMLBrowser>
     implements:
     - text: IEquatable<HHTMLBrowser>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -65089,7 +65437,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HServerListRequest
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamMatchmaking/HServerListRequest.cs#L5
-    declaration: '[Serializable] public struct HServerListRequest : IEquatable<HServerListRequest>'
+    declaration: >-
+      [Serializable]
+
+      public struct HServerListRequest : IEquatable<HServerListRequest>
     implements:
     - text: IEquatable<HServerListRequest>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -65244,7 +65595,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HServerQuery
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamMatchmaking/HServerQuery.cs#L5
-    declaration: '[Serializable] public struct HServerQuery : IEquatable<HServerQuery>, IComparable<HServerQuery>'
+    declaration: >-
+      [Serializable]
+
+      public struct HServerQuery : IEquatable<HServerQuery>, IComparable<HServerQuery>
     implements:
     - text: IEquatable<HServerQuery>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -65421,7 +65775,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HSteamListenSocket
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/HSteamListenSocket.cs#L5
-    declaration: '[Serializable] public struct HSteamListenSocket : IEquatable<HSteamListenSocket>, IComparable<HSteamListenSocket>'
+    declaration: >-
+      [Serializable]
+
+      public struct HSteamListenSocket : IEquatable<HSteamListenSocket>, IComparable<HSteamListenSocket>
     implements:
     - text: IEquatable<HSteamListenSocket>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -65598,7 +65955,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HSteamNetConnection
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/HSteamNetConnection.cs#L5
-    declaration: '[Serializable] public struct HSteamNetConnection : IEquatable<HSteamNetConnection>, IComparable<HSteamNetConnection>'
+    declaration: >-
+      [Serializable]
+
+      public struct HSteamNetConnection : IEquatable<HSteamNetConnection>, IComparable<HSteamNetConnection>
     implements:
     - text: IEquatable<HSteamNetConnection>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -65775,7 +66135,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HSteamNetPollGroup
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/HSteamNetPollGroup.cs#L5
-    declaration: '[Serializable] public struct HSteamNetPollGroup : IEquatable<HSteamNetPollGroup>, IComparable<HSteamNetPollGroup>'
+    declaration: >-
+      [Serializable]
+
+      public struct HSteamNetPollGroup : IEquatable<HSteamNetPollGroup>, IComparable<HSteamNetPollGroup>
     implements:
     - text: IEquatable<HSteamNetPollGroup>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -65952,7 +66315,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HSteamPipe
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/Steam_api_common/HSteamPipe.cs#L5
-    declaration: '[Serializable] public struct HSteamPipe : IEquatable<HSteamPipe>, IComparable<HSteamPipe>'
+    declaration: >-
+      [Serializable]
+
+      public struct HSteamPipe : IEquatable<HSteamPipe>, IComparable<HSteamPipe>
     implements:
     - text: IEquatable<HSteamPipe>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -66121,7 +66487,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HSteamUser
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/Steam_api_common/HSteamUser.cs#L5
-    declaration: '[Serializable] public struct HSteamUser : IEquatable<HSteamUser>, IComparable<HSteamUser>'
+    declaration: >-
+      [Serializable]
+
+      public struct HSteamUser : IEquatable<HSteamUser>, IComparable<HSteamUser>
     implements:
     - text: IEquatable<HSteamUser>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -67204,7 +67573,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HTTPCookieContainerHandle
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamHTTP/HTTPCookieContainerHandle.cs#L5
-    declaration: '[Serializable] public struct HTTPCookieContainerHandle : IEquatable<HTTPCookieContainerHandle>, IComparable<HTTPCookieContainerHandle>'
+    declaration: >-
+      [Serializable]
+
+      public struct HTTPCookieContainerHandle : IEquatable<HTTPCookieContainerHandle>, IComparable<HTTPCookieContainerHandle>
     implements:
     - text: IEquatable<HTTPCookieContainerHandle>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -67475,7 +67847,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.HTTPRequestHandle
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamHTTP/HTTPRequestHandle.cs#L5
-    declaration: '[Serializable] public struct HTTPRequestHandle : IEquatable<HTTPRequestHandle>, IComparable<HTTPRequestHandle>'
+    declaration: >-
+      [Serializable]
+
+      public struct HTTPRequestHandle : IEquatable<HTTPRequestHandle>, IComparable<HTTPRequestHandle>
     implements:
     - text: IEquatable<HTTPRequestHandle>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -68057,7 +68432,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.ISteamNetworkingConnectionSignaling
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingSockets/ISteamNetworkingConnectionSignaling.cs#L12
-    declaration: '[Serializable] public struct ISteamNetworkingConnectionSignaling'
+    declaration: >-
+      [Serializable]
+
+      public struct ISteamNetworkingConnectionSignaling
     methods:
     - name: Release()
       uid: SwiftlyS2.Shared.SteamAPI.ISteamNetworkingConnectionSignaling.Release
@@ -68095,7 +68473,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.ISteamNetworkingSignalingRecvContext
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingSockets/ISteamNetworkingSignalingRecvContext.cs#L8
-    declaration: '[Serializable] public struct ISteamNetworkingSignalingRecvContext'
+    declaration: >-
+      [Serializable]
+
+      public struct ISteamNetworkingSignalingRecvContext
     methods:
     - name: OnConnectRequest(HSteamNetConnection, ref SteamNetworkingIdentity, int)
       uid: SwiftlyS2.Shared.SteamAPI.ISteamNetworkingSignalingRecvContext.OnConnectRequest(SwiftlyS2.Shared.SteamAPI.HSteamNetConnection,SwiftlyS2.Shared.SteamAPI.SteamNetworkingIdentity@,System.Int32)
@@ -68143,7 +68524,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.InputActionSetHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/InputActionSetHandle_t.cs#L5
-    declaration: '[Serializable] public struct InputActionSetHandle_t : IEquatable<InputActionSetHandle_t>, IComparable<InputActionSetHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct InputActionSetHandle_t : IEquatable<InputActionSetHandle_t>, IComparable<InputActionSetHandle_t>
     implements:
     - text: IEquatable<InputActionSetHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -68348,7 +68732,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.InputAnalogActionHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/InputAnalogActionHandle_t.cs#L5
-    declaration: '[Serializable] public struct InputAnalogActionHandle_t : IEquatable<InputAnalogActionHandle_t>, IComparable<InputAnalogActionHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct InputAnalogActionHandle_t : IEquatable<InputAnalogActionHandle_t>, IComparable<InputAnalogActionHandle_t>
     implements:
     - text: IEquatable<InputAnalogActionHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -68538,7 +68925,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.InputDigitalActionHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/InputDigitalActionHandle_t.cs#L5
-    declaration: '[Serializable] public struct InputDigitalActionHandle_t : IEquatable<InputDigitalActionHandle_t>, IComparable<InputDigitalActionHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct InputDigitalActionHandle_t : IEquatable<InputDigitalActionHandle_t>, IComparable<InputDigitalActionHandle_t>
     implements:
     - text: IEquatable<InputDigitalActionHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -68707,7 +69097,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.InputHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/InputHandle_t.cs#L5
-    declaration: '[Serializable] public struct InputHandle_t : IEquatable<InputHandle_t>, IComparable<InputHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct InputHandle_t : IEquatable<InputHandle_t>, IComparable<InputHandle_t>
     implements:
     - text: IEquatable<InputHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -70401,7 +70794,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.PartyBeaconID_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTypes/PartyBeaconID_t.cs#L5
-    declaration: '[Serializable] public struct PartyBeaconID_t : IEquatable<PartyBeaconID_t>, IComparable<PartyBeaconID_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct PartyBeaconID_t : IEquatable<PartyBeaconID_t>, IComparable<PartyBeaconID_t>
     implements:
     - text: IEquatable<PartyBeaconID_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -70627,7 +71023,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.PublishedFileId_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamRemoteStorage/PublishedFileId_t.cs#L5
-    declaration: '[Serializable] public struct PublishedFileId_t : IEquatable<PublishedFileId_t>, IComparable<PublishedFileId_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct PublishedFileId_t : IEquatable<PublishedFileId_t>, IComparable<PublishedFileId_t>
     implements:
     - text: IEquatable<PublishedFileId_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -70804,7 +71203,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.PublishedFileUpdateHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamRemoteStorage/PublishedFileUpdateHandle_t.cs#L5
-    declaration: '[Serializable] public struct PublishedFileUpdateHandle_t : IEquatable<PublishedFileUpdateHandle_t>, IComparable<PublishedFileUpdateHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct PublishedFileUpdateHandle_t : IEquatable<PublishedFileUpdateHandle_t>, IComparable<PublishedFileUpdateHandle_t>
     implements:
     - text: IEquatable<PublishedFileUpdateHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -70981,7 +71383,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.RTime32
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTypes/RTime32.cs#L5
-    declaration: '[Serializable] public struct RTime32 : IEquatable<RTime32>, IComparable<RTime32>'
+    declaration: >-
+      [Serializable]
+
+      public struct RTime32 : IEquatable<RTime32>, IComparable<RTime32>
     implements:
     - text: IEquatable<RTime32>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -71150,7 +71555,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.RemotePlayCursorID_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamRemotePlay/RemotePlayCursorID_t.cs#L5
-    declaration: '[Serializable] public struct RemotePlayCursorID_t : IEquatable<RemotePlayCursorID_t>, IComparable<RemotePlayCursorID_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct RemotePlayCursorID_t : IEquatable<RemotePlayCursorID_t>, IComparable<RemotePlayCursorID_t>
     implements:
     - text: IEquatable<RemotePlayCursorID_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -71466,7 +71874,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.RemotePlaySessionID_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamRemotePlay/RemotePlaySessionID_t.cs#L5
-    declaration: '[Serializable] public struct RemotePlaySessionID_t : IEquatable<RemotePlaySessionID_t>, IComparable<RemotePlaySessionID_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct RemotePlaySessionID_t : IEquatable<RemotePlaySessionID_t>, IComparable<RemotePlaySessionID_t>
     implements:
     - text: IEquatable<RemotePlaySessionID_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -73005,7 +73416,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SNetListenSocket_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworking/SNetListenSocket_t.cs#L5
-    declaration: '[Serializable] public struct SNetListenSocket_t : IEquatable<SNetListenSocket_t>, IComparable<SNetListenSocket_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SNetListenSocket_t : IEquatable<SNetListenSocket_t>, IComparable<SNetListenSocket_t>
     implements:
     - text: IEquatable<SNetListenSocket_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -73174,7 +73588,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SNetSocket_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworking/SNetSocket_t.cs#L5
-    declaration: '[Serializable] public struct SNetSocket_t : IEquatable<SNetSocket_t>, IComparable<SNetSocket_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SNetSocket_t : IEquatable<SNetSocket_t>, IComparable<SNetSocket_t>
     implements:
     - text: IEquatable<SNetSocket_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -73343,7 +73760,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.ScreenshotHandle
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamScreenshots/ScreenshotHandle.cs#L5
-    declaration: '[Serializable] public struct ScreenshotHandle : IEquatable<ScreenshotHandle>, IComparable<ScreenshotHandle>'
+    declaration: >-
+      [Serializable]
+
+      public struct ScreenshotHandle : IEquatable<ScreenshotHandle>, IComparable<ScreenshotHandle>
     implements:
     - text: IEquatable<ScreenshotHandle>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -73891,7 +74311,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamAPICall_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTypes/SteamAPICall_t.cs#L5
-    declaration: '[Serializable] public struct SteamAPICall_t : IEquatable<SteamAPICall_t>, IComparable<SteamAPICall_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamAPICall_t : IEquatable<SteamAPICall_t>, IComparable<SteamAPICall_t>
     implements:
     - text: IEquatable<SteamAPICall_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -74080,7 +74503,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamDatagramHostedAddress
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamDatagramTickets/SteamDatagramHostedAddress.cs#L11
-    declaration: '[Serializable] public struct SteamDatagramHostedAddress'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamDatagramHostedAddress
     fields:
     - name: m_cbSize
       uid: SwiftlyS2.Shared.SteamAPI.SteamDatagramHostedAddress.m_cbSize
@@ -74108,7 +74534,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamDatagramRelayAuthTicket
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamDatagramTickets/SteamDatagramRelayAuthTicket.cs#L11
-    declaration: '[Serializable] public struct SteamDatagramRelayAuthTicket'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamDatagramRelayAuthTicket
     methods:
     - name: Clear()
       uid: SwiftlyS2.Shared.SteamAPI.SteamDatagramRelayAuthTicket.Clear
@@ -81808,7 +82237,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamIPAddress_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTypes/SteamIPAddress_t.cs#L6
-    declaration: '[Serializable] public struct SteamIPAddress_t'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamIPAddress_t
     constructors:
     - name: SteamIPAddress_t(IPAddress)
       uid: SwiftlyS2.Shared.SteamAPI.SteamIPAddress_t.#ctor(System.Net.IPAddress)
@@ -81958,7 +82390,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t.AnalogAction_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/SteamInputActionEvent_t.cs#L21
-    declaration: '[Serializable] public struct SteamInputActionEvent_t.AnalogAction_t'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamInputActionEvent_t.AnalogAction_t
     fields:
     - name: actionHandle
       uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t.AnalogAction_t.actionHandle
@@ -81981,7 +82416,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t.DigitalAction_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/SteamInputActionEvent_t.cs#L30
-    declaration: '[Serializable] public struct SteamInputActionEvent_t.DigitalAction_t'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamInputActionEvent_t.DigitalAction_t
     fields:
     - name: actionHandle
       uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t.DigitalAction_t.actionHandle
@@ -82004,7 +82442,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t.OptionValue
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/SteamInputActionEvent_t.cs#L39
-    declaration: '[Serializable] public struct SteamInputActionEvent_t.OptionValue'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamInputActionEvent_t.OptionValue
     fields:
     - name: analogAction
       uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t.OptionValue.analogAction
@@ -82035,7 +82476,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInput/SteamInputActionEvent_t.cs#L10
-    declaration: '[Serializable] public struct SteamInputActionEvent_t'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamInputActionEvent_t
     fields:
     - name: controllerHandle
       uid: SwiftlyS2.Shared.SteamAPI.SteamInputActionEvent_t.controllerHandle
@@ -82372,7 +82816,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamInventoryResult_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInventory/SteamInventoryResult_t.cs#L5
-    declaration: '[Serializable] public struct SteamInventoryResult_t : IEquatable<SteamInventoryResult_t>, IComparable<SteamInventoryResult_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamInventoryResult_t : IEquatable<SteamInventoryResult_t>, IComparable<SteamInventoryResult_t>
     implements:
     - text: IEquatable<SteamInventoryResult_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -82585,7 +83032,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamInventoryUpdateHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInventory/SteamInventoryUpdateHandle_t.cs#L5
-    declaration: '[Serializable] public struct SteamInventoryUpdateHandle_t : IEquatable<SteamInventoryUpdateHandle_t>, IComparable<SteamInventoryUpdateHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamInventoryUpdateHandle_t : IEquatable<SteamInventoryUpdateHandle_t>, IComparable<SteamInventoryUpdateHandle_t>
     implements:
     - text: IEquatable<SteamInventoryUpdateHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -82762,7 +83212,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamItemDef_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInventory/SteamItemDef_t.cs#L5
-    declaration: '[Serializable] public struct SteamItemDef_t : IEquatable<SteamItemDef_t>, IComparable<SteamItemDef_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamItemDef_t : IEquatable<SteamItemDef_t>, IComparable<SteamItemDef_t>
     implements:
     - text: IEquatable<SteamItemDef_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -82968,7 +83421,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamItemInstanceID_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamInventory/SteamItemInstanceID_t.cs#L5
-    declaration: '[Serializable] public struct SteamItemInstanceID_t : IEquatable<SteamItemInstanceID_t>, IComparable<SteamItemInstanceID_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamItemInstanceID_t : IEquatable<SteamItemInstanceID_t>, IComparable<SteamItemInstanceID_t>
     implements:
     - text: IEquatable<SteamItemInstanceID_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -83145,7 +83601,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamLeaderboardEntries_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamUserStats/SteamLeaderboardEntries_t.cs#L5
-    declaration: '[Serializable] public struct SteamLeaderboardEntries_t : IEquatable<SteamLeaderboardEntries_t>, IComparable<SteamLeaderboardEntries_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamLeaderboardEntries_t : IEquatable<SteamLeaderboardEntries_t>, IComparable<SteamLeaderboardEntries_t>
     implements:
     - text: IEquatable<SteamLeaderboardEntries_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -83314,7 +83773,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamLeaderboard_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamUserStats/SteamLeaderboard_t.cs#L5
-    declaration: '[Serializable] public struct SteamLeaderboard_t : IEquatable<SteamLeaderboard_t>, IComparable<SteamLeaderboard_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamLeaderboard_t : IEquatable<SteamLeaderboard_t>, IComparable<SteamLeaderboard_t>
     implements:
     - text: IEquatable<SteamLeaderboard_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -83877,7 +84339,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingConfigValue_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/SteamNetworkingConfigValue_t.cs#L17
-    declaration: '[Serializable] public struct SteamNetworkingConfigValue_t'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamNetworkingConfigValue_t
     fields:
     - name: m_eDataType
       uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingConfigValue_t.m_eDataType
@@ -83912,7 +84377,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingErrMsg
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/SteamNetworkingErrMsg.cs#L8
-    declaration: '[Serializable] public struct SteamNetworkingErrMsg'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamNetworkingErrMsg
     fields:
     - name: m_SteamNetworkingErrMsg
       uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingErrMsg.m_SteamNetworkingErrMsg
@@ -83974,7 +84442,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingIPAddr
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/SteamNetworkingIPAddr.cs#L9
-    declaration: '[Serializable] public struct SteamNetworkingIPAddr : IEquatable<SteamNetworkingIPAddr>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamNetworkingIPAddr : IEquatable<SteamNetworkingIPAddr>
     implements:
     - text: IEquatable<SteamNetworkingIPAddr>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -84139,7 +84610,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingIdentity
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/SteamNetworkingIdentity.cs#L11
-    declaration: '[Serializable] public struct SteamNetworkingIdentity : IEquatable<SteamNetworkingIdentity>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamNetworkingIdentity : IEquatable<SteamNetworkingIdentity>
     implements:
     - text: IEquatable<SteamNetworkingIdentity>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -84449,7 +84923,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingMessage_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/SteamNetworkingMessage_t.cs#L7
-    declaration: '[Serializable] public struct SteamNetworkingMessage_t'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamNetworkingMessage_t
     fields:
     - name: _pad1__
       uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingMessage_t._pad1__
@@ -84622,7 +85099,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingMicroseconds
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/SteamNetworkingMicroseconds.cs#L5
-    declaration: '[Serializable] public struct SteamNetworkingMicroseconds : IEquatable<SteamNetworkingMicroseconds>, IComparable<SteamNetworkingMicroseconds>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamNetworkingMicroseconds : IEquatable<SteamNetworkingMicroseconds>, IComparable<SteamNetworkingMicroseconds>
     implements:
     - text: IEquatable<SteamNetworkingMicroseconds>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -84791,7 +85271,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.SteamNetworkingPOPID
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamNetworkingtypes/SteamNetworkingPOPID.cs#L5
-    declaration: '[Serializable] public struct SteamNetworkingPOPID : IEquatable<SteamNetworkingPOPID>, IComparable<SteamNetworkingPOPID>'
+    declaration: >-
+      [Serializable]
+
+      public struct SteamNetworkingPOPID : IEquatable<SteamNetworkingPOPID>, IComparable<SteamNetworkingPOPID>
     implements:
     - text: IEquatable<SteamNetworkingPOPID>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -85747,7 +86230,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.TimelineEventHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamTimeline/TimelineEventHandle_t.cs#L5
-    declaration: '[Serializable] public struct TimelineEventHandle_t : IEquatable<TimelineEventHandle_t>, IComparable<TimelineEventHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct TimelineEventHandle_t : IEquatable<TimelineEventHandle_t>, IComparable<TimelineEventHandle_t>
     implements:
     - text: IEquatable<TimelineEventHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -85916,7 +86402,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.UGCFileWriteStreamHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamRemoteStorage/UGCFileWriteStreamHandle_t.cs#L5
-    declaration: '[Serializable] public struct UGCFileWriteStreamHandle_t : IEquatable<UGCFileWriteStreamHandle_t>, IComparable<UGCFileWriteStreamHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct UGCFileWriteStreamHandle_t : IEquatable<UGCFileWriteStreamHandle_t>, IComparable<UGCFileWriteStreamHandle_t>
     implements:
     - text: IEquatable<UGCFileWriteStreamHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -86093,7 +86582,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.UGCHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamRemoteStorage/UGCHandle_t.cs#L5
-    declaration: '[Serializable] public struct UGCHandle_t : IEquatable<UGCHandle_t>, IComparable<UGCHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct UGCHandle_t : IEquatable<UGCHandle_t>, IComparable<UGCHandle_t>
     implements:
     - text: IEquatable<UGCHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -86270,7 +86762,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.UGCQueryHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamUGC/UGCQueryHandle_t.cs#L5
-    declaration: '[Serializable] public struct UGCQueryHandle_t : IEquatable<UGCQueryHandle_t>, IComparable<UGCQueryHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct UGCQueryHandle_t : IEquatable<UGCQueryHandle_t>, IComparable<UGCQueryHandle_t>
     implements:
     - text: IEquatable<UGCQueryHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -86447,7 +86942,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.UGCUpdateHandle_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/SteamUGC/UGCUpdateHandle_t.cs#L5
-    declaration: '[Serializable] public struct UGCUpdateHandle_t : IEquatable<UGCUpdateHandle_t>, IComparable<UGCUpdateHandle_t>'
+    declaration: >-
+      [Serializable]
+
+      public struct UGCUpdateHandle_t : IEquatable<UGCUpdateHandle_t>, IComparable<UGCUpdateHandle_t>
     implements:
     - text: IEquatable<UGCUpdateHandle_t>
       url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
@@ -86997,7 +87495,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.gameserveritem_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/MatchmakingTypes/gameserveritem_t.cs#L11
-    declaration: '[Serializable] public class gameserveritem_t'
+    declaration: >-
+      [Serializable]
+
+      public class gameserveritem_t
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
@@ -87186,7 +87687,10 @@ categories:
     uid: SwiftlyS2.Shared.SteamAPI.servernetadr_t
     parent: SwiftlyS2.Shared.SteamAPI
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Generated/SteamAPI/Types/MatchmakingTypes/servernetadr_t.cs#L8
-    declaration: '[Serializable] public struct servernetadr_t'
+    declaration: >-
+      [Serializable]
+
+      public struct servernetadr_t
     methods:
     - name: CompareTo(servernetadr_t)
       uid: SwiftlyS2.Shared.SteamAPI.servernetadr_t.CompareTo(SwiftlyS2.Shared.SteamAPI.servernetadr_t)
@@ -90585,7 +91089,10 @@ categories:
       uid: SwiftlyS2.Shared.ISwiftlyCore.CSGODirectory
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L190
       summary: Gets the absolute file path to the `game/csgo` directory.
-      declaration: '[Obsolete("Please use GameFilesDirectory.")] string CSGODirectory { get; }'
+      declaration: >-
+        [Obsolete("Please use GameFilesDirectory.")]
+
+        string CSGODirectory { get; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
@@ -91001,7 +91508,10 @@ categories:
     uid: SwiftlyS2.Shared.SwiftlyInject
     parent: SwiftlyS2.Shared
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/main/managed/src/SwiftlyS2.Shared/SwiftlyCoreAttribute.cs#L3
-    declaration: '[AttributeUsage(AttributeTargets.Property|AttributeTargets.Field)] public class SwiftlyInject : Attribute'
+    declaration: >-
+      [AttributeUsage(AttributeTargets.Property|AttributeTargets.Field)]
+
+      public class SwiftlyInject : Attribute
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
