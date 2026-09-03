@@ -1,4 +1,3 @@
-using System.Text.Json.Nodes;
 using YamlDotNet.Serialization;
 
 namespace DotnetYamlApiCompressor;
@@ -9,9 +8,16 @@ public static class YamlDocumentLoader
         .WithAttemptingUnquotedStringTypeDeserialization()
         .Build();
 
-    public static List<JsonObject> LoadDirectory(string inputDir)
+    private static readonly HashSet<string> ExcludedNamespaces = new(StringComparer.Ordinal)
     {
-        var pages = new List<JsonObject>();
+        "SwiftlyS2.Shared.SchemaDefinitions",
+        "SwiftlyS2.Shared.ProtobufDefinitions",
+        "SwiftlyS2.Shared.GameEventDefinitions"
+    };
+
+    public static List<Dictionary<object, object>> LoadDirectory(string inputDir)
+    {
+        var pages = new List<Dictionary<object, object>>();
 
         if (!Directory.Exists(inputDir))
         {
@@ -25,28 +31,42 @@ public static class YamlDocumentLoader
 
         foreach (var file in files)
         {
-            var raw = Deserializer.Deserialize<object>(File.ReadAllText(file));
-            if (JsonNodeConverter.ToJsonNode(raw) is not JsonObject page)
+            if (Deserializer.Deserialize<object>(File.ReadAllText(file)) is not Dictionary<object, object> page)
             {
                 continue;
             }
 
             Annotate(page);
+
+            if (IsExcluded(page))
+            {
+                continue;
+            }
+
             pages.Add(page);
         }
 
         return pages;
     }
 
-    private static void Annotate(JsonObject page)
+    private static bool IsExcluded(Dictionary<object, object> page)
     {
-        var title = page["title"]?.GetValue<string>();
-        if (title is null || page["body"] is not JsonArray body)
+        var uid = page.GetValueOrDefault("uid") as string;
+        var parent = page.GetValueOrDefault("parent") as string;
+
+        return (uid is not null && ExcludedNamespaces.Contains(uid))
+            || (parent is not null && ExcludedNamespaces.Contains(parent));
+    }
+
+    private static void Annotate(Dictionary<object, object> page)
+    {
+        if (page.GetValueOrDefault("title") is not string title || page.GetValueOrDefault("body") is not List<object> body)
         {
             return;
         }
 
-        page["type"] = title.Split(' ', 2)[0];
+        var kind = title.Split(' ', 2)[0];
+        page["type"] = kind;
 
         var uid = FindPageUid(body);
         if (uid is not null)
@@ -54,40 +74,53 @@ public static class YamlDocumentLoader
             page["uid"] = uid;
         }
 
-        var namespaceUid = FindNamespaceFact(body);
-        if (namespaceUid is not null)
+        if (kind != "Namespace")
         {
-            page["parent"] = namespaceUid;
+            var namespaceUid = FindNamespaceFact(body);
+            if (namespaceUid is not null)
+            {
+                page["parent"] = namespaceUid;
+            }
+
+            foreach (var (key, value) in TypePageStructurer.Structure(body))
+            {
+                page[key] = value;
+            }
         }
 
-        page["body"] = ApiPageParser.Parse(body);
+        page.Remove("title");
+        page.Remove("body");
+        page.Remove("languageId");
+        page.Remove("metadata");
     }
 
-    private static string? FindPageUid(JsonArray body)
+    private static string? FindPageUid(List<object> body)
     {
-        if (body.Count == 0 || body[0] is not JsonObject header || header["metadata"] is not JsonObject metadata)
+        if (body.Count == 0
+            || body[0] is not Dictionary<object, object> header
+            || header.GetValueOrDefault("metadata") is not Dictionary<object, object> metadata)
         {
             return null;
         }
 
-        return metadata["uid"]?.GetValue<string>();
+        return metadata.GetValueOrDefault("uid") as string;
     }
 
-    private static string? FindNamespaceFact(JsonArray body)
+    private static string? FindNamespaceFact(List<object> body)
     {
         foreach (var block in body)
         {
-            if (block is not JsonObject obj || obj["facts"] is not JsonArray facts)
+            if (block is not Dictionary<object, object> obj || obj.GetValueOrDefault("facts") is not List<object> facts)
             {
                 continue;
             }
 
             foreach (var fact in facts)
             {
-                if (fact is JsonObject factObj
-                    && factObj["name"]?.GetValue<string>() == "Namespace"
-                    && factObj["value"] is JsonObject value
-                    && value["text"]?.GetValue<string>() is string namespaceUid)
+                if (fact is Dictionary<object, object> factObj
+                    && factObj.GetValueOrDefault("name") as string == "Namespace"
+                    && factObj.GetValueOrDefault("value") is Dictionary<object, object> value
+                    && value.GetValueOrDefault("text") is string namespaceUid)
                 {
                     return namespaceUid;
                 }

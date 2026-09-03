@@ -1,4 +1,3 @@
-using System.Text.Json;
 using DotnetYamlApiCompressor;
 
 namespace DotnetYamlApiCompressorTests;
@@ -30,8 +29,8 @@ public class YamlDocumentLoaderTests
         var pages = YamlDocumentLoader.LoadDirectory(dir);
 
         Assert.Single(pages);
-        Assert.Equal("Namespace", pages[0]["type"]!.GetValue<string>());
-        Assert.Equal("My.Ns", pages[0]["uid"]!.GetValue<string>());
+        Assert.Equal("Namespace", pages[0]["type"]);
+        Assert.Equal("My.Ns", pages[0]["uid"]);
         Assert.False(pages[0].ContainsKey("parent"));
 
         Directory.Delete(dir, recursive: true);
@@ -61,9 +60,9 @@ public class YamlDocumentLoaderTests
         var pages = YamlDocumentLoader.LoadDirectory(dir);
 
         Assert.Single(pages);
-        Assert.Equal("Class", pages[0]["type"]!.GetValue<string>());
-        Assert.Equal("My.Ns.Widget", pages[0]["uid"]!.GetValue<string>());
-        Assert.Equal("My.Ns", pages[0]["parent"]!.GetValue<string>());
+        Assert.Equal("Class", pages[0]["type"]);
+        Assert.Equal("My.Ns.Widget", pages[0]["uid"]);
+        Assert.Equal("My.Ns", pages[0]["parent"]);
 
         Directory.Delete(dir, recursive: true);
     }
@@ -94,7 +93,7 @@ public class YamlDocumentLoaderTests
 
         var pages = YamlDocumentLoader.LoadDirectory(dir);
 
-        Assert.Equal("My.Ns", pages[0]["parent"]!.GetValue<string>());
+        Assert.Equal("My.Ns", pages[0]["parent"]);
 
         Directory.Delete(dir, recursive: true);
     }
@@ -123,7 +122,7 @@ public class YamlDocumentLoaderTests
 
         var pages = YamlDocumentLoader.LoadDirectory(dir);
 
-        Assert.Equal("My.Ns.IThing`1", pages[0]["uid"]!.GetValue<string>());
+        Assert.Equal("My.Ns.IThing`1", pages[0]["uid"]);
 
         Directory.Delete(dir, recursive: true);
     }
@@ -155,8 +154,8 @@ public class YamlDocumentLoaderTests
         var pages = YamlDocumentLoader.LoadDirectory(dir);
 
         Assert.Equal(2, pages.Count);
-        Assert.DoesNotContain(pages, p => p["uid"]?.GetValue<string>() == "should-be-ignored");
-        Assert.Contains(pages, p => p["uid"]?.GetValue<string>() == "My.Ns.Other");
+        Assert.DoesNotContain(pages, p => p.GetValueOrDefault("uid") as string == "should-be-ignored");
+        Assert.Contains(pages, p => p.GetValueOrDefault("uid") as string == "My.Ns.Other");
 
         Directory.Delete(dir, recursive: true);
     }
@@ -174,10 +173,51 @@ public class YamlDocumentLoaderTests
 
         var pages = YamlDocumentLoader.LoadDirectory(dir);
 
-        Assert.Equal(JsonValueKind.True, pages[0]["isEii"]!.AsValue().GetValueKind());
-        Assert.Equal(JsonValueKind.False, pages[0]["isExternal"]!.AsValue().GetValueKind());
-        Assert.Equal(JsonValueKind.Number, pages[0]["startLine"]!.AsValue().GetValueKind());
-        Assert.Equal(42, pages[0]["startLine"]!.GetValue<int>());
+        Assert.IsType<bool>(pages[0]["isEii"]);
+        Assert.Equal(true, pages[0]["isEii"]);
+        Assert.IsType<bool>(pages[0]["isExternal"]);
+        Assert.Equal(false, pages[0]["isExternal"]);
+        Assert.Equal(42L, Convert.ToInt64(pages[0]["startLine"]));
+
+        Directory.Delete(dir, recursive: true);
+    }
+
+    [Theory]
+    [InlineData("SwiftlyS2.Shared.SchemaDefinitions", "C_OP_Widget")]
+    [InlineData("SwiftlyS2.Shared.ProtobufDefinitions", "SomeMessage")]
+    public void ExcludesKnownNoiseNamespacesAndTheirTypesEntirely(string excludedNamespace, string typeName)
+    {
+        var dir = Path.Combine(Path.GetTempPath(), "loader-" + Guid.NewGuid());
+        WriteFixture(dir, $"{excludedNamespace}.yml", $"""
+            title: Namespace {excludedNamespace}
+            body:
+            - api1: Namespace {excludedNamespace}
+              metadata:
+                uid: {excludedNamespace}
+            """);
+        WriteFixture(dir, $"{excludedNamespace}.{typeName}.yml", $"""
+            title: Class {typeName}
+            body:
+            - api1: Class {typeName}
+              metadata:
+                uid: {excludedNamespace}.{typeName}
+            - facts:
+              - name: Namespace
+                value:
+                  text: {excludedNamespace}
+            """);
+        WriteFixture(dir, "My.Ns.yml", """
+            title: Namespace My.Ns
+            body:
+            - api1: Namespace My.Ns
+              metadata:
+                uid: My.Ns
+            """);
+
+        var pages = YamlDocumentLoader.LoadDirectory(dir);
+
+        Assert.Single(pages);
+        Assert.Equal("My.Ns", pages[0]["uid"]);
 
         Directory.Delete(dir, recursive: true);
     }

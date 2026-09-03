@@ -6,6 +6,10 @@ public class RealDocfxFixtureTests
 {
     private static string FixturesDir => Path.Combine(AppContext.BaseDirectory, "Fixtures");
 
+    private static List<object> L(object o) => (List<object>)o;
+
+    private static Dictionary<object, object> M(object o) => (Dictionary<object, object>)o;
+
     [Fact]
     public void LoadsRealNamespaceAndInterfacePagesIntoATree()
     {
@@ -15,21 +19,27 @@ public class RealDocfxFixtureTests
 
         var root = ApiTreeBuilder.Build(pages, branchLabel: "stable");
 
-        var namespaces = root["namespaces"]!.AsArray();
-        Assert.Single(namespaces);
-        var ns = namespaces[0]!.AsObject();
-        Assert.Equal("SwiftlyS2.Shared.Commands", ns["uid"]!.GetValue<string>());
+        var categories = L(root["categories"]);
+        Assert.Single(categories);
+        var commands = M(categories[0]);
+        Assert.Equal("Commands", commands["category"]);
+        Assert.Equal("SwiftlyS2.Shared.Commands", commands["namespace"]);
 
-        var types = ns["types"]!.AsArray();
+        var types = L(commands["types"]);
         Assert.Single(types);
-        var iCommandContext = types[0]!.AsObject();
-        Assert.Equal("SwiftlyS2.Shared.Commands.ICommandContext", iCommandContext["uid"]!.GetValue<string>());
-        Assert.Equal("Interface", iCommandContext["type"]!.GetValue<string>());
+        var iCommandContext = M(types[0]);
+        Assert.Equal("SwiftlyS2.Shared.Commands.ICommandContext", iCommandContext["uid"]);
+        Assert.Equal("ICommandContext", iCommandContext["name"]);
+        Assert.Equal("Interface", iCommandContext["type"]);
 
-        var sections = iCommandContext["body"]!["sections"]!.AsArray();
-        Assert.Equal(2, sections.Count);
-        Assert.Equal("Properties", sections[0]!["heading"]!["h2"]!.GetValue<string>());
-        Assert.Equal("Methods", sections[1]!["heading"]!["h2"]!.GetValue<string>());
+        // Real members split by kind, not preserved as raw presentation blocks.
+        var properties = L(iCommandContext["properties"]);
+        Assert.NotEmpty(properties);
+        Assert.Contains(properties, p => M(p)["name"] as string == "Args");
+
+        var methods = L(iCommandContext["methods"]);
+        Assert.NotEmpty(methods);
+        Assert.Contains(methods, m => M(m)["name"] as string == "Reply(string)");
 
         Assert.False(root.ContainsKey("other"));
     }

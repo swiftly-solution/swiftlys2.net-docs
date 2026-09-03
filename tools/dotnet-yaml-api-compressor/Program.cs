@@ -1,5 +1,5 @@
-using System.Text.Json;
 using DotnetYamlApiCompressor;
+using YamlDotNet.Serialization;
 
 if (args.Length != 3)
 {
@@ -26,6 +26,7 @@ if (!pages.Any(p => p.ContainsKey("uid") && p.ContainsKey("type")))
 }
 
 var root = ApiTreeBuilder.Build(pages, branchLabel);
+ReferenceUidAnnotator.Annotate(root);
 
 var outputDir = Path.GetDirectoryName(Path.GetFullPath(outputFile));
 if (!string.IsNullOrEmpty(outputDir))
@@ -33,6 +34,7 @@ if (!string.IsNullOrEmpty(outputDir))
     Directory.CreateDirectory(outputDir);
 }
 
-File.WriteAllText(outputFile, root.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
+var serializer = new SerializerBuilder().Build();
+File.WriteAllText(outputFile, serializer.Serialize(root));
 Console.WriteLine($"Wrote {outputFile}");
 return 0;

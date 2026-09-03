@@ -58,20 +58,20 @@ jobs:
         working-directory: swiftlys2-src
         run: docfx metadata ./docfx.json
 
-      - name: Compress API metadata to JSON
+      - name: Compress API metadata to YAML
         env:
           DOCFX_DEST: ${{ steps.docfx-dest.outputs.dest }}
         run: |
           dotnet run -c Release --project tools/dotnet-yaml-api-compressor -- \
             "swiftlys2-src/$DOCFX_DEST" \
-            "api/${{ matrix.label }}.json" \
+            "api/${{ matrix.label }}.yaml" \
             "${{ matrix.label }}"
 
       - name: Commit and push
         run: |
           git config --global user.name "swiftlychan"
           git config --global user.email "swiftlychan@swiftlys2.net"
-          git add api/${{ matrix.label }}.json
+          git add api/${{ matrix.label }}.yaml
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
