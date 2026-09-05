@@ -1,0 +1,8 @@
+{
+    "terminologies": {
+        "page": "terminologies.mdx"
+    },
+    "dependency-injection": {
+        "page": "dependency-injection.mdx"
+    }
+}

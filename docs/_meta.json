@@ -4,5 +4,9 @@
     },
     "installation": {
         "page": "installation.mdx"
+    },
+    "guides": {
+        "category": "guides",
+        "title": "Guides"
     }
 }
