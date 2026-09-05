@@ -1,0 +1,85 @@
+---
+title: Thread Safety
+---
+
+Some framework APIs are thread-unsafe. Calling them from a non-main-thread context (e.g. inside `Task.Run`, or after `await`-ing a database call) can cause undefined behavior or crashes.
+
+<Callout type="warning">
+    If an API is marked thread-unsafe, don't call it directly from a background
+    thread. Use its `Async` counterpart, or schedule the call back onto the main
+    thread first.
+</Callout>
+
+## Core Rule
+
+Thread-unsafe methods are annotated with <ApiRef name="ThreadUnsafeAttribute" /> in source and must run on the game thread. Prefer their `Async` variant when one exists - it marshals the call for you; otherwise hand it to `Core.Scheduler` yourself. Check `Core.IsGameThread` at runtime to branch explicitly:
+
+```csharp
+if (!Core.IsGameThread)
+{
+    Core.Scheduler.NextTick(() => player.SendChat("Hello!"));
+}
+else
+{
+    player.SendChat("Hello!");
+}
+```
+
+## Safe Usage Patterns
+
+Prefer `Async` counterparts in any `async` flow (e.g. after a database call):
+
+```csharp
+public async Task NotifyPlayerAsync(IPlayer player)
+{
+    await player.SendChatAsync("Hello from an async flow.");
+
+    using var sound = new SoundEvent("UI.CounterBeep", volume: 1.0f, pitch: 1.0f);
+    sound.Recipients.AddAllPlayers();
+    await sound.EmitAsync();
+}
+```
+
+For a sync-only API with no `Async` variant, schedule it explicitly instead:
+
+```csharp
+await Core.Scheduler.NextTickAsync(() => player.SendChat("Executed on the main thread via the scheduler."));
+```
+
+## Common Thread-Unsafe APIs
+
+| Thread-Unsafe API                                                 | Async Alternative                                                                                         |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IPlayer" member="SendChat" />                       | `SendChatAsync`                                                                                           |
+| <ApiRef name="IPlayer" member="SendMessage" />                    | `SendMessageAsync`                                                                                        |
+| <ApiRef name="IPlayer" member="SendConsole" />                    | `SendConsoleAsync`                                                                                        |
+| <ApiRef name="IPlayer" member="SendCenter" />                     | `SendCenterAsync`                                                                                         |
+| <ApiRef name="IPlayer" member="SendAlert" />                      | `SendAlertAsync`                                                                                          |
+| <ApiRef name="IPlayer" member="SendCenterHTML" />                 | `SendCenterHTMLAsync`                                                                                     |
+| <ApiRef name="IPlayer" member="SendChatEOT" />                    | `SendChatEOTAsync`                                                                                        |
+| <ApiRef name="IPlayer" member="SendNotify" />                     | `SendNotifyAsync`                                                                                         |
+| <ApiRef name="IPlayer" member="Kick" />                           | `KickAsync`                                                                                               |
+| <ApiRef name="IPlayer" member="ExecuteCommand" />                 | `ExecuteCommandAsync`                                                                                     |
+| <ApiRef name="IPlayer" member="Teleport" />                       | `TeleportAsync`                                                                                           |
+| <ApiRef name="IPlayer" member="TakeDamage" />                     | `TakeDamageAsync`                                                                                         |
+| <ApiRef name="IPlayer" member="SwitchTeam" /> / `ChangeTeam`      | `SwitchTeamAsync` / `ChangeTeamAsync`                                                                     |
+| <ApiRef name="SoundEvent" member="Emit" />                        | `EmitAsync`                                                                                               |
+| <ApiRef name="IGameEventService" member="Fire" /> and friends     | `FireAsync`, `FireToPlayerAsync`, `FireToServerAsync`                                                     |
+| <ApiRef name="IGameService" member="EmitHEGrenade" /> and friends | `EmitHEGrenadeAsync`, `EmitFlashbangAsync`, `EmitSmokeGrenadeAsync`, `EmitMolotovAsync`, `EmitDecoyAsync` |
+
+<Callout type="info">
+    <ApiRef name="IEngineService" member="ExecuteCommand" />,
+    `ExecuteCommandWithBuffer` and `DispatchParticleEffect` also have `Async`
+    counterparts - use those from a background flow even if you're unsure the
+    sync overload is unsafe.
+</Callout>
+
+## Checklist
+
+Find sync calls to thread-unsafe APIs running after an `await` (outside `Load`/event handlers), replace with the `Async` variant, or wrap with `Core.Scheduler.NextTick`/`NextWorldUpdate` if no `Async` variant exists. Don't fire-and-forget gameplay-critical calls - `await` them or handle failures explicitly.
+
+## Reference
+
+See [Swiftly Core](/docs/development/swiftly-core) for `Core.IsGameThread` and `Core.Scheduler`.
+
+See [Scheduler](/docs/development/scheduler) for the full scheduling API.

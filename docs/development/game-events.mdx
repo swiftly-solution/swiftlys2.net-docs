@@ -1,0 +1,123 @@
+---
+title: Game Events
+---
+
+<Callout type="warning">
+    Game events are a legacy Source 2 mechanism and Valve has been retiring them
+    over time - some events no longer fire in current CS2 builds. Prefer [Game
+    Hooks](/docs/development/native-functions-and-hooks) or [Core
+    Events](/docs/development/core-events) when an equivalent exists.
+</Callout>
+
+SwiftlyS2 generates a strongly-typed interface for every CS2 game event, exposed through the plugin-scoped `Core.GameEvent` service (<ApiRef name="IGameEventService" />).
+
+## Firing Events
+
+`Fire` broadcasts to every player, `FireToPlayer` targets a slot, `FireToServer` stays server-side. Each has an async counterpart (`FireAsync`, `FireToPlayerAsync`, `FireToServerAsync`) for off-main-thread use - the sync overloads are thread-unsafe.
+
+```csharp
+// To everyone, with an optional configure callback
+Core.GameEvent.Fire<EventShowSurvivalRespawnStatus>(@event =>
+{
+    @event.LocToken = "survival_respawn_status";
+    @event.Duration = 5;
+});
+
+// To one player slot
+Core.GameEvent.FireToPlayer<EventShowSurvivalRespawnStatus>(0, @event =>
+{
+    @event.LocToken = "private_status";
+});
+
+// Server-side only
+Core.GameEvent.FireToServer<EventShowSurvivalRespawnStatus>();
+
+// Off the main thread
+await Core.GameEvent.FireAsync<EventShowSurvivalRespawnStatus>();
+```
+
+<Callout type="warning">
+    The event instance passed to a configure callback is only valid for that
+    callback's duration - don't stash and read it later.
+</Callout>
+
+## Hooking Events
+
+Register hooks by attribute or manually through the service, in `Pre` or `Post` mode. Returning `HookResult.Stop` from a pre-hook cancels the event.
+
+<Tabs>
+  <Tab label="With attribute">
+    ```csharp
+    [GameEventHandler(HookMode.Pre)]
+    public HookResult OnPlayerDeathPre(EventPlayerDeath @event)
+    {
+        Console.WriteLine($"victim={@event.UserId}, attacker={@event.Attacker}");
+        return HookResult.Continue;
+    }
+
+    [GameEventHandler(HookMode.Post)]
+    public HookResult OnPlayerDeathPost(EventPlayerDeath @event)
+    {
+        Console.WriteLine($"headshot={@event.Headshot}, weapon={@event.Weapon}");
+        return HookResult.Continue;
+    }
+    ```
+
+  </Tab>
+  <Tab label="Programmatically">
+    ```csharp
+    private Guid _preHookId;
+
+    public override void Load(bool hotReload)
+    {
+        _preHookId = Core.GameEvent.HookPre<EventPlayerDeath>(OnPlayerDeathPre);
+    }
+
+    public override void Unload()
+    {
+        Core.GameEvent.Unhook(_preHookId);
+    }
+
+    private HookResult OnPlayerDeathPre(EventPlayerDeath @event)
+    {
+        return HookResult.Continue;
+    }
+    ```
+
+  </Tab>
+</Tabs>
+
+Drop every hook registered for an event type at once:
+
+```csharp
+Core.GameEvent.UnhookPre<EventPlayerDeath>();
+Core.GameEvent.UnhookPost<EventPlayerDeath>();
+```
+
+## Reading Event Data
+
+Every generated event implements <ApiRef name="IGameEvent`1" />, giving you `Accessor` (<ApiRef name="IGameEventAccessor" />) and a settable `DontBroadcast` flag. Recognized fields get typed properties directly on the event - for `EventPlayerDeath`: `int UserId`/`Attacker`/`Assister`, `string Weapon`, `bool Headshot`, `float Distance`, `int ActualDmgHealth`, plus `IPlayer?` convenience wrappers (`UserIdPlayer`, `AttackerPlayer`, `AssisterPlayer`) resolved through the player manager:
+
+```csharp
+[GameEventHandler(HookMode.Post)]
+private HookResult OnPlayerDeath(EventPlayerDeath @event)
+{
+    if (@event.AttackerPlayer is { } attacker && @event.UserIdPlayer is { } victim)
+    {
+        Console.WriteLine($"{attacker.Name} killed {victim.Name} with {@event.Weapon}");
+    }
+
+    return HookResult.Continue;
+}
+```
+
+Fall back to `Accessor` for fields without a generated property:
+
+```csharp
+string weapon = @event.Accessor.GetString("weapon");
+int attackerSlot = @event.Accessor.GetPlayerSlot("attacker");
+```
+
+See <ApiRef name="IGameEventAccessor" /> for the full set of typed getters/setters (bool, int32, uint64, float, string, entity, entity index, player slot) plus read-only `GetPlayer`/`GetPlayerController`/`GetPlayerPawn`/`IsReliable()`/`IsLocal()`.
+
+Check whether a slot is listening for an event with <ApiRef name="IGameEventService" member="IsListeningToEvent" /> - by event name (`"player_death"`) or the typed `IsListeningToEvent<EventPlayerDeath>(playerId)` overload.

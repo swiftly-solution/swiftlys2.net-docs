@@ -1,0 +1,95 @@
+---
+title: Configuration
+---
+
+SwiftlyS2's configuration system lets your plugin create config files, bind typed models, and reload settings at runtime, through <ApiRef name="ISwiftlyCore" member="Configuration" /> (<ApiRef name="IPluginConfigurationService" />).
+
+## Paths
+
+```csharp
+string basePath = Core.Configuration.BasePath;
+bool exists = Core.Configuration.BasePathExists;
+string configPath = Core.Configuration.GetConfigPath("config.jsonc"); // needs the extension
+```
+
+See <ApiRef name="IPluginConfigurationService" member="BasePath" />, <ApiRef name="IPluginConfigurationService" member="BasePathExists" /> and <ApiRef name="IPluginConfigurationService" member="GetConfigPath" />.
+
+## Initializing Config Files
+
+```csharp
+// From a packaged templates/ folder
+Core.Configuration.InitializeWithTemplate("config.jsonc", "config.template.jsonc");
+
+// From a typed model - creates the file with defaults if it doesn't exist yet
+Core.Configuration.InitializeJsonWithModel<MainConfig>("config.jsonc", "Main");
+Core.Configuration.InitializeTomlWithModel<DatabaseConfig>("database.toml", "Database");
+```
+
+See <ApiRef name="IPluginConfigurationService" member="InitializeWithTemplate" />, <ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" /> and <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> - all three return <ApiRef name="IPluginConfigurationService" />, so they chain, followed by <ApiRef name="IPluginConfigurationService" member="Configure" /> to register the file as a live, reloadable source:
+
+```csharp
+Core.Configuration
+    .InitializeJsonWithModel<MainConfig>("config.jsonc", "Main")
+    .InitializeTomlWithModel<DatabaseConfig>("database.toml", "Database")
+    .Configure(builder =>
+    {
+        builder.AddJsonFile(Core.Configuration.GetConfigPath("config.jsonc"), optional: false, reloadOnChange: true);
+        builder.AddTomlFile(Core.Configuration.GetConfigPath("database.toml"), optional: false, reloadOnChange: true);
+    });
+```
+
+<Callout type="info">
+    `AddJsonFile`/`AddTomlFile` resolve relative to the process's working
+    directory, not your plugin folder - pass the full path from `GetConfigPath`,
+    not a bare file name.
+</Callout>
+
+Use <ApiRef name="IPluginConfigurationService" member="Manager" /> to reach the raw `IConfigurationManager` directly.
+
+## Complete Example
+
+```csharp
+namespace MyPlugin;
+
+public class MainConfig
+{
+    public bool Enabled { get; set; } = true;
+    public bool Debug { get; set; } = false;
+    public int MaxPlayers { get; set; } = 32;
+}
+
+public class DatabaseConfig
+{
+    public string Host { get; set; } = "127.0.0.1";
+    public int Port { get; set; } = 3306;
+}
+
+public override void Load(bool hotReload)
+{
+    Core.Configuration
+        .InitializeJsonWithModel<MainConfig>("config.jsonc", "Main")
+        .InitializeTomlWithModel<DatabaseConfig>("database.toml", "Database")
+        .Configure(builder =>
+        {
+            builder.AddJsonFile(Core.Configuration.GetConfigPath("config.jsonc"), optional: false, reloadOnChange: true);
+            builder.AddTomlFile(Core.Configuration.GetConfigPath("database.toml"), optional: false, reloadOnChange: true);
+        });
+
+    var services = new ServiceCollection();
+    services.AddSwiftly(Core);
+    services.AddOptionsWithValidateOnStart<MainConfig>().BindConfiguration("Main");
+    services.AddOptionsWithValidateOnStart<DatabaseConfig>().BindConfiguration("Database");
+}
+```
+
+See [Dependency Injection](/docs/guides/dependency-injection) for more on `services.AddSwiftly(Core)`. Consume with `IOptionsMonitor<T>` to react to reloads:
+
+```csharp
+public class ExampleService
+{
+    public ExampleService(IOptionsMonitor<MainConfig> main)
+    {
+        main.OnChange(cfg => Console.WriteLine($"Main config reloaded. Enabled: {cfg.Enabled}"));
+    }
+}
+```

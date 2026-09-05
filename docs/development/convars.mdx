@@ -1,0 +1,126 @@
+---
+title: Convars
+---
+
+SwiftlyS2's convar system covers creating convars, finding existing ones, replicating values to clients, and querying client-side values.
+
+Access it through `Core.ConVar` (<ApiRef name="ISwiftlyCore" member="ConVar" />, type <ApiRef name="IConVarService" />).
+
+## Supported Generic Types
+
+The generic parameter `T` used by <ApiRef name="IConVar`1" />, `Create<T>`, `CreateOrFind<T>`, and `Find<T>` supports:
+
+`bool`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `Color`, `QAngle`, `Vector`, `Vector2D`, `Vector4D`, `string`
+
+## Creating Convars
+
+<ApiRef name="IConVarService" member="Create" />
+`(name, helpMessage, defaultValue, flags = ConvarFlags.NONE)`, plus a `where T :
+unmanaged` overload taking `minValue, maxValue` before `flags` for
+numeric/struct types like `Vector`.
+<ApiRef name="IConVarService" member="CreateOrFind" /> has the same two
+overloads but returns the existing convar instead of throwing if `name` is
+already registered - prefer it unless you specifically want the
+duplicate-registration error.
+
+```csharp
+IConVar<bool> enabled = Core.ConVar.Create("sw_plugin_enabled", "Enable or disable the plugin.", true);
+IConVar<int> maxBots = Core.ConVar.Create("sw_plugin_max_bots", "Maximum amount of bots allowed.", 6, 0, 20);
+IConVar<bool> feature = Core.ConVar.CreateOrFind("sw_plugin_feature", "Enable feature X.", true);
+```
+
+## Finding Existing Convars
+
+### Typed Find
+
+Looking up an existing engine convar like <ConvarRef name="sv_cheats" />:
+
+```csharp
+IConVar<bool>? cheats = Core.ConVar.Find<bool>("sv_cheats");
+
+if (cheats == null)
+{
+    Console.WriteLine("sv_cheats was not found.");
+}
+```
+
+### Find as String
+
+Use <ApiRef name="IConVarService" member="FindAsString" /> for string-level access, or when the convar's type is unknown.
+
+```csharp
+IConVar? hostname = Core.ConVar.FindAsString("hostname");
+
+if (hostname != null)
+{
+    Console.WriteLine($"hostname = {hostname.ValueAsString}");
+}
+```
+
+## Working with <ApiRef name="IConVar`1" />
+
+Setting `Value` queues the change and auto-replicates if the convar is replicated; use <ApiRef name="IConVar`1" member="SetInternal" /> instead for an immediate, non-replicated change (e.g. inside a hook for that same convar, where the queued set won't apply in time). <ApiRef name="IConVar`1" member="ReplicateToClient" />/<ApiRef name="IConVar`1" member="QueryClient" /> push/pull a single client's value, and `TryGetMinValue`/`TryGetMaxValue`/`TryGetDefaultValue` read the bounds safely.
+
+```csharp
+enabled.Value = false;
+enabled.SetInternal(true);
+enabled.ReplicateToClient(0, true);
+enabled.QueryClient(0, valueAsString => Console.WriteLine($"Client replied with: {valueAsString}"));
+
+if (maxBots.TryGetMinValue(out var min)) Console.WriteLine($"Min value: {min}");
+if (maxBots.TryGetMaxValue(out var max)) Console.WriteLine($"Max value: {max}");
+if (maxBots.TryGetDefaultValue(out var def)) Console.WriteLine($"Default value: {def}");
+```
+
+## Working with <ApiRef name="IConVar" /> (String API)
+
+Without a generic type, use the non-generic members: `ValueAsString`, `SetInternalAsString`, `ReplicateToClientAsString`, `TryGetMinValueAsString`, `TryGetMaxValueAsString`, `TryGetDefaultValueAsString` - see <ApiRef name="IConVar" /> for the full list.
+
+```csharp
+IConVar? anyConvar = Core.ConVar.FindAsString("sv_cheats");
+
+if (anyConvar != null)
+{
+    anyConvar.SetInternalAsString("1");
+    anyConvar.ReplicateToClientAsString(0, "1");
+}
+```
+
+## Service-Level Replication
+
+Replicate a value by name to a client, even for convars that don't exist on the server:
+
+```csharp
+Core.ConVar.ReplicateToClient(0, "cl_showfps", "1");
+Core.ConVar.ReplicateToAll("cl_teamid_overhead_mode", "2");
+```
+
+## Tracking ConVar Changes
+
+```csharp
+public override void Load(bool hotReload)
+{
+    Core.Event.OnConVarValueChanged += OnConVarValueChanged;
+}
+
+private void OnConVarValueChanged(IOnConVarValueChanged @event) // see <ApiRef name="IOnConVarValueChanged" />
+{
+    if (!@event.ConVarName.StartsWith("sw_"))
+        return;
+
+    Console.WriteLine($"ConVar '{@event.ConVarName}' changed by player #{@event.PlayerId}: '{@event.OldValue}' -> '{@event.NewValue}'");
+}
+```
+
+Useful for audit logging, debugging, and reacting to config changes without polling `Value` on a hot path.
+
+<Callout type="info">
+    Unhook in `Unload()` (`Core.Event.OnConVarValueChanged -=
+    OnConVarValueChanged;`) to avoid leaking a delegate across hot reloads.
+</Callout>
+
+## Reference
+
+<ApiRef name="ConvarFlags" /> is a `[Flags] enum : ulong` mirroring the engine's
+`FCVAR_*` flags (`NONE`, `ARCHIVE`, `NOTIFY`, `REPLICATED`, `CHEAT`, `HIDDEN`,
+`PROTECTED`, and more).

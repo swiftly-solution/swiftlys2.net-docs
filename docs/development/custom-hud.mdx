@@ -1,0 +1,149 @@
+---
+title: Custom HUD
+---
+
+A `custom_hud_layout` entity builds a custom HUD for players. The interface is Panorama XML/CSS; the server updates its state through `CCSCustomHudLayout` methods.
+
+<Callout type="warning">
+    Custom HUD is still a new and unstable feature - Valve may make breaking
+    changes that cause incompatible API in the future. If actual behavior
+    differs from what's described here, contact the development team so the docs
+    can be corrected.
+</Callout>
+
+## Example XML
+
+```xml
+<!-- example.xml -->
+<root>
+    <styles>
+        <include src="s2r://panorama/styles/custom_game/example.vcss_c" />
+    </styles>
+    <Panel class="example_class" id="main_panel">
+        <Label class="example_label" id="text1" text="{s:dynamic}" />
+        <Button class="example_button" id="action_button">
+            <Label text="Click me" />
+        </Button>
+    </Panel>
+</root>
+```
+
+`id` identifies the HUD element to update - `text1` is the `panelId` in the methods below. `{s:dynamic}` is a dynamic string the server can update, where `dynamic` is the `variableName`.
+
+## Creating a custom_hud_layout Entity
+
+Create with the [Entity API](/docs/development/entity), set the layout path, notify the engine, then spawn:
+
+```csharp
+var hud = Core.EntitySystem.CreateEntity<CCSCustomHudLayout>();
+hud.StrLayout = "panorama/layout/custom_game/example.xml";
+hud.StrLayoutUpdated();
+hud.DispatchSpawn();
+```
+
+## Dynamic Strings
+
+`text1` is the XML element's `id`, `dynamic` is the variable name in `{s:dynamic}`. Getters return `null` if unset; a per-player override never falls back to the global value, and removing it reverts the player to the global value.
+
+```csharp
+hud.SetDialogVariableString("text1", "dynamic", "Global text");
+string? globalValue = hud.GetDialogVariableString("text1", "dynamic");
+
+const int playerId = 0;
+hud.SetDialogVariableStringForPlayer(playerId, "text1", "dynamic", "Text shown only to this player");
+string? playerValue = hud.GetDialogVariableStringForPlayer(playerId, "text1", "dynamic");
+hud.RemoveDialogVariableStringForPlayer(playerId, "text1", "dynamic");
+```
+
+## Dynamic CSS Classes
+
+Control whether a HUD element has a CSS class. `panelId` is the element's `id`; `className` is a class defined in the Panorama CSS.
+
+`EHudPanelClassStatus_t` states:
+
+| State                                     | Meaning                                                                                     |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `k_eHudPanelClassStatus_HasClass`         | The element has the class                                                                   |
+| `k_eHudPanelClassStatus_DoesNotHaveClass` | The element does not have the class                                                         |
+| `k_eHudPanelClassStatus_Undefined`        | Doesn't override the existing status; also returned when reading a state that doesn't exist |
+
+Both getters return `k_eHudPanelClassStatus_Undefined` if the `panelId`/`className`/state doesn't exist.
+
+```csharp
+hud.SetHasClass("main_panel", "highlight", EHudPanelClassStatus_t.k_eHudPanelClassStatus_HasClass);
+EHudPanelClassStatus_t globalClassStatus = hud.GetHasClass("main_panel", "highlight");
+
+const int playerId = 0;
+hud.SetHasClassForPlayer(playerId, "main_panel", "highlight", EHudPanelClassStatus_t.k_eHudPanelClassStatus_DoesNotHaveClass);
+EHudPanelClassStatus_t playerClassStatus = hud.GetHasClassForPlayer(playerId, "main_panel", "highlight");
+```
+
+## Input Capture
+
+Controls whether the Custom HUD receives player input (mouse cursor to click buttons), globally or per-player:
+
+```csharp
+hud.SetInputCaptureEnabled(true);
+bool globallyEnabled = hud.IsInputCaptureEnabled();
+
+const int playerId = 0;
+hud.SetInputCaptureEnabledForPlayer(playerId, true);
+bool enabledForPlayer = hud.IsInputCaptureEnabledForPlayer(playerId);
+hud.SetInputCaptureEnabledForPlayer(playerId, false); // disable once the interaction is complete
+```
+
+## Handling Button Clicks
+
+With input capture enabled, clicking a button fires <ApiRef name="IEventSubscriber" member="OnCustomHudClicked" /> (`Core.Event.OnCustomHudClicked`). Subscribe on load, unsubscribe on unload:
+
+```csharp
+public override void Load(bool hotReload)
+{
+    Core.Event.OnCustomHudClicked += OnCustomHudClicked;
+}
+
+public override void Unload()
+{
+    Core.Event.OnCustomHudClicked -= OnCustomHudClicked;
+}
+
+private void OnCustomHudClicked(<ApiRef name="IOnCustomHudClickedEvent" /> @event)
+{
+    if (@event.ButtonId != "action_button")
+    {
+        return;
+    }
+
+    Console.WriteLine($"Player {@event.PlayerId} clicked {@event.ButtonId}");
+}
+```
+
+| Property          | Description                                                      |
+| ----------------- | ---------------------------------------------------------------- |
+| `PlayerId`        | The ID of the player who clicked the button                      |
+| `ButtonId`        | The clicked button's `id` from the Panorama XML layout           |
+| `CustomHudLayout` | The `CCSCustomHudLayout` entity that contains the clicked button |
+
+`OnCustomHudClicked` fires for clicks from every Custom HUD layout - if a plugin creates multiple layouts, compare against the layout entity you stored.
+
+See [Core Events](/docs/development/core-events) for attribute-based listeners and general event subscription behavior.
+
+## Async Variants
+
+Each thread-unsafe `CCSCustomHudLayout` extension method has an `Async` counterpart returning a `Task`, for use from background tasks or async code - it runs immediately on the game thread, or schedules onto it otherwise.
+
+```csharp
+await hud.SetDialogVariableStringAsync("text1", "dynamic", "Global text");
+
+await hud.SetHasClassForPlayerAsync(playerId, "main_panel", "highlight", EHudPanelClassStatus_t.k_eHudPanelClassStatus_HasClass);
+
+await hud.SetInputCaptureEnabledForPlayerAsync(playerId, true);
+```
+
+Same parameters/behavior as the sync counterparts: `SetDialogVariableStringAsync`, `SetDialogVariableStringForPlayerAsync`, `RemoveDialogVariableStringForPlayerAsync`, `SetHasClassAsync`, `SetHasClassForPlayerAsync`, `SetInputCaptureEnabledAsync`, `SetInputCaptureEnabledForPlayerAsync`. Getters stay synchronous - no async variant for reads.
+
+<Callout type="info">
+    Synchronous methods that change HUD state are thread-unsafe. From a
+    background task, `await` the async variant instead. See [Thread
+    Safety](/docs/development/thread-safety).
+</Callout>

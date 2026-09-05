@@ -1,0 +1,129 @@
+---
+title: Shared API
+---
+
+Shared API lets plugins expose typed interfaces that other plugins can consume at runtime, via <ApiRef name="IInterfaceManager" />.
+
+## Shared Interface Lifecycle
+
+Shared API integration happens through three <ApiRef name="BasePlugin" /> callbacks, called in this order across every loaded plugin:
+
+- <ApiRef name="BasePlugin" member="ConfigureSharedInterface" />: register the
+  interfaces your plugin provides. Runs for every plugin first.
+- <ApiRef name="BasePlugin" member="UseSharedInterface" />: retrieve interfaces
+  from other plugins. Runs for every plugin only after all have finished
+  registering.
+- <ApiRef name="BasePlugin" member="OnSharedInterfaceInjected" />: react once
+  shared interfaces are resolved. Runs last, again across every plugin.
+
+```csharp
+public override void ConfigureSharedInterface(IInterfaceManager interfaceManager) { /* register provider interfaces */ }
+public override void UseSharedInterface(IInterfaceManager interfaceManager) { /* resolve dependencies from other plugins */ }
+public override void OnSharedInterfaceInjected(IInterfaceManager interfaceManager) { /* optional: react once everyone has resolved */ }
+```
+
+<Callout type="info">
+    This sequence re-runs whenever the plugin set changes (e.g. hot reload
+    adds/removes a plugin) - don't assume
+    `ConfigureSharedInterface`/`UseSharedInterface` only fire once at startup.
+</Callout>
+
+## Providing Shared Interfaces
+
+Use <ApiRef name="IInterfaceManager" member="AddSharedInterface" /> in `ConfigureSharedInterface`:
+
+```csharp
+public override void ConfigureSharedInterface(IInterfaceManager interfaceManager)
+{
+    interfaceManager.AddSharedInterface<IEconomyApi, EconomyApi>("Economy.Api.v1", new EconomyApi());
+}
+```
+
+<Callout type="info">
+    The interface type (`IEconomyApi` here) needs to live somewhere both plugins
+    can reference - typically a small contracts-only assembly the provider ships
+    alongside itself, referenced by consumers like a regular package.
+</Callout>
+
+## Consuming Shared Interfaces
+
+<ApiRef name="IInterfaceManager" member="TryGetSharedInterface" /> is preferred
+for optional dependencies (returns `false` instead of throwing);
+<ApiRef name="IInterfaceManager" member="GetSharedInterface" /> throws if the
+key isn't registered, for mandatory dependencies;
+<ApiRef name="IInterfaceManager" member="HasSharedInterface" /> is a quick
+presence check.
+
+```csharp
+private IEconomyApi? _economyApi;
+
+public override void UseSharedInterface(IInterfaceManager interfaceManager)
+{
+    if (!interfaceManager.TryGetSharedInterface<IEconomyApi>("Economy.Api.v1", out _economyApi))
+        Core.Logger.LogWarning("Economy API not available. Economy features disabled.");
+}
+
+// Mandatory dependency: IEconomyApi economyApi = interfaceManager.GetSharedInterface<IEconomyApi>("Economy.Api.v1");
+// Presence check: bool hasEconomy = interfaceManager.HasSharedInterface("Economy.Api.v1");
+```
+
+## Complete Example
+
+A contracts-only interface, referenced by both the provider and consumer plugin:
+
+```csharp
+namespace MyPlugin.Contracts;
+
+public interface IEconomyApi
+{
+    int GetBalance(ulong steamId);
+    bool TrySpend(ulong steamId, int amount);
+}
+```
+
+Provider registers its implementation; consumer resolves it and uses it (`Load`/`Unload` omitted for brevity):
+
+```csharp
+// Provider plugin
+public sealed class EconomyApi : IEconomyApi
+{
+    private readonly Dictionary<ulong, int> _balances = new();
+    public int GetBalance(ulong steamId) => _balances.TryGetValue(steamId, out int balance) ? balance : 0;
+    public bool TrySpend(ulong steamId, int amount)
+    {
+        int current = GetBalance(steamId);
+        if (current < amount) return false;
+        _balances[steamId] = current - amount;
+        return true;
+    }
+}
+
+public sealed class EconomyPlugin(ISwiftlyCore core) : BasePlugin(core)
+{
+    private readonly EconomyApi _api = new();
+    public override void ConfigureSharedInterface(IInterfaceManager interfaceManager) =>
+        interfaceManager.AddSharedInterface<IEconomyApi, EconomyApi>("Economy.Api.v1", _api);
+}
+
+// Consumer plugin
+public sealed class ShopPlugin(ISwiftlyCore core) : BasePlugin(core)
+{
+    private IEconomyApi? _economyApi;
+
+    public override void UseSharedInterface(IInterfaceManager interfaceManager) =>
+        interfaceManager.TryGetSharedInterface<IEconomyApi>("Economy.Api.v1", out _economyApi);
+
+    public void TryBuy(IPlayer player, int cost)
+    {
+        if (_economyApi == null) { player.SendChat("Economy service is unavailable."); return; }
+        player.SendChat(_economyApi.TrySpend(player.SteamID, cost) ? "Purchase successful." : "Not enough balance.");
+    }
+}
+```
+
+## Best Practices
+
+- Use stable, descriptive keys such as `PluginName.ServiceName.v1`, and version them on breaking changes (`.v1` -> `.v2`).
+- Prefer `TryGetSharedInterface` for optional dependencies so a missing provider doesn't crash yours.
+- Keep shared contracts small and implementation-agnostic - the contract assembly is the only thing both plugins should share.
+- Since registration can re-run on hot reload, unsubscribe before re-subscribing to provider events in `UseSharedInterface`, or you'll get duplicate handlers.

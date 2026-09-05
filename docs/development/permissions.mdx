@@ -1,0 +1,94 @@
+---
+title: Permissions
+---
+
+SwiftlyS2's permission service handles access checks, grant/revoke, and permission hierarchies.
+
+## Accessing the Permission Service
+
+Available through `Core.Permission` (<ApiRef name="ISwiftlyCore" member="Permission" />, type <ApiRef name="IPermissionManager" />). All checks and mutations key off SteamID64 (`ulong`) - use `player.SteamID`.
+
+## Checking Permissions
+
+<ApiRef name="IPermissionManager" member="PlayerHasPermission" /> checks one
+key; <ApiRef name="IPermissionManager" member="PlayerHasPermissions" /> requires
+every key in a list; both support wildcard keys like `myplugin.admin.*`.
+
+```csharp
+if (Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.admin"))
+    player.SendChat("You have admin access.");
+
+bool canUseRestrictedAction = Core.Permission.PlayerHasPermissions(
+    player.SteamID,
+    ["myplugin.admin.kick", "myplugin.admin.ban"]
+);
+
+Core.Permission.AddPermission(player.SteamID, "myplugin.admin.*"); // grants both .kick and .ban
+```
+
+## Granting and Revoking Permissions
+
+<ApiRef name="IPermissionManager" member="AddPermission" />,
+<ApiRef name="IPermissionManager" member="RemovePermission" />, and
+<ApiRef name="IPermissionManager" member="ClearPermissions" />:
+
+```csharp
+Core.Permission.AddPermission(player.SteamID, "myplugin.vip");
+Core.Permission.RemovePermission(player.SteamID, "myplugin.vip");
+Core.Permission.ClearPermissions(player.SteamID); // removes every directly-granted permission
+```
+
+<Callout type="warning">
+    `ClearPermission` (singular) is obsolete, forwarding to `ClearPermissions` -
+    use the plural in new code.
+</Callout>
+
+## Listing a Player's Permissions
+
+<ApiRef name="IPermissionManager" member="GetPlayerPermissions" /> returns
+everything a player effectively has, including inherited sub-permissions.
+
+```csharp
+IEnumerable<string> permissions = Core.Permission.GetPlayerPermissions(player.SteamID);
+```
+
+## Sub-Permissions (Hierarchy)
+
+One permission key can imply others.
+
+```csharp
+Core.Permission.AddSubPermission("myplugin.admin", "myplugin.moderator");
+Core.Permission.AddSubPermission("myplugin.moderator", "myplugin.helper");
+
+Core.Permission.AddPermission(player.SteamID, "myplugin.admin");
+
+bool isModerator = Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.moderator"); // true
+bool isHelper = Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.helper"); // true, transitively
+```
+
+Remove an edge with <ApiRef name="IPermissionManager" member="RemoveSubPermission" />:
+
+```csharp
+Core.Permission.RemoveSubPermission("myplugin.admin", "myplugin.moderator");
+```
+
+## Permission Naming Convention
+
+A consistent `plugin.scope.action` scheme keeps wildcards and hierarchies predictable, e.g. `myplugin.admin.kick`, `myplugin.admin.ban`, `myplugin.vip.access`, `myplugin.commands.reload`.
+
+## Using Permissions with Commands
+
+<ApiRef name="Command" />
+'s `permission` parameter checks this same store, so you rarely need
+<ApiRef name="IPermissionManager" member="PlayerHasPermission" /> directly
+inside a handler:
+
+```csharp
+[Command("ban", permission: "myplugin.admin.ban")]
+public void OnBanCommand(ICommandContext context)
+{
+    // Only reached if context.Sender has "myplugin.admin.ban"
+}
+```
+
+See the [Commands](/docs/development/commands) page for the full attribute reference.

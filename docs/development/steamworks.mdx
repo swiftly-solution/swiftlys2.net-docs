@@ -1,0 +1,168 @@
+---
+title: Steamworks
+---
+
+SwiftlyS2 ships generated server-side Steamworks bindings under `SwiftlyS2.Shared.SteamAPI` (`using SwiftlyS2.Shared.SteamAPI;`), covering identity, authorization, server metadata, license/Workshop checks, and Steam's async callback patterns, as static classes mirroring the native `ISteamGameServer*` interfaces - see <ApiRef name="SteamGameServer" />, <ApiRef name="SteamGameServerUtils" />, <ApiRef name="SteamGameServerUGC" /> and <ApiRef name="SteamGameServerStats" /> for the full member lists (or the Quick Reference table at the end for the class overview).
+
+## Waiting for the Steam API
+
+Steam callbacks aren't usable until the Steam API finishes activating - subscribe to `Core.Event.OnSteamAPIActivated` before touching any class above:
+
+```csharp
+public override void Load(bool hotReload)
+{
+    Core.Event.OnSteamAPIActivated += OnSteamApiActivated;
+}
+
+private void OnSteamApiActivated()
+{
+    var appId = SteamGameServerUtils.GetAppID();
+    Core.Logger.LogInformation("Steam API ready, AppId={AppId}", appId.m_AppId);
+}
+```
+
+## Converting Player IDs to Steam IDs
+
+`IPlayer.SteamID` is a plain `ulong` - wrap it in <ApiRef name="CSteamID" /> before passing it to a Steam API call:
+
+```csharp
+IPlayer? player = Core.PlayerManager.GetPlayer(playerId);
+if (player == null) return;
+
+var steamId = new CSteamID(player.SteamID);
+if (!steamId.IsValid() || !steamId.BIndividualAccount())
+{
+    Core.Logger.LogWarning("Invalid SteamID for slot {PlayerId}", playerId);
+    return;
+}
+```
+
+## Authorization Signals
+
+`Core.Event.OnClientSteamAuthorize`/`OnClientSteamAuthorizeFail` fire once Steam confirms or rejects a connecting client:
+
+```csharp
+Core.Event.OnClientSteamAuthorize += @event =>
+    Core.Logger.LogInformation("Steam auth OK for slot {PlayerId}", @event.PlayerId);
+
+Core.Event.OnClientSteamAuthorizeFail += @event =>
+    Core.Logger.LogWarning("Steam auth failed for slot {PlayerId}", @event.PlayerId);
+```
+
+## Server Metadata
+
+```csharp
+SteamGameServer.SetServerName("My Swiftly Server");
+SteamGameServer.SetMapName("de_dust2");
+SteamGameServer.SetMaxPlayerCount(32);
+SteamGameServer.SetPasswordProtected(false);
+
+bool loggedOn = SteamGameServer.BLoggedOn();
+bool secure = SteamGameServer.BSecure();
+CSteamID serverSteamId = SteamGameServer.GetSteamID();
+```
+
+## License / Ownership Checks
+
+```csharp
+var appId = new AppId_t(730); // see ApiRef: AppId_t
+var result = SteamGameServer.UserHasLicenseForApp(steamId, appId);
+
+if (result == EUserHasLicenseForAppResult.k_EUserHasLicenseResultHasLicense)
+{
+    Core.Logger.LogInformation("Player owns app {AppId}", appId.m_AppId);
+}
+```
+
+## Workshop Items
+
+Use `SteamGameServerUGC` - not the client-side `SteamUGC` - for server-side Workshop queries:
+
+```csharp
+var fileId = new PublishedFileId_t(3070212801);
+var state = (EItemState)SteamGameServerUGC.GetItemState(fileId);
+
+if ((state & EItemState.k_EItemStateInstalled) == 0)
+{
+    SteamGameServerUGC.DownloadItem(fileId, bHighPriority: true);
+}
+```
+
+Downloads complete asynchronously through a Steam callback struct - see below.
+
+## Steam Callbacks and Call Results
+
+Steam surfaces two async patterns: <ApiRef name="Callback`1" /> fires whenever a matching struct is posted; <ApiRef name="CallResult`1" /> is a one-shot result tied to a `SteamAPICall_t` from a request method. Both are `IDisposable` - dispose them, typically in `Unload`.
+
+<Tabs>
+  <Tab label="Callback<T>">
+    ```csharp
+    private Callback<DownloadItemResult_t>? _downloadResult;
+
+    public override void Load(bool hotReload)
+    {
+        _downloadResult = Callback<DownloadItemResult_t>.Create(OnDownloadItemResult);
+    }
+
+    public override void Unload()
+    {
+        _downloadResult?.Dispose();
+    }
+
+    private void OnDownloadItemResult(DownloadItemResult_t result)
+    {
+        if (result.m_eResult != EResult.k_EResultOK) return;
+
+        SteamGameServerUGC.GetItemInstallInfo(
+            result.m_nPublishedFileId, out ulong size, out string folder, 1024, out uint timestamp);
+    }
+    ```
+
+  </Tab>
+  <Tab label="CallResult<T>">
+    ```csharp
+    private CallResult<GSStatsReceived_t>? _statsResult;
+
+    public void RequestStats(CSteamID steamId)
+    {
+        SteamAPICall_t call = SteamGameServerStats.RequestUserStats(steamId);
+        _statsResult = CallResult<GSStatsReceived_t>.Create(call.m_SteamAPICall, OnStatsReceived);
+    }
+
+    private void OnStatsReceived(GSStatsReceived_t result, bool ioFailure)
+    {
+        if (ioFailure || result.m_eResult != EResult.k_EResultOK) return;
+
+        if (SteamGameServerStats.GetUserStat(result.m_steamIDUser, "total_kills", out int kills))
+            Core.Logger.LogInformation("kills={Kills}", kills);
+    }
+    ```
+
+  </Tab>
+</Tabs>
+
+## Auth Sessions
+
+To validate a client-provided auth ticket manually, use `BeginAuthSession`/`EndAuthSession` rather than the deprecated connect/disconnect variants:
+
+```csharp
+var authResult = SteamGameServer.BeginAuthSession(ticket, ticket.Length, steamId);
+if (authResult != EBeginAuthSessionResult.k_EBeginAuthSessionResultOK)
+{
+    return;
+}
+
+// ... later, once the session ends ...
+SteamGameServer.EndAuthSession(steamId);
+```
+
+## Quick Reference
+
+| Class                                      | Namespace                   | Purpose                                           |
+| ------------------------------------------ | --------------------------- | ------------------------------------------------- |
+| `SteamGameServer`                          | `SwiftlyS2.Shared.SteamAPI` | Identity, auth sessions, metadata, license checks |
+| `SteamGameServerUtils`                     | `SwiftlyS2.Shared.SteamAPI` | Misc utility queries (app ID, etc.)               |
+| `SteamGameServerUGC`                       | `SwiftlyS2.Shared.SteamAPI` | Workshop item state and download                  |
+| `SteamGameServerStats`                     | `SwiftlyS2.Shared.SteamAPI` | Server-managed user stats                         |
+| `CSteamID`, `AppId_t`, `PublishedFileId_t` | `SwiftlyS2.Shared.SteamAPI` | Core Steam identifier value types                 |
+| `Callback<T>` / `CallResult<T>`            | `SwiftlyS2.Shared.SteamAPI` | Async callback / call-result handling             |

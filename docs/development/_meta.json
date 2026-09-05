@@ -1,0 +1,71 @@
+{
+    "getting-started": {
+        "page": "getting-started.mdx"
+    },
+    "swiftly-core": {
+        "page": "swiftly-core.mdx"
+    },
+    "using-attributes": {
+        "page": "using-attributes.mdx"
+    },
+    "thread-safety": {
+        "page": "thread-safety.mdx"
+    },
+    "commands": {
+        "page": "commands.mdx"
+    },
+    "configuration": {
+        "page": "configuration.mdx"
+    },
+    "translations": {
+        "page": "translations.mdx"
+    },
+    "entity": {
+        "page": "entity.mdx"
+    },
+    "entitykeyvalues": {
+        "page": "entitykeyvalues.mdx"
+    },
+    "game-events": {
+        "page": "game-events.mdx"
+    },
+    "core-events": {
+        "page": "core-events.mdx"
+    },
+    "netmessages": {
+        "page": "netmessages.mdx"
+    },
+    "menus": {
+        "page": "menus.mdx"
+    },
+    "convars": {
+        "page": "convars.mdx"
+    },
+    "native-functions-and-hooks": {
+        "page": "native-functions-and-hooks.mdx"
+    },
+    "scheduler": {
+        "page": "scheduler.mdx"
+    },
+    "shared-api": {
+        "page": "shared-api.mdx"
+    },
+    "permissions": {
+        "page": "permissions.mdx"
+    },
+    "profiler": {
+        "page": "profiler.mdx"
+    },
+    "database": {
+        "page": "database.mdx"
+    },
+    "soundevents": {
+        "page": "soundevents.mdx"
+    },
+    "custom-hud": {
+        "page": "custom-hud.mdx"
+    },
+    "steamworks": {
+        "page": "steamworks.mdx"
+    }
+}

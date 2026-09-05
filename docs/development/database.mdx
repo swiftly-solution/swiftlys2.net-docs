@@ -1,0 +1,59 @@
+---
+title: Database
+---
+
+SwiftlyS2's database service lets plugins fetch named connections from one global configuration, through <ApiRef name="ISwiftlyCore" member="Database" /> (<ApiRef name="IDatabaseService" />).
+
+## Global Database Configuration
+
+Connections are defined in `configs/database.jsonc` and referenced by name from plugins:
+
+```jsonc
+{
+    "default_connection": "host",
+    "connections": {
+        "host": "mysql://username:password@localhost:3306/database",
+        "analytics": "postgresql://username:password@localhost:5432/database",
+        "local": "sqlite://data/local.db"
+    }
+}
+```
+
+Supported URI formats: `mysql://user:pass@host:3306/database`, `postgresql://user:pass@host:5432/database`, `sqlite://path/to/database.db`.
+
+## Getting a Connection
+
+<ApiRef name="IDatabaseService" member="GetConnection" /> returns an
+`IDbConnection` for the named connection, falling back to the default connection
+if the name isn't found.
+<ApiRef name="IDatabaseService" member="GetConnectionString" /> and
+<ApiRef name="IDatabaseService" member="GetConnectionInfo" /> share the same
+fallback and expose the raw string / parsed metadata instead (see
+<ApiRef name="DatabaseConnectionInfo" /> for the full field list - driver, host,
+database, user, pass, timeout, port, raw URI):
+
+```csharp
+using var connection = Core.Database.GetConnection("host");
+connection.Open();
+
+string connectionString = Core.Database.GetConnectionString("host");
+DatabaseConnectionInfo info = Core.Database.GetConnectionInfo("host");
+Console.WriteLine($"{info.Driver} -> {info.Host}:{info.Port}/{info.Database}");
+```
+
+<Callout type="warning">
+    Avoid logging secrets like `Pass` in production.
+</Callout>
+
+## Using ADO.NET or an ORM
+
+`GetConnection` returns `IDbConnection`, so plain ADO.NET or any compatible ORM works - Dapper, Dommel, FreeSql, Entity Framework Core:
+
+```csharp
+using var connection = Core.Database.GetConnection("host");
+
+var players = await connection.QueryAsync<PlayerRow>(
+    "SELECT steam_id, name FROM players WHERE is_active = @IsActive",
+    new { IsActive = true }
+);
+```

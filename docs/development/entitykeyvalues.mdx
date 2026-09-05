@@ -1,0 +1,79 @@
+---
+title: Entity Key Values
+---
+
+SwiftlyS2 provides <ApiRef name="CEntityKeyValues" /> as a typed key-value container for entity spawn/configuration values.
+
+## Creating and Disposing
+
+Default constructor. Implements `IDisposable`, so prefer `using`.
+
+```csharp
+using var keyValues = new CEntityKeyValues();
+```
+
+## Address Property
+
+Exposes its native address through `Address`.
+
+```csharp
+nint address = keyValues.Address;
+```
+
+## Setting and Getting Values
+
+A type-specific `SetX`/`GetX` pair exists for every supported type - `GetX` mirrors `SetX` 1:1, taking the same key and returning what was stored:
+
+```csharp
+keyValues.SetBool("is_enabled", true);
+keyValues.SetInt32("health", 100);
+keyValues.SetUInt32("flags", 1u);
+keyValues.SetInt64("large_value", 9223372036854775807);
+keyValues.SetUInt64("ularge_value", 18446744073709551615UL);
+keyValues.SetFloat("speed", 250.5f);
+keyValues.SetDouble("precise_value", 3.14159265359);
+keyValues.SetString("name", "example");
+keyValues.SetPtr("pointer", nint.Zero);
+keyValues.SetStringToken("token", stringToken);
+keyValues.SetColor("color", new Color(255, 0, 0, 255));
+keyValues.SetVector("position", new Vector(0, 0, 100));
+keyValues.SetVector2D("position_2d", new Vector2D(10, 20));
+keyValues.SetVector4D("position_4d", new Vector4D(1, 2, 3, 4));
+keyValues.SetQAngle("angle", new QAngle(0, 90, 0));
+
+int health = keyValues.GetInt32("health");
+bool hasHealth = keyValues.Has("health"); // check a key exists
+```
+
+Or the generic `Set<T>`/`Get<T>` form for the same types:
+
+```csharp
+keyValues.Set<int>("health", 100);
+keyValues.Set<Vector>("position", new Vector(0, 0, 100));
+
+int health = keyValues.Get<int>("health");
+Vector position = keyValues.Get<Vector>("position");
+```
+
+## Supported Generic Types
+
+`Set<T>`/`Get<T>` support `bool`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `string`, `nint`, `CUtlStringToken`, `Color`, `Vector`, `Vector2D`, `Vector4D`, `QAngle`.
+
+<Callout type="warning">
+Using an unsupported type with `Set<T>` or `Get<T>` throws `InvalidOperationException`.
+</Callout>
+
+## Using with Entity DispatchSpawn
+
+Commonly passed into `DispatchSpawn`/`DispatchSpawnAsync` (async for non-main-thread contexts) on a `CEntityInstance`. See [Entity](/docs/development/entity) for creating entities.
+
+```csharp
+CBaseEntity relay = Core.EntitySystem.CreateEntityByDesignerName<CBaseEntity>("logic_relay");
+
+using var keyValues = new CEntityKeyValues();
+keyValues.SetString("targetname", "sw_relay_01");
+keyValues.SetBool("StartDisabled", false);
+
+relay.DispatchSpawn(keyValues);
+await relay.DispatchSpawnAsync(keyValues); // non-main-thread
+```

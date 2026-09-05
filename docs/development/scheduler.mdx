@@ -1,0 +1,96 @@
+---
+title: Scheduler
+---
+
+SwiftlyS2 provides a scheduler service for main-thread dispatching and timer-based execution, available through <ApiRef name="ISwiftlyCore" member="Scheduler" /> (<ApiRef name="ISchedulerService" />).
+
+## Scheduling on the Main Loop
+
+<ApiRef name="ISchedulerService" member="NextTick" /> runs a callback on the
+next server tick; <ApiRef name="ISchedulerService" member="NextWorldUpdate" />
+runs on the next world update phase instead:
+
+```csharp
+Core.Scheduler.NextTick(() => Console.WriteLine("Runs on next tick."));
+Core.Scheduler.NextWorldUpdate(() => Console.WriteLine("Runs on next world update."));
+```
+
+### Awaitable Variants
+
+The `*Async` methods take the same `Action`/`Func<T>` overloads and can be awaited:
+
+```csharp
+await Core.Scheduler.NextTickAsync(() => Console.WriteLine("Executed on next tick, awaited."));
+
+int computedValue = await Core.Scheduler.NextWorldUpdateAsync(() => 42);
+```
+
+<Callout type="warning">
+Don't pass an async callback (`Func<Task>`/`Func<Task<T>>`) to `NextTick`, `NextTickAsync`, `NextWorldUpdate`, or `NextWorldUpdateAsync` - those overloads are `[Obsolete]` and throw `InvalidOperationException`, since an async callback can resume on a different thread and break the main-thread guarantee these methods exist for. Use the plain `Action`/`Func<T>` overloads instead.
+</Callout>
+
+## Timer APIs
+
+### Tick-Based Timers
+
+```csharp
+var delayCts = Core.Scheduler.Delay(128, () => Console.WriteLine("Executed once after 128 ticks."));
+var repeatCts = Core.Scheduler.Repeat(64, () => Console.WriteLine("Runs immediately, then every 64 ticks."));
+var delayRepeatCts = Core.Scheduler.DelayAndRepeat(32, 64, () => Console.WriteLine("Starts after 32 ticks, then repeats every 64 ticks."));
+```
+
+See <ApiRef name="ISchedulerService" member="Delay" />, <ApiRef name="ISchedulerService" member="Repeat" />, and <ApiRef name="ISchedulerService" member="DelayAndRepeat" />.
+
+### Second-Based Timers
+
+<ApiRef name="ISchedulerService" member="DelayBySeconds" />,
+<ApiRef name="ISchedulerService" member="RepeatBySeconds" />, and
+<ApiRef name="ISchedulerService" member="DelayAndRepeatBySeconds" /> mirror the
+tick-based methods above with human-readable intervals instead of raw ticks:
+
+```csharp
+Core.Scheduler.DelayBySeconds(2.0f, () => Console.WriteLine("Executed after 2 seconds."));
+```
+
+<Callout type="info">
+    Second-based timers are still driven by game ticks, so timing gets
+    inaccurate as intervals approach a single tick (~15ms).
+</Callout>
+
+## Canceling Timers
+
+`Delay`, `Repeat`, `DelayAndRepeat`, `DelayBySeconds`, `RepeatBySeconds`, and `DelayAndRepeatBySeconds` all return a `CancellationTokenSource`:
+
+```csharp
+var token = Core.Scheduler.Repeat(64, () => Console.WriteLine("Tick"));
+
+token.Cancel(); // manual cancel
+Core.Scheduler.StopOnMapChange(token); // auto-cancel on map change
+```
+
+See <ApiRef name="ISchedulerService" member="StopOnMapChange" />.
+
+## Advanced Timers with AddTimer
+
+<ApiRef name="ISchedulerService" member="AddTimer" /> supports dynamic
+per-execution behavior - e.g. changing the delay between runs or stopping on a
+condition:
+
+```csharp
+var cts = Core.Scheduler.AddTimer(ctx =>
+{
+    Console.WriteLine($"Run #{ctx.ExecutionCount}");
+    return ctx.ExecutionCount >= 4 ? TimerStep.Stop() : TimerStep.WaitForSeconds(1.0f);
+});
+```
+
+<ApiRef name="ITimerContext" member="ExecutionCount" /> is a `ulong` starting at
+`0`. <ApiRef name="TimerStep" /> helpers:
+
+| Method                                             | Behavior                                                                                    |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `TimerStep.Spin()`                                 | Run again on the very next tick                                                             |
+| `TimerStep.WaitForTicks(long ticks)`               | Wait the given number of ticks before the next run                                          |
+| `TimerStep.WaitForMilliseconds(long milliseconds)` | Wait the given number of milliseconds before the next run                                   |
+| `TimerStep.WaitForSeconds(float seconds)`          | Wait the given number of seconds before the next run (converted to milliseconds internally) |
+| `TimerStep.Stop()`                                 | Stop the timer, no further runs                                                             |

@@ -5,6 +5,10 @@
     "installation": {
         "page": "installation.mdx"
     },
+    "development": {
+        "category": "development",
+        "title": "Development"
+    },
     "guides": {
         "category": "guides",
         "title": "Guides"

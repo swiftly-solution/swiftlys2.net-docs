@@ -1,0 +1,76 @@
+---
+title: Sound Events
+---
+
+<ApiRef name="SoundEvent" /> lets plugins emit game sound events with custom
+parameters and recipient filters.
+
+## Creating Sound Events
+
+```csharp
+using var soundEvent = new SoundEvent();
+soundEvent.Name = "Weapon_AK47.Single";
+
+// or initialize name, volume, and pitch directly
+using var soundEvent2 = new SoundEvent("Weapon_AK47.Single", volume: 0.8f, pitch: 1.0f);
+```
+
+## Configuring Core Properties
+
+```csharp
+soundEvent.Name = "Weapon_AK47.Single";
+soundEvent.Volume = 0.6f;               // volume scalar
+soundEvent.Pitch = 1.15f;               // pitch scalar
+soundEvent.SourceEntityIndex = -1;      // source entity index; -1 (default) = recipient location
+
+soundEvent.SetSourceEntity(sourceEntity); // helper instead of setting SourceEntityIndex by hand
+```
+
+## Setting Custom Sound Fields
+
+`GetX` mirrors every `SetX` 1:1. `SetFloat3` also has a `Vector` overload.
+
+```csharp
+soundEvent.SetBool("public.some_flag", true);
+soundEvent.SetInt32("public.team", 2);
+soundEvent.SetUInt32("public.seed", 123u);
+soundEvent.SetFloat("public.volume_override", 0.7f);
+soundEvent.SetFloat3("public.position", 100.0f, 200.0f, 300.0f);
+soundEvent.SetFloat3("public.position", position); // Vector overload
+
+bool someFlag = soundEvent.GetBool("public.some_flag");
+Vector pos = soundEvent.GetFloat3("public.position");
+```
+
+## Configuring Recipients
+
+Managed through <ApiRef name="CRecipientFilter" /> on `soundEvent.Recipients`.
+
+```csharp
+// Broadcast to everyone
+soundEvent.Recipients.AddAllPlayers();
+
+// Or target specific players
+soundEvent.Recipients.RemoveAllPlayers();
+soundEvent.Recipients.AddRecipient(0);
+soundEvent.Recipients.AddRecipient(1);
+
+// Remove one player again
+soundEvent.Recipients.RemoveRecipient(1);
+```
+
+## Emitting Sound Events
+
+```csharp
+uint guid = soundEvent.Emit(); // main thread
+uint guid = await soundEvent.EmitAsync(); // non-main-thread
+```
+
+<Callout type="warning">
+    `Emit()` is thread-unsafe. Use `EmitAsync()` when you're not sure execution
+    is on the main thread.
+</Callout>
+
+## Disposing
+
+`SoundEvent` implements `IDisposable` - wrap it in `using` so its native handle is released once you're done emitting.

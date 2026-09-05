@@ -1,0 +1,113 @@
+---
+title: Commands
+---
+
+SwiftlyS2's command system lets you register commands, hook client commands and chat, and manage permissions - via attributes or programmatically.
+
+## Registering Commands
+
+### With Attributes
+
+Attach `[Command]` to a method matching `void CommandListenerFunction(ICommandContext context)`.
+
+```csharp
+[Command("heal", registerRaw: false, permission: "admins.commands.heal")]
+public void OnHealCommand(ICommandContext context)
+{
+    if (!context.IsSentByPlayer)
+    {
+        context.Reply("This command can only be used by players!");
+        return;
+    }
+    var player = context.Sender!;
+}
+```
+
+See <ApiRef name="Command" /> for the full attribute reference - `registerRaw` skips the `sw_` prefix; `permission` is checked before the handler runs (`heal` above registers as `sw_heal`, gated by `admins.commands.heal`).
+
+### Programmatically
+
+Same signature, registered via <ApiRef name="ICommandService" member="RegisterCommand" /> - the returned `Guid` is for later unregistration.
+
+```csharp
+public override void Load(bool hotReload)
+{
+    var commandGuid = Core.Command.RegisterCommand("heal", OnHealCommand);
+}
+```
+
+## Command Context
+
+Every handler receives an <ApiRef name="ICommandContext" /> - `Sender` (<ApiRef name="IPlayer" />), `IsSentByPlayer`, `Prefix`, `IsSlient`, `CommandName`, `Args`, plus `Reply`/`ReplyAsync`.
+
+<Callout type="info">
+    `Sender` is `null` when the command is executed from server console. Always
+    check `IsSentByPlayer` before dereferencing `Sender`.
+</Callout>
+
+## Unregistering Commands
+
+Plugins auto-unregister their commands on unload. To do it manually, see <ApiRef name="ICommandService" member="UnregisterCommand" /> (by `Guid` or by name) and <ApiRef name="ICommandService" member="IsCommandRegistered" /> to check if a name is taken.
+
+## Command Aliases
+
+Aliases register the same handler under extra command names.
+
+### With Attributes
+
+Stack <ApiRef name="CommandAlias" /> on an already-`[Command]`-registered method - it allows multiple attributes per method, so `heal` can gain both `hp` and `h`:
+
+```csharp
+[Command("heal")]
+[CommandAlias("hp")]
+[CommandAlias("h")]
+public void OnHealCommand(ICommandContext context)
+{
+    // reachable as sw_heal, sw_hp, sw_h
+}
+```
+
+### Programmatically
+
+```csharp
+// e.g. in Load():
+Core.Command.RegisterCommandAlias("heal", "hp");
+```
+
+See <ApiRef name="ICommandService" member="RegisterCommandAlias" /> for the full signature.
+
+## Introspection
+
+`Core.Command` can enumerate what's registered, e.g. for a `/plugins commands` admin command - see <ApiRef name="ICommandService" member="GetAllCommands" />, <ApiRef name="ICommandService" member="GetCommandsByPlugin" />, <ApiRef name="ICommandService" member="GetAllCommandsByPlugin" /> and <ApiRef name="ICommandService" member="GetAllCommandsInfo" /> (the latter three return <ApiRef name="CommandInfo" /> entries).
+
+## Client Command Hooks
+
+Intercept every console command a player sends (`~` console), not just ones you registered - via <ApiRef name="ClientCommandHookHandler" /> or programmatically with <ApiRef name="ICommandService" member="HookClientCommand" />/<ApiRef name="ICommandService" member="UnhookClientCommand" />:
+
+```csharp
+[ClientCommandHookHandler]
+public HookResult OnClientCommand(int playerId, string commandLine)
+{
+    if (commandLine.StartsWith("say"))
+        Console.WriteLine($"Player #{playerId} is using the say command");
+
+    return HookResult.Continue;
+}
+```
+
+## Client Chat Hooks
+
+Block or inspect chat messages before they reach other players - word filters, private chats, etc. Same shape, via <ApiRef name="ClientChatHookHandler" /> or <ApiRef name="ICommandService" member="HookClientChat" />/<ApiRef name="ICommandService" member="UnhookClientChat" />:
+
+```csharp
+[ClientChatHookHandler]
+public HookResult OnClientChat(int playerId, string text, bool teamonly)
+{
+    return text.Contains("badword") ? HookResult.Stop : HookResult.Continue;
+}
+```
+
+<Callout type="warning">
+    `HookResult.Stop` silently drops the command/message from the player's
+    perspective - use deliberately.
+</Callout>

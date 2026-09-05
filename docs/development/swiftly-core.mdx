@@ -1,0 +1,100 @@
+---
+title: Swiftly Core
+---
+
+<ApiRef name="ISwiftlyCore" /> is the central entry point for all plugin
+services in SwiftlyS2. `Core` refers to the `ISwiftlyCore` instance every plugin
+receives.
+
+## How Core Is Provided
+
+<ApiRef name="BasePlugin" /> takes `ISwiftlyCore` in its constructor and exposes
+it as the protected `Core` property:
+
+```csharp
+public sealed class MyPlugin : BasePlugin
+{
+    public MyPlugin(ISwiftlyCore core) : base(core)
+    {
+    }
+
+    public override void Load(bool hotReload)
+    {
+        Core.Logger.LogInformation("Plugin loaded. Hot reload: {HotReload}", hotReload);
+    }
+
+    public override void Unload()
+    {
+        Core.Logger.LogInformation("Plugin unloaded.");
+    }
+}
+```
+
+<Callout type="info">
+    Pass `ISwiftlyCore` (or the specific services you need) into helper classes
+    rather than reaching for a static/global reference.
+</Callout>
+
+## Core Services at a Glance
+
+| Property                             | Service                                                                                                  |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `Core.Event`                         | <ApiRef name="IEventSubscriber" /> - framework event subscription (client/map/entity lifecycle)          |
+| `Core.GameEvent`                     | <ApiRef name="IGameEventService" /> - game event (`EventPlayerDeath`, etc.) hook/fire APIs               |
+| `Core.NetMessage`                    | <ApiRef name="INetMessageService" /> - net message send/hook APIs                                        |
+| `Core.GameHooks`                     | <ApiRef name="IGameHooks" /> - virtual-function style hooks grouped by category                          |
+| `Core.Engine`                        | <ApiRef name="IEngineService" /> - console commands, particle effects                                    |
+| `Core.Game`                          | <ApiRef name="IGameService" /> - game-specific actions, e.g. grenade projectiles                         |
+| `Core.Helpers`                       | <ApiRef name="IHelpers" /> - misc helper utilities                                                       |
+| `Core.Command`                       | <ApiRef name="ICommandService" /> - command registration and aliasing                                    |
+| `Core.ConsoleOutput`                 | <ApiRef name="IConsoleOutputService" /> - console output access                                          |
+| `Core.EntitySystem`                  | <ApiRef name="IEntitySystemService" /> - entity creation and querying                                    |
+| `Core.ConVar`                        | <ApiRef name="IConVarService" /> - ConVar creation, lookup and value access                              |
+| `Core.Configuration`                 | <ApiRef name="IPluginConfigurationService" /> - plugin configuration file initialization/binding         |
+| `Core.GameData`                      | <ApiRef name="IGameDataService" /> - per-plugin signature/offset lookup                                  |
+| `Core.PlayerManager`                 | <ApiRef name="IPlayerManagerService" /> - player lookup and server-wide player actions                   |
+| `Core.Memory`                        | <ApiRef name="IMemoryService" /> - unmanaged function resolution and hooking                             |
+| `Core.Scheduler`                     | <ApiRef name="ISchedulerService" /> - main-thread dispatch, delayed and repeating tasks                  |
+| `Core.Database`                      | <ApiRef name="IDatabaseService" /> - database connection access                                          |
+| `Core.Translation`, `Core.Localizer` | <ApiRef name="ITranslationService" />, <ApiRef name="ILocalizer" /> - player and server localization     |
+| `Core.Permission`                    | <ApiRef name="IPermissionManager" /> - permission checks and assignment                                  |
+| `Core.Registrator`                   | <ApiRef name="IRegistratorService" /> - registers attribute-decorated instances beyond the plugin itself |
+| `Core.MenusAPI`                      | <ApiRef name="IMenuManagerAPI" /> - menu building and display                                            |
+| `Core.CommandLine`                   | <ApiRef name="ICommandLine" /> - server command-line argument access                                     |
+| `Core.GameFileSystem`                | <ApiRef name="IGameFileSystem" /> - game virtual file system access                                      |
+| `Core.PluginManager`                 | <ApiRef name="IPluginManager" /> - plugin discovery/metadata lookup                                      |
+| `Core.StringTable`                   | <ApiRef name="IStringTableService" /> - string table access                                              |
+| `Core.Profiler`                      | <ApiRef name="IContextedProfilerService" /> - profiling scopes and timers                                |
+| `Core.Trace`                         | <ApiRef name="ITraceManager" /> - trace/diagnostics manager                                              |
+| `Core.Logger`, `Core.LoggerFactory`  | Standard `Microsoft.Extensions.Logging` logger                                                           |
+
+Full member list for any of these: <ApiRef name="ISwiftlyCore" />.
+
+Runtime paths follow the same pattern: `Core.PluginPath` (current plugin's directory), `Core.PluginDataDirectory` (per-plugin data directory), `Core.CSGODirectory` (`game/csgo`), `Core.GameFilesDirectory` and `Core.GameDirectory` (game root).
+
+## Thread Awareness
+
+`Core.IsGameThread` reports whether the current call is on the game thread:
+
+```csharp
+public void EnsureMainThreadAction(Action action)
+{
+    if (Core.IsGameThread)
+    {
+        action();
+        return;
+    }
+
+    Core.Scheduler.NextTick(action);
+}
+```
+
+<Callout type="warning">
+    Many game-facing APIs are thread-unsafe (`[ThreadUnsafe]`). Off the game
+    thread, use their `Async` counterpart or hand the call to `Core.Scheduler`
+    first. See [Thread Safety](/docs/development/thread-safety).
+</Callout>
+
+## Registering Attribute Handlers on Other Classes
+
+Your plugin class is registered for attribute discovery automatically. Any other class needs `Core.Registrator.Register(instance)` - see [Using Attributes](/docs/development/using-attributes) for a full worked example and the complete attribute list.

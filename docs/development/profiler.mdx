@@ -1,0 +1,75 @@
+---
+title: Profiler
+---
+
+SwiftlyS2's profiler service measures execution time in plugin code and records custom duration metrics.
+
+Access it through `Core.Profiler` (<ApiRef name="ISwiftlyCore" member="Profiler" />).
+
+## Measuring Code Blocks
+
+Pair <ApiRef name="IContextedProfilerService" member="StartRecording" />/<ApiRef name="IContextedProfilerService" member="StopRecording" /> around the code, wrapped in `try`/`finally` so an exception doesn't leave a recording open.
+
+```csharp
+Core.Profiler.StartRecording("Database.PlayerStats.Load");
+try
+{
+    LoadPlayerStats();
+}
+finally
+{
+    Core.Profiler.StopRecording("Database.PlayerStats.Load");
+}
+```
+
+## Recording Precomputed Durations
+
+Use <ApiRef name="IContextedProfilerService" member="RecordTime" /> for a duration you already measured (`double`, microseconds).
+
+```csharp
+var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+BuildLargeMenu();
+
+stopwatch.Stop();
+double durationUs = stopwatch.ElapsedTicks * (1_000_000.0 / System.Diagnostics.Stopwatch.Frequency);
+Core.Profiler.RecordTime("Menu.Build", durationUs);
+```
+
+<Callout type="info">
+    Use microseconds consistently so profiler entries stay comparable across the
+    codebase.
+</Callout>
+
+## Profiling Sub-Operations
+
+Nest start/stop pairs to profile major flow steps separately and find hot spots faster:
+
+```csharp
+Core.Profiler.StartRecording("PlayerData.Process");
+try
+{
+    Core.Profiler.StartRecording("PlayerData.Load");
+    try { LoadPlayerData(player.SteamID); } finally { Core.Profiler.StopRecording("PlayerData.Load"); }
+
+    Core.Profiler.StartRecording("PlayerData.Apply");
+    try { ApplyPlayerData(player); } finally { Core.Profiler.StopRecording("PlayerData.Apply"); }
+}
+finally { Core.Profiler.StopRecording("PlayerData.Process"); }
+```
+
+## Naming Strategy
+
+Use clear, hierarchical names so related entries group together:
+
+```text
+category.operation.detail
+```
+
+Examples: `Database.Players.Load`, `Database.Players.Save`, `Menu.Main.Build`, `Menu.Main.Open`, `Commands.Teleport.Execute`, `Events.PlayerSpawn.Process`.
+
+Avoid generic names like `Operation` or `Process` - they make hot spots hard to trace back to real code.
+
+## Reference
+
+See <ApiRef name="IContextedProfilerService" /> (<ApiRef name="ISwiftlyCore" member="Profiler" />) for the full member list - `StartRecording`, `StopRecording`, `RecordTime`.

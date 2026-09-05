@@ -1,0 +1,112 @@
+---
+title: Translations
+---
+
+SwiftlyS2's translation APIs localize plugin text by key and automatically resolve player-specific language.
+
+## Translation File Layout
+
+Place `.jsonc` files named by language code under `resources/translations/` (for example `en.jsonc`, `fr.jsonc`, `pt-BR.jsonc`, `es-419.jsonc`). At least one must exist for the plugin's translations to load.
+
+<Callout type="warning">
+    Custom language codes work for direct lookups through `Core.Localizer`, but
+    `Core.Translation.GetPlayerLocalizer(player)` only resolves the codes listed
+    below.
+</Callout>
+
+<Callout type="info">
+    Keep an `en.jsonc` baseline with all keys so unsupported or incomplete
+    languages still have usable text.
+</Callout>
+
+### Language Codes
+
+| Language                | Code              | File Name                     |
+| ----------------------- | ----------------- | ----------------------------- |
+| Arabic                  | `ar`              | `ar.jsonc`                    |
+| Bulgarian               | `bg`              | `bg.jsonc`                    |
+| Chinese (CN & TW)       | `zh-CN` / `zh-TW` | `zh-CN.jsonc` / `zh-TW.jsonc` |
+| Czech                   | `cs`              | `cs.jsonc`                    |
+| Danish                  | `da`              | `da.jsonc`                    |
+| Dutch                   | `nl`              | `nl.jsonc`                    |
+| English                 | `en`              | `en.jsonc`                    |
+| Finnish                 | `fi`              | `fi.jsonc`                    |
+| French                  | `fr`              | `fr.jsonc`                    |
+| German                  | `de`              | `de.jsonc`                    |
+| Greek                   | `el`              | `el.jsonc`                    |
+| Hungarian               | `hu`              | `hu.jsonc`                    |
+| Indonesian              | `id`              | `id.jsonc`                    |
+| Italian                 | `it`              | `it.jsonc`                    |
+| Japanese                | `ja`              | `ja.jsonc`                    |
+| Korean                  | `ko`              | `ko.jsonc`                    |
+| Norwegian               | `no`              | `no.jsonc`                    |
+| Polish                  | `pl`              | `pl.jsonc`                    |
+| Portuguese              | `pt`              | `pt.jsonc`                    |
+| Portuguese (Brazilian)  | `pt-BR`           | `pt-BR.jsonc`                 |
+| Romanian                | `ro`              | `ro.jsonc`                    |
+| Russian                 | `ru`              | `ru.jsonc`                    |
+| Spanish                 | `es`              | `es.jsonc`                    |
+| Spanish (Latin America) | `es-419`          | `es-419.jsonc`                |
+| Swedish                 | `sv`              | `sv.jsonc`                    |
+| Thai                    | `th`              | `th.jsonc`                    |
+| Turkish                 | `tr`              | `tr.jsonc`                    |
+| Ukrainian               | `uk`              | `uk.jsonc`                    |
+| Vietnamese              | `vn`              | `vn.jsonc`                    |
+
+## Example Translation File
+
+```jsonc
+{
+    // General
+    "plugin.name": "My Plugin",
+    "plugin.ready": "Plugin is ready.",
+
+    // Command feedback
+    "command.heal.success": "You have been healed.",
+    "command.heal.other": "{0} healed {1}",
+    "command.heal.no_permission": "You do not have permission.",
+
+    // Errors
+    "error.player_not_found": "Player '{0}' was not found."
+}
+```
+
+<Callout type="info">
+    Values are chat-color-processed automatically, so `[red]`/`[green]`/etc.
+    bracket syntax works directly inside translation strings. See [Chat &
+    CenterHTML Styling](/docs/guides/chat-and-html-styling) for the full color
+    list.
+</Callout>
+
+## Server-Side Localization
+
+<ApiRef name="ISwiftlyCore" member="Localizer" /> (<ApiRef name="ILocalizer" />)
+is for messages that aren't player-specific. It supports `["key"]` and `["key",
+arg0, arg1, ...]` - keep placeholder order stable across languages:
+
+```csharp
+string readyMessage = Core.Localizer["plugin.ready"];
+string versionMessage = Core.Localizer["plugin.version", "1.2.0"];
+```
+
+## Player-Specific Localization
+
+Use <ApiRef name="ITranslationService" member="GetPlayerLocalizer" /> when output should match the player's language. <ApiRef name="IPlayer" member="PlayerLanguage" /> (a <ApiRef name="Language" /> value) is available for diagnostics or conditional flows:
+
+```csharp
+public async Task GreetAsync(IPlayer player)
+{
+    var localizer = Core.Translation.GetPlayerLocalizer(player);
+    string message = localizer["welcome.message", player.Name];
+
+    await player.SendChatAsync(message);
+    Core.Logger.LogInformation("Greeted {SteamId} in {Language}", player.SteamID, player.PlayerLanguage);
+}
+```
+
+## Key Design Best Practices
+
+- Use stable dot-separated keys (for example `command.heal.success`).
+- Keep the same key set across all language files.
+- Add JSONC comments for translator context when placeholders are involved.
+- Avoid string concatenation in code for translatable sentences.

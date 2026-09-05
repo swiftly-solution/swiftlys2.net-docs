@@ -1,0 +1,109 @@
+---
+title: Core Events
+---
+
+Core events are SwiftlyS2's own engine/framework callbacks - client lifecycle, entity lifecycle, convar changes, server startup, tick/world update - separate from the CS2 [game events](/docs/development/game-events) system. They're exposed through `Core.Event` (<ApiRef name="IEventSubscriber" />), a set of plain C# events.
+
+## Subscribing
+
+Subscribe with a plain `+=`, or with `[EventListener<T>]` where `T` is the matching delegate from `EventDelegates`.
+
+<Tabs>
+  <Tab label="Programmatically">
+    ```csharp
+    public override void Load(bool hotReload)
+    {
+        Core.Event.OnClientConnected += OnClientConnected;
+    }
+
+    private void OnClientConnected(IOnClientConnectedEvent @event)
+    {
+        Console.WriteLine($"Client connected: {@event.PlayerId}");
+    }
+    ```
+
+  </Tab>
+  <Tab label="With attribute">
+    ```csharp
+    [EventListener<EventDelegates.OnClientConnected>]
+    public void OnClientConnected(IOnClientConnectedEvent @event)
+    {
+        Console.WriteLine($"Client connected: {@event.PlayerId}");
+    }
+    ```
+  </Tab>
+</Tabs>
+
+Match the delegate signature exactly - `EventDelegates.OnClientConnected` is `void(IOnClientConnectedEvent @event)`; `OnTick`/`OnWorldUpdate` take no parameters.
+
+## Blocking a Client from Joining
+
+Some client-lifecycle events expose a settable `Result` to reject the action, e.g. <ApiRef name="IOnClientConnectedEvent" />:
+
+```csharp
+[EventListener<EventDelegates.OnClientConnected>]
+public void OnClientConnected(IOnClientConnectedEvent @event)
+{
+    if (IsBanned(@event.PlayerId))
+    {
+        @event.Result = HookResult.Stop;
+    }
+}
+```
+
+## Unsubscribing
+
+`-=` only removes a subscription added with `+=` - keep a reference to the exact delegate instance:
+
+```csharp
+private EventDelegates.OnClientConnected? _onClientConnected;
+
+public override void Load(bool hotReload)
+{
+    _onClientConnected = OnClientConnected;
+    Core.Event.OnClientConnected += _onClientConnected;
+}
+
+public override void Unload()
+{
+    if (_onClientConnected != null)
+        Core.Event.OnClientConnected -= _onClientConnected;
+}
+```
+
+<Callout type="info">
+    The framework tears down every listener a plugin registered on hot reload or
+    unload automatically - unsubscribe manually only to stop listening earlier.
+</Callout>
+
+## Hot Path Events
+
+`OnTick`, `OnWorldUpdate`, and the obsolete `OnClientProcessUsercmds` fire every tick/frame - keep handlers allocation-free and cheap; push anything heavier to a scheduled task or a flag.
+
+## Deprecated Hook-Style Events
+
+Several `Core.Event` members that used to be the only way to intercept a native call are `[Obsolete]` in favor of the more structured [`Core.GameHooks`](/docs/development/native-functions-and-hooks) categories - separate pre/post delegates and a richer context object instead of one generic event:
+
+| Obsolete event                                                  | Use instead                                           |
+| --------------------------------------------------------------- | ----------------------------------------------------- |
+| `OnClientProcessUsercmds`                                       | `Core.GameHooks.Controller`/`Movement`                |
+| `OnEntityTakeDamage`                                            | `Core.GameHooks.Entities.TakeDamage`                  |
+| `OnItemServicesCanAcquireHook`                                  | `Core.GameHooks.Items.CanAcquire`                     |
+| `OnWeaponServicesCanUseHook` / `OnWeaponServicesDropWeaponHook` | `Core.GameHooks.Weapons.*`                            |
+| `OnEntityStartTouch` / `OnEntityTouch` / `OnEntityEndTouch`     | `Core.GameHooks.Entities.{StartTouch,Touch,EndTouch}` |
+| `OnMovementServicesRunCommandHook`                              | `Core.GameHooks.Movement.RunCommand`                  |
+| `OnPlayerPawnPostThink`                                         | `Core.GameHooks.Pawn.PostThink`                       |
+| `OnEntityIdentityAcceptInputHook`                               | `Core.GameHooks.Entities.AcceptInput`                 |
+| `OnEntityFireOutputHook`                                        | `Core.GameHooks.Entities.FireOutput`                  |
+
+## Event Reference
+
+| Category          | Events                                                                                                                                                                 |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Client lifecycle  | `OnClientConnected`, `OnClientDisconnected`, `OnClientPutInServer`, `OnClientKeyStateChanged`, `OnClientSteamAuthorize`, `OnClientSteamAuthorizeFail`, `OnClientVoice` |
+| Entity lifecycle  | `OnEntityCreated`, `OnEntitySpawned`, `OnEntityDeleted`, `OnEntityParentChanged`                                                                                       |
+| ConVar / commands | `OnConVarCreated`, `OnConVarValueChanged`, `OnConCommandCreated`, `OnCommandExecuteHook`, `OnConsoleOutput`                                                            |
+| Server / world    | `OnStartupServer`, `OnMapLoad`, `OnMapUnload`, `OnTick`, `OnWorldUpdate`, `OnSteamAPIActivated`, `OnPrecacheResource`                                                  |
+| UI                | `OnCustomHudClicked`                                                                                                                                                   |
+
+Each parameter interface lives under `SwiftlyS2.Shared.Events` (e.g. <ApiRef name="IOnClientConnectedEvent" />, <ApiRef name="IOnMapLoadEvent" />) and exposes only the fields relevant to that callback - open the type's page for the full field list instead of guessing from the event name.

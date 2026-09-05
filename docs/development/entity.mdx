@@ -1,0 +1,148 @@
+---
+title: Entity
+---
+
+SwiftlyS2's entity system creates entities, queries existing ones, tracks them safely with handles, and hooks entity inputs/outputs.
+
+## Accessing Entity System Service
+
+Available through `Core.EntitySystem`.
+
+```csharp
+public override void Load(bool hotReload)
+{
+    var entitySystem = Core.EntitySystem;
+}
+```
+
+## Creating Entities
+
+By schema class via <ApiRef name="IEntitySystemService" member="CreateEntity" />, or by designer name via <ApiRef name="IEntitySystemService" member="CreateEntityByDesignerName" /> - each also has an overload to force a specific entity index:
+
+```csharp
+CPointWorldText worldText = Core.EntitySystem.CreateEntity<CPointWorldText>();
+CBaseEntity relay = Core.EntitySystem.CreateEntityByDesignerName<CBaseEntity>("logic_relay");
+```
+
+<Callout type="warning">
+    Every entity-system method here throws `InvalidOperationException` if called
+    too early, before the entity system is available.
+</Callout>
+
+## Spawning Entities
+
+Creating an entity doesn't spawn it - call `DispatchSpawn`/`DispatchSpawnAsync` (the latter for non-main-thread contexts) after creating, optionally with a [`CEntityKeyValues`](/docs/development/entitykeyvalues):
+
+```csharp
+CPointWorldText worldText = Core.EntitySystem.CreateEntity<CPointWorldText>();
+worldText.DispatchSpawn();
+
+CBaseEntity relay = Core.EntitySystem.CreateEntityByDesignerName<CBaseEntity>("logic_relay");
+
+using var keyValues = new CEntityKeyValues();
+keyValues.SetString("targetname", "sw_relay_01");
+keyValues.SetBool("StartDisabled", false);
+
+relay.DispatchSpawn(keyValues);
+await relay.DispatchSpawnAsync(keyValues); // non-main-thread
+```
+
+## Querying Existing Entities
+
+Every query method returns `IEnumerable<T>` - filter as early as possible. See <ApiRef name="IEntitySystemService" member="GetAllEntities" />, <ApiRef name="IEntitySystemService" member="GetAllEntitiesByClass" />, <ApiRef name="IEntitySystemService" member="GetAllEntitiesByDesignerName" />.
+
+```csharp
+IEnumerable<CEntityInstance> allEntities = Core.EntitySystem.GetAllEntities();
+IEnumerable<CPointWorldText> worldTexts = Core.EntitySystem.GetAllEntitiesByClass<CPointWorldText>();
+IEnumerable<CBaseEntity> relays = Core.EntitySystem.GetAllEntitiesByDesignerName<CBaseEntity>("logic_relay");
+```
+
+### Get by Index or Address
+
+<ApiRef name="IEntitySystemService" member="GetEntityByIndex" /> takes a `uint`
+index; <ApiRef name="IEntitySystemService" member="GetEntityByAddress" /> takes
+a pointer:
+
+```csharp
+CEntityInstance? byIndex = Core.EntitySystem.GetEntityByIndex(100u);
+CBaseEntity? typedByIndex = Core.EntitySystem.GetEntityByIndex<CBaseEntity>(100u);
+
+CEntityInstance? byAddress = Core.EntitySystem.GetEntityByAddress((nint)0x12345678);
+CBaseEntity? typedByAddress = Core.EntitySystem.GetEntityByAddress<CBaseEntity>((nint)0x12345678);
+```
+
+<Callout type="warning">
+The generic `GetEntityByIndex<T>`/`GetEntityByAddress<T>` overloads throw `InvalidOperationException` if the resolved entity isn't type `T`. Use the non-generic overload to check the type yourself.
+</Callout>
+
+## Getting Game Rules
+
+<ApiRef name="IEntitySystemService" member="GetGameRules" />:
+
+```csharp
+CCSGameRules? gameRules = Core.EntitySystem.GetGameRules();
+```
+
+## Entity Handles and Safety
+
+Check `IsValid` before using a direct entity reference - it's only a point-in-time check, so for tracking across frames/ticks store a <ApiRef name="CHandle`1" /> (via <ApiRef name="IEntitySystemService" member="GetRefEHandle" />) instead, and check `handle.IsValid` before reading `handle.Value`:
+
+```csharp
+List<CHandle<CBaseEntity>> trackedEntities = new();
+
+CBaseEntity entity = Core.EntitySystem.CreateEntity<CBaseEntity>();
+trackedEntities.Add(Core.EntitySystem.GetRefEHandle(entity));
+
+entity.Despawn(); // also has a DespawnAsync() counterpart
+
+Core.Scheduler.DelayBySeconds(10, () =>
+{
+    foreach (var tracked in trackedEntities)
+    {
+        if (tracked.IsValid)
+        {
+            CBaseEntity current = tracked.Value!;
+            Console.WriteLine("Tracked entity is still valid.");
+        }
+    }
+});
+```
+
+## Hooking Entity Outputs and Inputs
+
+Register by designer name via <ApiRef name="IEntitySystemService" member="HookEntityOutput" />, or with <ApiRef name="EntityOutputHandlerAttribute" /> (also available as <ApiRef name="EntityOutputHandlerAttribute`1" /> - `[EntityOutputHandler<T>("OutputName")]` resolves the designer name from the schema class). Inputs work identically via <ApiRef name="IEntitySystemService" member="HookEntityInput" /> and <ApiRef name="EntityInputHandlerAttribute" />/<ApiRef name="EntityInputHandlerAttribute`1" />, just swap `Output`→`Input`, `OutputName`→`InputName`, and the event type.
+
+<Tabs>
+  <Tab label="Programmatically">
+    ```csharp
+    private Guid _outputHookGuid;
+
+    public override void Load(bool hotReload)
+    {
+        _outputHookGuid = Core.EntitySystem.HookEntityOutput("func_door", "OnOpen", OnDoorOpened);
+    }
+
+    public override void Unload()
+    {
+        Core.EntitySystem.UnhookEntityOutput(_outputHookGuid);
+    }
+
+    private void OnDoorOpened(IOnEntityFireOutputHookEvent @event)
+    {
+        Console.WriteLine($"Output '{@event.OutputName}' fired by '{@event.DesignerName}'");
+    }
+    ```
+
+  </Tab>
+  <Tab label="With attribute">
+    ```csharp
+    [EntityOutputHandler("func_door", "OnOpen")]
+    public void OnDoorOpened(IOnEntityFireOutputHookEvent @event)
+    {
+        Console.WriteLine($"Output '{@event.OutputName}' fired by '{@event.DesignerName}'");
+    }
+    ```
+  </Tab>
+</Tabs>
+
+Input hooking mirrors this exactly, callback taking an <ApiRef name="IOnEntityIdentityAcceptInputHookEvent" /> with `@event.InputName` (output callbacks take <ApiRef name="IOnEntityFireOutputHookEvent" /> with `@event.OutputName`). Set `@event.Result = HookResult.Stop` in either callback to block the flow. Unhook with <ApiRef name="IEntitySystemService" member="UnhookEntityOutput" />/<ApiRef name="IEntitySystemService" member="UnhookEntityInput" />.

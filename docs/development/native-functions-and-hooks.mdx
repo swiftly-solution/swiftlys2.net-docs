@@ -1,0 +1,130 @@
+---
+title: Native Functions and Hooks
+---
+
+<Callout type="warning">
+    This is low-level, unsafe territory. A wrong calling convention, a
+    mismatched delegate signature, or a bad register edit in a mid-hook can
+    crash the game server. Test on a disposable server first.
+</Callout>
+
+Native interop splits across two services: `Core.GameData` (<ApiRef name="IGameDataService" />) resolves named signatures/offsets shipped with your plugin, `Core.Memory` (<ApiRef name="IMemoryService" />) turns raw addresses into callable, hookable functions (or raw memory to mid-hook directly).
+
+## Resolving Addresses
+
+### From Your Plugin's GameData
+
+Each plugin ships its own `resources/gamedata/*.jsonc` with signatures/offsets per platform, keyed by name. Look them up with `TryGetSignature`/`TryGetOffset`:
+
+```csharp
+if (!Core.GameData.TryGetSignature("CBaseEntity::DispatchSpawn", out nint dispatchSpawnAddress))
+{
+    Core.Logger.LogWarning("Signature not found");
+    return;
+}
+
+if (!Core.GameData.TryGetOffset("CCSPlayer_ItemServices::GiveNamedItem", out nint giveNamedItemOffset))
+{
+    return;
+}
+```
+
+### From a Raw Pattern or VTable Name
+
+`Core.Memory` can also scan a library directly, skipping gamedata entirely:
+
+```csharp
+nint? patternAddress = Core.Memory.GetAddressBySignature(Library.Server, "55 8B EC 83 EC 08 8B 45 08 5D C3");
+nint? vtableAddress = Core.Memory.GetVTableAddress(Library.Server, "CCSPlayer_ItemServices");
+nint? interfaceAddress = Core.Memory.GetInterfaceByName("VEngineServer");
+```
+
+<ApiRef name="Library" /> exposes the module names used by these lookups:
+`Library.Engine`, `Library.Tier0`, `Library.Server`, `Library.NetworkSystem`.
+
+## Declaring a Delegate
+
+Wrapping a native function needs a delegate matching its exact signature and calling convention:
+
+```csharp
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+private delegate nint DispatchSpawnDelegate(nint pEntity, nint pKeyValues);
+```
+
+## Wrapping and Calling It
+
+Wrap by address or by vtable + index; the resulting <ApiRef name="IUnmanagedFunction`1" /> exposes two delegate-typed members: `Call` (goes through any installed hooks) and `CallOriginal` (skips the hook chain).
+
+```csharp
+IUnmanagedFunction<DispatchSpawnDelegate> func =
+    Core.Memory.GetUnmanagedFunctionByAddress<DispatchSpawnDelegate>(dispatchSpawnAddress);
+// or: Core.Memory.GetUnmanagedFunctionByVTable<DispatchSpawnDelegate>(vtableAddress.Value, 15);
+```
+
+```csharp
+nint result = func.Call(pEntity, pKeyValues);
+nint resultUnhooked = func.CallOriginal(pEntity, pKeyValues);
+```
+
+## Hooking It
+
+`AddHook` takes a builder that receives "the next function in the chain" and must return your replacement delegate. Skipping `next()` skips the original call entirely.
+
+```csharp
+Guid hookId = func.AddHook(next =>
+{
+    return (pEntity, pKeyValues) =>
+    {
+        // pre logic
+        nint result = next()(pEntity, pKeyValues);
+        // post logic
+        return result;
+    };
+});
+
+// later
+func.RemoveHook(hookId);
+```
+
+<Callout type="info">
+    Hooks are cleaned up automatically on unload, but removing them yourself
+    once done is still good practice.
+</Callout>
+
+## Mid-Function Hooks
+
+When hooking function entry/exit isn't precise enough, `Core.Memory.GetUnmanagedMemoryByAddress` wraps an arbitrary address in an <ApiRef name="IUnmanagedMemory" /> so you can hook mid-function, with read/write access to the CPU registers at that point:
+
+```csharp
+IUnmanagedMemory mem = Core.Memory.GetUnmanagedMemoryByAddress(dispatchSpawnAddress);
+
+Guid midHookId = mem.AddHook((ref MidHookContext ctx) =>
+{
+    Console.WriteLine($"RIP=0x{ctx.RIP:X}, RAX=0x{ctx.RAX:X}");
+    ctx.RAX = 0x1337; // example register edit
+});
+
+// later
+mem.RemoveHook(midHookId);
+```
+
+See <ApiRef name="MidHookContext" /> for the full register list - every general-purpose register (`RAX`-`R15`, `RSP`, `RBP`, `RIP`, `RFLAGS`, plus the internal `TRAMPOLINE_RSP`) and `XMM0`-`XMM15` as `Xmm` structs (`.U32`/`.U64`/`.F32`/`.F64`).
+
+## Higher-Level Alternative: Game Hooks
+
+For common engine callbacks, `Core.GameHooks` (<ApiRef name="IGameHooks" />) wraps the vtable-hook plumbing above into typed categories with separate `Pre`/`Post` delegates - no manual delegate/signature bookkeeping. Example, hooking entity damage via <ApiRef name="ITakeDamageEntityHook" />:
+
+```csharp
+private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
+{
+    var entity = ctx.Params.Entity;
+    ref var info = ref ctx.Params.Info;
+
+    // ctx.SetHookResult(HookResult.Stop); // to block the damage
+}
+
+// Register in Load():
+Core.GameHooks.Entities.TakeDamage.Pre += OnTakeDamagePre;
+```
+
+Check `Core.GameHooks`'s categories (`Controller`, `Movement`, `Entities`, `Items`, `Weapons`, `Pawn`, and more) before reaching for a raw vtable hook.

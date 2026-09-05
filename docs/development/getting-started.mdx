@@ -1,0 +1,93 @@
+---
+title: Getting Started
+---
+
+## Install the Plugin Template
+
+With the .NET 10.0 SDK installed and `dotnet` on your `PATH`, install the plugin template, then run it with your plugin's details:
+
+```bash
+dotnet new install SwiftlyS2.CS2.PluginTemplate
+dotnet new swplugin -n MyPlugin --PluginName "My Plugin" --PluginVersion "1.0.0" --PluginAuthor "Author" --PluginDescription "My first SwiftlyS2 plugin"
+```
+
+<Callout type="info">
+    `-n` becomes the plugin's `Id`, namespace, class name, assembly name and
+    output folder. The other flags only fill in <ApiRef name="PluginMetadata" />{" "}
+    and can be edited afterwards.
+</Callout>
+
+Generated project layout:
+
+```
+MyPlugin/
+├── examples/
+│   ├── Commands.example.cs
+│   ├── Events.example.cs
+│   ├── GameEvents.example.cs
+│   ├── HookAndCallNativeFunctions.example.cs
+│   ├── NetMessage.example.cs
+│   └── SoundEvent.example.cs
+├── resources/
+│   ├── gamedata/
+│   │   ├── offsets.jsonc
+│   │   ├── patches.jsonc
+│   │   └── signatures.jsonc
+│   ├── templates/
+│   └── translations/
+│       └── en.jsonc
+├── MyPlugin.cs
+├── MyPlugin.csproj
+└── README.md
+```
+
+`examples/` is excluded from compilation by default (`<Compile Remove="examples\**\*.cs" />`) - it's reference material, not part of your plugin.
+
+Main plugin class:
+
+```csharp
+using SwiftlyS2.Shared.Plugins;
+using SwiftlyS2.Shared;
+
+namespace MyPlugin;
+
+[PluginMetadata(Id = "MyPlugin", Version = "1.0.0", Name = "My Plugin", Author = "Author", Description = "My first SwiftlyS2 plugin")]
+public partial class MyPlugin : BasePlugin
+{
+    public MyPlugin(ISwiftlyCore core) : base(core)
+    {
+    }
+
+    public override void Load(bool hotReload)
+    {
+    }
+
+    public override void Unload()
+    {
+    }
+}
+```
+
+`ConfigureSharedInterface`/`UseSharedInterface` on <ApiRef name="BasePlugin" /> (see [Shared API](/docs/development/shared-api)) can be overridden the same way once you need them.
+
+<Callout type="info">
+    `resources/gamedata`, `resources/templates` and `resources/translations`
+    copy to the output directory on build. Each plugin manages its own
+    `resources/gamedata`, independently from others.
+</Callout>
+
+A freshly generated project may not reference the latest release - bump it in your `.csproj` if needed: `<PackageReference Include="SwiftlyS2.CS2" Version="*" ExcludeAssets="runtime" PrivateAssets="all" />`. `*` tracks latest stable; pin a version (e.g. `1.0.3`) for reproducible builds, or use `*-*` for preview releases.
+
+## Publishing
+
+```bash
+dotnet publish
+```
+
+This outputs the packaged plugin to `build/publish/<PluginId>/` and a ready-to-share `build/<AssemblyName>.zip` alongside it.
+
+To test locally, copy `build/publish/<PluginId>/` into your server's `addons/swiftlys2/plugins/<PluginId>/`. Use the `.zip` for releases.
+
+## Next Steps
+
+The template's `examples/` folder covers commands, core events, game events, native function hooking, net messages and sound events - the rest of this Development section covers each system in more depth. Read the [Dependency Injection](/docs/guides/dependency-injection) guide before writing logic, since SwiftlyS2 plugins favor constructor-based DI over static/global state.

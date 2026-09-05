@@ -1,0 +1,219 @@
+---
+title: Using Attributes
+---
+
+SwiftlyS2 lets you register commands, events, and hooks by decorating methods with attributes, instead of wiring every handler manually.
+
+## Registration Scope
+
+Attribute discovery runs on registered object instances:
+
+- Your plugin class (the one inheriting `BasePlugin`) is registered automatically.
+- Any other class must be registered explicitly with `Core.Registrator.Register(instance)`.
+
+```csharp
+public sealed class ModerationHandlers
+{
+    [ClientChatHookHandler]
+    public HookResult OnClientChat(int playerId, string text, bool teamOnly)
+    {
+        if (text.Contains("badword", StringComparison.OrdinalIgnoreCase))
+        {
+            return HookResult.Stop;
+        }
+
+        return HookResult.Continue;
+    }
+}
+
+public override void Load(bool hotReload)
+{
+    Core.Registrator.Register(new ModerationHandlers());
+}
+```
+
+<Callout type="warning">
+    Register each handler instance once - registering the same instance
+    repeatedly duplicates callbacks.
+</Callout>
+
+## Signature Rules
+
+Attribute-decorated methods must match the expected delegate: same parameter order/types, same return type (`void` vs `HookResult`), and same generic event/message type where the attribute is generic. Otherwise the handler won't be picked up.
+
+## Attribute Reference
+
+### <ApiRef name="PluginMetadata" />
+
+On your plugin class. `Id` and `Version` are required; the rest optional:
+
+```csharp
+[PluginMetadata(Id = "my.plugin", Version = "1.0.0", Name = "My Plugin", Author = "Author", Description = "...", Website = "...")]
+public partial class MyPlugin : BasePlugin
+{
+}
+```
+
+### <ApiRef name="Command" />
+
+Registers a chat/console command; `permission` gates it via [Permissions](/docs/development/permissions). Full registration/lookup API on <ApiRef name="ICommandService" /> - see [Commands](/docs/development/commands).
+
+```csharp
+[Command("heal", permission: "myplugin.heal", helpText: "Heals yourself")]
+public void OnHealCommand(ICommandContext context)
+{
+    var player = context.Sender;
+}
+```
+
+### <ApiRef name="CommandAlias" />
+
+Adds an alternate name for a command registered elsewhere (attribute or <ApiRef name="ICommandService" member="RegisterCommand" />):
+
+```csharp
+[CommandAlias("heal", "h")]
+private void HealAlias() { } // body is unused, only the attribute matters
+```
+
+### <ApiRef name="GameEventHandler" />
+
+Hooks a generated game event (`EventPlayerDeath`, `EventRoundStart`, ...) - see <ApiRef name="IGameEventService" /> and [Game Events](/docs/development/game-events) for the full hook/fire API. `HookMode.Pre` runs before the game processes it, `Post` runs after:
+
+```csharp
+[GameEventHandler(HookMode.Post)]
+private HookResult OnPlayerDeath(EventPlayerDeath @event)
+{
+    return HookResult.Continue;
+}
+```
+
+### <ApiRef name="EventListener`1" /> (`[EventListener<T>]`)
+
+Subscribes a method to one of the framework's own events, via delegates on <ApiRef name="EventDelegates" /> mirroring <ApiRef name="IEventSubscriber" /> (e.g. `EventDelegates.OnEntityCreated`):
+
+```csharp
+[EventListener<EventDelegates.OnEntityCreated>]
+public void OnEntityCreated(IOnEntityCreatedEvent @event)
+{
+}
+```
+
+This is the attribute-based equivalent of `Core.Event.OnEntityCreated += OnEntityCreated;`.
+
+### <ApiRef name="GameHookHandler" />
+
+Hooks a category under <ApiRef name="IGameHooks" /> (e.g. entity take-damage):
+
+```csharp
+[GameHookHandler(HookMode.Pre)]
+private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
+{
+}
+```
+
+### <ApiRef name="ClientCommandHookHandler" />
+
+Intercepts a raw client console command before the server processes it - see <ApiRef name="ICommandService" member="HookClientCommand" />:
+
+```csharp
+[ClientCommandHookHandler]
+public HookResult OnClientCommand(int playerId, string commandLine)
+{
+    return HookResult.Continue;
+}
+```
+
+### <ApiRef name="ClientChatHookHandler" />
+
+Intercepts a chat message before it's broadcast - same shape as above, with chat-specific parameters, see <ApiRef name="ICommandService" member="HookClientChat" /> (and the `ModerationHandlers` example at the top of this page):
+
+```csharp
+[ClientChatHookHandler]
+public HookResult OnClientChat(int playerId, string text, bool teamOnly)
+{
+    return HookResult.Continue;
+}
+```
+
+### <ApiRef name="EntityOutputHandlerAttribute" /> / <ApiRef name="EntityOutputHandlerAttribute`1" />
+
+Hooks an entity I/O output by designer name, or generically by schema class (`<T>` resolves `T.ClassName` for you):
+
+```csharp
+[EntityOutputHandler("func_door", "OnOpen")]
+public void OnDoorOpened(IOnEntityFireOutputHookEvent @event)
+{
+    Console.WriteLine($"Output '{@event.OutputName}' fired by '{@event.DesignerName}'");
+}
+
+[EntityOutputHandler<CBaseDoor>("OnOpen")]
+public void OnDoorOpenedGeneric(IOnEntityFireOutputHookEvent @event)
+{
+}
+```
+
+Set `@event.Result = HookResult.Stop` to block the output from firing.
+
+### <ApiRef name="EntityInputHandlerAttribute" /> / <ApiRef name="EntityInputHandlerAttribute`1" />
+
+Same shape as the output handler, for entity I/O inputs instead:
+
+```csharp
+[EntityInputHandler("func_door", "Open")]
+public void OnDoorOpenInput(IOnEntityIdentityAcceptInputHookEvent @event)
+{
+    Console.WriteLine($"Input '{@event.InputName}' accepted by '{@event.DesignerName}'");
+}
+
+[EntityInputHandler<CBaseDoor>("Open")]
+public void OnDoorOpenInputGeneric(IOnEntityIdentityAcceptInputHookEvent @event)
+{
+}
+```
+
+Set `@event.Result = HookResult.Stop` to block the input from being accepted.
+
+### <ApiRef name="ServerNetMessageHandler" />
+
+Hooks a net message the server sends to clients - see <ApiRef name="INetMessageService" /> and [Net Messages](/docs/development/netmessages):
+
+```csharp
+[ServerNetMessageHandler]
+public HookResult OnServerSound(CMsgSosStartSoundEvent msg)
+{
+    Console.WriteLine($"sound hash={msg.SoundeventHash}");
+    return HookResult.Continue;
+}
+```
+
+### <ApiRef name="ServerNetMessageInternalHandler" />
+
+Same as <ApiRef name="ServerNetMessageHandler" />, but for internal server messages, which carry a target `playerId`:
+
+```csharp
+[ServerNetMessageInternalHandler]
+public HookResult OnServerSoundInternal(CMsgSosStartSoundEvent msg, int playerId)
+{
+    Console.WriteLine($"player={playerId}, sound hash={msg.SoundeventHash}");
+    return HookResult.Continue;
+}
+```
+
+### <ApiRef name="ClientNetMessageHandler" />
+
+Hooks a net message a client sends to the server:
+
+```csharp
+[ClientNetMessageHandler]
+public HookResult OnClientMove(CCLCMsg_Move msg, int playerId)
+{
+    Console.WriteLine($"player={playerId}, lastCmd={msg.LastCommandNumber}");
+    return HookResult.Continue;
+}
+```
+
+<Callout type="info">
+    See [Net Messages](/docs/development/netmessages) and
+    [Entity](/docs/development/entity) for the programmatic
+    (`Core.NetMessage`/`Core.EntitySystem`) equivalents of the attributes above.
+</Callout>
