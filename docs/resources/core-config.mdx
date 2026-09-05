@@ -1,0 +1,95 @@
+---
+title: Core Configuration
+---
+
+Core configuration controls framework-wide behavior such as command parsing, plugin loading, menu input, console filtering, console logging, unlocker toggles, and Steam auth mode.
+
+## Config File
+
+Edit the following file:
+
+`addons/swiftlys2/configs/core.jsonc`
+
+Missing keys are auto-registered with their default value and written back to this file on load.
+
+## Global Settings
+
+| Key                            | Type       | Default                                                          | Description                                                                                                |
+| ------------------------------ | ---------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `CommandPrefixes`              | `string[]` | `["!"]`                                                          | Prefixes recognized for normal command execution.                                                          |
+| `CommandSilentPrefixes`        | `string[]` | `["/"]`                                                          | Prefixes recognized for silent command execution.                                                          |
+| `AutoHotReload`                | `boolean`  | `true`                                                           | Enables automatic hot reload behavior.                                                                     |
+| `ProfilerLevel`                | `number`   | `0`                                                              | Profiler verbosity level.                                                                                  |
+| `ConsoleFilter`                | `boolean`  | `true`                                                           | Enables or disables console filtering globally.                                                            |
+| `PatchesToPerform`             | `string[]` | `[]`                                                             | Patch identifiers to perform on startup.                                                                   |
+| `CS2ServerGuidelines`          | `string`   | `"https://blog.counter-strike.net/index.php/server_guidelines/"` | Only registered on CS2. URL referenced by the server guidelines behavior.                                  |
+| `Follow<Game>ServerGuidelines` | `boolean`  | `true`                                                           | Applies server guideline behavior. Key name depends on the current game, e.g. `FollowCS2ServerGuidelines`. |
+| `Language`                     | `string`   | `"en"`                                                           | Default language code used by the server.                                                                  |
+| `UsePlayerLanguage`            | `boolean`  | `true`                                                           | Uses player language when available.                                                                       |
+| `ManualLoadPlugins`            | `boolean`  | `false`                                                          | Toggles manual plugin loading mode.                                                                        |
+| `PluginLoadOrder`              | `string[]` | `[]`                                                             | Plugin load order list used by the core loader.                                                            |
+| `DotnetCrashTracerLevel`       | `number`   | `0`                                                              | Crash tracer level. Supported values: `0`, `1`.                                                            |
+| `WindowsFullDump`              | `boolean`  | `false`                                                          | Enables full memory dumps on crash (Windows only).                                                         |
+
+## Unlocker Settings
+
+`Unlocker` controls which restricted engine features are exposed.
+
+| Key           | Type      | Default | Description                          |
+| ------------- | --------- | ------- | ------------------------------------ |
+| `Convars`     | `boolean` | `false` | Unlocks restricted convars.          |
+| `ConCommands` | `boolean` | `false` | Unlocks restricted console commands. |
+
+## Console Logger Settings
+
+`ConsoleLogger` controls console output logging and log file rotation.
+
+| Key                             | Type       | Default                           | Description                                                                  |
+| ------------------------------- | ---------- | --------------------------------- | ---------------------------------------------------------------------------- |
+| `Enable`                        | `boolean`  | `true`                            | Enables console logging to file.                                             |
+| `ManagedEnable`                 | `boolean`  | `true`                            | Enables console logging for managed (.NET) output.                           |
+| `WriteIntervalMs`               | `number`   | `2000`                            | Interval, in milliseconds, between log file writes.                          |
+| `Rotation.Enable`               | `boolean`  | `true`                            | Enables log file rotation.                                                   |
+| `Rotation.Mode`                 | `string`   | `"file_count"`                    | Rotation mode. Available: `"file_count"`, `"time_interval"`.                 |
+| `Rotation.AvailableModes`       | `string[]` | `["file_count", "time_interval"]` | Rotation modes recognized by the logger.                                     |
+| `Rotation.MaximumFiles`         | `number`   | `60`                              | Maximum number of rotated log files to keep (`file_count` mode).             |
+| `Rotation.DeleteOlderThanHours` | `number`   | `168`                             | Deletes rotated log files older than this many hours (`time_interval` mode). |
+
+## Menu Settings
+
+`Menu` controls input mode, navigation behavior, and menu sounds.
+
+| Key                   | Type       | Default              | Description                                        |
+| --------------------- | ---------- | -------------------- | -------------------------------------------------- |
+| `AvailableInputModes` | `string[]` | `["button", "wasd"]` | Available menu input modes.                        |
+| `InputMode`           | `string`   | `"button"`           | Active menu input mode.                            |
+| `NavigationPrefix`    | `string`   | `"➤"`                | Prefix shown for the currently selected menu item. |
+| `ItemsPerPage`        | `number`   | `5`                  | Number of menu items shown per page.               |
+
+### Menu Buttons
+
+| Key          | Default   |
+| ------------ | --------- |
+| `Exit`       | `"tab"`   |
+| `Scroll`     | `"shift"` |
+| `ScrollBack` | `"f"`     |
+| `Use`        | `"e"`     |
+
+### Menu Sound
+
+`Menu.Sound` defines the sound played for menu actions.
+
+| Action   | Name                | Volume |
+| -------- | ------------------- | ------ |
+| `Exit`   | `"Vote.Failed"`     | `0.75` |
+| `Scroll` | `"UI.ContractType"` | `0.75` |
+| `Use`    | `"Vote.Cast.Yes"`   | `0.75` |
+
+## SteamAuth Settings
+
+`SteamAuth` controls Steam authentication mode.
+
+| Key              | Type       | Default                  | Description                 |
+| ---------------- | ---------- | ------------------------ | --------------------------- |
+| `AvailableModes` | `string[]` | `["flexible", "strict"]` | Available Steam auth modes. |
+| `Mode`           | `string`   | `"flexible"`             | Active Steam auth mode.     |

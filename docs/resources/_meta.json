@@ -1,0 +1,14 @@
+{
+    "cli-options": {
+        "page": "cli-options.mdx"
+    },
+    "command-overrides": {
+        "page": "command-overrides.mdx"
+    },
+    "console-filter": {
+        "page": "console-filter.mdx"
+    },
+    "core-config": {
+        "page": "core-config.mdx"
+    }
+}

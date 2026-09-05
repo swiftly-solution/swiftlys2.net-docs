@@ -8,5 +8,9 @@
     "guides": {
         "category": "guides",
         "title": "Guides"
+    },
+    "resources": {
+        "category": "resources",
+        "title": "Resources"
     }
 }
