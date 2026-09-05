@@ -4,5 +4,8 @@
     },
     "terminologies": {
         "page": "terminologies.mdx"
+    },
+    "chat-and-html-styling": {
+        "page": "chat-and-html-styling.mdx"
     }
 }

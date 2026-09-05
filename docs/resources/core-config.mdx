@@ -14,22 +14,21 @@ Missing keys are auto-registered with their default value and written back to th
 
 ## Global Settings
 
-| Key                            | Type       | Default                                                          | Description                                                                                                |
-| ------------------------------ | ---------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `CommandPrefixes`              | `string[]` | `["!"]`                                                          | Prefixes recognized for normal command execution.                                                          |
-| `CommandSilentPrefixes`        | `string[]` | `["/"]`                                                          | Prefixes recognized for silent command execution.                                                          |
-| `AutoHotReload`                | `boolean`  | `true`                                                           | Enables automatic hot reload behavior.                                                                     |
-| `ProfilerLevel`                | `number`   | `0`                                                              | Profiler verbosity level.                                                                                  |
-| `ConsoleFilter`                | `boolean`  | `true`                                                           | Enables or disables console filtering globally.                                                            |
-| `PatchesToPerform`             | `string[]` | `[]`                                                             | Patch identifiers to perform on startup.                                                                   |
-| `CS2ServerGuidelines`          | `string`   | `"https://blog.counter-strike.net/index.php/server_guidelines/"` | Only registered on CS2. URL referenced by the server guidelines behavior.                                  |
-| `Follow<Game>ServerGuidelines` | `boolean`  | `true`                                                           | Applies server guideline behavior. Key name depends on the current game, e.g. `FollowCS2ServerGuidelines`. |
-| `Language`                     | `string`   | `"en"`                                                           | Default language code used by the server.                                                                  |
-| `UsePlayerLanguage`            | `boolean`  | `true`                                                           | Uses player language when available.                                                                       |
-| `ManualLoadPlugins`            | `boolean`  | `false`                                                          | Toggles manual plugin loading mode.                                                                        |
-| `PluginLoadOrder`              | `string[]` | `[]`                                                             | Plugin load order list used by the core loader.                                                            |
-| `DotnetCrashTracerLevel`       | `number`   | `0`                                                              | Crash tracer level. Supported values: `0`, `1`.                                                            |
-| `WindowsFullDump`              | `boolean`  | `false`                                                          | Enables full memory dumps on crash (Windows only).                                                         |
+| Key                            | Type       | Default | Description                                                                                                |
+| ------------------------------ | ---------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| `CommandPrefixes`              | `string[]` | `["!"]` | Prefixes recognized for normal command execution.                                                          |
+| `CommandSilentPrefixes`        | `string[]` | `["/"]` | Prefixes recognized for silent command execution.                                                          |
+| `AutoHotReload`                | `boolean`  | `true`  | Enables automatic hot reload behavior.                                                                     |
+| `ProfilerLevel`                | `number`   | `0`     | Profiler verbosity level.                                                                                  |
+| `ConsoleFilter`                | `boolean`  | `true`  | Enables or disables console filtering globally.                                                            |
+| `PatchesToPerform`             | `string[]` | `[]`    | Patch identifiers to perform on startup.                                                                   |
+| `Follow<Game>ServerGuidelines` | `boolean`  | `true`  | Applies server guideline behavior. Key name depends on the current game, e.g. `FollowCS2ServerGuidelines`. |
+| `Language`                     | `string`   | `"en"`  | Default language code used by the server.                                                                  |
+| `UsePlayerLanguage`            | `boolean`  | `true`  | Uses player language when available.                                                                       |
+| `ManualLoadPlugins`            | `boolean`  | `false` | Toggles manual plugin loading mode.                                                                        |
+| `PluginLoadOrder`              | `string[]` | `[]`    | Plugin load order list used by the core loader.                                                            |
+| `DotnetCrashTracerLevel`       | `number`   | `0`     | Crash tracer level. Supported values: `0`, `1`.                                                            |
+| `WindowsFullDump`              | `boolean`  | `false` | Enables full memory dumps on crash (Windows only).                                                         |
 
 ## Unlocker Settings
 
