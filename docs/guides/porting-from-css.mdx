@@ -1102,15 +1102,17 @@ In SwiftlyS2, you need to define delegates that match the native function signat
 
 <Tabs>
     <Tab label="CounterStrikeSharp">
-        ```csharp VirtualFunctions.GiveNamedItemFunc.Unhook(OnGiveNamedItemPre,
-        HookMode.Pre);
-        VirtualFunctions.GiveNamedItemFunc.Unhook(OnGiveNamedItemPost,
-        HookMode.Post); ```
+        ```csharp 
+        VirtualFunctions.GiveNamedItemFunc.Unhook(OnGiveNamedItemPre, HookMode.Pre);
+        VirtualFunctions.GiveNamedItemFunc.Unhook(OnGiveNamedItemPost, HookMode.Post);
+        ```
     </Tab>
     <Tab label="SwiftlyS2">
-        ```csharp // SwiftlyS2 - in Unload() if (_giveNamedItem != null &&
-        _giveNamedItemHookId != Guid.Empty)
-        _giveNamedItem.RemoveHook(_giveNamedItemHookId); ```
+        ```csharp 
+        // SwiftlyS2 - in Unload() 
+        if (_giveNamedItem != null && _giveNamedItemHookId != Guid.Empty)
+            _giveNamedItem.RemoveHook(_giveNamedItemHookId); 
+        ```
     </Tab>
 </Tabs>
 
