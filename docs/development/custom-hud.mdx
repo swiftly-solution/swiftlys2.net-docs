@@ -14,16 +14,18 @@ A `custom_hud_layout` entity builds a custom HUD for players. The interface is P
 ## Example XML
 
 ```xml
-<!-- example.xml -->
+<!-- example.vxml -->
 <root>
     <styles>
         <include src="s2r://panorama/styles/custom_game/example.vcss_c" />
     </styles>
-    <Panel class="example_class" id="main_panel">
-        <Label class="example_label" id="text1" text="{s:dynamic}" />
-        <Button class="example_button" id="action_button">
-            <Label text="Click me" />
-        </Button>
+    <Panel class="example_class">
+        <Panel id="main_panel">
+            <Label class="example_label" id="text1" text="{s:dynamic}" />
+            <Button class="example_button" id="action_button">
+                <Label text="Click me" />
+            </Button>
+        </Panel>
     </Panel>
 </root>
 ```
