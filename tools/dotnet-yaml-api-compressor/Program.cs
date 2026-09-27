@@ -27,6 +27,7 @@ if (!pages.Any(p => p.ContainsKey("uid") && p.ContainsKey("type")))
 
 var root = ApiTreeBuilder.Build(pages, branchLabel);
 ReferenceUidAnnotator.Annotate(root);
+SourceUrlBranchRewriter.Rewrite(root, branchLabel);
 
 var outputDir = Path.GetDirectoryName(Path.GetFullPath(outputFile));
 if (!string.IsNullOrEmpty(outputDir))
