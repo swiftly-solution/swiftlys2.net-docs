@@ -62195,7 +62195,7 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.SteamAPI.CallResult`1
     parent: SwiftlyS2.Shared.SteamAPI
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L261
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L259
     summary: Represents a Steam call result that automatically manages its lifecycle
     declaration: 'public sealed class CallResult<T> : IDisposable where T : struct'
     typeParameters:
@@ -62209,7 +62209,7 @@ categories:
     methods:
     - name: Create(ulong, Action<T, bool>)
       uid: SwiftlyS2.Shared.SteamAPI.CallResult`1.Create(System.UInt64,System.Action{`0,System.Boolean})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L276
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L274
       summary: Create and register a new call result
       declaration: public static CallResult<T> Create(ulong hAPICall, Action<T, bool> callback)
       parameters:
@@ -62238,16 +62238,16 @@ categories:
         - '>'
     - name: Dispose()
       uid: SwiftlyS2.Shared.SteamAPI.CallResult`1.Dispose
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L323
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L321
       summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
       declaration: public void Dispose()
     - name: ~CallResult()
       uid: SwiftlyS2.Shared.SteamAPI.CallResult`1.Finalize
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L339
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L337
       declaration: protected ~CallResult()
     - name: Set(ulong)
       uid: SwiftlyS2.Shared.SteamAPI.CallResult`1.Set(System.UInt64)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L286
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L284
       summary: Set or change the API call to wait for
       declaration: public void Set(ulong hAPICall)
       parameters:
@@ -62259,7 +62259,7 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.SteamAPI.Callback`1
     parent: SwiftlyS2.Shared.SteamAPI
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L193
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L191
     summary: Represents a Steam callback that automatically manages its lifecycle
     declaration: 'public sealed class Callback<T> : IDisposable where T : struct'
     typeParameters:
@@ -62273,7 +62273,7 @@ categories:
     methods:
     - name: Create(Action<T>)
       uid: SwiftlyS2.Shared.SteamAPI.Callback`1.Create(System.Action{`0})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L207
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L205
       summary: Create and register a new callback
       declaration: public static Callback<T> Create(Action<T> callback)
       parameters:
@@ -62294,23 +62294,13 @@ categories:
         - '>'
     - name: Dispose()
       uid: SwiftlyS2.Shared.SteamAPI.Callback`1.Dispose
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L241
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L239
       summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
       declaration: public void Dispose()
     - name: ~Callback()
       uid: SwiftlyS2.Shared.SteamAPI.Callback`1.Finalize
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L252
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L250
       declaration: protected ~Callback()
-  - name: CallbackDispatcher
-    type: Class
-    uid: SwiftlyS2.Shared.SteamAPI.CallbackDispatcher
-    parent: SwiftlyS2.Shared.SteamAPI
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/CallbackDispatcher.cs#L11
-    summary: Manages Steam callbacks and call results registration/dispatch
-    declaration: public static class CallbackDispatcher
-    inherits:
-    - text: object
-      url: https://learn.microsoft.com/dotnet/api/system.object
   - name: CallbackIdentities
     type: Class
     uid: SwiftlyS2.Shared.SteamAPI.CallbackIdentities
@@ -72350,46 +72340,11 @@ categories:
       valueType:
       - text: ushort
         url: https://learn.microsoft.com/dotnet/api/system.uint16
-  - name: Packsize.ValvePackingSentinel_t
-    type: Struct
-    uid: SwiftlyS2.Shared.SteamAPI.Packsize.ValvePackingSentinel_t
-    parent: SwiftlyS2.Shared.SteamAPI
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L13
-    declaration: public struct Packsize.ValvePackingSentinel_t
-    fields:
-    - name: m_d
-      uid: SwiftlyS2.Shared.SteamAPI.Packsize.ValvePackingSentinel_t.m_d
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L19
-      declaration: public double m_d
-      valueType:
-      - text: double
-        url: https://learn.microsoft.com/dotnet/api/system.double
-    - name: m_u16
-      uid: SwiftlyS2.Shared.SteamAPI.Packsize.ValvePackingSentinel_t.m_u16
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L18
-      declaration: public ushort m_u16
-      valueType:
-      - text: ushort
-        url: https://learn.microsoft.com/dotnet/api/system.uint16
-    - name: m_u32
-      uid: SwiftlyS2.Shared.SteamAPI.Packsize.ValvePackingSentinel_t.m_u32
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L16
-      declaration: public uint m_u32
-      valueType:
-      - text: uint
-        url: https://learn.microsoft.com/dotnet/api/system.uint32
-    - name: m_u64
-      uid: SwiftlyS2.Shared.SteamAPI.Packsize.ValvePackingSentinel_t.m_u64
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L17
-      declaration: public ulong m_u64
-      valueType:
-      - text: ulong
-        url: https://learn.microsoft.com/dotnet/api/system.uint64
   - name: Packsize
     type: Class
     uid: SwiftlyS2.Shared.SteamAPI.Packsize
     parent: SwiftlyS2.Shared.SteamAPI
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L5
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L3
     declaration: public static class Packsize
     inherits:
     - text: object
@@ -72397,7 +72352,7 @@ categories:
     fields:
     - name: value
       uid: SwiftlyS2.Shared.SteamAPI.Packsize.value
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L10
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/SteamAPI/Packsize.cs#L8
       declaration: public const int value = 4
       valueType:
       - text: int
