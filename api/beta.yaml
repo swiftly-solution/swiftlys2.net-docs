@@ -40366,6 +40366,28 @@ categories:
         type:
         - text: uint
           url: https://learn.microsoft.com/dotnet/api/system.uint32
+    - name: HashLowercaseAscii(ReadOnlySpan<byte>, uint)
+      uid: SwiftlyS2.Shared.Misc.MurmurHash2.HashLowercaseAscii(System.ReadOnlySpan{System.Byte},System.UInt32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/MurmurHash2.cs#L71
+      declaration: public static uint HashLowercaseAscii(ReadOnlySpan<byte> data, uint seed = 826366246)
+      parameters:
+      - name: data
+        type:
+        - text: ReadOnlySpan
+          url: https://learn.microsoft.com/dotnet/api/system.readonlyspan-1
+        - <
+        - text: byte
+          url: https://learn.microsoft.com/dotnet/api/system.byte
+        - '>'
+      - name: seed
+        type:
+        - text: uint
+          url: https://learn.microsoft.com/dotnet/api/system.uint32
+        optional: true
+      returns:
+        type:
+        - text: uint
+          url: https://learn.microsoft.com/dotnet/api/system.uint32
     - name: HashString(string, uint)
       uid: SwiftlyS2.Shared.Misc.MurmurHash2.HashString(System.String,System.UInt32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/MurmurHash2.cs#L58
