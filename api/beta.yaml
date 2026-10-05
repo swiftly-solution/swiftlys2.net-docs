@@ -3512,7 +3512,7 @@ categories:
     type: Struct
     uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo
     parent: SwiftlyS2.Shared.Database
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
     declaration: 'public record struct DatabaseConnectionInfo : IEquatable<DatabaseConnectionInfo>'
     implements:
     - text: IEquatable<DatabaseConnectionInfo>
@@ -3520,7 +3520,7 @@ categories:
     constructors:
     - name: DatabaseConnectionInfo(string, string, string, string, string, uint, ushort, string)
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.#ctor(System.String,System.String,System.String,System.String,System.String,System.UInt32,System.UInt16,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public DatabaseConnectionInfo(string Driver, string Host, string Database, string User, string Pass, uint Timeout, ushort Port, string RawUri)
       parameters:
       - name: Driver
@@ -3558,56 +3558,71 @@ categories:
     properties:
     - name: Database
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.Database
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public string Database { readonly get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Driver
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.Driver
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public string Driver { readonly get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Host
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.Host
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public string Host { readonly get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: Options
+      uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.Options
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L12
+      declaration: public IReadOnlyDictionary<string, string> Options { readonly get; init; }
+      valueType:
+      - text: IReadOnlyDictionary
+        url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2
+      - <
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
     - name: Pass
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.Pass
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public string Pass { readonly get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Port
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.Port
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public ushort Port { readonly get; set; }
       valueType:
       - text: ushort
         url: https://learn.microsoft.com/dotnet/api/system.uint16
     - name: RawUri
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.RawUri
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public string RawUri { readonly get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Timeout
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.Timeout
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public uint Timeout { readonly get; set; }
       valueType:
       - text: uint
         url: https://learn.microsoft.com/dotnet/api/system.uint32
     - name: User
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.User
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L5
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L6
       declaration: public string User { readonly get; set; }
       valueType:
       - text: string
@@ -3615,7 +3630,7 @@ categories:
     methods:
     - name: ToString()
       uid: SwiftlyS2.Shared.Database.DatabaseConnectionInfo.ToString
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L7
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L17
       summary: Returns the fully qualified type name of this instance.
       declaration: public override readonly string ToString()
       returns:
@@ -3627,12 +3642,12 @@ categories:
     type: Interface
     uid: SwiftlyS2.Shared.Database.IDatabaseService
     parent: SwiftlyS2.Shared.Database
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L29
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L55
     declaration: public interface IDatabaseService
     methods:
     - name: GetConnection(string)
       uid: SwiftlyS2.Shared.Database.IDatabaseService.GetConnection(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L50
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L76
       summary: Get a connection to the database.
       declaration: IDbConnection GetConnection(string connectionName)
       parameters:
@@ -3648,7 +3663,7 @@ categories:
         description: A connection to the database. Return the default connection if the connection name is not found.
     - name: GetConnectionInfo(string)
       uid: SwiftlyS2.Shared.Database.IDatabaseService.GetConnectionInfo(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L43
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L69
       summary: Get the connection info for a given connection name.
       declaration: DatabaseConnectionInfo GetConnectionInfo(string connectionName)
       parameters:
@@ -3665,7 +3680,7 @@ categories:
         description: The connection info. Returns the default connection info if the connection name is not found.
     - name: GetConnectionString(string)
       uid: SwiftlyS2.Shared.Database.IDatabaseService.GetConnectionString(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L36
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Database/IDatabaseService.cs#L62
       summary: Get the connection string for a given connection name.
       declaration: string GetConnectionString(string connectionName)
       parameters:
