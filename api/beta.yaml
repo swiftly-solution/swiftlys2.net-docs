@@ -4540,7 +4540,7 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues
     parent: SwiftlyS2.Shared.EntitySystem
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L6
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L25
     declaration: 'public class CEntityKeyValues : IDisposable'
     inherits:
     - text: object
@@ -4551,12 +4551,12 @@ categories:
     constructors:
     - name: CEntityKeyValues()
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.#ctor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L11
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L30
       declaration: public CEntityKeyValues()
     properties:
     - name: Address
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.Address
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L21
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L40
       declaration: public nint Address { get; }
       valueType:
       - text: nint
@@ -4564,12 +4564,12 @@ categories:
     methods:
     - name: Dispose()
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.Dispose
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L16
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L35
       summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
       declaration: public void Dispose()
     - name: Get<T>(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.Get``1(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L241
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L272
       declaration: public T Get<T>(string key)
       parameters:
       - name: key
@@ -4583,7 +4583,7 @@ categories:
       - name: T
     - name: GetBool(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetBool(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L98
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L129
       declaration: public bool GetBool(string key)
       parameters:
       - name: key
@@ -4596,7 +4596,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: GetColor(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetColor(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L148
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L179
       declaration: public Color GetColor(string key)
       parameters:
       - name: key
@@ -4610,7 +4610,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.Color
     - name: GetDouble(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetDouble(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L128
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L159
       declaration: public double GetDouble(string key)
       parameters:
       - name: key
@@ -4623,7 +4623,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.double
     - name: GetFloat(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetFloat(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L123
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L154
       declaration: public float GetFloat(string key)
       parameters:
       - name: key
@@ -4636,7 +4636,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.single
     - name: GetInt32(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetInt32(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L103
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L134
       declaration: public int GetInt32(string key)
       parameters:
       - name: key
@@ -4649,7 +4649,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: GetInt64(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetInt64(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L113
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L144
       declaration: public long GetInt64(string key)
       parameters:
       - name: key
@@ -4662,7 +4662,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.int64
     - name: GetPtr(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetPtr(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L138
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L169
       declaration: public nint GetPtr(string key)
       parameters:
       - name: key
@@ -4675,7 +4675,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.intptr
     - name: GetQAngle(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetQAngle(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L168
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L199
       declaration: public QAngle GetQAngle(string key)
       parameters:
       - name: key
@@ -4689,7 +4689,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.QAngle
     - name: GetString(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetString(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L133
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L164
       declaration: public string GetString(string key)
       parameters:
       - name: key
@@ -4702,7 +4702,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.string
     - name: GetStringToken(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetStringToken(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L143
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L174
       declaration: public CUtlStringToken GetStringToken(string key)
       parameters:
       - name: key
@@ -4716,7 +4716,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.CUtlStringToken
     - name: GetUInt32(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetUInt32(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L108
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L139
       declaration: public uint GetUInt32(string key)
       parameters:
       - name: key
@@ -4729,7 +4729,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.uint32
     - name: GetUInt64(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetUInt64(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L118
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L149
       declaration: public ulong GetUInt64(string key)
       parameters:
       - name: key
@@ -4742,7 +4742,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.uint64
     - name: GetVector(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetVector(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L153
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L184
       declaration: public Vector GetVector(string key)
       parameters:
       - name: key
@@ -4756,7 +4756,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.Vector
     - name: GetVector2D(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetVector2D(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L158
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L189
       declaration: public Vector2D GetVector2D(string key)
       parameters:
       - name: key
@@ -4770,7 +4770,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.Vector2D
     - name: GetVector4D(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.GetVector4D(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L163
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L194
       declaration: public Vector4D GetVector4D(string key)
       parameters:
       - name: key
@@ -4784,7 +4784,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.Vector4D
     - name: Has(string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.Has(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L309
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L340
       declaration: public bool Has(string key)
       parameters:
       - name: key
@@ -4797,7 +4797,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Set<T>(string, T)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.Set``1(System.String,``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L173
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L204
       declaration: public void Set<T>(string key, T value)
       parameters:
       - name: key
@@ -4811,7 +4811,7 @@ categories:
       - name: T
     - name: SetBool(string, bool)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetBool(System.String,System.Boolean)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L23
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L54
       declaration: public void SetBool(string key, bool value)
       parameters:
       - name: key
@@ -4824,7 +4824,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: SetColor(string, Color)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetColor(System.String,SwiftlyS2.Shared.Natives.Color)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L73
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L104
       declaration: public void SetColor(string key, Color value)
       parameters:
       - name: key
@@ -4838,7 +4838,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.Color
     - name: SetDouble(string, double)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetDouble(System.String,System.Double)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L53
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L84
       declaration: public void SetDouble(string key, double value)
       parameters:
       - name: key
@@ -4851,7 +4851,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.double
     - name: SetFloat(string, float)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetFloat(System.String,System.Single)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L48
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L79
       declaration: public void SetFloat(string key, float value)
       parameters:
       - name: key
@@ -4864,7 +4864,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.single
     - name: SetInt32(string, int)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetInt32(System.String,System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L28
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L59
       declaration: public void SetInt32(string key, int value)
       parameters:
       - name: key
@@ -4877,7 +4877,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: SetInt64(string, long)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetInt64(System.String,System.Int64)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L38
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L69
       declaration: public void SetInt64(string key, long value)
       parameters:
       - name: key
@@ -4890,7 +4890,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.int64
     - name: SetPtr(string, nint)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetPtr(System.String,System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L63
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L94
       declaration: public void SetPtr(string key, nint value)
       parameters:
       - name: key
@@ -4903,7 +4903,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.intptr
     - name: SetQAngle(string, QAngle)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetQAngle(System.String,SwiftlyS2.Shared.Natives.QAngle)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L93
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L124
       declaration: public void SetQAngle(string key, QAngle value)
       parameters:
       - name: key
@@ -4917,7 +4917,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.QAngle
     - name: SetString(string, string)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetString(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L58
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L89
       declaration: public void SetString(string key, string value)
       parameters:
       - name: key
@@ -4930,7 +4930,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.string
     - name: SetStringToken(string, CUtlStringToken)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetStringToken(System.String,SwiftlyS2.Shared.Natives.CUtlStringToken)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L68
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L99
       declaration: public void SetStringToken(string key, CUtlStringToken value)
       parameters:
       - name: key
@@ -4944,7 +4944,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.CUtlStringToken
     - name: SetUInt32(string, uint)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetUInt32(System.String,System.UInt32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L33
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L64
       declaration: public void SetUInt32(string key, uint value)
       parameters:
       - name: key
@@ -4957,7 +4957,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.uint32
     - name: SetUInt64(string, ulong)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetUInt64(System.String,System.UInt64)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L43
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L74
       declaration: public void SetUInt64(string key, ulong value)
       parameters:
       - name: key
@@ -4970,7 +4970,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.uint64
     - name: SetVector(string, Vector)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetVector(System.String,SwiftlyS2.Shared.Natives.Vector)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L78
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L109
       declaration: public void SetVector(string key, Vector value)
       parameters:
       - name: key
@@ -4984,7 +4984,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.Vector
     - name: SetVector2D(string, Vector2D)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetVector2D(System.String,SwiftlyS2.Shared.Natives.Vector2D)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L83
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L114
       declaration: public void SetVector2D(string key, Vector2D value)
       parameters:
       - name: key
@@ -4998,7 +4998,7 @@ categories:
           uid: SwiftlyS2.Shared.Natives.Vector2D
     - name: SetVector4D(string, Vector4D)
       uid: SwiftlyS2.Shared.EntitySystem.CEntityKeyValues.SetVector4D(System.String,SwiftlyS2.Shared.Natives.Vector4D)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L88
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs#L119
       declaration: public void SetVector4D(string key, Vector4D value)
       parameters:
       - name: key
