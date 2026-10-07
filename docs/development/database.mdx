@@ -21,6 +21,65 @@ Connections are defined in `configs/database.jsonc` and referenced by name from 
 
 Supported URI formats: `mysql://user:pass@host:3306/database`, `postgresql://user:pass@host:5432/database`, `sqlite://path/to/database.db`.
 
+### Object format and options
+
+A connection can also be an object. Besides `driver`, `host`, `port`, `database`, `user`, `pass` and `timeout`, it takes an `options` field with the connection string keywords of the driver:
+
+```jsonc
+{
+    "connections": {
+        "host": {
+            "driver": "mysql",
+            "host": "localhost",
+            "database": "swiftlys2",
+            "user": "root",
+            "pass": "",
+            "options": {
+                "SslMode": "Required",
+                "CharacterSet": "utf8mb4",
+                "MaximumPoolSize": 50
+            }
+        },
+        "analytics": {
+            "driver": "postgresql",
+            "host": "localhost",
+            "database": "swiftlys2",
+            "user": "postgres",
+            "options": {
+                "SSL Mode": "Require",
+                "Maximum Pool Size": 50,
+                "Search Path": "public"
+            }
+        },
+        "local": {
+            "driver": "sqlite",
+            "database": "data/local.db",
+            "options": {
+                "Journal Mode": "Wal",
+                "Foreign Keys": true,
+                "Cache Size": 4000
+            }
+        }
+    }
+}
+```
+
+Every keyword that the driver supports works, with the same names and synonyms as in its own connection string:
+
+| Driver | Library | Keywords |
+|---|---|---|
+| `mysql` | MySqlConnector | [Connection options](https://mysqlconnector.net/connection-options/) |
+| `postgresql` | Npgsql | [Connection string parameters](https://www.npgsql.org/doc/connection-string-parameters.html) |
+| `sqlite` | System.Data.SQLite | The properties of `SQLiteConnectionStringBuilder`, such as `Journal Mode`, `Foreign Keys`, `Cache Size`, `Default Timeout` and `Pooling` |
+
+Values can be strings, numbers or booleans. Nested objects and arrays are skipped. Options are applied after the other fields, so an option can override one of them, for example `Server`.
+
+<Callout type="warning">
+    A keyword or a value that the driver doesn't accept throws an `ArgumentException` that names the option when the connection is requested, for example `Invalid option 'NoSuchOption' = '1' for the mysql driver`. For SQLite the keyword is matched ignoring case, spaces and underscores, so `journal_mode`, `JournalMode` and `Journal Mode` are the same option.
+</Callout>
+
+The parsed options are available as `DatabaseConnectionInfo.Options`, and they are included in `GetConnectionString`.
+
 ## Getting a Connection
 
 <ApiRef name="IDatabaseService" member="GetConnection" /> returns an
@@ -30,7 +89,7 @@ if the name isn't found.
 <ApiRef name="IDatabaseService" member="GetConnectionInfo" /> share the same
 fallback and expose the raw string / parsed metadata instead (see
 <ApiRef name="DatabaseConnectionInfo" /> for the full field list - driver, host,
-database, user, pass, timeout, port, raw URI):
+database, user, pass, timeout, port, raw URI, options):
 
 ```csharp
 using var connection = Core.Database.GetConnection("host");
