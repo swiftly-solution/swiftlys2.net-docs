@@ -22,6 +22,29 @@ public class TypePageStructurerTests
     private static string S(object o) => (string)o;
 
     [Fact]
+    public void CapturesEnumFields()
+    {
+        var body = ParseBody("""
+            title: Enum E
+            body:
+            - api1: Enum E
+              metadata:
+                uid: N.E
+            - code: public enum E
+            - h2: Fields
+            - parameters:
+              - name: A
+                default: "2"
+                description: A value.
+            """);
+
+        var fields = L(TypePageStructurer.Structure(body)["fields"]);
+
+        Assert.Equal("A", S(M(fields[0])["name"]));
+        Assert.Equal("2", S(M(fields[0])["default"]));
+    }
+
+    [Fact]
     public void SeparatesPropertiesFromMethodsAndCapturesValueTypeAndParameters()
     {
         var body = ParseBody("""

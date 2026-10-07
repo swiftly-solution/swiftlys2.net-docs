@@ -169,6 +169,17 @@ public static class TypePageStructurer
                     {
                         result["typeParameters"] = parameters;
                     }
+                    else if (currentCategory == "fields")
+                    {
+                        foreach (var field in parameters.OfType<Dictionary<object, object>>())
+                        {
+                            if (field.TryGetValue("description", out var description))
+                            {
+                                field["description"] = NormalizeText(description);
+                            }
+                        }
+                        result["fields"] = parameters;
+                    }
                     continue;
                 }
 
