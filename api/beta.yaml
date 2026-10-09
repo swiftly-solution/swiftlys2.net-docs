@@ -61372,7 +61372,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: BasePathExists
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.BasePathExists
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L62
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L67
       summary: Whether the base path exists in the file system.
       declaration: bool BasePathExists { get; }
       valueType:
@@ -61380,7 +61380,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Manager
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.Manager
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L57
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L62
       summary: Get the configuration root.
       declaration: IConfigurationManager Manager { get; }
       valueType:
@@ -61389,7 +61389,7 @@ categories:
     methods:
     - name: Configure(Action<IConfigurationBuilder>)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.Configure(System.Action{Microsoft.Extensions.Configuration.IConfigurationBuilder})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L51
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L56
       summary: Configure the internal configuration manager.
       declaration: IPluginConfigurationService Configure(Action<IConfigurationBuilder> configure)
       parameters:
@@ -61426,8 +61426,8 @@ categories:
         description: The path to the configuration file.
     - name: InitializeJsonWithModel<T>(string, string)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeJsonWithModel``1(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L36
-      summary: Initialize the json configuration file with a class as template.
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L39
+      summary: Initialize the json configuration file with a class as template. When the file name ends with <code>.jsonc</code>, properties and fields marked with <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> are written with their description as <code>//</code> comment lines above the key, including members of nested objects, list items and dictionary values. A <code>.json</code> file is always written as plain JSON, since comments are not valid JSON.
       declaration: 'IPluginConfigurationService InitializeJsonWithModel<T>(string name, string sectionName) where T : class, new()'
       parameters:
       - name: name
@@ -61450,8 +61450,8 @@ categories:
         description: The type of the configuration model.
     - name: InitializeTomlWithModel<T>(string, string)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeTomlWithModel``1(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L44
-      summary: Initialize the TOML configuration file with a class as template.
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L49
+      summary: Initialize the TOML configuration file with a class as template. Properties and fields marked with <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> are written with their description as <code>#</code> comment lines above the key or above the table header. Members of inline tables cannot carry comments.
       declaration: 'IPluginConfigurationService InitializeTomlWithModel<T>(string name, string sectionName) where T : class, new()'
       parameters:
       - name: name
