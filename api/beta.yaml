@@ -61515,215 +61515,12 @@ categories:
     type: Interface
     uid: SwiftlyS2.Shared.Services.ITraceManager
     parent: SwiftlyS2.Shared.Services
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L8
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L7
     declaration: public interface ITraceManager
     methods:
-    - name: SimpleTrace(Vector, Vector, RayType_t, RnQueryObjectSet, MaskTrace, MaskTrace, MaskTrace, CollisionGroup, ref CGameTrace, CBaseEntity?, CBaseEntity?)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.SimpleTrace(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.RayType_t,SwiftlyS2.Shared.Natives.RnQueryObjectSet,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.CollisionGroup,SwiftlyS2.Shared.Natives.CGameTrace@,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L85
-      summary: Performs a simple trace shape operation from the specified start point to the end point, using the provided object query and trace mask. The result of the trace is stored in the provided trace object.
-      declaration: >-
-        [Obsolete("Use other TraceShape methods instead.")]
-
-        void SimpleTrace(Vector start, Vector end, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, represented as a vector.
-      - name: end
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The ending position of the trace, represented as a vector.
-      - name: rayKind
-        type:
-        - text: RayType_t
-          url: SwiftlyS2.Shared.Natives.RayType_t.html
-          uid: SwiftlyS2.Shared.Natives.RayType_t
-        description: The type of ray used for the trace.
-      - name: objectQuery
-        type:
-        - text: RnQueryObjectSet
-          url: SwiftlyS2.Shared.Natives.RnQueryObjectSet.html
-          uid: SwiftlyS2.Shared.Natives.RnQueryObjectSet
-        description: The object query specifying which objects to consider during the trace.
-      - name: interactWith
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to include in the trace.
-      - name: interactExclude
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to exclude from the trace.
-      - name: interactAs
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to interact as during the trace.
-      - name: collision
-        type:
-        - text: CollisionGroup
-          url: SwiftlyS2.Shared.Natives.CollisionGroup.html
-          uid: SwiftlyS2.Shared.Natives.CollisionGroup
-        description: The collision group defining the collision behavior during the trace.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace structure that receives the results of the trace, including hit information and
-              surface details.
-      - name: filterEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional entity to exclude from the trace.
-        optional: true
-      - name: filterSecondEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional second entity to exclude from the trace.
-        optional: true
-    - name: SimpleTrace(Vector, QAngle, RayType_t, RnQueryObjectSet, MaskTrace, MaskTrace, MaskTrace, CollisionGroup, ref CGameTrace, CBaseEntity?, CBaseEntity?)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.SimpleTrace(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.RayType_t,SwiftlyS2.Shared.Natives.RnQueryObjectSet,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.CollisionGroup,SwiftlyS2.Shared.Natives.CGameTrace@,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L104
-      summary: Performs a simple trace shape operation from the specified start point in the direction defined by the given angle, using the provided object query and trace mask. The result of the trace is stored in the provided trace object.
-      declaration: >-
-        [Obsolete("Use other TraceShape methods instead.")]
-
-        void SimpleTrace(Vector start, QAngle angle, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, represented as a vector.
-      - name: angle
-        type:
-        - text: QAngle
-          url: SwiftlyS2.Shared.Natives.QAngle.html
-          uid: SwiftlyS2.Shared.Natives.QAngle
-        description: The direction of the trace, represented as a QAngle.
-      - name: rayKind
-        type:
-        - text: RayType_t
-          url: SwiftlyS2.Shared.Natives.RayType_t.html
-          uid: SwiftlyS2.Shared.Natives.RayType_t
-        description: The type of ray used for the trace.
-      - name: objectQuery
-        type:
-        - text: RnQueryObjectSet
-          url: SwiftlyS2.Shared.Natives.RnQueryObjectSet.html
-          uid: SwiftlyS2.Shared.Natives.RnQueryObjectSet
-        description: The object query specifying which objects to consider during the trace.
-      - name: interactWith
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to include in the trace.
-      - name: interactExclude
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to exclude from the trace.
-      - name: interactAs
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to interact as during the trace.
-      - name: collision
-        type:
-        - text: CollisionGroup
-          url: SwiftlyS2.Shared.Natives.CollisionGroup.html
-          uid: SwiftlyS2.Shared.Natives.CollisionGroup
-        description: The collision group defining the collision behavior during the trace.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace structure that receives the results of the trace, including hit information and
-              surface details.
-      - name: filterEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional entity to exclude from the trace.
-        optional: true
-      - name: filterSecondEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional second entity to exclude from the trace.
-        optional: true
-    - name: TracePlayerBBox(Vector, Vector, BBox_t, CTraceFilter, ref CGameTrace)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.TracePlayerBBox(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.BBox_t,SwiftlyS2.Shared.Natives.CTraceFilter,SwiftlyS2.Shared.Natives.CGameTrace@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L21
-      summary: Performs a collision trace of a player-sized bounding box from the specified start position to the end position, using the given filter and bounding box dimensions. The result of the trace is stored in the provided trace object.
-      declaration: >-
-        [Obsolete("Use TracePlayerBBox method with TraceParams instead.")]
-
-        void TracePlayerBBox(Vector start, Vector end, BBox_t bounds, CTraceFilter filter, ref CGameTrace trace)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, typically representing the player's initial location.
-      - name: end
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The ending position of the trace, representing the target location for the bounding box movement.
-      - name: bounds
-        type:
-        - text: BBox_t
-          url: SwiftlyS2.Shared.Natives.BBox_t.html
-          uid: SwiftlyS2.Shared.Natives.BBox_t
-        description: The dimensions of the player's bounding box to be traced.
-      - name: filter
-        type:
-        - text: CTraceFilter
-          url: SwiftlyS2.Shared.Natives.CTraceFilter.html
-          uid: SwiftlyS2.Shared.Natives.CTraceFilter
-        description: The trace filter used to determine which entities or surfaces are considered during the trace operation.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace object that receives the results of the trace, including collision information and
-              hit details.
     - name: TracePlayerBBox(in Vector, in Vector, in BBox_t, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TracePlayerBBox(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.BBox_t@,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L29
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L14
       summary: Performs a collision trace of a player-sized bounding box from the specified start position to the end position, using the given filter and bounding box dimensions. The result of the trace is stored in the provided trace object.
       declaration: TraceResult TracePlayerBBox(in Vector start, in Vector end, in BBox_t bounds, in TraceParams? param = null)
       parameters:
@@ -61754,50 +61551,9 @@ categories:
         - text: TraceResult
           url: SwiftlyS2.Shared.Trace.TraceResult.html
           uid: SwiftlyS2.Shared.Trace.TraceResult
-    - name: TraceShape(Vector, Vector, Ray_t, CTraceFilter, ref CGameTrace)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShape(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Ray_t,SwiftlyS2.Shared.Natives.CTraceFilter,SwiftlyS2.Shared.Natives.CGameTrace@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L66
-      summary: Performs a trace operation from the specified start point to the end point using the given ray and filter, and populates the trace result with collision information.
-      declaration: >-
-        [Obsolete("Use TraceShapeLine method with TraceParams instead.")]
-
-        void TraceShape(Vector start, Vector end, Ray_t ray, CTraceFilter filter, ref CGameTrace trace)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, represented as a vector.
-      - name: end
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The ending position of the trace, represented as a vector.
-      - name: ray
-        type:
-        - text: Ray_t
-          url: SwiftlyS2.Shared.Natives.Ray_t.html
-          uid: SwiftlyS2.Shared.Natives.Ray_t
-        description: The ray definition used for the trace, specifying direction and other ray properties.
-      - name: filter
-        type:
-        - text: CTraceFilter
-          url: SwiftlyS2.Shared.Natives.CTraceFilter.html
-          uid: SwiftlyS2.Shared.Natives.CTraceFilter
-        description: The filter that determines which entities or surfaces are considered during the trace.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace structure that receives the results of the trace, including hit information and
-              surface details.
     - name: TraceShapeAngle(in Vector, in QAngle, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShapeAngle(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.QAngle@,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L45
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L30
       summary: Traces from <code class="paramref">start</code> towards <code class="paramref">angle</code> with the provided shape options.
       declaration: TraceResult TraceShapeAngle(in Vector start, in QAngle angle, in TraceParams? param = null)
       parameters:
@@ -61828,7 +61584,7 @@ categories:
           uid: SwiftlyS2.Shared.Trace.TraceResult
     - name: TraceShapeAngle(in Vector, in QAngle, float, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShapeAngle(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.QAngle@,System.Single,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L54
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L39
       summary: Traces from <code class="paramref">start</code> towards <code class="paramref">angle</code> with the provided shape options.
       declaration: TraceResult TraceShapeAngle(in Vector start, in QAngle angle, float maxDistance = 8192, in TraceParams? param = null)
       parameters:
@@ -61865,7 +61621,7 @@ categories:
           uid: SwiftlyS2.Shared.Trace.TraceResult
     - name: TraceShapeLine(in Vector, in Vector, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShapeLine(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.Vector@,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L37
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L22
       summary: Traces from <code class="paramref">start</code> to <code class="paramref">end</code> with the provided shape options.
       declaration: TraceResult TraceShapeLine(in Vector start, in Vector end, in TraceParams? param = null)
       parameters:
