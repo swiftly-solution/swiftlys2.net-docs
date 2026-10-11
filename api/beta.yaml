@@ -61322,7 +61322,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: BasePathExists
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.BasePathExists
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L67
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L97
       summary: Whether the base path exists in the file system.
       declaration: bool BasePathExists { get; }
       valueType:
@@ -61330,7 +61330,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Manager
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.Manager
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L62
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L92
       summary: Get the configuration root.
       declaration: IConfigurationManager Manager { get; }
       valueType:
@@ -61339,7 +61339,7 @@ categories:
     methods:
     - name: Configure(Action<IConfigurationBuilder>)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.Configure(System.Action{Microsoft.Extensions.Configuration.IConfigurationBuilder})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L56
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L86
       summary: Configure the internal configuration manager.
       declaration: IPluginConfigurationService Configure(Action<IConfigurationBuilder> configure)
       parameters:
@@ -61398,9 +61398,38 @@ categories:
       typeParameters:
       - name: T
         description: The type of the configuration model.
+    - name: InitializeJsonWithModel<T>(string, string, bool)
+      uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeJsonWithModel``1(System.String,System.String,System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L54
+      summary: Initialize the json configuration file with a class as template. Behaves like <xref href="SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeJsonWithModel%60%601(System.String%2cSystem.String)" data-throw-if-not-resolved="false"></xref> when the file does not exist yet. When the file exists and <code class="paramref">addMissingKeys</code> is <code>true</code>, keys present in the model but missing from the file are inserted with their default value, including keys of nested objects. In a <code>.jsonc</code> file each inserted key gets its <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> as <code>//</code> comment lines above it. The rest of the file, including existing values, comments and formatting, is left untouched. Dictionary entries and list items are never added. Keys are matched case-insensitively, the same way the configuration binder reads them. A file that is not valid JSON is not changed.
+      declaration: 'IPluginConfigurationService InitializeJsonWithModel<T>(string name, string sectionName, bool addMissingKeys) where T : class, new()'
+      parameters:
+      - name: name
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the configuration file.
+      - name: sectionName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the section in the configuration file.
+      - name: addMissingKeys
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether to insert keys missing from an existing file.
+      returns:
+        type:
+        - text: IPluginConfigurationService
+          url: SwiftlyS2.Shared.Services.IPluginConfigurationService.html
+          uid: SwiftlyS2.Shared.Services.IPluginConfigurationService
+      typeParameters:
+      - name: T
+        description: The type of the configuration model.
     - name: InitializeTomlWithModel<T>(string, string)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeTomlWithModel``1(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L49
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L64
       summary: Initialize the TOML configuration file with a class as template. Properties and fields marked with <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> are written with their description as <code>#</code> comment lines above the key or above the table header. Members of inline tables cannot carry comments.
       declaration: 'IPluginConfigurationService InitializeTomlWithModel<T>(string name, string sectionName) where T : class, new()'
       parameters:
@@ -61414,6 +61443,35 @@ categories:
         - text: string
           url: https://learn.microsoft.com/dotnet/api/system.string
         description: The name of the section in the configuration file.
+      returns:
+        type:
+        - text: IPluginConfigurationService
+          url: SwiftlyS2.Shared.Services.IPluginConfigurationService.html
+          uid: SwiftlyS2.Shared.Services.IPluginConfigurationService
+      typeParameters:
+      - name: T
+        description: The type of the configuration model.
+    - name: InitializeTomlWithModel<T>(string, string, bool)
+      uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeTomlWithModel``1(System.String,System.String,System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L79
+      summary: Initialize the TOML configuration file with a class as template. Behaves like <xref href="SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeTomlWithModel%60%601(System.String%2cSystem.String)" data-throw-if-not-resolved="false"></xref> when the file does not exist yet. When the file exists and <code class="paramref">addMissingKeys</code> is <code>true</code>, keys present in the model but missing from an existing table are inserted after the table's last value, and tables missing from the file are appended at its end, each with its <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> as <code>#</code> comment lines. The rest of the file, including existing values, comments and formatting, is left untouched. Members of inline tables and entries of table arrays are never added. Keys are matched case-insensitively, the same way the configuration binder reads them. A file that is not valid TOML is not changed.
+      declaration: 'IPluginConfigurationService InitializeTomlWithModel<T>(string name, string sectionName, bool addMissingKeys) where T : class, new()'
+      parameters:
+      - name: name
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the configuration file.
+      - name: sectionName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the section in the configuration file.
+      - name: addMissingKeys
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether to insert keys missing from an existing file.
       returns:
         type:
         - text: IPluginConfigurationService
