@@ -60387,7 +60387,7 @@ categories:
     methods:
     - name: DispatchParticleEffect(string, ParticleAttachment_t, byte, CUtlSymbolLarge, CRecipientFilter, bool, int, CBaseEntity?)
       uid: SwiftlyS2.Shared.Services.IEngineService.DispatchParticleEffect(System.String,SwiftlyS2.Shared.SchemaDefinitions.ParticleAttachment_t,System.Byte,SwiftlyS2.Shared.Natives.CUtlSymbolLarge,SwiftlyS2.Shared.Natives.CRecipientFilter,System.Boolean,System.Int32,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L78
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L62
       summary: Dispatches a particle effect to the specified recipients. Thread unsafe, use async variant instead for non-main thread context.
       declaration: void DispatchParticleEffect(string particleName, ParticleAttachment_t attachmentType, byte attachmentPoint, CUtlSymbolLarge attachmentName, CRecipientFilter filter, bool resetAllParticlesOnEntity = false, int splitScreenSlot = 0, CBaseEntity? entity = null)
       parameters:
@@ -60441,7 +60441,7 @@ categories:
         optional: true
     - name: DispatchParticleEffectAsync(string, ParticleAttachment_t, byte, CUtlSymbolLarge, CRecipientFilter, bool, int, CBaseEntity?)
       uid: SwiftlyS2.Shared.Services.IEngineService.DispatchParticleEffectAsync(System.String,SwiftlyS2.Shared.SchemaDefinitions.ParticleAttachment_t,System.Byte,SwiftlyS2.Shared.Natives.CUtlSymbolLarge,SwiftlyS2.Shared.Natives.CRecipientFilter,System.Boolean,System.Int32,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L94
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L78
       summary: Dispatches a particle effect to the specified recipients asynchronously.
       declaration: Task DispatchParticleEffectAsync(string particleName, ParticleAttachment_t attachmentType, byte attachmentPoint, CUtlSymbolLarge attachmentName, CRecipientFilter filter, bool resetAllParticlesOnEntity = false, int splitScreenSlot = 0, CBaseEntity? entity = null)
       parameters:
@@ -60524,59 +60524,9 @@ categories:
         type:
         - text: Task
           url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
-    - name: ExecuteCommandWithBuffer(string, Action<string>)
-      uid: SwiftlyS2.Shared.Services.IEngineService.ExecuteCommandWithBuffer(System.String,System.Action{System.String})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L47
-      summary: Executes the specified command string in the current context.
-      declaration: >-
-        [Obsolete("This method is planned to be removed.")]
-
-        void ExecuteCommandWithBuffer(string command, Action<string> bufferCallback)
-      parameters:
-      - name: command
-        type:
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        description: The command to execute. Cannot be null or empty.
-      - name: bufferCallback
-        type:
-        - text: Action
-          url: https://learn.microsoft.com/dotnet/api/system.action-1
-        - <
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - '>'
-        description: The callback to receive the output of the command.
-    - name: ExecuteCommandWithBufferAsync(string, Action<string>)
-      uid: SwiftlyS2.Shared.Services.IEngineService.ExecuteCommandWithBufferAsync(System.String,System.Action{System.String})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L55
-      summary: Executes the specified command string in the current context with a buffer callback asynchronously.
-      declaration: >-
-        [Obsolete("This method is planned to be removed.")]
-
-        Task ExecuteCommandWithBufferAsync(string command, Action<string> bufferCallback)
-      parameters:
-      - name: command
-        type:
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        description: The command to execute. Cannot be null or empty.
-      - name: bufferCallback
-        type:
-        - text: Action
-          url: https://learn.microsoft.com/dotnet/api/system.action-1
-        - <
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - '>'
-        description: The callback to receive the output of the command.
-      returns:
-        type:
-        - text: Task
-          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
     - name: FindGameSystemByName(string)
       uid: SwiftlyS2.Shared.Services.IEngineService.FindGameSystemByName(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L63
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L47
       summary: Find a game system by name.
       declaration: nint? FindGameSystemByName(string name)
       parameters:
