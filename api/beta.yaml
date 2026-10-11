@@ -7425,6 +7425,139 @@ categories:
       default: 13
     - name: Weapon2
       default: 14
+- category: Extensions
+  namespace: SwiftlyS2.Shared.Extensions
+  types:
+  - name: IExtensionService
+    type: Interface
+    uid: SwiftlyS2.Shared.Extensions.IExtensionService
+    parent: SwiftlyS2.Shared.Extensions
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L6
+    summary: Manages native extensions and their shared pointer registry.
+    declaration: public interface IExtensionService
+    methods:
+    - name: GetSharedPointer(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.GetSharedPointer(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L39
+      summary: Gets a shared pointer, or zero if the key does not exist. Use HasSharedPointer to distinguish a stored zero from a missing key.
+      declaration: nint GetSharedPointer(string key)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+    - name: HasSharedPointer(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.HasSharedPointer(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L50
+      summary: Checks whether a shared pointer key exists, including keys with zero values.
+      declaration: bool HasSharedPointer(string key)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Load(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.Load(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L12
+      summary: Loads an extension from extensions/{id}/{id}.dll or .so.
+      declaration: bool Load(string id)
+      parameters:
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was loaded successfully.
+    - name: LoadFromPath(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.LoadFromPath(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L26
+      summary: Loads an extension from an absolute path to its library. The extension ID is the library filename without its extension.
+      declaration: bool LoadFromPath(string absolutePath)
+      parameters:
+      - name: absolutePath
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was loaded successfully.
+      exceptions:
+      - type:
+        - text: ArgumentException
+          url: https://learn.microsoft.com/dotnet/api/system.argumentexception
+        description: The path is empty or not fully qualified.
+    - name: RemoveSharedPointer(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.RemoveSharedPointer(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L56
+      summary: Removes a shared pointer key without freeing the pointed-to object. Missing keys are ignored.
+      declaration: void RemoveSharedPointer(string key)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: SetSharedPointer(string, nint)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.SetSharedPointer(System.String,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L45
+      summary: Inserts or replaces a shared pointer. The value can be zero. The registry does not own the pointed-to object or free replaced values.
+      declaration: void SetSharedPointer(string key, nint pointer)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pointer
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+    - name: Unload(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.Unload(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L18
+      summary: Unloads an extension and invokes its registered unload callback.
+      declaration: bool Unload(string id)
+      parameters:
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was unloaded successfully.
+    - name: UnloadFromPath(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.UnloadFromPath(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L33
+      summary: Unloads an extension by the absolute path to its library.
+      declaration: bool UnloadFromPath(string absolutePath)
+      parameters:
+      - name: absolutePath
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was unloaded successfully.
+      exceptions:
+      - type:
+        - text: ArgumentException
+          url: https://learn.microsoft.com/dotnet/api/system.argumentexception
+        description: The path is empty or not fully qualified.
 - category: FileSystem
   namespace: SwiftlyS2.Shared.FileSystem
   types:
@@ -95845,13 +95978,13 @@ categories:
     type: Interface
     uid: SwiftlyS2.Shared.ISwiftlyCore
     parent: SwiftlyS2.Shared
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L30
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L31
     summary: Core interface of SwiftlyS2 framework.
     declaration: public interface ISwiftlyCore
     properties:
     - name: CSGODirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.CSGODirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L190
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L196
       summary: Gets the absolute file path to the `game/csgo` directory.
       declaration: >-
         [Obsolete("Please use GameFilesDirectory.")]
@@ -95862,7 +95995,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Command
       uid: SwiftlyS2.Shared.ISwiftlyCore.Command
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L70
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L71
       summary: Command service.
       declaration: ICommandService Command { get; }
       valueType:
@@ -95871,7 +96004,7 @@ categories:
         uid: SwiftlyS2.Shared.Commands.ICommandService
     - name: CommandLine
       uid: SwiftlyS2.Shared.ISwiftlyCore.CommandLine
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L165
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L171
       summary: Command line.
       declaration: ICommandLine CommandLine { get; }
       valueType:
@@ -95880,7 +96013,7 @@ categories:
         uid: SwiftlyS2.Shared.CommandLine.ICommandLine
     - name: ConVar
       uid: SwiftlyS2.Shared.ISwiftlyCore.ConVar
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L85
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L86
       summary: Convar service.
       declaration: IConVarService ConVar { get; }
       valueType:
@@ -95889,7 +96022,7 @@ categories:
         uid: SwiftlyS2.Shared.Convars.IConVarService
     - name: Configuration
       uid: SwiftlyS2.Shared.ISwiftlyCore.Configuration
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L90
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L91
       summary: Configuration service.
       declaration: IPluginConfigurationService Configuration { get; }
       valueType:
@@ -95898,7 +96031,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IPluginConfigurationService
     - name: ConsoleOutput
       uid: SwiftlyS2.Shared.ISwiftlyCore.ConsoleOutput
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L75
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L76
       summary: Console output service.
       declaration: IConsoleOutputService ConsoleOutput { get; }
       valueType:
@@ -95907,7 +96040,7 @@ categories:
         uid: SwiftlyS2.Shared.ConsoleOutput.IConsoleOutputService
     - name: Database
       uid: SwiftlyS2.Shared.ISwiftlyCore.Database
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L135
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L141
       summary: Database service.
       declaration: IDatabaseService Database { get; }
       valueType:
@@ -95916,7 +96049,7 @@ categories:
         uid: SwiftlyS2.Shared.Database.IDatabaseService
     - name: Engine
       uid: SwiftlyS2.Shared.ISwiftlyCore.Engine
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L40
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L41
       summary: Gets the engine service used to perform core engine operations.
       declaration: IEngineService Engine { get; }
       valueType:
@@ -95925,7 +96058,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IEngineService
     - name: EntitySystem
       uid: SwiftlyS2.Shared.ISwiftlyCore.EntitySystem
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L80
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L81
       summary: Entity system service.
       declaration: IEntitySystemService EntitySystem { get; }
       valueType:
@@ -95934,16 +96067,25 @@ categories:
         uid: SwiftlyS2.Shared.EntitySystem.IEntitySystemService
     - name: Event
       uid: SwiftlyS2.Shared.ISwiftlyCore.Event
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L35
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L36
       summary: Custom event subscriber.
       declaration: IEventSubscriber Event { get; }
       valueType:
       - text: IEventSubscriber
         url: SwiftlyS2.Shared.Events.IEventSubscriber.html
         uid: SwiftlyS2.Shared.Events.IEventSubscriber
+    - name: Extension
+      uid: SwiftlyS2.Shared.ISwiftlyCore.Extension
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L111
+      summary: Native extension and shared pointer service.
+      declaration: IExtensionService Extension { get; }
+      valueType:
+      - text: IExtensionService
+        url: SwiftlyS2.Shared.Extensions.IExtensionService.html
+        uid: SwiftlyS2.Shared.Extensions.IExtensionService
     - name: Game
       uid: SwiftlyS2.Shared.ISwiftlyCore.Game
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L65
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L66
       summary: Game service.
       declaration: IGameService Game { get; }
       valueType:
@@ -95952,7 +96094,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IGameService
     - name: GameData
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameData
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L95
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L96
       summary: Game data service.
       declaration: IGameDataService GameData { get; }
       valueType:
@@ -95961,7 +96103,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IGameDataService
     - name: GameDirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameDirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L201
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L207
       summary: Gets the absolute file path to the game's root directory.
       declaration: string GameDirectory { get; }
       valueType:
@@ -95969,7 +96111,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: GameEvent
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameEvent
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L45
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L46
       summary: Game event service.
       declaration: IGameEventService GameEvent { get; }
       valueType:
@@ -95978,7 +96120,7 @@ categories:
         uid: SwiftlyS2.Shared.GameEvents.IGameEventService
     - name: GameFileSystem
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameFileSystem
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L170
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L176
       summary: Game file system interface.
       declaration: IGameFileSystem GameFileSystem { get; }
       valueType:
@@ -95987,7 +96129,7 @@ categories:
         uid: SwiftlyS2.Shared.FileSystem.IGameFileSystem
     - name: GameFilesDirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameFilesDirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L196
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L202
       summary: Gets the absolute file path to the game's files directory.
       declaration: string GameFilesDirectory { get; }
       valueType:
@@ -95995,7 +96137,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: GameHooks
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameHooks
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L60
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L61
       summary: Game hooks service.
       declaration: IGameHooks GameHooks { get; }
       valueType:
@@ -96004,7 +96146,7 @@ categories:
         uid: SwiftlyS2.Shared.GameHooks.IGameHooks
     - name: Helpers
       uid: SwiftlyS2.Shared.ISwiftlyCore.Helpers
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L55
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L56
       summary: Helpers service.
       declaration: IHelpers Helpers { get; }
       valueType:
@@ -96013,7 +96155,7 @@ categories:
         uid: SwiftlyS2.Shared.Helpers.IHelpers
     - name: IsGameThread
       uid: SwiftlyS2.Shared.ISwiftlyCore.IsGameThread
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L212
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L218
       summary: Checks whether or not this code section runs on the game thread.
       declaration: bool IsGameThread { get; }
       valueType:
@@ -96021,7 +96163,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Localizer
       uid: SwiftlyS2.Shared.ISwiftlyCore.Localizer
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L145
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L151
       summary: Localizer.
       declaration: ILocalizer Localizer { get; }
       valueType:
@@ -96030,7 +96172,7 @@ categories:
         uid: SwiftlyS2.Shared.Translation.ILocalizer
     - name: Logger
       uid: SwiftlyS2.Shared.ISwiftlyCore.Logger
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L115
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L121
       summary: Default logger.
       declaration: ILogger Logger { get; }
       valueType:
@@ -96038,7 +96180,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger
     - name: LoggerFactory
       uid: SwiftlyS2.Shared.ISwiftlyCore.LoggerFactory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L110
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L116
       summary: Logger factory.
       declaration: ILoggerFactory LoggerFactory { get; }
       valueType:
@@ -96046,7 +96188,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.iloggerfactory
     - name: Memory
       uid: SwiftlyS2.Shared.ISwiftlyCore.Memory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L105
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L106
       summary: Memory service.
       declaration: IMemoryService Memory { get; }
       valueType:
@@ -96055,7 +96197,7 @@ categories:
         uid: SwiftlyS2.Shared.Memory.IMemoryService
     - name: MenusAPI
       uid: SwiftlyS2.Shared.ISwiftlyCore.MenusAPI
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L160
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L166
       summary: Menu manager API.
       declaration: IMenuManagerAPI MenusAPI { get; }
       valueType:
@@ -96064,7 +96206,7 @@ categories:
         uid: SwiftlyS2.Shared.Menus.IMenuManagerAPI
     - name: NetMessage
       uid: SwiftlyS2.Shared.ISwiftlyCore.NetMessage
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L50
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L51
       summary: Net message service.
       declaration: INetMessageService NetMessage { get; }
       valueType:
@@ -96073,7 +96215,7 @@ categories:
         uid: SwiftlyS2.Shared.NetMessages.INetMessageService
     - name: Permission
       uid: SwiftlyS2.Shared.ISwiftlyCore.Permission
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L150
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L156
       summary: Permission manager.
       declaration: IPermissionManager Permission { get; }
       valueType:
@@ -96082,7 +96224,7 @@ categories:
         uid: SwiftlyS2.Shared.Permissions.IPermissionManager
     - name: PlayerManager
       uid: SwiftlyS2.Shared.ISwiftlyCore.PlayerManager
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L100
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L101
       summary: Player manager service.
       declaration: IPlayerManagerService PlayerManager { get; }
       valueType:
@@ -96091,7 +96233,7 @@ categories:
         uid: SwiftlyS2.Shared.Players.IPlayerManagerService
     - name: PluginDataDirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.PluginDataDirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L207
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L213
       summary: Gets the file path to the plugin data directory. This directory is ensured to exist by the framework.
       declaration: string PluginDataDirectory { get; }
       valueType:
@@ -96099,7 +96241,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: PluginManager
       uid: SwiftlyS2.Shared.ISwiftlyCore.PluginManager
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L175
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L181
       summary: Plugin manager.
       declaration: IPluginManager PluginManager { get; }
       valueType:
@@ -96108,7 +96250,7 @@ categories:
         uid: SwiftlyS2.Shared.Plugins.IPluginManager
     - name: PluginPath
       uid: SwiftlyS2.Shared.ISwiftlyCore.PluginPath
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L185
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L191
       summary: Gets the file path to the plugin directory.
       declaration: string PluginPath { get; }
       valueType:
@@ -96116,7 +96258,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Profiler
       uid: SwiftlyS2.Shared.ISwiftlyCore.Profiler
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L120
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L126
       summary: Profiler service.
       declaration: IContextedProfilerService Profiler { get; }
       valueType:
@@ -96125,7 +96267,7 @@ categories:
         uid: SwiftlyS2.Shared.Profiler.IContextedProfilerService
     - name: Registrator
       uid: SwiftlyS2.Shared.ISwiftlyCore.Registrator
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L155
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L161
       summary: Registrator service.
       declaration: IRegistratorService Registrator { get; }
       valueType:
@@ -96134,7 +96276,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IRegistratorService
     - name: Scheduler
       uid: SwiftlyS2.Shared.ISwiftlyCore.Scheduler
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L130
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L136
       summary: Scheduler service.
       declaration: ISchedulerService Scheduler { get; }
       valueType:
@@ -96143,7 +96285,7 @@ categories:
         uid: SwiftlyS2.Shared.Scheduler.ISchedulerService
     - name: StringTable
       uid: SwiftlyS2.Shared.ISwiftlyCore.StringTable
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L180
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L186
       summary: String table service.
       declaration: IStringTableService StringTable { get; }
       valueType:
@@ -96152,7 +96294,7 @@ categories:
         uid: SwiftlyS2.Shared.StringTable.IStringTableService
     - name: Trace
       uid: SwiftlyS2.Shared.ISwiftlyCore.Trace
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L125
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L131
       summary: Gets the trace manager used to control and configure tracing operations within the game.
       declaration: ITraceManager Trace { get; }
       valueType:
@@ -96161,7 +96303,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.ITraceManager
     - name: Translation
       uid: SwiftlyS2.Shared.ISwiftlyCore.Translation
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L140
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L146
       summary: Translation service.
       declaration: ITranslationService Translation { get; }
       valueType:
