@@ -42,6 +42,12 @@ var task = Opt("task");
 var summaryPath = Opt("summary");
 var betaSrc = opt.TryGetValue("beta-src", out var bs) ? Path.GetFullPath(bs) : null;
 var allowUpstream = opt.ContainsKey("allow-upstream");
+if (opt.TryGetValue("scope", out var scope)) // restrict every source tool to a subdirectory (e.g. the public API project)
+{
+    if (allowUpstream) throw new ArgumentException("--scope and --allow-upstream are mutually exclusive");
+    src = Safe(src, scope);
+    if (betaSrc is not null) betaSrc = Safe(betaSrc, scope);
+}
 var model = Environment.GetEnvironmentVariable("DEEPSEEK_MODEL") ?? "deepseek-flash";
 var api = Environment.GetEnvironmentVariable("DEEPSEEK_API_URL") ?? "https://api.deepseek.com/chat/completions";
 
@@ -102,6 +108,12 @@ string Safe(string root, string rel)
         if (new FileInfo(cur).LinkTarget is not null) throw new InvalidOperationException($"symlink not allowed: {rel}");
     }
     return p;
+}
+
+static string TryPath(string? args)
+{
+    try { return JsonNode.Parse(args ?? "{}")?["path"] is { } p ? $" path={p}" : ""; }
+    catch { return ""; }
 }
 
 static string Clip(string s) => s.Length > MaxOut ? s[..MaxOut] : s;
@@ -180,10 +192,10 @@ string Run(string name, JsonNode a)
         {
             if (!allowUpstream) return "ERROR: upstream edits not allowed for this page.";
             var p = Safe(src, (string)a["path"]!); // resolved first so ../ and symlinks collapse before the check
-            var cfg = Safe(src, UpstreamPrefix);
+            var cfg = Safe(src, UpstreamPrefix).TrimEnd(Path.DirectorySeparatorChar); // GetFullPath keeps the prefix's trailing '/'
             if (!p.StartsWith(cfg + Path.DirectorySeparatorChar)
                 || Path.GetRelativePath(src, p).Split(Path.DirectorySeparatorChar).Contains(".git"))
-                return $"ERROR: only paths under {UpstreamPrefix} are allowed.";
+                return $"ERROR: '{a["path"]}' (resolved: {Path.GetRelativePath(src, p)}) is outside {UpstreamPrefix}; only paths under it are allowed.";
             File.WriteAllText(p, (string)a["content"]!, new UTF8Encoding(false));
             return "upstream file written";
         }
@@ -230,7 +242,8 @@ for (var turn = 0; turn < MaxTurns && !finished; turn++)
             else output = Run(name, a);
         }
         catch (Exception e) { output = $"ERROR: {e.Message}"; } // report to the model, let it recover
-        Console.Error.WriteLine($"[{name}] {output[..Math.Min(output.Length, 120)].ReplaceLineEndings(" ")}");
+        var target = fn["arguments"] is { } ? TryPath((string?)fn["arguments"]) : "";
+        Console.Error.WriteLine($"[{name}]{target} {output[..Math.Min(output.Length, 120)].ReplaceLineEndings(" ")}");
         messages.Add(new JsonObject { ["role"] = "tool", ["tool_call_id"] = (string)c["id"]!, ["content"] = output });
     }
     if (turn == MaxTurns - 1 && !finished) Console.Error.WriteLine("agent hit MaxTurns");
