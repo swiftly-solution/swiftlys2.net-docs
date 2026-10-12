@@ -10,54 +10,63 @@ Connections are defined in `configs/database.jsonc` and referenced by name from 
 
 ```jsonc
 {
-    "default_connection": "host",
+    // Default connection name
+    "default_connection": "default",
     "connections": {
-        "host": "mysql://username:password@localhost:3306/database",
-        "analytics": "postgresql://username:password@localhost:5432/database",
-        "local": "sqlite://data/local.db"
+        "default": "mysql://root:@localhost:3306/swiftlys2",
+        "postgres_uri": "postgresql://postgres:@localhost:5432/swiftlys2",
+        "local": "sqlite://swiftlys2-local.db"
     }
 }
 ```
 
-Supported URI formats: `mysql://user:pass@host:3306/database`, `postgresql://user:pass@host:5432/database`, `sqlite://path/to/database.db`.
+`default_connection` is the connection name a lookup falls back to when the requested name isn't found. Supported URI formats: `driver://user:password@host:port/database` for `mysql` and `postgresql`, and `sqlite://path/to/database.db` for `sqlite`.
 
-### Object format and options
+### Object Format and Options
 
 A connection can also be an object. Besides `driver`, `host`, `port`, `database`, `user`, `pass` and `timeout`, it takes an `options` field with the connection string keywords of the driver:
 
 ```jsonc
 {
     "connections": {
-        "host": {
+        "mysql_detailed": {
             "driver": "mysql",
             "host": "localhost",
             "database": "swiftlys2",
             "user": "root",
             "pass": "",
+            "port": 3306,
+            "timeout": 30,
             "options": {
-                "SslMode": "Required",
+                "SslMode": "Preferred",
                 "CharacterSet": "utf8mb4",
-                "MaximumPoolSize": 50
+                "MaximumPoolSize": 50,
+                "DefaultCommandTimeout": 60
             }
         },
-        "analytics": {
+        "postgres_detailed": {
             "driver": "postgresql",
             "host": "localhost",
             "database": "swiftlys2",
             "user": "postgres",
+            "pass": "",
+            "port": 5432,
+            "timeout": 30,
             "options": {
-                "SSL Mode": "Require",
+                "SSL Mode": "Prefer",
                 "Maximum Pool Size": 50,
+                "Command Timeout": 60,
                 "Search Path": "public"
             }
         },
-        "local": {
+        "sqlite_detailed": {
             "driver": "sqlite",
-            "database": "data/local.db",
+            "database": "data/swiftlys2-detailed.db",
             "options": {
                 "Journal Mode": "Wal",
                 "Foreign Keys": true,
-                "Cache Size": 4000
+                "Cache Size": 4000,
+                "Default Timeout": 30
             }
         }
     }
@@ -72,44 +81,61 @@ Every keyword that the driver supports works, with the same names and synonyms a
 | `postgresql` | Npgsql | [Connection string parameters](https://www.npgsql.org/doc/connection-string-parameters.html) |
 | `sqlite` | System.Data.SQLite | The properties of `SQLiteConnectionStringBuilder`, such as `Journal Mode`, `Foreign Keys`, `Cache Size`, `Default Timeout` and `Pooling` |
 
-Values can be strings, numbers or booleans. Nested objects and arrays are skipped. Options are applied after the other fields, so an option can override one of them, for example `Server`.
+Values can be strings, numbers or booleans. Options are applied after the other fields, so an option can override one of them, for example `Server`.
 
 <Callout type="warning">
-    A keyword or a value that the driver doesn't accept throws an `ArgumentException` that names the option when the connection is requested, for example `Invalid option 'NoSuchOption' = '1' for the mysql driver`. For SQLite the keyword is matched ignoring case, spaces and underscores, so `journal_mode`, `JournalMode` and `Journal Mode` are the same option.
+    A keyword or a value that the driver doesn't know is an error when the
+    connection is requested.
 </Callout>
-
-The parsed options are available as `DatabaseConnectionInfo.Options`, and they are included in `GetConnectionString`.
 
 ## Getting a Connection
 
 <ApiRef name="IDatabaseService" member="GetConnection" /> returns an
 `IDbConnection` for the named connection, falling back to the default connection
-if the name isn't found.
-<ApiRef name="IDatabaseService" member="GetConnectionString" /> and
+if the name isn't found. <ApiRef name="IDatabaseService" member="GetConnectionString" /> and
 <ApiRef name="IDatabaseService" member="GetConnectionInfo" /> share the same
-fallback and expose the raw string / parsed metadata instead (see
-<ApiRef name="DatabaseConnectionInfo" /> for the full field list - driver, host,
-database, user, pass, timeout, port, raw URI, options):
+fallback and give you the connection string / the parsed metadata instead (see
+<ApiRef name="DatabaseConnectionInfo" />). The returned connection is not
+opened - call `Open()`/`OpenAsync()` yourself:
 
 ```csharp
-using var connection = Core.Database.GetConnection("host");
+using var connection = Core.Database.GetConnection("default");
 connection.Open();
 
-string connectionString = Core.Database.GetConnectionString("host");
-DatabaseConnectionInfo info = Core.Database.GetConnectionInfo("host");
+string connectionString = Core.Database.GetConnectionString("default");
+DatabaseConnectionInfo info = Core.Database.GetConnectionInfo("default");
 Console.WriteLine($"{info.Driver} -> {info.Host}:{info.Port}/{info.Database}");
+Console.WriteLine(info.ToString()); // connection string built from the info
 ```
 
+<ApiRef name="DatabaseConnectionInfo" /> is a `record struct`, so its properties are positional and it can be deconstructed:
+
+| Member | Type | Description |
+|---|---|---|
+| `Driver` | `string` | Driver of the connection, e.g. `mysql`, `postgresql` or `sqlite` |
+| `Host` | `string` | Host of the database server |
+| `Database` | `string` | Database name, or the file path for `sqlite` |
+| `User` | `string` | User name |
+| `Pass` | `string` | Password |
+| `Timeout` | `uint` | Timeout value of the connection |
+| `Port` | `ushort` | Port of the database server |
+| `RawUri` | `string` | The raw connection URI, when one is available |
+| `Options` | `IReadOnlyDictionary<string, string>` | The parsed `options`, empty when the connection has none |
+
+<ApiRef name="DatabaseConnectionInfo" member="ToString" /> renders the connection string: it returns `RawUri` unchanged when that is set, otherwise it builds the driver's own format - `Data Source=...` for `sqlite`, `Server=...;Port=...;Database=...;User ID=...;Password=...` (plus `Timeout` when it is greater than `0`) for `mysql` and `postgresql`, and `driver://user:pass@host:port/database` for any other driver - and appends every entry of `Options`. When `Port` is `0` on a `mysql` or `postgresql` connection, the default port is used (`3306` and `5432`). Values with leading or trailing whitespace, or containing `;`, `"`, `'` or `=`, are quoted.
+
 <Callout type="warning">
-    Avoid logging secrets like `Pass` in production.
+    Avoid logging secrets like `Pass` in production - a rendered connection string contains it.
 </Callout>
+
+`services.AddSwiftly(Core)` registers <ApiRef name="IDatabaseService" /> as a singleton next to the other core services, so it can be injected like any other dependency - see [Dependency Injection](/docs/guides/dependency-injection).
 
 ## Using ADO.NET or an ORM
 
 `GetConnection` returns `IDbConnection`, so plain ADO.NET or any compatible ORM works - Dapper, Dommel, FreeSql, Entity Framework Core:
 
 ```csharp
-using var connection = Core.Database.GetConnection("host");
+using var connection = Core.Database.GetConnection("default");
 
 var players = await connection.QueryAsync<PlayerRow>(
     "SELECT steam_id, name FROM players WHERE is_active = @IsActive",

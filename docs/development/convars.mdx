@@ -12,6 +12,8 @@ The generic parameter `T` used by <ApiRef name="IConVar`1" />, `Create<T>`, `Cre
 
 `bool`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `Color`, `QAngle`, `Vector`, `Vector2D`, `Vector4D`, `string`
 
+The `minValue`/`maxValue` overloads are constrained to `where T : unmanaged`, so a reference type like `string` only works with the overloads that don't take bounds.
+
 ## Creating Convars
 
 <ApiRef name="IConVarService" member="Create" />
@@ -19,9 +21,8 @@ The generic parameter `T` used by <ApiRef name="IConVar`1" />, `Create<T>`, `Cre
 unmanaged` overload taking `minValue, maxValue` before `flags` for
 numeric/struct types like `Vector`.
 <ApiRef name="IConVarService" member="CreateOrFind" /> has the same two
-overloads but returns the existing convar instead of throwing if `name` is
-already registered - prefer it unless you specifically want the
-duplicate-registration error.
+overloads, but returns the convar already registered under `name` if there is
+one instead of creating a second one.
 
 ```csharp
 IConVar<bool> enabled = Core.ConVar.Create("sw_plugin_enabled", "Enable or disable the plugin.", true);
@@ -61,11 +62,15 @@ if (hostname != null)
 
 Setting `Value` queues the change and auto-replicates if the convar is replicated; use <ApiRef name="IConVar`1" member="SetInternal" /> instead for an immediate, non-replicated change (e.g. inside a hook for that same convar, where the queued set won't apply in time). <ApiRef name="IConVar`1" member="ReplicateToClient" />/<ApiRef name="IConVar`1" member="QueryClient" /> push/pull a single client's value, and `TryGetMinValue`/`TryGetMaxValue`/`TryGetDefaultValue` read the bounds safely.
 
+Every convar also exposes `Name` and `HelpText`, a settable `Flags`, the typed `MinValue`, `MaxValue` and `DefaultValue`, and the `HasMinValue`/`HasMaxValue`/`HasDefaultValue` guards for them - reading or writing `MinValue`/`MaxValue` on a convar that has no such bound throws `InvalidOperationException`, which is what the `TryGet*` methods avoid.
+
 ```csharp
 enabled.Value = false;
 enabled.SetInternal(true);
 enabled.ReplicateToClient(0, true);
 enabled.QueryClient(0, valueAsString => Console.WriteLine($"Client replied with: {valueAsString}"));
+
+Console.WriteLine($"{enabled.Name}: {enabled.HelpText} (flags: {enabled.Flags})");
 
 if (maxBots.TryGetMinValue(out var min)) Console.WriteLine($"Min value: {min}");
 if (maxBots.TryGetMaxValue(out var max)) Console.WriteLine($"Max value: {max}");
@@ -74,7 +79,7 @@ if (maxBots.TryGetDefaultValue(out var def)) Console.WriteLine($"Default value: 
 
 ## Working with <ApiRef name="IConVar" /> (String API)
 
-Without a generic type, use the non-generic members: `ValueAsString`, `SetInternalAsString`, `ReplicateToClientAsString`, `TryGetMinValueAsString`, `TryGetMaxValueAsString`, `TryGetDefaultValueAsString` - see <ApiRef name="IConVar" /> for the full list.
+Without a generic type, use the non-generic members: `ValueAsString`, `MinValueAsString`, `MaxValueAsString`, `DefaultValueAsString` (all readable and settable), `HasMinValue`/`HasMaxValue`/`HasDefaultValue`, `Flags`, `SetInternalAsString`, `ReplicateToClientAsString`, `QueryClient`, and `TryGetMinValueAsString`/`TryGetMaxValueAsString`/`TryGetDefaultValueAsString` - see <ApiRef name="IConVar" /> for the full list. A string that can't be parsed throws `ArgumentException`.
 
 ```csharp
 IConVar? anyConvar = Core.ConVar.FindAsString("sv_cheats");
@@ -83,10 +88,13 @@ if (anyConvar != null)
 {
     anyConvar.SetInternalAsString("1");
     anyConvar.ReplicateToClientAsString(0, "1");
+
+    if (anyConvar.TryGetDefaultValueAsString(out var defaultValue))
+        Console.WriteLine($"Default value: {defaultValue}");
 }
 ```
 
-## Service-Level Replication
+## Service-Level Replication and Queries
 
 Replicate a value by name to a client, even for convars that don't exist on the server:
 
@@ -95,15 +103,34 @@ Core.ConVar.ReplicateToClient(0, "cl_showfps", "1");
 Core.ConVar.ReplicateToAll("cl_teamid_overhead_mode", "2");
 ```
 
-## Tracking ConVar Changes
+<ApiRef name="IConVarService" member="QueryClient" /> is the reverse direction - it asks a client for its value by name and hands the answer to a callback:
+
+```csharp
+Core.ConVar.QueryClient(0, "cl_showfps", clientValue => Console.WriteLine($"Client replied with: {clientValue}"));
+```
+
+For client userinfo convars like `m_yaw` or `sensitivity`, <ApiRef name="IPlayer" member="GetClientConvarValue" /> returns the value the server already knows, without a round trip.
+
+## ConVar Events
+
+Two events on `Core.Event` (<ApiRef name="IEventSubscriber" />) cover convars: `OnConVarCreated` when a convar is created, and `OnConVarValueChanged` when its value changes. Both take a single `@event` parameter, matching `EventDelegates.OnConVarCreated` and `EventDelegates.OnConVarValueChanged`, so they can be subscribed to with `+=` or with `[EventListener<T>]` - see [Core Events](/docs/development/core-events) for the subscription details.
+
+- <ApiRef name="IOnConVarCreated" />: `ConVarName`.
+- <ApiRef name="IOnConVarValueChanged" />: `ConVarName`, `PlayerId` (the client that made the change), `OldValue` and `NewValue`, both as strings.
 
 ```csharp
 public override void Load(bool hotReload)
 {
+    Core.Event.OnConVarCreated += OnConVarCreated;
     Core.Event.OnConVarValueChanged += OnConVarValueChanged;
 }
 
-private void OnConVarValueChanged(IOnConVarValueChanged @event) // see <ApiRef name="IOnConVarValueChanged" />
+private void OnConVarCreated(IOnConVarCreated @event)
+{
+    Console.WriteLine($"ConVar was created: {@event.ConVarName}");
+}
+
+private void OnConVarValueChanged(IOnConVarValueChanged @event)
 {
     if (!@event.ConVarName.StartsWith("sw_"))
         return;
@@ -115,12 +142,33 @@ private void OnConVarValueChanged(IOnConVarValueChanged @event) // see <ApiRef n
 Useful for audit logging, debugging, and reacting to config changes without polling `Value` on a hot path.
 
 <Callout type="info">
-    Unhook in `Unload()` (`Core.Event.OnConVarValueChanged -=
-    OnConVarValueChanged;`) to avoid leaking a delegate across hot reloads.
+    The framework tears down every listener a plugin registered on hot reload or
+    unload automatically - unsubscribe manually (`Core.Event.OnConVarCreated -=
+    OnConVarCreated;`) only to stop listening earlier.
 </Callout>
 
 ## Reference
 
 <ApiRef name="ConvarFlags" /> is a `[Flags] enum : ulong` mirroring the engine's
-`FCVAR_*` flags (`NONE`, `ARCHIVE`, `NOTIFY`, `REPLICATED`, `CHEAT`, `HIDDEN`,
-`PROTECTED`, and more).
+`FCVAR_*` flags, passed to `Create`/`CreateOrFind` and readable and writable
+through <ApiRef name="IConVar" member="Flags" />. The most commonly used ones:
+
+| Flag         | Meaning                                                                              |
+| ------------ | ------------------------------------------------------------------------------------ |
+| `NONE`       | No flags at all - the default for `Create`/`CreateOrFind`.                            |
+| `ARCHIVE`    | Set to cause it to be saved to `vars.rc`.                                             |
+| `NOTIFY`     | Notifies players when changed.                                                        |
+| `REPLICATED` | Server setting enforced on clients - values are replicated from server to clients.    |
+| `CHEAT`      | Only usable in singleplayer/debug or when `sv_cheats` is enabled.                     |
+| `HIDDEN`     | Doesn't appear in find or auto complete.                                              |
+| `PROTECTED`  | The value isn't sent to clients - `1` if the value isn't blank/zero, `0` otherwise.   |
+| `SPONLY`     | Cannot be changed by clients connected to a multiplayer server.                       |
+
+The remaining engine flags (`LINKED_COMMAND`, `DEVELOPMENT_ONLY`, `GAMEDLL`,
+`CLIENTDLL`, `USERINFO`, `REFERENCE`, `UNLOGGED`, `INITIAL_SETVALUE`,
+`PER_USER`, `DEMO`, `DONTRECORD`, `PERFORMING_CALLBACKS`, `RELEASE`,
+`MENUBAR_ITEM`, `COMMANDLINE_ENFORCED`, `NOT_CONNECTED`,
+`VCONSOLE_FUZZY_MATCHING`, `SERVER_CAN_EXECUTE`, `CLIENT_CAN_EXECUTE`,
+`SERVER_CANNOT_QUERY`, `VCONSOLE_SET_FOCUS`, `CLIENTCMD_CAN_EXECUTE`,
+`EXECUTE_PER_TICK`, `DEFENSIVE`) are available on the enum as well - see
+<ApiRef name="ConvarFlags" /> for the full list.

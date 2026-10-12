@@ -25,6 +25,23 @@ Core.Configuration.InitializeJsonWithModel<MainConfig>("config.jsonc", "Main");
 Core.Configuration.InitializeTomlWithModel<DatabaseConfig>("database.toml", "Database");
 ```
 
+<ApiRef name="IPluginConfigurationService" member="InitializeWithTemplate" /> takes `(name, templateName)` and initializes `name` from `templateName`, which must be packaged in a `templates/` folder inside your plugin.
+
+<ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" /> and <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> take `(name, sectionName)` and write the file from the model's defaults, using `sectionName` as the section the options are later bound to. Members marked with `[Description]` are written with the description as a comment above the key - `//` lines in a `.jsonc` file, `#` lines in TOML. A `.json` file is always written as plain JSON, because comments are not valid JSON.
+
+```csharp
+using System.ComponentModel;
+
+public class DatabaseConfig
+{
+    [Description("Host name of the database server.")]
+    public string Host { get; set; } = "127.0.0.1";
+
+    [Description("Port of the database server.")]
+    public int Port { get; set; } = 3306;
+}
+```
+
 See <ApiRef name="IPluginConfigurationService" member="InitializeWithTemplate" />, <ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" /> and <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> - all three return <ApiRef name="IPluginConfigurationService" />, so they chain, followed by <ApiRef name="IPluginConfigurationService" member="Configure" /> to register the file as a live, reloadable source:
 
 ```csharp
@@ -82,7 +99,11 @@ public override void Load(bool hotReload)
 }
 ```
 
-See [Dependency Injection](/docs/guides/dependency-injection) for more on `services.AddSwiftly(Core)`. Consume with `IOptionsMonitor<T>` to react to reloads:
+`services.AddSwiftly(Core, addLogger = true, addConfiguration = true)` registers the configuration services only when <ApiRef name="IPluginConfigurationService" member="BasePathExists" /> is `true` - pass `addConfiguration: false` to leave them out. See [Dependency Injection](/docs/guides/dependency-injection) for more on `services.AddSwiftly(Core)`.
+
+`AddSwiftly` also replaces the default options factory with <ApiRef name="SwiftlyOptionsFactory`1" />, so values read from the file replace the model's code defaults instead of merging with them - a list or dictionary in the file replaces the default collection instead of being appended to it.
+
+Consume with `IOptionsMonitor<T>` to react to reloads:
 
 ```csharp
 public class ExampleService
@@ -93,3 +114,19 @@ public class ExampleService
     }
 }
 ```
+
+## Beta Changes
+
+These are available on the beta branch only.
+
+`InitializeJsonWithModel<T>` and `InitializeTomlWithModel<T>` have an extra overload taking `addMissingKeys`, for filling in keys added to the model after the file was first written:
+
+```csharp
+Core.Configuration.InitializeJsonWithModel<MainConfig>("config.jsonc", "Main", addMissingKeys: true);
+Core.Configuration.InitializeTomlWithModel<DatabaseConfig>("database.toml", "Database", addMissingKeys: true);
+```
+
+When the file already exists and `addMissingKeys` is `true`, keys present in the model but missing from the file are inserted with their default value, including keys of nested objects. Keys are matched case-insensitively, the same way the configuration binder reads them. Everything else in the file, including existing values, comments and formatting, is left untouched, and the overloads without `addMissingKeys` behave as before.
+
+- JSON: each inserted key gets its `[Description]` as `//` comment lines above it in a `.jsonc` file. Dictionary entries and list items are never added, and a file that is not valid JSON is not changed.
+- TOML: keys missing from a table are inserted after the table's last value, and tables missing from the file are appended at its end, each with its `[Description]` as `#` comment lines. Members of inline tables and entries of table arrays are never added, and a file that is not valid TOML is not changed.
