@@ -1,7 +1,11 @@
 // DeepSeek tool-calling agent that updates one docs page from the SwiftlyS2 source.
 // Usage: docs-agent --page <mdx> --src <dir> --task <text> --summary <file> [--allow-upstream]
+//   [--beta-src <dir>] [--scope <subdir>] [--slug <id> --hash-file <json> [--watch a,b,c] [--force]]
+// With --slug/--hash-file the run is skipped when the watched source (stable+beta) and the page's task are unchanged
+// since the hash stored for that slug; the hash is stored again after a completed run.
 // Env: DEEPSEEK_API_KEY (required), DEEPSEEK_MODEL (default deepseek-flash), DEEPSEEK_API_URL.
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -48,6 +52,50 @@ if (opt.TryGetValue("scope", out var scope)) // restrict every source tool to a 
     src = Safe(src, scope);
     if (betaSrc is not null) betaSrc = Safe(betaSrc, scope);
 }
+
+// ---- change detection: skip when nothing the page depends on changed since the last completed run ----
+string? inputHash = null;
+Dictionary<string, string> hashes = [];
+var slug = opt.GetValueOrDefault("slug");
+var hashFile = opt.GetValueOrDefault("hash-file");
+if (slug is not null && hashFile is not null)
+{
+    using var h = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+    void Feed(string s) => h.AppendData(Encoding.UTF8.GetBytes(s + "\0"));
+    Feed($"{page}|{scope}|{allowUpstream}|{task}");
+    var watch = (opt.GetValueOrDefault("watch") ?? ".").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    foreach (var (label, root) in new[] { ("stable", src), ("beta", betaSrc) })
+    {
+        if (root is null) continue;
+        var sep = Path.DirectorySeparatorChar;
+        var files = new SortedSet<string>(StringComparer.Ordinal);
+        foreach (var w in watch)
+        {
+            var p = Safe(root, w);
+            if (File.Exists(p)) files.Add(p);
+            else if (Directory.Exists(p))
+            {
+                foreach (var f in Directory.EnumerateFiles(p, "*", new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.System | FileAttributes.ReparsePoint }))
+                    if (!f.Contains($"{sep}.git{sep}")) files.Add(f);
+            }
+            else Feed($"{label}:missing:{w}");
+        }
+        foreach (var f in files)
+        {
+            Feed($"{label}:{Path.GetRelativePath(root, f).Replace('\\', '/')}");
+            h.AppendData(SHA256.HashData(File.ReadAllBytes(f)));
+        }
+    }
+    inputHash = Convert.ToHexString(h.GetHashAndReset()).ToLowerInvariant();
+    if (File.Exists(hashFile))
+        hashes = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(hashFile)) ?? [];
+    if (!opt.ContainsKey("force") && hashes.TryGetValue(slug, out var old) && old == inputHash)
+    {
+        Console.Error.WriteLine($"[{slug}] unchanged since last update ({inputHash[..12]}); skipping");
+        return; // no summary file is written: the caller treats that as "skipped"
+    }
+}
+
 var model = Environment.GetEnvironmentVariable("DEEPSEEK_MODEL") ?? "deepseek-flash";
 var api = Environment.GetEnvironmentVariable("DEEPSEEK_API_URL") ?? "https://api.deepseek.com/chat/completions";
 
@@ -217,6 +265,7 @@ var messages = new JsonArray
 
 var summary = "";
 var finished = false;
+var completed = false; // model finished (finish tool or plain reply), not cut off by MaxTurns
 for (var turn = 0; turn < MaxTurns && !finished; turn++)
 {
     var body = new JsonObject { ["model"] = model, ["temperature"] = 0, ["messages"] = messages.DeepClone(), ["tools"] = tools.DeepClone() };
@@ -227,11 +276,13 @@ for (var turn = 0; turn < MaxTurns && !finished; turn++)
     messages.Add(msg.DeepClone());
 
     var calls = msg["tool_calls"]?.AsArray();
-    if (calls is not { Count: > 0 }) { summary = (string?)msg["content"] ?? ""; break; }
+    if (calls is not { Count: > 0 }) { summary = (string?)msg["content"] ?? ""; completed = true; break; }
 
-    foreach (var c in calls)
+    // Read-only tools run in parallel; page/upstream writes and finish run afterwards, in call order.
+    static bool Mutates(string n) => n is "write_page" or "write_upstream_file" or "finish";
+    string Exec(JsonNode c)
     {
-        var fn = c!["function"]!;
+        var fn = c["function"]!;
         var name = (string)fn["name"]!;
         string output;
         try
@@ -242,11 +293,23 @@ for (var turn = 0; turn < MaxTurns && !finished; turn++)
             else output = Run(name, a);
         }
         catch (Exception e) { output = $"ERROR: {e.Message}"; } // report to the model, let it recover
-        var target = fn["arguments"] is { } ? TryPath((string?)fn["arguments"]) : "";
-        Console.Error.WriteLine($"[{name}]{target} {output[..Math.Min(output.Length, 120)].ReplaceLineEndings(" ")}");
-        messages.Add(new JsonObject { ["role"] = "tool", ["tool_call_id"] = (string)c["id"]!, ["content"] = output });
+        Console.Error.WriteLine($"[{name}]{TryPath((string?)fn["arguments"])} {output[..Math.Min(output.Length, 120)].ReplaceLineEndings(" ")}");
+        return output;
     }
+    var all = calls.Select(c => c!).ToList();
+    var outputs = new string[all.Count];
+    await Task.WhenAll(all.Select((c, i) => Mutates((string)c["function"]!["name"]!) ? Task.CompletedTask : Task.Run(() => outputs[i] = Exec(c))));
+    for (var i = 0; i < all.Count; i++)
+        if (Mutates((string)all[i]["function"]!["name"]!)) outputs[i] = Exec(all[i]);
+    for (var i = 0; i < all.Count; i++)
+        messages.Add(new JsonObject { ["role"] = "tool", ["tool_call_id"] = (string)all[i]["id"]!, ["content"] = outputs[i] });
     if (turn == MaxTurns - 1 && !finished) Console.Error.WriteLine("agent hit MaxTurns");
 }
 
 File.WriteAllText(summaryPath, summary);
+if (inputHash is not null && (finished || completed))
+{
+    hashes[slug!] = inputHash;
+    File.WriteAllText(hashFile!, System.Text.Json.JsonSerializer.Serialize(hashes.OrderBy(k => k.Key).ToDictionary(k => k.Key, k => k.Value),
+        new System.Text.Json.JsonSerializerOptions { WriteIndented = true }) + "\n");
+}

@@ -3,19 +3,35 @@
     "slug": "core-config",
     "page": "docs/resources/core-config.mdx",
     "upstream": true,
-    "task": "Update the page from the core configuration code in the SwiftlyS2 codebase (find where core.jsonc options are registered/defined) and from plugin_files/configs/core.example.jsonc.\nCode is the source of truth for keys, types and defaults.\nIf core.example.jsonc differs from the code (missing/extra/renamed keys, wrong defaults), fix it with write_upstream_file."
+    "task": "Update the page from the core configuration code in the SwiftlyS2 codebase (find where core.jsonc options are registered/defined) and from plugin_files/configs/core.example.jsonc.\nCode is the source of truth for keys, types and defaults.\nIf core.example.jsonc differs from the code (missing/extra/renamed keys, wrong defaults), fix it with write_upstream_file.",
+    "watch": [
+      "plugin_files/configs/core.example.jsonc",
+      "src/server/configuration",
+      "src/api/server/configuration",
+      "managed/src/SwiftlyS2.Core/Models",
+      "managed/src/SwiftlyS2.Core/Services"
+    ]
   },
   {
     "slug": "console-filter",
     "page": "docs/resources/console-filter.mdx",
     "upstream": false,
-    "task": "Use plugin_files/configs/confilter.example.jsonc (and the console filter code that loads it) to explain the console filter config file format, its rules and the `sw confilter` commands.\nNote the config path in the page may be wrong; verify it in the code."
+    "task": "Use plugin_files/configs/confilter.example.jsonc (and the console filter code that loads it) to explain the console filter config file format, its rules and the `sw confilter` commands.\nNote the config path in the page may be wrong; verify it in the code.",
+    "watch": [
+      "plugin_files/configs/confilter.example.jsonc",
+      "src/engine/consoleoutput",
+      "src/api/engine/consoleoutput",
+      "src/core/console"
+    ]
   },
   {
     "slug": "cli-options",
     "page": "docs/resources/cli-options.mdx",
     "upstream": false,
-    "task": "Find every command-line option the C++/native code reads, e.g.\n`CommandLine()->ParmValue(CUtlStringToken(\"-sw_logpath\"), WIN_LINUX(\"addons\\\\swiftlys2\\\\logs\", \"addons/swiftlys2/logs\"))`\nwhere the token is the CLI option and the second argument is the default value.\nAlso look for other CommandLine() accessors (HasParm, ParmValue, CheckParm, ...) using sw_ options.\nUpdate the options table (option, example, details incl. default and accepted values)."
+    "task": "Find every command-line option the C++/native code reads, e.g.\n`CommandLine()->ParmValue(CUtlStringToken(\"-sw_logpath\"), WIN_LINUX(\"addons\\\\swiftlys2\\\\logs\", \"addons/swiftlys2/logs\"))`\nwhere the token is the CLI option and the second argument is the default value.\nAlso look for other CommandLine() accessors (HasParm, ParmValue, CheckParm, ...) using sw_ options.\nUpdate the options table (option, example, details incl. default and accepted values).",
+    "watch": [
+      "src"
+    ]
   },
   {
     "slug": "commands",

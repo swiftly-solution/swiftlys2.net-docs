@@ -1,7 +1,12 @@
 name: Update Docs
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Re-run every page even if its source is unchanged
+        type: boolean
+        default: false
   repository_dispatch:
     types: [swiftlys2-updated]
 
@@ -46,9 +51,17 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Restore source hashes
+        uses: actions/cache@v4
+        with:
+          path: tools/docs-agent/hashes.json
+          key: docs-agent-hashes-${{ github.run_id }}
+          restore-keys: docs-agent-hashes-
+
       - name: Run agent for every page
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          FORCE: ${{ inputs.force }}
         run: |
           dotnet build -c Release tools/docs-agent -o "$RUNNER_TEMP/agent"
           : > "$RUNNER_TEMP/body.md"
@@ -56,11 +69,14 @@ jobs:
             slug=$(jq -r .slug <<<"$p"); page=$(jq -r .page <<<"$p")
             flag=""; [ "$(jq -r .upstream <<<"$p")" = true ] && flag="--allow-upstream"
             scope=$(jq -r '.scope // empty' <<<"$p"); [ -n "$scope" ] && flag="$flag --scope $scope"
+            watch=$(jq -r '(.watch // []) | join(",")' <<<"$p"); [ -n "$watch" ] && flag="$flag --watch $watch"
+            [ "$FORCE" = true ] && flag="$flag --force"
             echo "::group::$slug"
             # one failing page must not block the others
             if dotnet "$RUNNER_TEMP/agent/docs-agent.dll" --page "$page" --src swiftlys2-src --beta-src swiftlys2-beta \
-                 --task "$(jq -r .task <<<"$p")" --summary "$RUNNER_TEMP/$slug.md" $flag </dev/null; then
-              printf '### `%s`\n\n%s\n\n' "$page" "$(cat "$RUNNER_TEMP/$slug.md")" >> "$RUNNER_TEMP/body.md"
+                 --task "$(jq -r .task <<<"$p")" --summary "$RUNNER_TEMP/$slug.md" --slug "$slug" --hash-file tools/docs-agent/hashes.json $flag </dev/null; then
+              # no summary file means the page was skipped as unchanged
+              [ -f "$RUNNER_TEMP/$slug.md" ] && printf '### `%s`\n\n%s\n\n' "$page" "$(cat "$RUNNER_TEMP/$slug.md")" >> "$RUNNER_TEMP/body.md"
             else
               echo "::warning::agent failed for $slug"
             fi
