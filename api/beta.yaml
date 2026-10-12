@@ -7425,6 +7425,139 @@ categories:
       default: 13
     - name: Weapon2
       default: 14
+- category: Extensions
+  namespace: SwiftlyS2.Shared.Extensions
+  types:
+  - name: IExtensionService
+    type: Interface
+    uid: SwiftlyS2.Shared.Extensions.IExtensionService
+    parent: SwiftlyS2.Shared.Extensions
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L6
+    summary: Manages native extensions and their shared pointer registry.
+    declaration: public interface IExtensionService
+    methods:
+    - name: GetSharedPointer(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.GetSharedPointer(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L39
+      summary: Gets a shared pointer, or zero if the key does not exist. Use HasSharedPointer to distinguish a stored zero from a missing key.
+      declaration: nint GetSharedPointer(string key)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+    - name: HasSharedPointer(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.HasSharedPointer(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L50
+      summary: Checks whether a shared pointer key exists, including keys with zero values.
+      declaration: bool HasSharedPointer(string key)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Load(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.Load(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L12
+      summary: Loads an extension from extensions/{id}/{id}.dll or .so.
+      declaration: bool Load(string id)
+      parameters:
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was loaded successfully.
+    - name: LoadFromPath(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.LoadFromPath(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L26
+      summary: Loads an extension from an absolute path to its library. The extension ID is the library filename without its extension.
+      declaration: bool LoadFromPath(string absolutePath)
+      parameters:
+      - name: absolutePath
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was loaded successfully.
+      exceptions:
+      - type:
+        - text: ArgumentException
+          url: https://learn.microsoft.com/dotnet/api/system.argumentexception
+        description: The path is empty or not fully qualified.
+    - name: RemoveSharedPointer(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.RemoveSharedPointer(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L56
+      summary: Removes a shared pointer key without freeing the pointed-to object. Missing keys are ignored.
+      declaration: void RemoveSharedPointer(string key)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: SetSharedPointer(string, nint)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.SetSharedPointer(System.String,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L45
+      summary: Inserts or replaces a shared pointer. The value can be zero. The registry does not own the pointed-to object or free replaced values.
+      declaration: void SetSharedPointer(string key, nint pointer)
+      parameters:
+      - name: key
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pointer
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+    - name: Unload(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.Unload(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L18
+      summary: Unloads an extension and invokes its registered unload callback.
+      declaration: bool Unload(string id)
+      parameters:
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was unloaded successfully.
+    - name: UnloadFromPath(string)
+      uid: SwiftlyS2.Shared.Extensions.IExtensionService.UnloadFromPath(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Extensions/IExtensionService.cs#L33
+      summary: Unloads an extension by the absolute path to its library.
+      declaration: bool UnloadFromPath(string absolutePath)
+      parameters:
+      - name: absolutePath
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the extension was unloaded successfully.
+      exceptions:
+      - type:
+        - text: ArgumentException
+          url: https://learn.microsoft.com/dotnet/api/system.argumentexception
+        description: The path is empty or not fully qualified.
 - category: FileSystem
   namespace: SwiftlyS2.Shared.FileSystem
   types:
@@ -60387,7 +60520,7 @@ categories:
     methods:
     - name: DispatchParticleEffect(string, ParticleAttachment_t, byte, CUtlSymbolLarge, CRecipientFilter, bool, int, CBaseEntity?)
       uid: SwiftlyS2.Shared.Services.IEngineService.DispatchParticleEffect(System.String,SwiftlyS2.Shared.SchemaDefinitions.ParticleAttachment_t,System.Byte,SwiftlyS2.Shared.Natives.CUtlSymbolLarge,SwiftlyS2.Shared.Natives.CRecipientFilter,System.Boolean,System.Int32,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L78
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L62
       summary: Dispatches a particle effect to the specified recipients. Thread unsafe, use async variant instead for non-main thread context.
       declaration: void DispatchParticleEffect(string particleName, ParticleAttachment_t attachmentType, byte attachmentPoint, CUtlSymbolLarge attachmentName, CRecipientFilter filter, bool resetAllParticlesOnEntity = false, int splitScreenSlot = 0, CBaseEntity? entity = null)
       parameters:
@@ -60441,7 +60574,7 @@ categories:
         optional: true
     - name: DispatchParticleEffectAsync(string, ParticleAttachment_t, byte, CUtlSymbolLarge, CRecipientFilter, bool, int, CBaseEntity?)
       uid: SwiftlyS2.Shared.Services.IEngineService.DispatchParticleEffectAsync(System.String,SwiftlyS2.Shared.SchemaDefinitions.ParticleAttachment_t,System.Byte,SwiftlyS2.Shared.Natives.CUtlSymbolLarge,SwiftlyS2.Shared.Natives.CRecipientFilter,System.Boolean,System.Int32,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L94
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L78
       summary: Dispatches a particle effect to the specified recipients asynchronously.
       declaration: Task DispatchParticleEffectAsync(string particleName, ParticleAttachment_t attachmentType, byte attachmentPoint, CUtlSymbolLarge attachmentName, CRecipientFilter filter, bool resetAllParticlesOnEntity = false, int splitScreenSlot = 0, CBaseEntity? entity = null)
       parameters:
@@ -60524,59 +60657,9 @@ categories:
         type:
         - text: Task
           url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
-    - name: ExecuteCommandWithBuffer(string, Action<string>)
-      uid: SwiftlyS2.Shared.Services.IEngineService.ExecuteCommandWithBuffer(System.String,System.Action{System.String})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L47
-      summary: Executes the specified command string in the current context.
-      declaration: >-
-        [Obsolete("This method is planned to be removed.")]
-
-        void ExecuteCommandWithBuffer(string command, Action<string> bufferCallback)
-      parameters:
-      - name: command
-        type:
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        description: The command to execute. Cannot be null or empty.
-      - name: bufferCallback
-        type:
-        - text: Action
-          url: https://learn.microsoft.com/dotnet/api/system.action-1
-        - <
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - '>'
-        description: The callback to receive the output of the command.
-    - name: ExecuteCommandWithBufferAsync(string, Action<string>)
-      uid: SwiftlyS2.Shared.Services.IEngineService.ExecuteCommandWithBufferAsync(System.String,System.Action{System.String})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L55
-      summary: Executes the specified command string in the current context with a buffer callback asynchronously.
-      declaration: >-
-        [Obsolete("This method is planned to be removed.")]
-
-        Task ExecuteCommandWithBufferAsync(string command, Action<string> bufferCallback)
-      parameters:
-      - name: command
-        type:
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        description: The command to execute. Cannot be null or empty.
-      - name: bufferCallback
-        type:
-        - text: Action
-          url: https://learn.microsoft.com/dotnet/api/system.action-1
-        - <
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - '>'
-        description: The callback to receive the output of the command.
-      returns:
-        type:
-        - text: Task
-          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
     - name: FindGameSystemByName(string)
       uid: SwiftlyS2.Shared.Services.IEngineService.FindGameSystemByName(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L63
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IEngineService.cs#L47
       summary: Find a game system by name.
       declaration: nint? FindGameSystemByName(string name)
       parameters:
@@ -61372,7 +61455,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: BasePathExists
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.BasePathExists
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L62
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L97
       summary: Whether the base path exists in the file system.
       declaration: bool BasePathExists { get; }
       valueType:
@@ -61380,7 +61463,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Manager
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.Manager
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L57
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L92
       summary: Get the configuration root.
       declaration: IConfigurationManager Manager { get; }
       valueType:
@@ -61389,7 +61472,7 @@ categories:
     methods:
     - name: Configure(Action<IConfigurationBuilder>)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.Configure(System.Action{Microsoft.Extensions.Configuration.IConfigurationBuilder})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L51
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L86
       summary: Configure the internal configuration manager.
       declaration: IPluginConfigurationService Configure(Action<IConfigurationBuilder> configure)
       parameters:
@@ -61426,8 +61509,8 @@ categories:
         description: The path to the configuration file.
     - name: InitializeJsonWithModel<T>(string, string)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeJsonWithModel``1(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L36
-      summary: Initialize the json configuration file with a class as template.
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L39
+      summary: Initialize the json configuration file with a class as template. When the file name ends with <code>.jsonc</code>, properties and fields marked with <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> are written with their description as <code>//</code> comment lines above the key, including members of nested objects, list items and dictionary values. A <code>.json</code> file is always written as plain JSON, since comments are not valid JSON.
       declaration: 'IPluginConfigurationService InitializeJsonWithModel<T>(string name, string sectionName) where T : class, new()'
       parameters:
       - name: name
@@ -61448,10 +61531,39 @@ categories:
       typeParameters:
       - name: T
         description: The type of the configuration model.
+    - name: InitializeJsonWithModel<T>(string, string, bool)
+      uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeJsonWithModel``1(System.String,System.String,System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L54
+      summary: Initialize the json configuration file with a class as template. Behaves like <xref href="SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeJsonWithModel%60%601(System.String%2cSystem.String)" data-throw-if-not-resolved="false"></xref> when the file does not exist yet. When the file exists and <code class="paramref">addMissingKeys</code> is <code>true</code>, keys present in the model but missing from the file are inserted with their default value, including keys of nested objects. In a <code>.jsonc</code> file each inserted key gets its <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> as <code>//</code> comment lines above it. The rest of the file, including existing values, comments and formatting, is left untouched. Dictionary entries and list items are never added. Keys are matched case-insensitively, the same way the configuration binder reads them. A file that is not valid JSON is not changed.
+      declaration: 'IPluginConfigurationService InitializeJsonWithModel<T>(string name, string sectionName, bool addMissingKeys) where T : class, new()'
+      parameters:
+      - name: name
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the configuration file.
+      - name: sectionName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the section in the configuration file.
+      - name: addMissingKeys
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether to insert keys missing from an existing file.
+      returns:
+        type:
+        - text: IPluginConfigurationService
+          url: SwiftlyS2.Shared.Services.IPluginConfigurationService.html
+          uid: SwiftlyS2.Shared.Services.IPluginConfigurationService
+      typeParameters:
+      - name: T
+        description: The type of the configuration model.
     - name: InitializeTomlWithModel<T>(string, string)
       uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeTomlWithModel``1(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L44
-      summary: Initialize the TOML configuration file with a class as template.
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L64
+      summary: Initialize the TOML configuration file with a class as template. Properties and fields marked with <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> are written with their description as <code>#</code> comment lines above the key or above the table header. Members of inline tables cannot carry comments.
       declaration: 'IPluginConfigurationService InitializeTomlWithModel<T>(string name, string sectionName) where T : class, new()'
       parameters:
       - name: name
@@ -61464,6 +61576,35 @@ categories:
         - text: string
           url: https://learn.microsoft.com/dotnet/api/system.string
         description: The name of the section in the configuration file.
+      returns:
+        type:
+        - text: IPluginConfigurationService
+          url: SwiftlyS2.Shared.Services.IPluginConfigurationService.html
+          uid: SwiftlyS2.Shared.Services.IPluginConfigurationService
+      typeParameters:
+      - name: T
+        description: The type of the configuration model.
+    - name: InitializeTomlWithModel<T>(string, string, bool)
+      uid: SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeTomlWithModel``1(System.String,System.String,System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs#L79
+      summary: Initialize the TOML configuration file with a class as template. Behaves like <xref href="SwiftlyS2.Shared.Services.IPluginConfigurationService.InitializeTomlWithModel%60%601(System.String%2cSystem.String)" data-throw-if-not-resolved="false"></xref> when the file does not exist yet. When the file exists and <code class="paramref">addMissingKeys</code> is <code>true</code>, keys present in the model but missing from an existing table are inserted after the table's last value, and tables missing from the file are appended at its end, each with its <xref href="System.ComponentModel.DescriptionAttribute" data-throw-if-not-resolved="false"></xref> as <code>#</code> comment lines. The rest of the file, including existing values, comments and formatting, is left untouched. Members of inline tables and entries of table arrays are never added. Keys are matched case-insensitively, the same way the configuration binder reads them. A file that is not valid TOML is not changed.
+      declaration: 'IPluginConfigurationService InitializeTomlWithModel<T>(string name, string sectionName, bool addMissingKeys) where T : class, new()'
+      parameters:
+      - name: name
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the configuration file.
+      - name: sectionName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: The name of the section in the configuration file.
+      - name: addMissingKeys
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether to insert keys missing from an existing file.
       returns:
         type:
         - text: IPluginConfigurationService
@@ -61515,215 +61656,12 @@ categories:
     type: Interface
     uid: SwiftlyS2.Shared.Services.ITraceManager
     parent: SwiftlyS2.Shared.Services
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L8
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L7
     declaration: public interface ITraceManager
     methods:
-    - name: SimpleTrace(Vector, Vector, RayType_t, RnQueryObjectSet, MaskTrace, MaskTrace, MaskTrace, CollisionGroup, ref CGameTrace, CBaseEntity?, CBaseEntity?)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.SimpleTrace(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.RayType_t,SwiftlyS2.Shared.Natives.RnQueryObjectSet,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.CollisionGroup,SwiftlyS2.Shared.Natives.CGameTrace@,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L85
-      summary: Performs a simple trace shape operation from the specified start point to the end point, using the provided object query and trace mask. The result of the trace is stored in the provided trace object.
-      declaration: >-
-        [Obsolete("Use other TraceShape methods instead.")]
-
-        void SimpleTrace(Vector start, Vector end, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, represented as a vector.
-      - name: end
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The ending position of the trace, represented as a vector.
-      - name: rayKind
-        type:
-        - text: RayType_t
-          url: SwiftlyS2.Shared.Natives.RayType_t.html
-          uid: SwiftlyS2.Shared.Natives.RayType_t
-        description: The type of ray used for the trace.
-      - name: objectQuery
-        type:
-        - text: RnQueryObjectSet
-          url: SwiftlyS2.Shared.Natives.RnQueryObjectSet.html
-          uid: SwiftlyS2.Shared.Natives.RnQueryObjectSet
-        description: The object query specifying which objects to consider during the trace.
-      - name: interactWith
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to include in the trace.
-      - name: interactExclude
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to exclude from the trace.
-      - name: interactAs
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to interact as during the trace.
-      - name: collision
-        type:
-        - text: CollisionGroup
-          url: SwiftlyS2.Shared.Natives.CollisionGroup.html
-          uid: SwiftlyS2.Shared.Natives.CollisionGroup
-        description: The collision group defining the collision behavior during the trace.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace structure that receives the results of the trace, including hit information and
-              surface details.
-      - name: filterEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional entity to exclude from the trace.
-        optional: true
-      - name: filterSecondEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional second entity to exclude from the trace.
-        optional: true
-    - name: SimpleTrace(Vector, QAngle, RayType_t, RnQueryObjectSet, MaskTrace, MaskTrace, MaskTrace, CollisionGroup, ref CGameTrace, CBaseEntity?, CBaseEntity?)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.SimpleTrace(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.QAngle,SwiftlyS2.Shared.Natives.RayType_t,SwiftlyS2.Shared.Natives.RnQueryObjectSet,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.MaskTrace,SwiftlyS2.Shared.Natives.CollisionGroup,SwiftlyS2.Shared.Natives.CGameTrace@,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity,SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L104
-      summary: Performs a simple trace shape operation from the specified start point in the direction defined by the given angle, using the provided object query and trace mask. The result of the trace is stored in the provided trace object.
-      declaration: >-
-        [Obsolete("Use other TraceShape methods instead.")]
-
-        void SimpleTrace(Vector start, QAngle angle, RayType_t rayKind, RnQueryObjectSet objectQuery, MaskTrace interactWith, MaskTrace interactExclude, MaskTrace interactAs, CollisionGroup collision, ref CGameTrace trace, CBaseEntity? filterEntity = null, CBaseEntity? filterSecondEntity = null)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, represented as a vector.
-      - name: angle
-        type:
-        - text: QAngle
-          url: SwiftlyS2.Shared.Natives.QAngle.html
-          uid: SwiftlyS2.Shared.Natives.QAngle
-        description: The direction of the trace, represented as a QAngle.
-      - name: rayKind
-        type:
-        - text: RayType_t
-          url: SwiftlyS2.Shared.Natives.RayType_t.html
-          uid: SwiftlyS2.Shared.Natives.RayType_t
-        description: The type of ray used for the trace.
-      - name: objectQuery
-        type:
-        - text: RnQueryObjectSet
-          url: SwiftlyS2.Shared.Natives.RnQueryObjectSet.html
-          uid: SwiftlyS2.Shared.Natives.RnQueryObjectSet
-        description: The object query specifying which objects to consider during the trace.
-      - name: interactWith
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to include in the trace.
-      - name: interactExclude
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to exclude from the trace.
-      - name: interactAs
-        type:
-        - text: MaskTrace
-          url: SwiftlyS2.Shared.Natives.MaskTrace.html
-          uid: SwiftlyS2.Shared.Natives.MaskTrace
-        description: The interaction layer defining the types of surfaces or entities to interact as during the trace.
-      - name: collision
-        type:
-        - text: CollisionGroup
-          url: SwiftlyS2.Shared.Natives.CollisionGroup.html
-          uid: SwiftlyS2.Shared.Natives.CollisionGroup
-        description: The collision group defining the collision behavior during the trace.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace structure that receives the results of the trace, including hit information and
-              surface details.
-      - name: filterEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional entity to exclude from the trace.
-        optional: true
-      - name: filterSecondEntity
-        type:
-        - text: CBaseEntity
-          url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
-          uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
-        - '?'
-        description: An optional second entity to exclude from the trace.
-        optional: true
-    - name: TracePlayerBBox(Vector, Vector, BBox_t, CTraceFilter, ref CGameTrace)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.TracePlayerBBox(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.BBox_t,SwiftlyS2.Shared.Natives.CTraceFilter,SwiftlyS2.Shared.Natives.CGameTrace@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L21
-      summary: Performs a collision trace of a player-sized bounding box from the specified start position to the end position, using the given filter and bounding box dimensions. The result of the trace is stored in the provided trace object.
-      declaration: >-
-        [Obsolete("Use TracePlayerBBox method with TraceParams instead.")]
-
-        void TracePlayerBBox(Vector start, Vector end, BBox_t bounds, CTraceFilter filter, ref CGameTrace trace)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, typically representing the player's initial location.
-      - name: end
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The ending position of the trace, representing the target location for the bounding box movement.
-      - name: bounds
-        type:
-        - text: BBox_t
-          url: SwiftlyS2.Shared.Natives.BBox_t.html
-          uid: SwiftlyS2.Shared.Natives.BBox_t
-        description: The dimensions of the player's bounding box to be traced.
-      - name: filter
-        type:
-        - text: CTraceFilter
-          url: SwiftlyS2.Shared.Natives.CTraceFilter.html
-          uid: SwiftlyS2.Shared.Natives.CTraceFilter
-        description: The trace filter used to determine which entities or surfaces are considered during the trace operation.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace object that receives the results of the trace, including collision information and
-              hit details.
     - name: TracePlayerBBox(in Vector, in Vector, in BBox_t, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TracePlayerBBox(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.BBox_t@,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L29
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L14
       summary: Performs a collision trace of a player-sized bounding box from the specified start position to the end position, using the given filter and bounding box dimensions. The result of the trace is stored in the provided trace object.
       declaration: TraceResult TracePlayerBBox(in Vector start, in Vector end, in BBox_t bounds, in TraceParams? param = null)
       parameters:
@@ -61754,50 +61692,9 @@ categories:
         - text: TraceResult
           url: SwiftlyS2.Shared.Trace.TraceResult.html
           uid: SwiftlyS2.Shared.Trace.TraceResult
-    - name: TraceShape(Vector, Vector, Ray_t, CTraceFilter, ref CGameTrace)
-      uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShape(SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Vector,SwiftlyS2.Shared.Natives.Ray_t,SwiftlyS2.Shared.Natives.CTraceFilter,SwiftlyS2.Shared.Natives.CGameTrace@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L66
-      summary: Performs a trace operation from the specified start point to the end point using the given ray and filter, and populates the trace result with collision information.
-      declaration: >-
-        [Obsolete("Use TraceShapeLine method with TraceParams instead.")]
-
-        void TraceShape(Vector start, Vector end, Ray_t ray, CTraceFilter filter, ref CGameTrace trace)
-      parameters:
-      - name: start
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The starting position of the trace, represented as a vector.
-      - name: end
-        type:
-        - text: Vector
-          url: SwiftlyS2.Shared.Natives.Vector.html
-          uid: SwiftlyS2.Shared.Natives.Vector
-        description: The ending position of the trace, represented as a vector.
-      - name: ray
-        type:
-        - text: Ray_t
-          url: SwiftlyS2.Shared.Natives.Ray_t.html
-          uid: SwiftlyS2.Shared.Natives.Ray_t
-        description: The ray definition used for the trace, specifying direction and other ray properties.
-      - name: filter
-        type:
-        - text: CTraceFilter
-          url: SwiftlyS2.Shared.Natives.CTraceFilter.html
-          uid: SwiftlyS2.Shared.Natives.CTraceFilter
-        description: The filter that determines which entities or surfaces are considered during the trace.
-      - name: trace
-        type:
-        - text: CGameTrace
-          url: SwiftlyS2.Shared.Natives.CGameTrace.html
-          uid: SwiftlyS2.Shared.Natives.CGameTrace
-        description: >-
-          A reference to a CGameTrace structure that receives the results of the trace, including hit information and
-              surface details.
     - name: TraceShapeAngle(in Vector, in QAngle, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShapeAngle(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.QAngle@,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L45
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L30
       summary: Traces from <code class="paramref">start</code> towards <code class="paramref">angle</code> with the provided shape options.
       declaration: TraceResult TraceShapeAngle(in Vector start, in QAngle angle, in TraceParams? param = null)
       parameters:
@@ -61828,7 +61725,7 @@ categories:
           uid: SwiftlyS2.Shared.Trace.TraceResult
     - name: TraceShapeAngle(in Vector, in QAngle, float, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShapeAngle(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.QAngle@,System.Single,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L54
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L39
       summary: Traces from <code class="paramref">start</code> towards <code class="paramref">angle</code> with the provided shape options.
       declaration: TraceResult TraceShapeAngle(in Vector start, in QAngle angle, float maxDistance = 8192, in TraceParams? param = null)
       parameters:
@@ -61865,7 +61762,7 @@ categories:
           uid: SwiftlyS2.Shared.Trace.TraceResult
     - name: TraceShapeLine(in Vector, in Vector, in TraceParams?)
       uid: SwiftlyS2.Shared.Services.ITraceManager.TraceShapeLine(SwiftlyS2.Shared.Natives.Vector@,SwiftlyS2.Shared.Natives.Vector@,System.Nullable{SwiftlyS2.Shared.Trace.TraceParams}@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L37
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Trace/ITraceManager.cs#L22
       summary: Traces from <code class="paramref">start</code> to <code class="paramref">end</code> with the provided shape options.
       declaration: TraceResult TraceShapeLine(in Vector start, in Vector end, in TraceParams? param = null)
       parameters:
@@ -96081,13 +95978,13 @@ categories:
     type: Interface
     uid: SwiftlyS2.Shared.ISwiftlyCore
     parent: SwiftlyS2.Shared
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L30
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L31
     summary: Core interface of SwiftlyS2 framework.
     declaration: public interface ISwiftlyCore
     properties:
     - name: CSGODirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.CSGODirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L190
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L196
       summary: Gets the absolute file path to the `game/csgo` directory.
       declaration: >-
         [Obsolete("Please use GameFilesDirectory.")]
@@ -96098,7 +95995,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Command
       uid: SwiftlyS2.Shared.ISwiftlyCore.Command
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L70
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L71
       summary: Command service.
       declaration: ICommandService Command { get; }
       valueType:
@@ -96107,7 +96004,7 @@ categories:
         uid: SwiftlyS2.Shared.Commands.ICommandService
     - name: CommandLine
       uid: SwiftlyS2.Shared.ISwiftlyCore.CommandLine
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L165
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L171
       summary: Command line.
       declaration: ICommandLine CommandLine { get; }
       valueType:
@@ -96116,7 +96013,7 @@ categories:
         uid: SwiftlyS2.Shared.CommandLine.ICommandLine
     - name: ConVar
       uid: SwiftlyS2.Shared.ISwiftlyCore.ConVar
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L85
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L86
       summary: Convar service.
       declaration: IConVarService ConVar { get; }
       valueType:
@@ -96125,7 +96022,7 @@ categories:
         uid: SwiftlyS2.Shared.Convars.IConVarService
     - name: Configuration
       uid: SwiftlyS2.Shared.ISwiftlyCore.Configuration
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L90
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L91
       summary: Configuration service.
       declaration: IPluginConfigurationService Configuration { get; }
       valueType:
@@ -96134,7 +96031,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IPluginConfigurationService
     - name: ConsoleOutput
       uid: SwiftlyS2.Shared.ISwiftlyCore.ConsoleOutput
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L75
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L76
       summary: Console output service.
       declaration: IConsoleOutputService ConsoleOutput { get; }
       valueType:
@@ -96143,7 +96040,7 @@ categories:
         uid: SwiftlyS2.Shared.ConsoleOutput.IConsoleOutputService
     - name: Database
       uid: SwiftlyS2.Shared.ISwiftlyCore.Database
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L135
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L141
       summary: Database service.
       declaration: IDatabaseService Database { get; }
       valueType:
@@ -96152,7 +96049,7 @@ categories:
         uid: SwiftlyS2.Shared.Database.IDatabaseService
     - name: Engine
       uid: SwiftlyS2.Shared.ISwiftlyCore.Engine
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L40
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L41
       summary: Gets the engine service used to perform core engine operations.
       declaration: IEngineService Engine { get; }
       valueType:
@@ -96161,7 +96058,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IEngineService
     - name: EntitySystem
       uid: SwiftlyS2.Shared.ISwiftlyCore.EntitySystem
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L80
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L81
       summary: Entity system service.
       declaration: IEntitySystemService EntitySystem { get; }
       valueType:
@@ -96170,16 +96067,25 @@ categories:
         uid: SwiftlyS2.Shared.EntitySystem.IEntitySystemService
     - name: Event
       uid: SwiftlyS2.Shared.ISwiftlyCore.Event
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L35
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L36
       summary: Custom event subscriber.
       declaration: IEventSubscriber Event { get; }
       valueType:
       - text: IEventSubscriber
         url: SwiftlyS2.Shared.Events.IEventSubscriber.html
         uid: SwiftlyS2.Shared.Events.IEventSubscriber
+    - name: Extension
+      uid: SwiftlyS2.Shared.ISwiftlyCore.Extension
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L111
+      summary: Native extension and shared pointer service.
+      declaration: IExtensionService Extension { get; }
+      valueType:
+      - text: IExtensionService
+        url: SwiftlyS2.Shared.Extensions.IExtensionService.html
+        uid: SwiftlyS2.Shared.Extensions.IExtensionService
     - name: Game
       uid: SwiftlyS2.Shared.ISwiftlyCore.Game
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L65
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L66
       summary: Game service.
       declaration: IGameService Game { get; }
       valueType:
@@ -96188,7 +96094,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IGameService
     - name: GameData
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameData
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L95
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L96
       summary: Game data service.
       declaration: IGameDataService GameData { get; }
       valueType:
@@ -96197,7 +96103,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IGameDataService
     - name: GameDirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameDirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L201
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L207
       summary: Gets the absolute file path to the game's root directory.
       declaration: string GameDirectory { get; }
       valueType:
@@ -96205,7 +96111,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: GameEvent
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameEvent
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L45
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L46
       summary: Game event service.
       declaration: IGameEventService GameEvent { get; }
       valueType:
@@ -96214,7 +96120,7 @@ categories:
         uid: SwiftlyS2.Shared.GameEvents.IGameEventService
     - name: GameFileSystem
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameFileSystem
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L170
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L176
       summary: Game file system interface.
       declaration: IGameFileSystem GameFileSystem { get; }
       valueType:
@@ -96223,7 +96129,7 @@ categories:
         uid: SwiftlyS2.Shared.FileSystem.IGameFileSystem
     - name: GameFilesDirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameFilesDirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L196
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L202
       summary: Gets the absolute file path to the game's files directory.
       declaration: string GameFilesDirectory { get; }
       valueType:
@@ -96231,7 +96137,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: GameHooks
       uid: SwiftlyS2.Shared.ISwiftlyCore.GameHooks
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L60
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L61
       summary: Game hooks service.
       declaration: IGameHooks GameHooks { get; }
       valueType:
@@ -96240,7 +96146,7 @@ categories:
         uid: SwiftlyS2.Shared.GameHooks.IGameHooks
     - name: Helpers
       uid: SwiftlyS2.Shared.ISwiftlyCore.Helpers
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L55
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L56
       summary: Helpers service.
       declaration: IHelpers Helpers { get; }
       valueType:
@@ -96249,7 +96155,7 @@ categories:
         uid: SwiftlyS2.Shared.Helpers.IHelpers
     - name: IsGameThread
       uid: SwiftlyS2.Shared.ISwiftlyCore.IsGameThread
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L212
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L218
       summary: Checks whether or not this code section runs on the game thread.
       declaration: bool IsGameThread { get; }
       valueType:
@@ -96257,7 +96163,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Localizer
       uid: SwiftlyS2.Shared.ISwiftlyCore.Localizer
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L145
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L151
       summary: Localizer.
       declaration: ILocalizer Localizer { get; }
       valueType:
@@ -96266,7 +96172,7 @@ categories:
         uid: SwiftlyS2.Shared.Translation.ILocalizer
     - name: Logger
       uid: SwiftlyS2.Shared.ISwiftlyCore.Logger
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L115
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L121
       summary: Default logger.
       declaration: ILogger Logger { get; }
       valueType:
@@ -96274,7 +96180,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger
     - name: LoggerFactory
       uid: SwiftlyS2.Shared.ISwiftlyCore.LoggerFactory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L110
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L116
       summary: Logger factory.
       declaration: ILoggerFactory LoggerFactory { get; }
       valueType:
@@ -96282,7 +96188,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.iloggerfactory
     - name: Memory
       uid: SwiftlyS2.Shared.ISwiftlyCore.Memory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L105
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L106
       summary: Memory service.
       declaration: IMemoryService Memory { get; }
       valueType:
@@ -96291,7 +96197,7 @@ categories:
         uid: SwiftlyS2.Shared.Memory.IMemoryService
     - name: MenusAPI
       uid: SwiftlyS2.Shared.ISwiftlyCore.MenusAPI
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L160
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L166
       summary: Menu manager API.
       declaration: IMenuManagerAPI MenusAPI { get; }
       valueType:
@@ -96300,7 +96206,7 @@ categories:
         uid: SwiftlyS2.Shared.Menus.IMenuManagerAPI
     - name: NetMessage
       uid: SwiftlyS2.Shared.ISwiftlyCore.NetMessage
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L50
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L51
       summary: Net message service.
       declaration: INetMessageService NetMessage { get; }
       valueType:
@@ -96309,7 +96215,7 @@ categories:
         uid: SwiftlyS2.Shared.NetMessages.INetMessageService
     - name: Permission
       uid: SwiftlyS2.Shared.ISwiftlyCore.Permission
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L150
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L156
       summary: Permission manager.
       declaration: IPermissionManager Permission { get; }
       valueType:
@@ -96318,7 +96224,7 @@ categories:
         uid: SwiftlyS2.Shared.Permissions.IPermissionManager
     - name: PlayerManager
       uid: SwiftlyS2.Shared.ISwiftlyCore.PlayerManager
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L100
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L101
       summary: Player manager service.
       declaration: IPlayerManagerService PlayerManager { get; }
       valueType:
@@ -96327,7 +96233,7 @@ categories:
         uid: SwiftlyS2.Shared.Players.IPlayerManagerService
     - name: PluginDataDirectory
       uid: SwiftlyS2.Shared.ISwiftlyCore.PluginDataDirectory
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L207
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L213
       summary: Gets the file path to the plugin data directory. This directory is ensured to exist by the framework.
       declaration: string PluginDataDirectory { get; }
       valueType:
@@ -96335,7 +96241,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: PluginManager
       uid: SwiftlyS2.Shared.ISwiftlyCore.PluginManager
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L175
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L181
       summary: Plugin manager.
       declaration: IPluginManager PluginManager { get; }
       valueType:
@@ -96344,7 +96250,7 @@ categories:
         uid: SwiftlyS2.Shared.Plugins.IPluginManager
     - name: PluginPath
       uid: SwiftlyS2.Shared.ISwiftlyCore.PluginPath
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L185
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L191
       summary: Gets the file path to the plugin directory.
       declaration: string PluginPath { get; }
       valueType:
@@ -96352,7 +96258,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Profiler
       uid: SwiftlyS2.Shared.ISwiftlyCore.Profiler
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L120
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L126
       summary: Profiler service.
       declaration: IContextedProfilerService Profiler { get; }
       valueType:
@@ -96361,7 +96267,7 @@ categories:
         uid: SwiftlyS2.Shared.Profiler.IContextedProfilerService
     - name: Registrator
       uid: SwiftlyS2.Shared.ISwiftlyCore.Registrator
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L155
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L161
       summary: Registrator service.
       declaration: IRegistratorService Registrator { get; }
       valueType:
@@ -96370,7 +96276,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.IRegistratorService
     - name: Scheduler
       uid: SwiftlyS2.Shared.ISwiftlyCore.Scheduler
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L130
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L136
       summary: Scheduler service.
       declaration: ISchedulerService Scheduler { get; }
       valueType:
@@ -96379,7 +96285,7 @@ categories:
         uid: SwiftlyS2.Shared.Scheduler.ISchedulerService
     - name: StringTable
       uid: SwiftlyS2.Shared.ISwiftlyCore.StringTable
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L180
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L186
       summary: String table service.
       declaration: IStringTableService StringTable { get; }
       valueType:
@@ -96388,7 +96294,7 @@ categories:
         uid: SwiftlyS2.Shared.StringTable.IStringTableService
     - name: Trace
       uid: SwiftlyS2.Shared.ISwiftlyCore.Trace
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L125
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L131
       summary: Gets the trace manager used to control and configure tracing operations within the game.
       declaration: ITraceManager Trace { get; }
       valueType:
@@ -96397,7 +96303,7 @@ categories:
         uid: SwiftlyS2.Shared.Services.ITraceManager
     - name: Translation
       uid: SwiftlyS2.Shared.ISwiftlyCore.Translation
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L140
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs#L146
       summary: Translation service.
       declaration: ITranslationService Translation { get; }
       valueType:
