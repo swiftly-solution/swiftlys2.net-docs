@@ -4,6 +4,8 @@ title: Commands
 
 SwiftlyS2's command system lets you register commands, hook client commands and chat, and manage permissions - via attributes or programmatically.
 
+Access it through `Core.Command` (<ApiRef name="ISwiftlyCore" member="Command" />, type <ApiRef name="ICommandService" />).
+
 ## Registering Commands
 
 ### With Attributes
@@ -11,7 +13,7 @@ SwiftlyS2's command system lets you register commands, hook client commands and 
 Attach `[Command]` to a method matching `void CommandListenerFunction(ICommandContext context)`.
 
 ```csharp
-[Command("heal", registerRaw: false, permission: "admins.commands.heal")]
+[Command("heal", registerRaw: false, permission: "admins.commands.heal", helpText: "Heals yourself")]
 public void OnHealCommand(ICommandContext context)
 {
     if (!context.IsSentByPlayer)
@@ -19,26 +21,39 @@ public void OnHealCommand(ICommandContext context)
         context.Reply("This command can only be used by players!");
         return;
     }
+
     var player = context.Sender!;
 }
 ```
 
-See <ApiRef name="Command" /> for the full attribute reference - `registerRaw` skips the `sw_` prefix; `permission` is checked before the handler runs (`heal` above registers as `sw_heal`, gated by `admins.commands.heal`).
+<ApiRef name="Command" /> takes `(name, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")` - `registerRaw` skips the `sw_` prefix (so `heal` above registers as `sw_heal`), `permission` is checked through [Permissions](/docs/development/permissions) before the handler runs, and `helpText` is the description shown in command listings. A method takes only one `[Command]` (`AllowMultiple = false`) - see Command Aliases below for extra names.
 
 ### Programmatically
 
-Same signature, registered via <ApiRef name="ICommandService" member="RegisterCommand" /> - the returned `Guid` is for later unregistration.
+The handler is a <ApiRef name="ICommandService" member="CommandListener" /> (`void (ICommandContext context)`), registered via <ApiRef name="ICommandService" member="RegisterCommand" /> - the returned `Guid` is for later unregistration.
 
 ```csharp
 public override void Load(bool hotReload)
 {
-    var commandGuid = Core.Command.RegisterCommand("heal", OnHealCommand);
+    var commandGuid = Core.Command.RegisterCommand("heal", OnHealCommand, helpText: "Heals yourself");
+}
+
+public void OnHealCommand(ICommandContext context)
+{
+    context.Reply($"You used {context.CommandName}.");
 }
 ```
 
+`RegisterCommand(commandName, handler, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")` has the same options as the attribute. An overload taking `registerRaw` and `permission` without defaults (and no `helpText`) is kept for backward compatibility.
+
 ## Command Context
 
-Every handler receives an <ApiRef name="ICommandContext" /> - `Sender` (<ApiRef name="IPlayer" />), `IsSentByPlayer`, `Prefix`, `IsSlient`, `CommandName`, `Args`, plus `Reply`/`ReplyAsync`.
+Every handler receives an <ApiRef name="ICommandContext" />:
+
+- `Sender` (<ApiRef name="IPlayer" />) and `IsSentByPlayer` (`bool`).
+- `CommandName` (the command name) and `Args` (`string[]`, the arguments passed with the command).
+- `Prefix` (the command prefix) and `IsSlient` (`bool`, the API's spelling) - whether the command should run without broadcasting to other players.
+- `Reply(string)` and `ReplyAsync(string)` (`Task`) to answer the sender.
 
 <Callout type="info">
     `Sender` is `null` when the command is executed from server console. Always
@@ -47,7 +62,7 @@ Every handler receives an <ApiRef name="ICommandContext" /> - `Sender` (<ApiRef 
 
 ## Unregistering Commands
 
-Plugins auto-unregister their commands on unload. To do it manually, see <ApiRef name="ICommandService" member="UnregisterCommand" /> (by `Guid` or by name) and <ApiRef name="ICommandService" member="IsCommandRegistered" /> to check if a name is taken.
+Plugins auto-unregister their commands on unload. To do it manually, <ApiRef name="ICommandService" member="UnregisterCommand" /> takes either the `Guid` returned by `RegisterCommand` or a command name (unregistering every listener with that name), and <ApiRef name="ICommandService" member="IsCommandRegistered" /> checks whether a name is already taken.
 
 ## Command Aliases
 
@@ -55,7 +70,7 @@ Aliases register the same handler under extra command names.
 
 ### With Attributes
 
-Stack <ApiRef name="CommandAlias" /> on an already-`[Command]`-registered method - it allows multiple attributes per method, so `heal` can gain both `hp` and `h`:
+Stack <ApiRef name="CommandAlias" /> on an already-`[Command]`-registered method - it takes `(alias, registerRaw = false)` and allows multiple attributes per method, so `heal` can gain both `hp` and `h`:
 
 ```csharp
 [Command("heal")]
@@ -69,20 +84,25 @@ public void OnHealCommand(ICommandContext context)
 
 ### Programmatically
 
+`RegisterCommandAlias(commandName, alias, registerRaw = false)` adds an alias for the command registered under `commandName` (pass `registerRaw: true` when that command was registered raw):
+
 ```csharp
 // e.g. in Load():
 Core.Command.RegisterCommandAlias("heal", "hp");
+Core.Command.RegisterCommandAlias("heal", "h");
 ```
 
 See <ApiRef name="ICommandService" member="RegisterCommandAlias" /> for the full signature.
 
 ## Introspection
 
-`Core.Command` can enumerate what's registered, e.g. for a `/plugins commands` admin command - see <ApiRef name="ICommandService" member="GetAllCommands" />, <ApiRef name="ICommandService" member="GetCommandsByPlugin" />, <ApiRef name="ICommandService" member="GetAllCommandsByPlugin" /> and <ApiRef name="ICommandService" member="GetAllCommandsInfo" /> (the latter three return <ApiRef name="CommandInfo" /> entries).
+`Core.Command` can enumerate what's registered, e.g. for a `/plugins commands` admin command: <ApiRef name="ICommandService" member="GetAllCommands" /> returns the registered names, <ApiRef name="ICommandService" member="GetCommandsByPlugin" /> takes a plugin name, <ApiRef name="ICommandService" member="GetAllCommandsByPlugin" /> maps every plugin name to its commands, and <ApiRef name="ICommandService" member="GetAllCommandsInfo" /> returns every command in one list - the latter three return <ApiRef name="CommandInfo" />.
+
+<ApiRef name="CommandInfo" /> is a `record` with four `required`, init-only properties: `CommandName`, `RegisterRaw`, `Permission` and `HelpText`.
 
 ## Client Command Hooks
 
-Intercept every console command a player sends (`~` console), not just ones you registered - via <ApiRef name="ClientCommandHookHandler" /> or programmatically with <ApiRef name="ICommandService" member="HookClientCommand" />/<ApiRef name="ICommandService" member="UnhookClientCommand" />:
+Intercept every console command a player sends (`~` console), not just ones you registered - via `[ClientCommandHookHandler]` (a parameterless attribute) or programmatically with <ApiRef name="ICommandService" member="HookClientCommand" />/<ApiRef name="ICommandService" member="UnhookClientCommand" />. The handler is a `ClientCommandHandler(int playerId, string commandLine)` returning <ApiRef name="HookResult" />:
 
 ```csharp
 [ClientCommandHookHandler]
@@ -95,9 +115,17 @@ public HookResult OnClientCommand(int playerId, string commandLine)
 }
 ```
 
+`HookClientCommand` returns the `Guid` to pass to `UnhookClientCommand`:
+
+```csharp
+var hookGuid = Core.Command.HookClientCommand(OnClientCommand);
+// later:
+Core.Command.UnhookClientCommand(hookGuid);
+```
+
 ## Client Chat Hooks
 
-Block or inspect chat messages before they reach other players - word filters, private chats, etc. Same shape, via <ApiRef name="ClientChatHookHandler" /> or <ApiRef name="ICommandService" member="HookClientChat" />/<ApiRef name="ICommandService" member="UnhookClientChat" />:
+Block or inspect chat messages before they reach other players - word filters, private chats, etc. Same shape, via `[ClientChatHookHandler]` or <ApiRef name="ICommandService" member="HookClientChat" />/<ApiRef name="ICommandService" member="UnhookClientChat" />. The handler is a `ClientChatHandler(int playerId, string text, bool teamonly)` returning <ApiRef name="HookResult" /> (`teamonly` tells you whether the message is team-only):
 
 ```csharp
 [ClientChatHookHandler]
@@ -108,6 +136,8 @@ public HookResult OnClientChat(int playerId, string text, bool teamonly)
 ```
 
 <Callout type="warning">
-    `HookResult.Stop` silently drops the command/message from the player's
-    perspective - use deliberately.
+    `HookResult.Stop` cancels the original call - the command is not processed and
+    the chat message is not broadcast - and skips the remaining hooks, so use it
+    deliberately. See <ApiRef name="HookResult" /> for the other values
+    (`Continue`, `Handled`, `CancelOriginal`).
 </Callout>

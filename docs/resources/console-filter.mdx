@@ -2,7 +2,7 @@
 title: Console Filter
 ---
 
-The console filter suppresses known noisy console lines so important logs remain visible. Lines that match a rule are dropped before they reach the engine logger, so they never show up in the console or in log files.
+The console filter suppresses known noisy console lines so important logs remain visible. Lines that match a rule are dropped before they reach the engine logger, so they never show up in the console or in the log files.
 
 ## Config File
 
@@ -10,36 +10,82 @@ Edit the following file:
 
 `addons/swiftlys2/configs/confilter.jsonc`
 
-If the file does not exist yet, SwiftlyS2 creates it on startup from `configs/confilter.example.jsonc`, which ships with the default rules. Change the path with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
+If the file does not exist yet, SwiftlyS2 creates it on startup by copying `addons/swiftlys2/configs/confilter.example.jsonc`, which ships with the default rules. Change the location with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
 
-This file is a JSONC object where each entry defines one filter rule. Comments are allowed.
+## File Format
 
-- Key: rule name used to identify the filter.
-- Value: [PCRE2](https://www.pcre.org/) regular expression matched against the console line.
+The file is a JSONC object where each entry defines one filter rule. Both `//` and `/* */` comments are allowed.
+
+- Key: rule name used to identify the rule in `sw confilter status` and in error messages. Rule names are otherwise free-form.
+- Value: [PCRE2](https://www.pcre.org/) pattern matched against the console line. Values have to be JSON strings, so a backslash is escaped as `\\` - `"\\d+"` in the file is the pattern `\d+`.
+
+The shipped `confilter.example.jsonc` contains the default rules:
 
 ```jsonc
 {
     "BotProfile": "botprofile",
+    "Unexpected": "UNEXPECTED LONG",
+    "IgnoreBad": "Ignored bad",
     "Tick_number": "empty starved x",
-    "Framerate_Values": "\\d+\\.\\d+ms\\s+\\d+\\.\\d+%\\s+\\d+\\.\\d+ms\\s+[A-Za-z\\s]+"
+    "Ticks": "ticks this frame",
+    "long_frame": "Long frame",
+    "Model": "name collision found",
+    "Certificate": "Certificate expires in",
+    "RemoveArray": "RemoveArrayElementsOutsideOfArrayMetadataBounds",
+    "CreatingNetChan": "Creating NetChan",
+    "StartingFreezeperiod": "Starting Freeze period",
+    "JsonBegin": "JSON_BEGIN",
+    "discarding_suspicious": "which is suspicious, discarding",
+    "BacktrackPlayer": "No valid positions in history for BacktrackPlayer",
+    "killed_other": "killed other",
+    "disconnects_timeouts": "reply timeouts",
+    "name": "round_stats",
+    "round_number": "round_number",
+    "score_t": "score_t",
+    "score_ct": "score_ct",
+    "players_0": "players_0",
+    "MatchStatus": "MatchStatus",
+    "blinded": "blinded for",
+    "player_0": "player_0",
+    "json_end": "JSON_END",
+    "roundstart": "World triggered Round_Start",
+    "teamct": "Team CT triggered",
+    "teamt": "Team T triggered",
+    "teamtero": "Team TERRORIST",
+    "teamtcounter": "Team CT",
+    "roundend": "World triggered Round_End",
+    "laterecv": "LATE Recv",
+    "generatesubstitute": "generating substitute",
+    "texturebase": "texturebase.cpp",
+    "CNavMesh": "CNavMesh::TestRayToMesh",
+    "CRecipientFilter": "CRecipientFilter::AddAllPlayers",
+    "CNavGenParams": "CNavGenParams -",
+    "Framerate_Title": "Framerate spike report",
+    "Framerate_Spacer": "-+\\s+-+\\s+-+\\s+-+",
+    "Framerate_Header": "excl ms   excl %   incl ms   group",
+    "Framerate_Values": "\\d+\\.\\d+ms\\s+\\d+\\.\\d+%\\s+\\d+\\.\\d+ms\\s+[A-Za-z\\s]+",
+    "Framerate_Total": "FrameTotal:\\s+\\d+\\.\\d+ms,\\s+\\s*tolerance:\\s+\\d+\\.\\d+ms",
+    "IGameSystem": "IGameSystem::",
+    "FLASHBANG": "FLASHBANG:"
 }
 ```
 
 ## How It Works
 
-- Every value is compiled as a PCRE2 regular expression and is unanchored, so it matches anywhere in the line - use `^`/`$` when the pattern must match the whole line.
-- A line is filtered as soon as any rule matches it, and the match count of that rule is incremented.
+- Every value is compiled once as a PCRE2 regular expression when the file is loaded.
+- Patterns are unanchored and case-sensitive, so they match anywhere in the line - use `^`/`$` when the pattern must match the whole line and `(?i)` for case-insensitive matching.
+- Rules are checked in the order they appear in the file. A line is dropped as soon as any rule matches it, and the counter of that rule is incremented, so a line matching several rules counts towards the first one.
 - If a regular expression fails to compile, the error is logged with the rule name and the failing offset, and only that rule is skipped.
-- Rule names `Framerate_Values` and `Framerate_Total` are handled specially: the newline-only line that follows a match of either rule is dropped as well, keeping the framerate report grouped.
+- Rule names `Framerate_Values` and `Framerate_Total` are handled specially: the next line that contains nothing but a newline is dropped as well, keeping the framerate report grouped.
 - Rule names are only labels for `sw confilter status` and for error messages.
 
 ## Enabling and Disabling
 
-`ConsoleFilter` in `core.jsonc` (default `true`) decides whether filtering is active after startup - see [Core Configuration](/docs/resources/core-config). The `enable`/`disable` subcommands below toggle the same state at runtime, but that change is not persisted, so the value from `core.jsonc` applies again after a restart.
+`ConsoleFilter` in `core.jsonc` (default `true`) decides whether filtering is active after startup - see [Core Configuration](/docs/resources/core-config). The `enable`/`disable` subcommands below toggle the same state at runtime, but that change is not persisted, so the value from `core.jsonc` applies again after a restart. While filtering is disabled no rule is evaluated, so the counters stay unchanged.
 
 ## Command Management
 
-`sw confilter` is restricted to the server console. Run it without a subcommand to print the subcommand list.
+`sw confilter` is restricted to the server console. Run it without a subcommand to print the subcommand list; an unrecognized subcommand prints `Unknown command`.
 
 | Subcommand | Description                            |
 | ---------- | -------------------------------------- |
@@ -48,7 +94,9 @@ This file is a JSONC object where each entry defines one filter rule. Comments a
 | `status`   | Show the status of the console filter. |
 | `reload`   | Reload console filter configuration.   |
 
-`status` prints the current state followed by per-rule counters, e.g. `- Tick_number -> 42`. Counters are reset by `reload`, which also recompiles every pattern; it does not change whether filtering is enabled.
+`status` prints the current state followed by one counter line per rule, e.g. `- Tick_number -> 42`, including rules that never matched. Counters are reset by `reload`, which also recompiles every pattern; it does not change whether filtering is enabled.
+
+Plugins reach the same state through <ApiRef name="IConsoleOutputService" /> - `IsFilterEnabled`, `ToggleFilter` and `ReloadFilterConfiguration`.
 
 ## Typical Workflow
 
