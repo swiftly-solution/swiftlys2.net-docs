@@ -3,13 +3,10 @@
     "slug": "core-config",
     "page": "docs/resources/core-config.mdx",
     "upstream": true,
-    "task": "Update the page from the core configuration code in the SwiftlyS2 codebase (find where core.jsonc options are registered/defined) and from plugin_files/configs/core.example.jsonc.\nCode is the source of truth for keys, types and defaults.\nIf core.example.jsonc differs from the code (missing/extra/renamed keys, wrong defaults), fix it with write_upstream_file.",
+    "task": "Document core.jsonc from the native C++ code, which is the single source of truth for keys, types and defaults. Config keys are registered across the C++ source (start with src/server/configuration/configuration.cpp, then grep for where keys are read/registered, e.g. src/monitor/consolelogger/consolelogger.cpp and src/server/commands/manager.cpp; grep for key names such as CommandPrefixes, Rotation, Unlocker, Menu, SteamAuth).\nCover every key you can verify in the C++ code, including nested ones.\nThen compare against plugin_files/configs/core.example.jsonc on the beta branch. For every key the C++ code supports that the example lacks (or has with a wrong default/type), update the example with write_upstream_file, keeping its existing JSONC style and comments. Do not remove keys unless the C++ code no longer has them.",
     "watch": [
       "plugin_files/configs/core.example.jsonc",
-      "src/server/configuration",
-      "src/api/server/configuration",
-      "managed/src/SwiftlyS2.Core/Models",
-      "managed/src/SwiftlyS2.Core/Services"
+      "src"
     ]
   },
   {
@@ -38,6 +35,79 @@
     "page": "docs/development/commands.mdx",
     "upstream": false,
     "scope": "managed/src/SwiftlyS2.Shared",
-    "task": "Document the public command API only: you can only see the SwiftlyS2.Shared project (the public API plugin developers use), not the core implementation.\nCover ICommandService, ICommandContext, CommandInfo and the command attributes (CommandAttribute, CommandAliasAttribute, ClientCommandHookHandlerAttribute, ClientChatHookHandlerAttribute): signatures, parameters, defaults and members.\nEnsure the page's code examples only use members that exist in this API. Do not describe internals."
+    "task": "Document the public command API only: you can only see the SwiftlyS2.Shared project (the public API plugin developers use), not the core implementation.\nCover ICommandService, ICommandContext, CommandInfo and the command attributes (CommandAttribute, CommandAliasAttribute, ClientCommandHookHandlerAttribute, ClientChatHookHandlerAttribute): signatures, parameters, defaults and members.\nEnsure the page's code examples only use members that exist in this API. Do not describe internals.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Commands"
+    ]
+  },
+  {
+    "slug": "configuration",
+    "page": "docs/development/configuration.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: the plugin configuration service (IPluginConfigurationService, reached through ISwiftlyCore.Configuration) and related types.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Services/IPluginConfigurationService.cs",
+      "managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs"
+    ]
+  },
+  {
+    "slug": "convars",
+    "page": "docs/development/convars.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: console variables (IConVarService, IConVar, convar flags/enums) and the convar events (IOnConVarCreated, IOnConVarValueChanged).",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Convars",
+      "managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnConVarCreated.cs",
+      "managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnConVarValueChanged.cs"
+    ]
+  },
+  {
+    "slug": "core-events",
+    "page": "docs/development/core-events.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: the core event system: EventHandlerAttribute, EventDelegates, ClientKind and every event under Modules/Events/EventParams (IOn*Event). Make sure the page lists every available event with its members.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Events"
+    ]
+  },
+  {
+    "slug": "custom-hud",
+    "page": "docs/development/custom-hud.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared,managed/src/SwiftlyS2.Generated/Schemas/Interfaces,managed/src/SwiftlyS2.Core/Modules/Schemas/Extensions",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: custom HUD: CCSCustomHudLayout and CCSCustomHudLayoutState (schema interfaces and their extension methods) and IOnCustomHudClickedEvent.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnCustomHudClickedEvent.cs",
+      "managed/src/SwiftlyS2.Generated/Schemas/Interfaces/CCSCustomHudLayout.cs",
+      "managed/src/SwiftlyS2.Generated/Schemas/Interfaces/CCSCustomHudLayoutState.cs",
+      "managed/src/SwiftlyS2.Core/Modules/Schemas/Extensions/CCSCustomHudLayout.cs"
+    ]
+  },
+  {
+    "slug": "database",
+    "page": "docs/development/database.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared,plugin_files/configs/database.example.jsonc",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IDatabaseService (reached through ISwiftlyCore.Database). Also read plugin_files/configs/database.example.jsonc and make sure the page's configuration section matches it: connection URI formats, the object format, every field and the `options` field.\nTell users where to take the connection options from: `options` takes the connection string keywords of the underlying driver (MySqlConnector for mysql, Npgsql for postgresql, System.Data.SQLite for sqlite), so link the driver's own documentation: MySqlConnector https://mysqlconnector.net/connection-options/ and Npgsql https://www.npgsql.org/doc/connection-string-parameters.html. Only add these links if the page doesn't already have them; do not invent other URLs. Mention that a keyword or value the driver doesn't know is an error when the connection is requested (if the example says so).",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Database",
+      "plugin_files/configs/database.example.jsonc"
+    ]
+  },
+  {
+    "slug": "entity",
+    "page": "docs/development/entity.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared,managed/src/SwiftlyS2.Generated/Schemas/Interfaces,managed/src/SwiftlyS2.Core/Modules/Schemas/Extensions",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: entities: IEntitySystem, the entity attributes (EntityInputHandlerAttribute, EntityOutputHandlerAttribute), entity events and the entity schema interfaces (CBaseEntity, CBaseModelEntity, CBasePlayerPawn, ...) plus their extension methods.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/EntitySystem",
+      "managed/src/SwiftlyS2.Generated/Schemas/Interfaces/CBaseEntity.cs",
+      "managed/src/SwiftlyS2.Generated/Schemas/Interfaces/CBaseModelEntity.cs",
+      "managed/src/SwiftlyS2.Generated/Schemas/Interfaces/CBasePlayerPawn.cs"
+    ]
   }
 ]

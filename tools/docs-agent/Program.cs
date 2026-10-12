@@ -1,6 +1,6 @@
 // DeepSeek tool-calling agent that updates one docs page from the SwiftlyS2 source.
 // Usage: docs-agent --page <mdx> --src <dir> --task <text> --summary <file> [--allow-upstream]
-//   [--beta-src <dir>] [--scope <subdir>] [--slug <id> --hash-file <json> [--watch a,b,c] [--force]]
+//   [--beta-src <dir>] [--scope <dir,dir,...>] [--slug <id> --hash-file <json> [--watch a,b,c] [--force]]
 // With --slug/--hash-file the run is skipped when the watched source (stable+beta) and the page's task are unchanged
 // since the hash stored for that slug; the hash is stored again after a completed run.
 // Env: DEEPSEEK_API_KEY (required), DEEPSEEK_MODEL (default deepseek-flash), DEEPSEEK_API_URL.
@@ -46,12 +46,10 @@ var task = Opt("task");
 var summaryPath = Opt("summary");
 var betaSrc = opt.TryGetValue("beta-src", out var bs) ? Path.GetFullPath(bs) : null;
 var allowUpstream = opt.ContainsKey("allow-upstream");
-if (opt.TryGetValue("scope", out var scope)) // restrict every source tool to a subdirectory (e.g. the public API project)
-{
-    if (allowUpstream) throw new ArgumentException("--scope and --allow-upstream are mutually exclusive");
-    src = Safe(src, scope);
-    if (betaSrc is not null) betaSrc = Safe(betaSrc, scope);
-}
+// --scope restricts every source tool to these repo-relative files/dirs (e.g. the public API project)
+var scopes = (opt.GetValueOrDefault("scope") ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    .Select(x => x.Replace('\\', '/').Trim('/')).ToArray();
+if (scopes.Length > 0 && allowUpstream) throw new ArgumentException("--scope and --allow-upstream are mutually exclusive");
 
 // ---- change detection: skip when nothing the page depends on changed since the last completed run ----
 string? inputHash = null;
@@ -62,8 +60,8 @@ if (slug is not null && hashFile is not null)
 {
     using var h = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
     void Feed(string s) => h.AppendData(Encoding.UTF8.GetBytes(s + "\0"));
-    Feed($"{page}|{scope}|{allowUpstream}|{task}");
-    var watch = (opt.GetValueOrDefault("watch") ?? ".").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    Feed($"{page}|{string.Join(",", scopes)}|{allowUpstream}|{task}");
+    var watch = (opt.GetValueOrDefault("watch") ?? (scopes.Length > 0 ? string.Join(",", scopes) : ".")).Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     foreach (var (label, root) in new[] { ("stable", src), ("beta", betaSrc) })
     {
         if (root is null) continue;
@@ -137,7 +135,7 @@ var tools = new JsonArray
     Tool("write_page", "Overwrite the docs page with its full new content (must keep frontmatter).",
         new() { ["content"] = Str() }, "content"),
     Tool("write_upstream_file",
-        $"Overwrite a file in the SwiftlyS2 repo (only under {UpstreamPrefix}) with full content, e.g. to fix an example config that drifted from the code. A PR is opened.",
+        $"Overwrite a file in the SwiftlyS2 repo (only under {UpstreamPrefix}) with full content, e.g. to fix an example config that drifted from the code. The file is edited on the beta branch and a PR against beta is opened, so base the fix on the beta code (source=\"beta\").",
         new() { ["path"] = Str(), ["content"] = Str() }, "path", "content"),
     Tool("finish", "End the task.", new() { ["summary"] = Str() }, "summary"),
 };
@@ -166,6 +164,21 @@ static string TryPath(string? args)
 
 static string Clip(string s) => s.Length > MaxOut ? s[..MaxOut] : s;
 
+// Safe() plus the --scope allowlist. Only the tools the agent reads source with use this.
+string Scoped(string root, string rel)
+{
+    var p = Safe(root, rel);
+    if (scopes.Length == 0) return p;
+    var r = Path.GetRelativePath(root, p).Replace('\\', '/');
+    if (!scopes.Any(s => r == s || r.StartsWith(s + "/")))
+        throw new InvalidOperationException($"path is outside the allowed source scope ({string.Join(", ", scopes)}): {rel}");
+    return p;
+}
+
+// Paths a tool call covers: the requested one, or every scope when the request is the repo root.
+IEnumerable<string> Targets(string? rel) =>
+    scopes.Length > 0 && (rel is null or "." or "") ? scopes : [rel ?? "."];
+
 string Root(JsonNode a) =>
     (string?)a["source"] == "beta" ? betaSrc ?? throw new InvalidOperationException("beta source not available") : src;
 
@@ -177,11 +190,10 @@ string Run(string name, JsonNode a)
         {
             var re = new Regex((string)a["pattern"]!, RegexOptions.None, TimeSpan.FromSeconds(2));
             var top = Root(a);
-            var root = Safe(top, (string?)a["path"] ?? ".");
             var sep = Path.DirectorySeparatorChar;
-            IEnumerable<string> files = File.Exists(root)
+            IEnumerable<string> files = Targets((string?)a["path"]).Select(t => Scoped(top, t)).SelectMany(root => File.Exists(root)
                 ? [root]
-                : Directory.EnumerateFiles(root, "*", new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.System | FileAttributes.ReparsePoint }).Where(f => !f.Contains($"{sep}.git{sep}"));
+                : Directory.EnumerateFiles(root, "*", new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.System | FileAttributes.ReparsePoint }).Where(f => !f.Contains($"{sep}.git{sep}")));
             var sb = new StringBuilder();
             var n = 0;
             foreach (var f in files)
@@ -197,28 +209,33 @@ string Run(string name, JsonNode a)
         }
         case "read_file":
         {
-            var lines = File.ReadAllLines(Safe(Root(a), (string)a["path"]!));
+            var lines = File.ReadAllLines(Scoped(Root(a), (string)a["path"]!));
             var s = Math.Max((int?)a["start"] ?? 1, 1);
             var e = Math.Min((int?)a["end"] ?? lines.Length, lines.Length);
             return Clip(string.Join("\n", Enumerable.Range(s, Math.Max(e - s + 1, 0)).Select(i => $"{i}: {lines[i - 1]}")));
         }
         case "list_dir":
         {
-            var d = Safe(Root(a), (string)a["path"]!);
+            var rel = (string)a["path"]!;
+            if (scopes.Length > 0 && rel is "." or "") return string.Join("\n", scopes.Select(x => x + "/")); // only the scopes are visible
+            var d = Scoped(Root(a), rel);
             return Clip(string.Join("\n", Directory.EnumerateFileSystemEntries(d)
                 .Select(p => Path.GetFileName(p) + (Directory.Exists(p) ? "/" : "")).Order()));
         }
         case "diff_beta":
         {
             if (betaSrc is null) return "ERROR: beta source not available.";
-            var rel = (string?)a["path"] ?? ".";
-            var psi = new System.Diagnostics.ProcessStartInfo("git") { RedirectStandardOutput = true, RedirectStandardError = true };
-            // --no-index: compare the two checkouts directly; paths shown as a/<rel> vs b/<rel> via --src/dst-prefix
-            foreach (var x in new[] { "diff", "--no-index", "--no-color", "--src-prefix=stable/", "--dst-prefix=beta/", "--", Safe(src, rel), Safe(betaSrc, rel) }) psi.ArgumentList.Add(x);
-            using var p = System.Diagnostics.Process.Start(psi)!;
-            var o = p.StandardOutput.ReadToEnd().Replace(src + "/", "").Replace(betaSrc + "/", "");
-            p.WaitForExit();
-            return o.Length == 0 ? "(no differences)" : Clip(o);
+            var all = new StringBuilder();
+            foreach (var rel in Targets((string?)a["path"]))
+            {
+                var psi = new System.Diagnostics.ProcessStartInfo("git") { RedirectStandardOutput = true, RedirectStandardError = true };
+                // --no-index: compare the two checkouts directly
+                foreach (var x in new[] { "diff", "--no-index", "--no-color", "--src-prefix=stable/", "--dst-prefix=beta/", "--", Scoped(src, rel), Scoped(betaSrc, rel) }) psi.ArgumentList.Add(x);
+                using var p = System.Diagnostics.Process.Start(psi)!;
+                all.Append(p.StandardOutput.ReadToEnd().Replace(src + "/", "").Replace(betaSrc + "/", ""));
+                p.WaitForExit();
+            }
+            return all.Length == 0 ? "(no differences)" : Clip(all.ToString());
         }
         case "read_docs":
         {
@@ -239,11 +256,13 @@ string Run(string name, JsonNode a)
         case "write_upstream_file":
         {
             if (!allowUpstream) return "ERROR: upstream edits not allowed for this page.";
-            var p = Safe(src, (string)a["path"]!); // resolved first so ../ and symlinks collapse before the check
-            var cfg = Safe(src, UpstreamPrefix).TrimEnd(Path.DirectorySeparatorChar); // GetFullPath keeps the prefix's trailing '/'
+            // upstream PRs target the beta branch, so edits are made in the beta checkout
+            var up = betaSrc ?? throw new InvalidOperationException("--beta-src is required for upstream edits");
+            var p = Safe(up, (string)a["path"]!); // resolved first so ../ and symlinks collapse before the check
+            var cfg = Safe(up, UpstreamPrefix).TrimEnd(Path.DirectorySeparatorChar); // GetFullPath keeps the prefix's trailing '/'
             if (!p.StartsWith(cfg + Path.DirectorySeparatorChar)
-                || Path.GetRelativePath(src, p).Split(Path.DirectorySeparatorChar).Contains(".git"))
-                return $"ERROR: '{a["path"]}' (resolved: {Path.GetRelativePath(src, p)}) is outside {UpstreamPrefix}; only paths under it are allowed.";
+                || Path.GetRelativePath(up, p).Split(Path.DirectorySeparatorChar).Contains(".git"))
+                return $"ERROR: '{a["path"]}' (resolved: {Path.GetRelativePath(up, p)}) is outside {UpstreamPrefix}; only paths under it are allowed.";
             File.WriteAllText(p, (string)a["content"]!, new UTF8Encoding(false));
             return "upstream file written";
         }
@@ -259,7 +278,7 @@ var messages = new JsonArray
     {
         ["role"] = "user",
         ["content"] = $"Docs page: {page}\n\nTask:\n{task}"
-            + (allowUpstream ? $"\n\nYou MAY fix drifted files under {UpstreamPrefix} via write_upstream_file." : ""),
+            + (allowUpstream ? $"\n\nYou MAY fix drifted files under {UpstreamPrefix} via write_upstream_file. These edits go to the beta branch, so verify against the beta source." : ""),
     },
 };
 
