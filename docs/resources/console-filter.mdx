@@ -2,23 +2,44 @@
 title: Console Filter
 ---
 
-The console filter suppresses known noisy console lines so important logs remain visible.
+The console filter suppresses known noisy console lines so important logs remain visible. Lines that match a rule are dropped before they reach the engine logger, so they never show up in the console or in log files.
 
 ## Config File
 
 Edit the following file:
 
-`addone/swiftlys2/configs/confilter.jsonc`
+`addons/swiftlys2/configs/confilter.jsonc`
 
-This file is a JSONC object where each entry defines one filter rule.
+If the file does not exist yet, SwiftlyS2 creates it on startup from `configs/confilter.example.jsonc`, which ships with the default rules. Change the path with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
+
+This file is a JSONC object where each entry defines one filter rule. Comments are allowed.
 
 - Key: rule name used to identify the filter.
-- Value: text or pattern to match in console output.
-- When output matches a configured rule, it is filtered out.
+- Value: [PCRE2](https://www.pcre.org/) regular expression matched against the console line.
+
+```jsonc
+{
+    "BotProfile": "botprofile",
+    "Tick_number": "empty starved x",
+    "Framerate_Values": "\\d+\\.\\d+ms\\s+\\d+\\.\\d+%\\s+\\d+\\.\\d+ms\\s+[A-Za-z\\s]+"
+}
+```
+
+## How It Works
+
+- Every value is compiled as a PCRE2 regular expression and is unanchored, so it matches anywhere in the line - use `^`/`$` when the pattern must match the whole line.
+- A line is filtered as soon as any rule matches it, and the match count of that rule is incremented.
+- If a regular expression fails to compile, the error is logged with the rule name and the failing offset, and only that rule is skipped.
+- Rule names `Framerate_Values` and `Framerate_Total` are handled specially: the newline-only line that follows a match of either rule is dropped as well, keeping the framerate report grouped.
+- Rule names are only labels for `sw confilter status` and for error messages.
+
+## Enabling and Disabling
+
+`ConsoleFilter` in `core.jsonc` (default `true`) decides whether filtering is active after startup - see [Core Configuration](/docs/resources/core-config). The `enable`/`disable` subcommands below toggle the same state at runtime, but that change is not persisted, so the value from `core.jsonc` applies again after a restart.
 
 ## Command Management
 
-Use `sw confilter` with the following subcommands:
+`sw confilter` is restricted to the server console. Run it without a subcommand to print the subcommand list.
 
 | Subcommand | Description                            |
 | ---------- | -------------------------------------- |
@@ -27,8 +48,10 @@ Use `sw confilter` with the following subcommands:
 | `status`   | Show the status of the console filter. |
 | `reload`   | Reload console filter configuration.   |
 
+`status` prints the current state followed by per-rule counters, e.g. `- Tick_number -> 42`. Counters are reset by `reload`, which also recompiles every pattern; it does not change whether filtering is enabled.
+
 ## Typical Workflow
 
 1. Update `confilter.jsonc` with the rules you want.
 2. Run `sw confilter reload` to apply configuration changes.
-3. Use `sw confilter status` to confirm filtering is active.
+3. Use `sw confilter status` to confirm filtering is active and to see which rules match most.
