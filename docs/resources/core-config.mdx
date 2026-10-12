@@ -10,25 +10,26 @@ Edit the following file:
 
 `addons/swiftlys2/configs/core.jsonc`
 
-Missing keys are auto-registered with their default value and written back to this file on load.
+The file is created from `core.example.jsonc` on first startup. Missing keys, or keys with an incompatible type, are replaced with their default value and written back to this file on load.
 
 ## Global Settings
 
-| Key                            | Type       | Default | Description                                                                                                |
-| ------------------------------ | ---------- | ------- | ---------------------------------------------------------------------------------------------------------- |
-| `CommandPrefixes`              | `string[]` | `["!"]` | Prefixes recognized for normal command execution.                                                          |
-| `CommandSilentPrefixes`        | `string[]` | `["/"]` | Prefixes recognized for silent command execution.                                                          |
-| `AutoHotReload`                | `boolean`  | `true`  | Enables automatic hot reload behavior.                                                                     |
-| `ProfilerLevel`                | `number`   | `0`     | Profiler verbosity level.                                                                                  |
-| `ConsoleFilter`                | `boolean`  | `true`  | Enables or disables console filtering globally.                                                            |
-| `PatchesToPerform`             | `string[]` | `[]`    | Patch identifiers to perform on startup.                                                                   |
-| `Follow<Game>ServerGuidelines` | `boolean`  | `true`  | Applies server guideline behavior. Key name depends on the current game, e.g. `FollowCS2ServerGuidelines`. |
-| `Language`                     | `string`   | `"en"`  | Default language code used by the server.                                                                  |
-| `UsePlayerLanguage`            | `boolean`  | `true`  | Uses player language when available.                                                                       |
-| `ManualLoadPlugins`            | `boolean`  | `false` | Toggles manual plugin loading mode.                                                                        |
-| `PluginLoadOrder`              | `string[]` | `[]`    | Plugin load order list used by the core loader.                                                            |
-| `DotnetCrashTracerLevel`       | `number`   | `0`     | Crash tracer level. Supported values: `0`, `1`.                                                            |
-| `WindowsFullDump`              | `boolean`  | `false` | Enables full memory dumps on crash (Windows only).                                                         |
+| Key                            | Type       | Default                                                                | Description                                                                                                |
+| ------------------------------ | ---------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `CommandPrefixes`              | `string[]` | `["!"]`                                                                | Prefixes recognized for normal command execution.                                                          |
+| `CommandSilentPrefixes`        | `string[]` | `["/"]`                                                                | Prefixes recognized for silent command execution.                                                          |
+| `AutoHotReload`                | `boolean`  | `true`                                                                 | Enables automatic hot reload behavior.                                                                     |
+| `ProfilerLevel`                | `number`   | `0`                                                                    | Default profiler level. `0` disables profiling, `1` enables EventPipe profiling.                           |
+| `ConsoleFilter`                | `boolean`  | `true`                                                                 | Enables or disables console filtering globally.                                                            |
+| `PatchesToPerform`             | `string[]` | `[]`                                                                   | Patch identifiers to perform on startup.                                                                   |
+| `CS2ServerGuidelines`          | `string`   | `"https://blog.counter-strike.net/index.php/server_guidelines/"`       | URL of the CS2 server guidelines. Registered on CS2 only.                                                  |
+| `Follow<Game>ServerGuidelines` | `boolean`  | `true`                                                                 | Applies server guideline behavior. Key name depends on the current game, e.g. `FollowCS2ServerGuidelines`. |
+| `Language`                     | `string`   | `"en"`                                                                 | Default language code used by the server.                                                                  |
+| `UsePlayerLanguage`            | `boolean`  | `true`                                                                 | Uses player language when available.                                                                       |
+| `ManualLoadPlugins`            | `boolean`  | `false`                                                                | Toggles manual plugin loading mode.                                                                        |
+| `PluginLoadOrder`              | `string[]` | `[]`                                                                   | Plugin load order list used by the core loader.                                                            |
+| `DotnetCrashTracerLevel`       | `number`   | `0`                                                                    | .NET crash tracer level. A value greater than `0` enables the tracer.                                      |
+| `WindowsFullDump`              | `boolean`  | `false`                                                                | Enables full memory dumps on crash (Windows only).                                                         |
 
 ## Unlocker Settings
 
