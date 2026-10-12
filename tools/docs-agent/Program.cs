@@ -1,0 +1,239 @@
+// DeepSeek tool-calling agent that updates one docs page from the SwiftlyS2 source.
+// Usage: docs-agent --page <mdx> --src <dir> --task <text> --summary <file> [--allow-upstream]
+// Env: DEEPSEEK_API_KEY (required), DEEPSEEK_MODEL (default deepseek-flash), DEEPSEEK_API_URL.
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
+
+const int MaxTurns = 40;
+const int MaxOut = 20000; // chars returned per tool call
+const string UpstreamPrefix = "plugin_files/configs/"; // only place the agent may edit in swiftlys2
+
+const string SystemPrompt = """
+    You maintain one documentation page of the SwiftlyS2 docs site (MDX, Docusaurus-like).
+    The SwiftlyS2 source code is available through your tools. Your job: make the page accurately reflect the source.
+
+    Rules:
+    - Only document what the source supports. Never invent options, defaults or types. Verify each one by reading code.
+    - Keep the page's existing frontmatter, structure, tone and table style. Change only what is out of date, wrong or missing.
+    - If nothing needs changing, do NOT call write_page; just call finish.
+    - The source comes in two branches: `stable` (master, the default) and `beta`. The page body documents stable.
+      If beta has something stable lacks (new/renamed options, new commands, changed defaults), call diff_beta to find it, verify in code,
+      and put it in ONE section at the very END of the page titled `## Beta Changes`, starting with a short note that these are available on the beta branch only.
+      Use the page's existing table style there. Rewrite that section from scratch each run; if beta has nothing new, remove it.
+    - Match the voice of the rest of the documentation: before writing, read 2-3 other pages with read_docs
+      (list "docs/guides" and "docs/development", e.g. docs/development/configuration.mdx, docs/guides/terminologies.mdx, docs/development/commands.mdx)
+      and copy their tone, heading style, sentence length, table/admonition/code-block conventions and terminology.
+      Do not introduce a new style, emojis or marketing language.
+    - Be efficient: use grep to locate things, read_file with line ranges to confirm.
+    - When done, call finish with a short markdown summary of what changed and why (used as the PR description).
+    """;
+
+var opt = new Dictionary<string, string>();
+for (var i = 0; i < args.Length; i++)
+    if (args[i].StartsWith("--")) opt[args[i][2..]] = i + 1 < args.Length && !args[i + 1].StartsWith("--") ? args[++i] : "true";
+string Opt(string k) => opt.TryGetValue(k, out var v) ? v : throw new ArgumentException($"missing --{k}");
+
+var page = Opt("page");
+var docsRoot = Path.GetFullPath("docs");
+var src = Path.GetFullPath(Opt("src"));
+var task = Opt("task");
+var summaryPath = Opt("summary");
+var betaSrc = opt.TryGetValue("beta-src", out var bs) ? Path.GetFullPath(bs) : null;
+var allowUpstream = opt.ContainsKey("allow-upstream");
+var model = Environment.GetEnvironmentVariable("DEEPSEEK_MODEL") ?? "deepseek-flash";
+var api = Environment.GetEnvironmentVariable("DEEPSEEK_API_URL") ?? "https://api.deepseek.com/chat/completions";
+
+using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(5) };
+http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+    Environment.GetEnvironmentVariable("DEEPSEEK_API_KEY") ?? throw new InvalidOperationException("DEEPSEEK_API_KEY not set"));
+
+static JsonObject Tool(string name, string desc, JsonObject props, params string[] required) => new()
+{
+    ["type"] = "function",
+    ["function"] = new JsonObject
+    {
+        ["name"] = name,
+        ["description"] = desc,
+        ["parameters"] = new JsonObject
+        {
+            ["type"] = "object",
+            ["properties"] = props,
+            ["required"] = new JsonArray(required.Select(r => (JsonNode)r).ToArray()),
+        },
+    },
+};
+static JsonObject Str(string d = "") => new() { ["type"] = "string", ["description"] = d };
+static JsonObject Src() => new() { ["type"] = "string", ["enum"] = new JsonArray("stable", "beta"), ["description"] = "Default stable" };
+static JsonObject Int() => new() { ["type"] = "integer" };
+
+var tools = new JsonArray
+{
+    Tool("grep", "Recursive regex search in the SwiftlyS2 source. Returns file:line:text.",
+        new() { ["pattern"] = Str(), ["path"] = Str("Subdirectory or file, relative to source root. Default '.'"), ["source"] = Src() }, "pattern"),
+    Tool("read_file", "Read a file from the SwiftlyS2 source (1-based inclusive line range optional).",
+        new() { ["path"] = Str(), ["start"] = Int(), ["end"] = Int(), ["source"] = Src() }, "path"),
+    Tool("list_dir", "List a directory in the SwiftlyS2 source.", new() { ["path"] = Str(), ["source"] = Src() }, "path"),
+    Tool("diff_beta", "Unified diff of the SwiftlyS2 source, stable vs beta (a/ = stable, b/ = beta). Optional subdirectory or file.",
+        new() { ["path"] = Str("Relative to source root. Default '.'") }),
+    Tool("read_docs", "Read-only: read a docs file, or list a docs directory, to learn the documentation's writing style. Path relative to the docs folder (e.g. 'guides', 'development/commands.mdx').",
+        new() { ["path"] = Str() }, "path"),
+    Tool("read_page", "Read the current docs page you are maintaining.", new()),
+    Tool("write_page", "Overwrite the docs page with its full new content (must keep frontmatter).",
+        new() { ["content"] = Str() }, "content"),
+    Tool("write_upstream_file",
+        $"Overwrite a file in the SwiftlyS2 repo (only under {UpstreamPrefix}) with full content, e.g. to fix an example config that drifted from the code. A PR is opened.",
+        new() { ["path"] = Str(), ["content"] = Str() }, "path", "content"),
+    Tool("finish", "End the task.", new() { ["summary"] = Str() }, "summary"),
+};
+
+// Resolve rel under root. Rejects ../, any .git segment, and any symlink along the path.
+string Safe(string root, string rel)
+{
+    var p = Path.GetFullPath(Path.Combine(root, rel));
+    var parts = Path.GetRelativePath(root, p).Split(Path.DirectorySeparatorChar);
+    if (parts[0] == "..") throw new InvalidOperationException($"path escapes root: {rel}");
+    var cur = root;
+    foreach (var part in parts.Where(x => x != "."))
+    {
+        if (part == ".git") throw new InvalidOperationException($"forbidden path: {rel}");
+        cur = Path.Combine(cur, part);
+        if (new FileInfo(cur).LinkTarget is not null) throw new InvalidOperationException($"symlink not allowed: {rel}");
+    }
+    return p;
+}
+
+static string Clip(string s) => s.Length > MaxOut ? s[..MaxOut] : s;
+
+string Root(JsonNode a) =>
+    (string?)a["source"] == "beta" ? betaSrc ?? throw new InvalidOperationException("beta source not available") : src;
+
+string Run(string name, JsonNode a)
+{
+    switch (name)
+    {
+        case "grep":
+        {
+            var re = new Regex((string)a["pattern"]!, RegexOptions.None, TimeSpan.FromSeconds(2));
+            var top = Root(a);
+            var root = Safe(top, (string?)a["path"] ?? ".");
+            var sep = Path.DirectorySeparatorChar;
+            IEnumerable<string> files = File.Exists(root)
+                ? [root]
+                : Directory.EnumerateFiles(root, "*", new EnumerationOptions { RecurseSubdirectories = true, AttributesToSkip = FileAttributes.System | FileAttributes.ReparsePoint }).Where(f => !f.Contains($"{sep}.git{sep}"));
+            var sb = new StringBuilder();
+            var n = 0;
+            foreach (var f in files)
+            {
+                string[] lines;
+                try { lines = File.ReadAllLines(f); } catch { continue; }
+                if (lines.Take(50).Any(l => l.Contains('\0'))) continue; // binary
+                for (var i = 0; i < lines.Length && n < 50; i++)
+                    if (re.IsMatch(lines[i])) { sb.AppendLine($"{Path.GetRelativePath(top, f).Replace('\\', '/')}:{i + 1}:{lines[i]}"); n++; }
+                if (n >= 50) break;
+            }
+            return n == 0 ? "(no matches)" : Clip(sb.ToString());
+        }
+        case "read_file":
+        {
+            var lines = File.ReadAllLines(Safe(Root(a), (string)a["path"]!));
+            var s = Math.Max((int?)a["start"] ?? 1, 1);
+            var e = Math.Min((int?)a["end"] ?? lines.Length, lines.Length);
+            return Clip(string.Join("\n", Enumerable.Range(s, Math.Max(e - s + 1, 0)).Select(i => $"{i}: {lines[i - 1]}")));
+        }
+        case "list_dir":
+        {
+            var d = Safe(Root(a), (string)a["path"]!);
+            return Clip(string.Join("\n", Directory.EnumerateFileSystemEntries(d)
+                .Select(p => Path.GetFileName(p) + (Directory.Exists(p) ? "/" : "")).Order()));
+        }
+        case "diff_beta":
+        {
+            if (betaSrc is null) return "ERROR: beta source not available.";
+            var rel = (string?)a["path"] ?? ".";
+            var psi = new System.Diagnostics.ProcessStartInfo("git") { RedirectStandardOutput = true, RedirectStandardError = true };
+            // --no-index: compare the two checkouts directly; paths shown as a/<rel> vs b/<rel> via --src/dst-prefix
+            foreach (var x in new[] { "diff", "--no-index", "--no-color", "--src-prefix=stable/", "--dst-prefix=beta/", "--", Safe(src, rel), Safe(betaSrc, rel) }) psi.ArgumentList.Add(x);
+            using var p = System.Diagnostics.Process.Start(psi)!;
+            var o = p.StandardOutput.ReadToEnd().Replace(src + "/", "").Replace(betaSrc + "/", "");
+            p.WaitForExit();
+            return o.Length == 0 ? "(no differences)" : Clip(o);
+        }
+        case "read_docs":
+        {
+            var d = Safe(docsRoot, ((string)a["path"]!).Replace("docs/", "", StringComparison.Ordinal));
+            return Directory.Exists(d)
+                ? string.Join("\n", Directory.EnumerateFileSystemEntries(d).Select(p => Path.GetFileName(p) + (Directory.Exists(p) ? "/" : "")).Order())
+                : Clip(File.ReadAllText(d));
+        }
+        case "read_page":
+            return File.ReadAllText(page);
+        case "write_page":
+        {
+            var c = (string)a["content"]!;
+            if (!c.StartsWith("---")) return "ERROR: page must start with frontmatter (---).";
+            File.WriteAllText(page, c.TrimEnd('\n') + "\n", new UTF8Encoding(false));
+            return "page written";
+        }
+        case "write_upstream_file":
+        {
+            if (!allowUpstream) return "ERROR: upstream edits not allowed for this page.";
+            var p = Safe(src, (string)a["path"]!); // resolved first so ../ and symlinks collapse before the check
+            var cfg = Safe(src, UpstreamPrefix);
+            if (!p.StartsWith(cfg + Path.DirectorySeparatorChar)
+                || Path.GetRelativePath(src, p).Split(Path.DirectorySeparatorChar).Contains(".git"))
+                return $"ERROR: only paths under {UpstreamPrefix} are allowed.";
+            File.WriteAllText(p, (string)a["content"]!, new UTF8Encoding(false));
+            return "upstream file written";
+        }
+        default:
+            return $"ERROR: unknown tool {name}";
+    }
+}
+
+var messages = new JsonArray
+{
+    new JsonObject { ["role"] = "system", ["content"] = SystemPrompt },
+    new JsonObject
+    {
+        ["role"] = "user",
+        ["content"] = $"Docs page: {page}\n\nTask:\n{task}"
+            + (allowUpstream ? $"\n\nYou MAY fix drifted files under {UpstreamPrefix} via write_upstream_file." : ""),
+    },
+};
+
+var summary = "";
+var finished = false;
+for (var turn = 0; turn < MaxTurns && !finished; turn++)
+{
+    var body = new JsonObject { ["model"] = model, ["temperature"] = 0, ["messages"] = messages.DeepClone(), ["tools"] = tools.DeepClone() };
+    using var resp = await http.PostAsync(api, new StringContent(body.ToJsonString(), Encoding.UTF8, "application/json"));
+    var text = await resp.Content.ReadAsStringAsync();
+    if (!resp.IsSuccessStatusCode) throw new HttpRequestException($"{(int)resp.StatusCode}: {text}");
+    var msg = JsonNode.Parse(text)!["choices"]![0]!["message"]!.AsObject();
+    messages.Add(msg.DeepClone());
+
+    var calls = msg["tool_calls"]?.AsArray();
+    if (calls is not { Count: > 0 }) { summary = (string?)msg["content"] ?? ""; break; }
+
+    foreach (var c in calls)
+    {
+        var fn = c!["function"]!;
+        var name = (string)fn["name"]!;
+        string output;
+        try
+        {
+            var raw = (string?)fn["arguments"];
+            var a = JsonNode.Parse(string.IsNullOrEmpty(raw) ? "{}" : raw)!;
+            if (name == "finish") { summary = (string)a["summary"]!; output = "ok"; finished = true; }
+            else output = Run(name, a);
+        }
+        catch (Exception e) { output = $"ERROR: {e.Message}"; } // report to the model, let it recover
+        Console.Error.WriteLine($"[{name}] {output[..Math.Min(output.Length, 120)].ReplaceLineEndings(" ")}");
+        messages.Add(new JsonObject { ["role"] = "tool", ["tool_call_id"] = (string)c["id"]!, ["content"] = output });
+    }
+    if (turn == MaxTurns - 1 && !finished) Console.Error.WriteLine("agent hit MaxTurns");
+}
+
+File.WriteAllText(summaryPath, summary);
