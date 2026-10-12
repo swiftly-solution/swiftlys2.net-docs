@@ -2,7 +2,7 @@
 title: Core Events
 ---
 
-Core events are SwiftlyS2's own engine/framework callbacks - client lifecycle, entity lifecycle, convar changes, server startup, tick/world update - separate from the CS2 [game events](/docs/development/game-events) system. They're exposed through `Core.Event` (<ApiRef name="IEventSubscriber" />), a set of plain C# events.
+Core events are SwiftlyS2's own engine/framework callbacks - client lifecycle, entity lifecycle, convar and command changes, console output, server startup, tick/world update - separate from the CS2 [game events](/docs/development/game-events) system. They're exposed through `Core.Event` (<ApiRef name="IEventSubscriber" />), a set of plain C# events.
 
 ## Subscribing
 
@@ -34,11 +34,13 @@ Subscribe with a plain `+=`, or with `[EventListener<T>]` where `T` is the match
   </Tab>
 </Tabs>
 
-Match the delegate signature exactly - `EventDelegates.OnClientConnected` is `void(IOnClientConnectedEvent @event)`; `OnTick`/`OnWorldUpdate` take no parameters.
+Match the delegate signature exactly - `EventDelegates.OnClientConnected` is `void(IOnClientConnectedEvent @event)`; `OnTick`, `OnWorldUpdate`, `OnSteamAPIActivated` and `OnStartupServer` take no parameters at all.
+
+<ApiRef name="EventListener`1" /> takes exactly one delegate type and a method can carry only one of them (`AllowMultiple = false`) - use `+=` when a single method or instance has to listen to several events.
 
 ## Blocking a Client from Joining
 
-Some client-lifecycle events expose a settable `Result` to reject the action, e.g. <ApiRef name="IOnClientConnectedEvent" />:
+Some client-lifecycle events expose a settable `Result` to reject the action, e.g. <ApiRef name="IOnClientConnectedEvent" /> - set it to `HookResult.Stop` or `HookResult.CancelOriginal`:
 
 ```csharp
 [EventListener<EventDelegates.OnClientConnected>]
@@ -80,30 +82,94 @@ public override void Unload()
 
 `OnTick`, `OnWorldUpdate`, and the obsolete `OnClientProcessUsercmds` fire every tick/frame - keep handlers allocation-free and cheap; push anything heavier to a scheduled task or a flag.
 
+`OnTick` doesn't run while the server is in hibernation, `OnWorldUpdate` does.
+
 ## Deprecated Hook-Style Events
 
 Several `Core.Event` members that used to be the only way to intercept a native call are `[Obsolete]` in favor of the more structured [`Core.GameHooks`](/docs/development/native-functions-and-hooks) categories - separate pre/post delegates and a richer context object instead of one generic event:
 
-| Obsolete event                                                  | Use instead                                           |
-| --------------------------------------------------------------- | ----------------------------------------------------- |
-| `OnClientProcessUsercmds`                                       | `Core.GameHooks.Controller`/`Movement`                |
-| `OnEntityTakeDamage`                                            | `Core.GameHooks.Entities.TakeDamage`                  |
-| `OnItemServicesCanAcquireHook`                                  | `Core.GameHooks.Items.CanAcquire`                     |
-| `OnWeaponServicesCanUseHook` / `OnWeaponServicesDropWeaponHook` | `Core.GameHooks.Weapons.*`                            |
-| `OnEntityStartTouch` / `OnEntityTouch` / `OnEntityEndTouch`     | `Core.GameHooks.Entities.{StartTouch,Touch,EndTouch}` |
-| `OnMovementServicesRunCommandHook`                              | `Core.GameHooks.Movement.RunCommand`                  |
-| `OnPlayerPawnPostThink`                                         | `Core.GameHooks.Pawn.PostThink`                       |
-| `OnEntityIdentityAcceptInputHook`                               | `Core.GameHooks.Entities.AcceptInput`                 |
-| `OnEntityFireOutputHook`                                        | `Core.GameHooks.Entities.FireOutput`                  |
+| Obsolete event                                              | Use instead                                           |
+| ----------------------------------------------------------- | ----------------------------------------------------- |
+| `OnClientProcessUsercmds`                                   | `Core.GameHooks.Controller.ProcessUsercmds`           |
+| `OnEntityTakeDamage`                                        | `Core.GameHooks.Entities.TakeDamage`                  |
+| `OnItemServicesCanAcquireHook`                              | `Core.GameHooks.Items.CanAcquire`                     |
+| `OnWeaponServicesCanUseHook`                                | `Core.GameHooks.Weapons.CanUse`                       |
+| `OnWeaponServicesDropWeaponHook`                            | `Core.GameHooks.Weapons.Drop`                         |
+| `OnEntityStartTouch` / `OnEntityTouch` / `OnEntityEndTouch` | `Core.GameHooks.Entities.{StartTouch,Touch,EndTouch}` |
+| `OnMovementServicesRunCommandHook`                          | `Core.GameHooks.Movement.RunCommand`                  |
+| `OnPlayerPawnPostThink`                                     | `Core.GameHooks.Pawn.PostThink`                       |
+| `OnEntityIdentityAcceptInputHook`                           | `Core.GameHooks.Entities.AcceptInput`                 |
+| `OnEntityFireOutputHook`                                    | `Core.GameHooks.Entities.FireOutput`                  |
+
+Their event objects still carry the parameters they always did:
+
+| Obsolete event                                              | Event object                                                                                                                  | Members                                                                                                                                                                                                                                          |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `OnClientProcessUsercmds`                                   | <ApiRef name="IOnClientProcessUsercmdsEvent" />                                                                                | `PlayerId` (`int`), `Usercmds` (`List<CSGOUserCmdPB>`), `Paused` (`bool`), `Margin` (`float`)                                                                                                                                                     |
+| `OnEntityTakeDamage`                                        | <ApiRef name="IOnEntityTakeDamageEvent" />                                                                                     | `Entity` (`CEntityInstance`), `Info` (`ref CTakeDamageInfo`), `DamageResult` (`ref CTakeDamageResult`), settable `Result` (`HookResult`)                                                                                                          |
+| `OnEntityStartTouch` / `OnEntityTouch` / `OnEntityEndTouch` | <ApiRef name="IOnEntityStartTouchEvent" /> / <ApiRef name="IOnEntityTouchEvent" /> / <ApiRef name="IOnEntityEndTouchEvent" />   | `Entity` (`CBaseEntity`), `OtherEntity` (`CBaseEntity`)                                                                                                                                                                                          |
+| `OnItemServicesCanAcquireHook`                              | <ApiRef name="IOnItemServicesCanAcquireHookEvent" />                                                                           | `ItemServices` (`CCSPlayer_ItemServices`), `EconItemView` (`CEconItemView`), `WeaponVData` (`CCSWeaponBaseVData?`), `AcquireMethod` (`AcquireMethod`), `OriginalResult` (`AcquireResult`), `SetAcquireResult(AcquireResult)`                       |
+| `OnWeaponServicesCanUseHook`                                | <ApiRef name="IOnWeaponServicesCanUseHookEvent" />                                                                             | `WeaponServices` (`CCSPlayer_WeaponServices`), `Weapon` (`CCSWeaponBase`), `OriginalResult` (`bool`), `SetResult(bool)`                                                                                                                            |
+| `OnWeaponServicesDropWeaponHook`                            | <ApiRef name="IOnWeaponServicesDropWeaponHook" />                                                                              | `WeaponServices` (`CCSPlayer_WeaponServices`), `Weapon` (`CBasePlayerWeapon?`), `SwappingWeapon` (`bool`), settable `Result` (`HookResult`)                                                                                                       |
+| `OnMovementServicesRunCommandHook`                          | <ApiRef name="IOnMovementServicesRunCommandHookEvent" />                                                                       | `MovementServices` (`CCSPlayer_MovementServices`), `ButtonState` (`CInButtonState`), `UserCmdPB` (`CSGOUserCmdPB`)                                                                                                                                |
+| `OnPlayerPawnPostThink`                                     | <ApiRef name="IOnPlayerPawnPostThinkHookEvent" />                                                                              | `PlayerPawn` (`CCSPlayerPawn`)                                                                                                                                                                                                                    |
+| `OnEntityIdentityAcceptInputHook`                           | <ApiRef name="IOnEntityIdentityAcceptInputHookEvent" />                                                                        | `Identity` (`CEntityIdentity`), `EntityInstance` (`CEntityInstance`), `DesignerName` (`string`), `InputName` (`string`), `Activator` (`CEntityInstance?`), `Caller` (`CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `OutputId` (`int`), settable `Result` (`HookResult`) |
+| `OnEntityFireOutputHook`                                    | <ApiRef name="IOnEntityFireOutputHookEvent" />                                                                                 | `EntityIO` (`ref CEntityIOOutput`), `DesignerName` (`string`), `OutputName` (`string`), `Activator` (`CEntityInstance?`), `Caller` (`CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `Delay` (`float`), settable `Result` (`HookResult`) |
 
 ## Event Reference
 
-| Category          | Events                                                                                                                                                                 |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Client lifecycle  | `OnClientConnected`, `OnClientDisconnected`, `OnClientPutInServer`, `OnClientKeyStateChanged`, `OnClientSteamAuthorize`, `OnClientSteamAuthorizeFail`, `OnClientVoice` |
-| Entity lifecycle  | `OnEntityCreated`, `OnEntitySpawned`, `OnEntityDeleted`, `OnEntityParentChanged`                                                                                       |
-| ConVar / commands | `OnConVarCreated`, `OnConVarValueChanged`, `OnConCommandCreated`, `OnCommandExecuteHook`, `OnConsoleOutput`                                                            |
-| Server / world    | `OnStartupServer`, `OnMapLoad`, `OnMapUnload`, `OnTick`, `OnWorldUpdate`, `OnSteamAPIActivated`, `OnPrecacheResource`                                                  |
-| UI                | `OnCustomHudClicked`                                                                                                                                                   |
+Each parameter interface lives under `SwiftlyS2.Shared.Events` and exposes only the fields relevant to that callback. The delegate on <ApiRef name="EventDelegates" /> has the same name as the `Core.Event` member - `OnEntityFireOutputHook` is the exception, its delegate is `EventDelegates.OnEntityFireOutputHookEvent`.
 
-Each parameter interface lives under `SwiftlyS2.Shared.Events` (e.g. <ApiRef name="IOnClientConnectedEvent" />, <ApiRef name="IOnMapLoadEvent" />) and exposes only the fields relevant to that callback - open the type's page for the full field list instead of guessing from the event name.
+### Client Lifecycle
+
+- `OnClientConnected` - <ApiRef name="IOnClientConnectedEvent" />: `PlayerId` (`int`), settable `Result` (`HookResult`).
+- `OnClientDisconnected` - <ApiRef name="IOnClientDisconnectedEvent" />: `PlayerId` (`int`), `Reason` (`ENetworkDisconnectionReason`).
+- `OnClientPutInServer` - <ApiRef name="IOnClientPutInServerEvent" />: `PlayerId` (`int`), `Kind` (<ApiRef name="ClientKind" />).
+- `OnClientSteamAuthorize` - <ApiRef name="IOnClientSteamAuthorizeEvent" />: `PlayerId` (`int`).
+- `OnClientSteamAuthorizeFail` - <ApiRef name="IOnClientSteamAuthorizeFailEvent" />: `PlayerId` (`int`).
+- `OnClientKeyStateChanged` - <ApiRef name="IOnClientKeyStateChangedEvent" />: `PlayerId` (`int`), `Key` (<ApiRef name="KeyKind" />), `Pressed` (`bool`).
+- `OnClientVoice` - <ApiRef name="IOnClientVoiceEvent" />: `PlayerId` (`int`).
+
+### Entity Lifecycle
+
+- `OnEntityCreated` - <ApiRef name="IOnEntityCreatedEvent" />: `Entity` (`CEntityInstance`). The entity isn't fully initialized yet - do your work on the next tick and check its validity there.
+- `OnEntitySpawned` - <ApiRef name="IOnEntitySpawnedEvent" />: `Entity` (`CEntityInstance`).
+- `OnEntityDeleted` - <ApiRef name="IOnEntityDeletedEvent" />: `Entity` (`CEntityInstance`).
+- `OnEntityParentChanged` - <ApiRef name="IOnEntityParentChangedEvent" />: `Entity` (`CEntityInstance`), `NewParent` (`CEntityInstance?`).
+
+### ConVar and Commands
+
+- `OnConVarCreated` - <ApiRef name="IOnConVarCreated" />: `ConVarName` (`string`).
+- `OnConVarValueChanged` - <ApiRef name="IOnConVarValueChanged" />: `ConVarName` (`string`), `PlayerId` (`int`, the client that made the change), `NewValue` and `OldValue` (both `string`).
+- `OnConCommandCreated` - <ApiRef name="IOnConCommandCreated" />: `CommandName` (`string`).
+- `OnCommandExecuteHook` - <ApiRef name="IOnCommandExecuteHookEvent" />: `Command` (`ref CCommand`), `HookMode` (<ApiRef name="HookMode" />), settable `Result` (`HookResult`). `HookMode` tells you whether this is the `Pre` or the `Post` pass, and `Result` can only be changed in `Pre`.
+- `OnConsoleOutput` - <ApiRef name="IOnConsoleOutputEvent" />: `Message` (`string`). Callbacks run on the dedicated console dispatch thread - schedule the work onto the game thread before touching game-thread-only APIs (see [Thread Safety](/docs/development/thread-safety)).
+
+The convar events are covered in more detail in [Convars](/docs/development/convars).
+
+### Server and World
+
+- `OnMapLoad` - <ApiRef name="IOnMapLoadEvent" />: `MapName` (`string`).
+- `OnMapUnload` - <ApiRef name="IOnMapUnloadEvent" />: `MapName` (`string`).
+- `OnPrecacheResource` - <ApiRef name="IOnPrecacheResourceEvent" />: `AddItem(string path)` adds a resource to the precache list.
+- `OnStartupServer`, `OnTick`, `OnWorldUpdate`, `OnSteamAPIActivated` - no event object, the handler takes no parameters.
+
+### UI
+
+- `OnCustomHudClicked` - <ApiRef name="IOnCustomHudClickedEvent" />: `PlayerId` (`int`), `CustomHudLayout` (`CCSCustomHudLayout`), `ButtonId` (`string`). See [Custom HUD](/docs/development/custom-hud).
+
+## ClientKind and KeyKind
+
+Two enums are carried by event objects rather than configured:
+
+<ApiRef name="ClientKind" /> is reported by `IOnClientPutInServerEvent.Kind`:
+
+| Value     | Number |
+| --------- | ------ |
+| `Player`  | `0`    |
+| `Bot`     | `1`    |
+| `Unknown` | `2`    |
+
+<ApiRef name="KeyKind" /> is reported by `IOnClientKeyStateChangedEvent.Key`:
+
+`Mouse1`, `Mouse2`, `Space`, `Ctrl`, `W`, `A`, `S`, `D`, `E`, `Esc`, `R`, `Alt`, `Shift`, `Weapon1`, `Weapon2`, `Grenade1`, `Grenade2`, `Tab`, `F`

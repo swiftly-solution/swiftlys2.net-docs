@@ -43,6 +43,52 @@ hud.StrLayoutUpdated();
 hud.DispatchSpawn();
 ```
 
+## Layout Members
+
+`CCSCustomHudLayout` extends `CBaseEntity` and holds the layout state directly. After assigning a field, call the matching `...Updated()` method (`StrLayout`/`StrLayoutUpdated` above) so the change is picked up:
+
+| Member                                                      | Description                                        |
+| ----------------------------------------------------------- | -------------------------------------------------- |
+| `StrLayout` (`string`)                                      | Path of the layout file                            |
+| `Observable` (`bool`)                                       | Whether the layout is observable                   |
+| `PanelIds` (`CUtlVector<CUtlString>`)                       | Panel `id` values the layout state refers to       |
+| `ClassNames` (`CUtlVector<CUtlString>`)                     | CSS class names the layout state refers to         |
+| `DialogVariableNames` (`CUtlVector<CUtlString>`)            | Dialog variable names the layout state refers to   |
+| `GlobalLayoutState` (`CCSCustomHudLayoutState`)             | The layout state applied to every player           |
+| `PlayerLayoutStates` (`CUtlVector<CCSCustomHudLayoutState>`) | The per-player layout states, indexed by player id |
+
+Their update methods are `StrLayoutUpdated`, `ObservableUpdated`, `PanelIdsUpdated`, `ClassNamesUpdated`, `DialogVariableNamesUpdated`, `GlobalLayoutStateUpdated` and `PlayerLayoutStatesUpdated`.
+
+### Layout State
+
+`CCSCustomHudLayoutState` is the state the global and per-player methods below read and write. `GlobalLayoutState` applies to everyone, `PlayerLayoutStates` holds one entry per player:
+
+| Member                                                                        | Description                                     |
+| ----------------------------------------------------------------------------- | ----------------------------------------------- |
+| `PlayerSlot` (`uint`)                                                         | The player the state belongs to                 |
+| `InputCaptureEnabled` (`bool`)                                                | Whether input capture is enabled for that player |
+| `DialogVariableStrings` (`CUtlVector<HUDPanelDialogVariableString_t>`)        | The dialog variable string overrides            |
+| `HasClasses` (`CUtlVector<HUDPanelHasClass_t>`)                               | The CSS class overrides                         |
+
+Its update methods are `InputCaptureEnabledUpdated`, `DialogVariableStringsUpdated` and `HasClassesUpdated`.
+
+Both override lists store indices into the layout's id/name lists instead of the strings themselves:
+
+| `HUDPanelDialogVariableString_t`    | Description                                         |
+| ----------------------------------- | --------------------------------------------------- |
+| `PanelIdIndex` (`ushort`)           | Index into `CCSCustomHudLayout.PanelIds`            |
+| `DialogVariableIndex` (`ushort`)    | Index into `CCSCustomHudLayout.DialogVariableNames` |
+| `Value` (`string`)                  | The value to show                                   |
+| `IsSet` (`bool`)                    | Whether the override is set                         |
+
+| `HUDPanelHasClass_t`                    | Description                              |
+| --------------------------------------- | ---------------------------------------- |
+| `PanelIdIndex` (`ushort`)               | Index into `CCSCustomHudLayout.PanelIds` |
+| `ClassNameIndex` (`ushort`)             | Index into `CCSCustomHudLayout.ClassNames` |
+| `ClassStatus` (`EHudPanelClassStatus_t`) | Whether the panel has the class          |
+
+The methods in the sections below take the `panelId`, `variableName` and `className` strings directly, so you rarely need these indices yourself.
+
 ## Dynamic Strings
 
 `text1` is the XML element's `id`, `dynamic` is the variable name in `{s:dynamic}`. Getters return `null` if unset; a per-player override never falls back to the global value, and removing it reverts the player to the global value.
