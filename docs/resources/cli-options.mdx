@@ -16,15 +16,17 @@ SwiftlyS2 startup behavior can be configured with command-line options passed wh
 
 ## Options Reference
 
-| Option                     | Example                             | Details                                                                                                        |
-| -------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `-sw_path`                 | `-sw_path addons/swiftlys2`         | Relative path from `game/csgo` where SwiftlyS2 is located. Default: `addons/swiftlys2`.                        |
-| `-sw_logpath`              | `-sw_logpath addons/swiftlys2/logs` | Relative path from `game/csgo` where logs are stored. Default: `addons/swiftlys2/logs`.                        |
-| `-sw_hide_logs_in_console` | `-sw_hide_logs_in_console 1`        | Disables plugin logs in console. Accepted values: `1`, `TRUE`, `YES`.                                          |
-| `-sw_loglevel`             | `-sw_loglevel WARNING`              | Minimum log level shown in console. Default: all. Accepted values: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `OFF`. |
+| Option                     | Example                             | Details                                                                                                                                   |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `-sw_path`                 | `-sw_path addons/swiftlys2`         | Relative path from `game/csgo` where SwiftlyS2 is installed. Default: `addons/swiftlys2`.                                                  |
+| `-sw_logpath`              | `-sw_logpath addons/swiftlys2/logs` | Relative path from `game/csgo` where managed plugin logs are written. Default: `addons/swiftlys2/logs`.                                    |
+| `-sw_hide_logs_in_console` | `-sw_hide_logs_in_console 1`        | Hides plugin logs in console; they are still written to files. Accepted values: `1`, `TRUE`, `YES`.                                        |
+| `-sw_loglevel`             | `-sw_loglevel WARNING`              | Minimum log level for console output. Default: `INFO`. Accepted values: `TRACE`, `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`, `NONE`. |
 
 ## Notes
 
-- `-sw_path` and `-sw_logpath` are relative to the `game/csgo` directory.
-- Use `-sw_hide_logs_in_console` when you want plugin logs to remain in files but not in console output.
-- Use `-sw_loglevel` to reduce console noise while preserving higher-severity logs.
+- `-sw_path` and `-sw_logpath` are relative to the `game/csgo` directory, and a trailing slash is added automatically.
+- `-sw_logpath` only affects the managed (.NET) log directory; console logs are always written to `logs/` inside the `-sw_path` directory.
+- Use `-sw_hide_logs_in_console` when you want plugin logs to remain in files but not in console output. Logs from the `Core` and `Shared` categories are still printed.
+- Use `-sw_loglevel` to reduce console noise while preserving higher-severity logs. Values are case-insensitive and unrecognized values fall back to `INFO`; the managed logger also accepts `OFF`.
+- Both logging options are applied once at startup: `-sw_loglevel` sets `SWIFTLY_LOG_LEVEL` and `-sw_hide_logs_in_console` sets `SWIFTLY_HIDE_LOG_IN_CONSOLE`.
