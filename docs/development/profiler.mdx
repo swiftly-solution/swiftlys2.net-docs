@@ -4,11 +4,13 @@ title: Profiler
 
 SwiftlyS2's profiler service measures execution time in plugin code and records custom duration metrics.
 
-Access it through `Core.Profiler` (<ApiRef name="ISwiftlyCore" member="Profiler" />).
+Access it through `Core.Profiler` (<ApiRef name="ISwiftlyCore" member="Profiler" />, type <ApiRef name="IContextedProfilerService" />).
 
 ## Measuring Code Blocks
 
 Pair <ApiRef name="IContextedProfilerService" member="StartRecording" />/<ApiRef name="IContextedProfilerService" member="StopRecording" /> around the code, wrapped in `try`/`finally` so an exception doesn't leave a recording open.
+
+Both take the recording name as a `string`, so pass the same name to `StopRecording` that you passed to `StartRecording`:
 
 ```csharp
 Core.Profiler.StartRecording("Database.PlayerStats.Load");
@@ -24,7 +26,7 @@ finally
 
 ## Recording Precomputed Durations
 
-Use <ApiRef name="IContextedProfilerService" member="RecordTime" /> for a duration you already measured (`double`, microseconds).
+Use <ApiRef name="IContextedProfilerService" member="RecordTime" /> for a duration you already measured - the second parameter is a `double` in microseconds.
 
 ```csharp
 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -69,6 +71,18 @@ category.operation.detail
 Examples: `Database.Players.Load`, `Database.Players.Save`, `Menu.Main.Build`, `Menu.Main.Open`, `Commands.Teleport.Execute`, `Events.PlayerSpawn.Process`.
 
 Avoid generic names like `Operation` or `Process` - they make hot spots hard to trace back to real code.
+
+## Members
+
+<ApiRef name="IContextedProfilerService" /> has three members, all `void`:
+
+| Member                                                              | Signature                                             | Description                                                     |
+| ------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------- |
+| <ApiRef name="IContextedProfilerService" member="StartRecording" /> | `void StartRecording(string name)`                    | Starts a recording under `name`                                 |
+| <ApiRef name="IContextedProfilerService" member="StopRecording" />  | `void StopRecording(string name)`                     | Stops the recording started under `name`                        |
+| <ApiRef name="IContextedProfilerService" member="RecordTime" />     | `void RecordTime(string name, double duration)`       | Records `duration` for `name` without a start/stop pair         |
+
+All three return `void`: the service is write-only, and none of its members read a recording back or report its current state.
 
 ## Reference
 

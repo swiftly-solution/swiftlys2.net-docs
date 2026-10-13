@@ -6,7 +6,7 @@ Shared API lets plugins expose typed interfaces that other plugins can consume a
 
 ## Shared Interface Lifecycle
 
-Shared API integration happens through three <ApiRef name="BasePlugin" /> callbacks, called in this order across every loaded plugin:
+Shared API integration happens through three <ApiRef name="BasePlugin" /> callbacks, called in this order across every loaded plugin. They are declared by <ApiRef name="IPlugin" /> and implemented as `virtual` no-ops on <ApiRef name="BasePlugin" />, so override only the ones you need:
 
 - <ApiRef name="BasePlugin" member="ConfigureSharedInterface" />: register the
   interfaces your plugin provides. Runs for every plugin first.
@@ -39,6 +39,8 @@ public override void ConfigureSharedInterface(IInterfaceManager interfaceManager
 }
 ```
 
+`TInterface` is what consumers resolve and `TImpl` the concrete implementation registered under the key, so `AddSharedInterface` requires `TInterface` to be a class and `TImpl` to be a class implementing it (`where TInterface : class`, `where TImpl : class, TInterface`).
+
 <Callout type="info">
     The interface type (`IEconomyApi` here) needs to live somewhere both plugins
     can reference - typically a small contracts-only assembly the provider ships
@@ -48,9 +50,11 @@ public override void ConfigureSharedInterface(IInterfaceManager interfaceManager
 ## Consuming Shared Interfaces
 
 <ApiRef name="IInterfaceManager" member="TryGetSharedInterface" /> is preferred
-for optional dependencies (returns `false` instead of throwing);
-<ApiRef name="IInterfaceManager" member="GetSharedInterface" /> throws if the
-key isn't registered, for mandatory dependencies;
+for optional dependencies - it returns `false` instead of failing, and leaves
+the out parameter `null` when the key isn't registered;
+<ApiRef name="IInterfaceManager" member="GetSharedInterface" /> returns the
+interface directly and doesn't report a missing key, so use it for mandatory
+dependencies whose provider is always present;
 <ApiRef name="IInterfaceManager" member="HasSharedInterface" /> is a quick
 presence check.
 
@@ -66,6 +70,17 @@ public override void UseSharedInterface(IInterfaceManager interfaceManager)
 // Mandatory dependency: IEconomyApi economyApi = interfaceManager.GetSharedInterface<IEconomyApi>("Economy.Api.v1");
 // Presence check: bool hasEconomy = interfaceManager.HasSharedInterface("Economy.Api.v1");
 ```
+
+### <ApiRef name="IInterfaceManager" /> Members
+
+`TInterface` is `class`-constrained on every generic member:
+
+| Member                                                             | Signature                                                                                 | Returns                                                                     |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| <ApiRef name="IInterfaceManager" member="AddSharedInterface" />     | `void AddSharedInterface<TInterface, TImpl>(string key, TImpl implInstance)`               | -                                                                           |
+| <ApiRef name="IInterfaceManager" member="TryGetSharedInterface" />  | `bool TryGetSharedInterface<TInterface>(string key, out TInterface? instance)`             | `true` when the key is registered; `instance` is then non-null (annotated `[NotNullWhen(true)]`) |
+| <ApiRef name="IInterfaceManager" member="GetSharedInterface" />     | `TInterface GetSharedInterface<TInterface>(string key)`                                    | the implementation registered under `key`                                   |
+| <ApiRef name="IInterfaceManager" member="HasSharedInterface" />     | `bool HasSharedInterface(string key)`                                                      | whether a key is registered                                                 |
 
 ## Complete Example
 

@@ -43,6 +43,14 @@ MyPlugin/
 
 `examples/` is excluded from compilation by default (`<Compile Remove="examples\**\*.cs" />`) - it's reference material, not part of your plugin.
 
+<Callout type="info">
+    `resources/gamedata`, `resources/templates` and `resources/translations`
+    copy to the output directory on build. Each plugin manages its own
+    `resources/gamedata`, independently from others.
+</Callout>
+
+A freshly generated project may not reference the latest release - bump it in your `.csproj` if needed: `<PackageReference Include="SwiftlyS2.CS2" Version="*" ExcludeAssets="runtime" PrivateAssets="all" />`. `*` tracks latest stable; pin a version (e.g. `1.0.3`) for reproducible builds, or use `*-*` for preview releases.
+
 Main plugin class:
 
 ```csharp
@@ -68,15 +76,70 @@ public partial class MyPlugin : BasePlugin
 }
 ```
 
-`ConfigureSharedInterface`/`UseSharedInterface` on <ApiRef name="BasePlugin" /> (see [Shared API](/docs/development/shared-api)) can be overridden the same way once you need them.
+### Plugin Metadata
 
-<Callout type="info">
-    `resources/gamedata`, `resources/templates` and `resources/translations`
-    copy to the output directory on build. Each plugin manages its own
-    `resources/gamedata`, independently from others.
-</Callout>
+`[PluginMetadata]` supplies the metadata SwiftlyS2 reports for your plugin, at runtime through <ApiRef name="IPluginManager" member="GetPluginMetadata" /> and <ApiRef name="IPluginManager" member="GetAllPluginMetadata" />. `Id` and `Version` are required; `Name` falls back to `Id` when it isn't set, and the other properties have defaults:
 
-A freshly generated project may not reference the latest release - bump it in your `.csproj` if needed: `<PackageReference Include="SwiftlyS2.CS2" Version="*" ExcludeAssets="runtime" PrivateAssets="all" />`. `*` tracks latest stable; pin a version (e.g. `1.0.3`) for reproducible builds, or use `*-*` for preview releases.
+| Property            | Required | Default                     |
+| ------------------- | -------- | --------------------------- |
+| `Id`                | yes      | -                           |
+| `Version`           | yes      | -                           |
+| `Name`              | no       | the value of `Id`           |
+| `Author`            | no       | `"Anonymous"`               |
+| `Description`       | no       | `"No further description."` |
+| `Website`           | no       | empty string                |
+| `MinimumAPIVersion` | no       | `"0.0.0"`                   |
+
+See <ApiRef name="PluginMetadata" /> for the full member list.
+
+### Plugin Lifecycle
+
+Your plugin class derives from <ApiRef name="BasePlugin" /> (which implements <ApiRef name="IPlugin" />) and takes <ApiRef name="ISwiftlyCore" /> as a constructor parameter. <ApiRef name="BasePlugin" /> stores it in the protected `Core` property, which only the base constructor assigns - derived classes read it (see [Swiftly Core](/docs/development/swiftly-core)).
+
+`Load` and `Unload` are abstract and must both be overridden. The remaining callbacks are `virtual` no-ops, overridden only when you need them:
+
+| Member                                         | Called                                                                                                                                       |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Load(bool hotReload)`                         | when the plugin is loaded. `hotReload` is `true` when the plugin is loaded as part of a reload rather than the server's initial load of it.   |
+| `Unload()`                                     | when the plugin is unloaded - also in a hot reload, before `Load` runs again. Undo everything you set up in `Load`.                           |
+| `ConfigureSharedInterface(IInterfaceManager)`  | to register the interfaces your plugin provides, see [Shared API](/docs/development/shared-api).                                              |
+| `UseSharedInterface(IInterfaceManager)`        | to resolve interfaces provided by other plugins.                                                                                             |
+| `OnSharedInterfaceInjected(IInterfaceManager)` | once shared interfaces have been resolved.                                                                                                   |
+| `OnAllPluginsLoaded()`                         | once every plugin on the server has finished loading.                                                                                         |
+
+```csharp
+public override void Load(bool hotReload)
+{
+    Core.Logger.LogInformation("Loaded. Hot reload: {HotReload}", hotReload);
+}
+
+public override void Unload()
+{
+    // Release anything you set up in Load.
+}
+
+public override void ConfigureSharedInterface(IInterfaceManager interfaceManager)
+{
+    // Register the interfaces this plugin provides.
+}
+```
+
+The three shared interface callbacks run in the order listed above, and they re-run whenever the plugin set changes - don't assume they only fire once at startup. See [Shared API](/docs/development/shared-api) for what to do inside each of them.
+
+### Injecting Services into the Plugin
+
+Besides the constructor, a service can be injected into a member: <ApiRef name="SwiftlyInject" /> (`SwiftlyS2.Shared`) applies to fields and properties, and SwiftlyS2 assigns the service to the marked member.
+
+```csharp
+public partial class MyPlugin : BasePlugin
+{
+    [SwiftlyInject] private ICommandService _commands = null!;
+
+    public MyPlugin(ISwiftlyCore core) : base(core)
+    {
+    }
+}
+```
 
 ## Publishing
 

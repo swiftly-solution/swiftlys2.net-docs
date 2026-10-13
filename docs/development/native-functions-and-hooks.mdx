@@ -8,13 +8,13 @@ title: Native Functions and Hooks
     crash the game server. Test on a disposable server first.
 </Callout>
 
-Native interop splits across two services: `Core.GameData` (<ApiRef name="IGameDataService" />) resolves named signatures/offsets shipped with your plugin, `Core.Memory` (<ApiRef name="IMemoryService" />) turns raw addresses into callable, hookable functions (or raw memory to mid-hook directly).
+Native interop splits across three services: `Core.GameData` (<ApiRef name="IGameDataService" />) resolves named signatures/offsets/patches shipped with your plugin, `Core.Memory` (<ApiRef name="IMemoryService" />) turns raw addresses into callable, hookable functions (or raw memory to mid-hook directly), and `Core.GameHooks` (<ApiRef name="IGameHooks" />) wraps the common engine callbacks in typed categories.
 
 ## Resolving Addresses
 
 ### From Your Plugin's GameData
 
-Each plugin ships its own `resources/gamedata/*.jsonc` with signatures/offsets per platform, keyed by name. Look them up with `TryGetSignature`/`TryGetOffset`:
+Each plugin ships its own `resources/gamedata/*.jsonc` with signatures, offsets and patches per platform, keyed by name - signatures in `signatures.jsonc`, offsets in `offsets.jsonc` and byte patches in `patches.jsonc`. Look them up with `TryGetSignature`/`TryGetOffset`:
 
 ```csharp
 if (!Core.GameData.TryGetSignature("CBaseEntity::DispatchSpawn", out nint dispatchSpawnAddress))
@@ -29,6 +29,22 @@ if (!Core.GameData.TryGetOffset("CCSPlayer_ItemServices::GiveNamedItem", out nin
 }
 ```
 
+The full <ApiRef name="IGameDataService" /> surface:
+
+| Member                                             | Returns | Defined in         |
+| -------------------------------------------------- | ------- | ------------------ |
+| `HasSignature(string signatureName)`               | `bool`  | `signatures.jsonc` |
+| `GetSignature(string signatureName)`               | `nint`  | `signatures.jsonc` |
+| `TryGetSignature(string signatureName, out nint)`  | `bool`  | `signatures.jsonc` |
+| `HasOffset(string offsetName)`                     | `bool`  | `offsets.jsonc`    |
+| `GetOffset(string offsetName)`                     | `int`   | `offsets.jsonc`    |
+| `TryGetOffset(string offsetName, out nint)`        | `bool`  | `offsets.jsonc`    |
+| `HasPatch(string patchName)`                       | `bool`  | `patches.jsonc`    |
+| `ApplyPatch(string patchName)`                     | `void`  | `patches.jsonc`    |
+| `RevertPatch(string patchName)`                    | `void`  | `patches.jsonc`    |
+
+`GetOffset` hands the offset back as an `int`, `TryGetOffset` as an `nint`.
+
 ### From a Raw Pattern or VTable Name
 
 `Core.Memory` can also scan a library directly, skipping gamedata entirely:
@@ -40,7 +56,44 @@ nint? interfaceAddress = Core.Memory.GetInterfaceByName("VEngineServer");
 ```
 
 <ApiRef name="Library" /> exposes the module names used by these lookups:
-`Library.Engine`, `Library.Tier0`, `Library.Server`, `Library.NetworkSystem`.
+
+| Member                  | Module          |
+| ----------------------- | --------------- |
+| `Library.Engine`        | `engine2`       |
+| `Library.Tier0`         | `tier0`         |
+| `Library.Server`        | `server`        |
+| `Library.NetworkSystem` | `networksystem` |
+
+### Other Memory Helpers
+
+The same service resolves cross-references, inspects object pointers, converts raw addresses and allocates memory:
+
+```csharp
+nint resolved = Core.Memory.ResolveXrefAddress(xrefAddress);
+
+string? vtableName = Core.Memory.GetObjectPtrVtableName(entityAddress);
+bool hasVTable = Core.Memory.ObjectPtrHasVtable(entityAddress);
+bool isBaseEntity = Core.Memory.ObjectPtrHasBaseClass(entityAddress, "CBaseEntity");
+
+CBaseEntity entity = Core.Memory.ToSchemaClass<CBaseEntity>(entityAddress);
+IServerSideClient client = Core.Memory.ToServerSideClient(clientAddress);
+
+nint block = Core.Memory.Alloc(64);
+block = Core.Memory.Resize(block, 128);
+Core.Memory.Free(block);
+```
+
+| Member                                                      | Returns                                        |
+| ----------------------------------------------------------- | ---------------------------------------------- |
+| `ResolveXrefAddress(nint xrefAddress)`                      | `nint`, the address the xref points at         |
+| `GetObjectPtrVtableName(nint address)`                      | `string?`, `null` when not found               |
+| `ObjectPtrHasVtable(nint address)`                          | `bool`                                         |
+| `ObjectPtrHasBaseClass(nint address, string baseClassName)` | `bool`                                         |
+| `ToSchemaClass<T>(nint address)`                            | `T`, where `T : class, ISchemaClass<T>`        |
+| `ToServerSideClient(nint address)`                          | <ApiRef name="IServerSideClient" />            |
+| `Alloc(ulong size)`                                         | `nint`, the address of the allocated block     |
+| `Resize(nint pointer, ulong newSize)`                       | `nint`, the address of the resized block       |
+| `Free(nint pointer)`                                        | `void`                                         |
 
 ## Declaring a Delegate
 
@@ -53,7 +106,7 @@ private delegate nint DispatchSpawnDelegate(nint pEntity, nint pKeyValues);
 
 ## Wrapping and Calling It
 
-Wrap by address or by vtable + index; the resulting <ApiRef name="IUnmanagedFunction`1" /> exposes two delegate-typed members: `Call` (goes through any installed hooks) and `CallOriginal` (skips the hook chain).
+Wrap by address or by vtable + index; the resulting <ApiRef name="IUnmanagedFunction`1" /> exposes `Address` (`nint`) and two delegate-typed members: `Call` (goes through any installed hooks) and `CallOriginal` (skips the hook chain).
 
 ```csharp
 IUnmanagedFunction<DispatchSpawnDelegate> func =
@@ -62,13 +115,14 @@ IUnmanagedFunction<DispatchSpawnDelegate> func =
 ```
 
 ```csharp
+nint address = func.Address;
 nint result = func.Call(pEntity, pKeyValues);
 nint resultUnhooked = func.CallOriginal(pEntity, pKeyValues);
 ```
 
 ## Hooking It
 
-`AddHook` takes a builder that receives "the next function in the chain" and must return your replacement delegate. Skipping `next()` skips the original call entirely.
+`AddHook` takes a builder that receives "the next function in the chain" and must return your replacement delegate. Skipping `next()` skips the original call entirely. It returns the hook's `Guid`, which `RemoveHook` takes.
 
 ```csharp
 Guid hookId = func.AddHook(next =>
@@ -108,11 +162,34 @@ Guid midHookId = mem.AddHook((ref MidHookContext ctx) =>
 mem.RemoveHook(midHookId);
 ```
 
-See <ApiRef name="MidHookContext" /> for the full register list - every general-purpose register (`RAX`-`R15`, `RSP`, `RBP`, `RIP`, `RFLAGS`, plus the internal `TRAMPOLINE_RSP`) and `XMM0`-`XMM15` as `Xmm` structs (`.U32`/`.U64`/`.F32`/`.F64`).
+`AddHook` here takes a <ApiRef name="MidHookDelegate" /> (`void (ref MidHookContext)`) and returns a `Guid`, and the wrapper exposes `Address`. See <ApiRef name="MidHookContext" /> for the full register list - every general-purpose register (`RAX`, `RBX`, `RCX`, `RDX`, `RSI`, `RDI`, `RBP`, `RSP`, `R8`-`R15`, `RIP`, `RFLAGS`, plus the internal `TRAMPOLINE_RSP`) and `XMM0`-`XMM15` as <ApiRef name="Xmm" /> structs (fixed buffers `U8`, `U16`, `U32`, `U64`, `F32`, `F64`).
+
+## Hook Modes and Results
+
+<ApiRef name="HookMode" /> picks when a hook runs, <ApiRef name="HookResult" /> tells the framework what to do with the call afterwards:
+
+| Value           | Number | When it runs                        |
+| --------------- | ------ | ----------------------------------- |
+| `HookMode.Pre`  | `0`    | Before the game processes the call. |
+| `HookMode.Post` | `1`    | After the game processed the call.  |
+
+| Value                       | Number | Effect                                                           |
+| --------------------------- | ------ | ---------------------------------------------------------------- |
+| `HookResult.Continue`       | `0`    | Following hooks and the original function run.                   |
+| `HookResult.Stop`           | `1`    | Following hooks and the original function are cancelled.         |
+| `HookResult.Handled`        | `2`    | Following hooks are cancelled, the original function still runs. |
+| `HookResult.CancelOriginal` | `3`    | Following hooks run, the original function is cancelled.         |
+
+<Callout type="warning">
+    `Stop` and `Handled` have no effect in post hooks - the original function
+    has already run by the time they are set.
+</Callout>
+
+Delegate-based hooks such as `Core.GameEvent` and the client command/chat and net message hooks return the result from the handler. Game hooks below take it on the context with `SetHookResult(HookResult)` instead, and hooks whose native function returns a value expose that separately: `SetReturn(...)` in a `Pre` context, and a settable `Return` on the matching `Post` context.
 
 ## Higher-Level Alternative: Game Hooks
 
-For common engine callbacks, `Core.GameHooks` (<ApiRef name="IGameHooks" />) wraps the vtable-hook plumbing above into typed categories with separate `Pre`/`Post` delegates - no manual delegate/signature bookkeeping. Example, hooking entity damage via <ApiRef name="ITakeDamageEntityHook" />:
+`Core.GameHooks` (<ApiRef name="IGameHooks" />) wraps the vtable-hook plumbing above into typed categories with separate `Pre`/`Post` delegates - no manual delegate/signature bookkeeping. Example, hooking entity damage via <ApiRef name="ITakeDamageEntityHook" />:
 
 ```csharp
 private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
@@ -127,4 +204,65 @@ private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
 Core.GameHooks.Entities.TakeDamage.Pre += OnTakeDamagePre;
 ```
 
-Check `Core.GameHooks`'s categories (`Controller`, `Movement`, `Entities`, `Items`, `Weapons`, `Pawn`, and more) before reaching for a raw vtable hook.
+The same handler can be registered by attribute instead. <ApiRef name="GameHookHandler" /> takes the mode in its constructor, sits on a method whose signature matches the hook's delegate, and allows one attribute per method (`AllowMultiple = false`); the methods are discovered on registered instances - see [Using Attributes](/docs/development/using-attributes):
+
+```csharp
+[GameHookHandler(HookMode.Pre)]
+private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
+{
+    // ctx.SetHookResult(HookResult.Stop); // to block the damage
+}
+```
+
+### Categories
+
+| Category   | Access path                 | Hooks                                                                                                                                                                                                                                                                                                                                                        |
+| ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Controller | `Core.GameHooks.Controller` | `ProcessUsercmds`, `SimulateUserCommands`                                                                                                                                                                                                                                                                                                                    |
+| Entities   | `Core.GameHooks.Entities`   | `TakeDamage`, `StartTouch`, `Touch`, `EndTouch`, `AcceptInput`, `FireOutput`                                                                                                                                                                                                                                                                                 |
+| Items      | `Core.GameHooks.Items`      | `CanAcquire`                                                                                                                                                                                                                                                                                                                                                 |
+| Movement   | `Core.GameHooks.Movement`   | `RunCommand`, `SetupMove`, `ProcessMovement`, `CheckFalling`, `CategorizePosition`, `TryPlayerMove`, `WalkMove`, `Friction`, `AirAccelerate`, `AirMove`, `OnJumpModern`, `OnJumpLegacy`, `CheckJumpButtonModern`, `CheckJumpButtonLegacy`, `LadderMove`, `CanUnduck`, `Duck`, `CheckVelocity`, `WaterMove`, `CheckWater`, `MoveInit`, `FullWalkMove`, `CheckParameters`, `PlayerMove`, `GroundAccelerate` |
+| Pawn       | `Core.GameHooks.Pawn`       | `PostThink`, `CanMove`                                                                                                                                                                                                                                                                                                                                       |
+| Weapons    | `Core.GameHooks.Weapons`    | `Drop`, `CanUse`                                                                                                                                                                                                                                                                                                                                             |
+| Datamaps   | `Core.GameHooks.Datamaps`   | Datamap (`think`/`touch`/`use`) function hooks, grouped by owning schema class                                                                                                                                                                                                                                                                                |
+
+### Hook Params
+
+Every hook has a `Pre` and a `Post` context, both carrying a `Params` field with the arguments of the call:
+
+| Hook                                        | `Params` members                                                                                                                                                                                                                                                         |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Controller.ProcessUsercmds`                | `Player` (`IPlayer`), `Usercmds` (`List<IUserCmd>`), `Paused` (`bool`), `Margin` (`float`)                                                                                                                                                                               |
+| `Controller.SimulateUserCommands`           | `Player` (`IPlayer`)                                                                                                                                                                                                                                                    |
+| `Entities.TakeDamage`                       | `Entity` (`CBaseEntity`), `Info` (`ref CTakeDamageInfo`), `DamageResult` (`CTakeDamageResult*`, may be null)                                                                                                                                                             |
+| `Entities.StartTouch` / `Touch` / `EndTouch` | `Entity` and `OtherEntity` (both `CBaseEntity`)                                                                                                                                                                                                                        |
+| `Entities.AcceptInput`                      | `Identity` (`CEntityIdentity`), `EntityInstance` (`CEntityInstance`), `DesignerName` (`string`), `InputName` (`string`), `Activator` and `Caller` (both `CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `OutputId` (`int`)                |
+| `Entities.FireOutput`                       | `EntityIO` (`ref CEntityIOOutput`), `DesignerName` (`string`), `OutputName` (`string`), `Activator` and `Caller` (both `CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `Delay` (`float`)                                                 |
+| `Items.CanAcquire`                          | `Player` (`IPlayer`), `EconItemView` (`CEconItemView`), `WeaponVData` (`CCSWeaponBaseVData?`), `AcquireMethod` (<ApiRef name="AcquireMethod" />)                                                                                                                        |
+| `Pawn.PostThink` / `CanMove`                | `Player` (`IPlayer`)                                                                                                                                                                                                                                                    |
+| `Weapons.Drop`                              | `Player` (`IPlayer`), `Weapon` (`CBasePlayerWeapon?`), `SwappingWeapon` (`bool`)                                                                                                                                                                                        |
+| `Weapons.CanUse`                            | `Player` (`IPlayer`), `Weapon` (`CCSWeaponBase`)                                                                                                                                                                                                                        |
+| `Movement.RunCommand`                       | `Player` (`IPlayer`), `UserCmd` (<ApiRef name="IUserCmd" />)                                                                                                                                                                                                            |
+| `Movement.SetupMove`                        | `Player` (`IPlayer`), `UserCmd` (<ApiRef name="IUserCmd" />), `MoveData` (<ApiRef name="IMoveData" />)                                                                                                                                                                   |
+| every other `Movement` hook                 | `Player` (`IPlayer`), `MoveData` (<ApiRef name="IMoveData" />)                                                                                                                                                                                                           |
+
+Some hooks carry extra settable params: `Movement.AirAccelerate` adds `WishDirection` (`Vector`), `WishSpeed` (`float`) and `Acceleration` (`float`), `Movement.GroundAccelerate` adds `WishDirection`, `FrameTime` (`float`, read-only), `WishSpeed` and `Acceleration`, `Movement.CategorizePosition` a `StayOnGround` (`bool`), and `Movement.FullWalkMove` a `Ground` (`bool`).
+
+`IMoveData` and `IUserCmd` wrap native pointers - `IMoveData.From(address)` and `IUserCmd.From(address)` build one from an address, and `Address`/`TypedAddress` are exposed back.
+
+### Return Values
+
+Hooks whose original function returns a value expose it on the context:
+
+| Hook                                 | Return type     | Set it in `Pre`      | Read/overwrite it in `Post` |
+| ------------------------------------ | --------------- | -------------------- | --------------------------- |
+| `Core.GameHooks.Items.CanAcquire`    | `AcquireResult` | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Weapons.CanUse`      | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Pawn.CanMove`        | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.CanUnduck`  | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.LadderMove` | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.MoveInit`   | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.PlayerMove` | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.CheckWater` | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+
+Every other hook has no return value - use `SetHookResult(HookResult.CancelOriginal)` when you need to stop the original call.
