@@ -295,13 +295,194 @@ var menu = Core.Menu.CreateMenu("myplugin.info")
     .Build();
 ```
 
-Components produce a tree of <ApiRef name="MenuNode" /> values (`MenuTextNode`, `MenuLineNode`, `MenuStackNode`, `MenuBlankNode`, `MenuSelectionNode`, `MenuRawNode`) instead of markup, which is why every component works on every renderer. A plugin can add a renderer by implementing <ApiRef name="IMenuRenderer" /> and registering it with `Core.Menu.Renderers.Register(renderer)`, and can teach a renderer to draw a specific component type with <ApiRef name="IComponentRenderer" /> and `RegisterComponentRenderer`. Both registrations are released when your plugin unloads.
+Components produce a tree of <ApiRef name="MenuNode" /> values (`MenuTextNode`, `MenuLineNode`, `MenuStackNode`, `MenuBlankNode`, `MenuSelectionNode`, `MenuRawNode`) instead of markup, which is why every component works on every renderer. A plugin can add its own renderer, see [Custom Renderers](#custom-renderers).
+
+## Custom Renderers
+
+A renderer turns a composed frame into output and delivers it to the player. It never looks at concrete component types, only at <ApiRef name="MenuNode" /> trees, so a custom renderer can draw every built-in component and every custom one.
+
+### Implementing IMenuRenderer
+
+<ApiRef name="IMenuRenderer" /> has an `Id`, a `Render` method and a `Clear` method:
+
+```csharp
+using SwiftlyS2.Shared.Menu;
+using SwiftlyS2.Shared.Players;
+
+public sealed class PlainChatRenderer : IMenuRenderer
+{
+    public string Id => "myplugin.plain";
+
+    public void Render(IMenuRenderContext context)
+    {
+        var frame = context.Frame;
+        var player = context.Player;
+
+        foreach (var node in frame.Header.Concat(frame.Body).Concat(frame.Footer))
+        {
+            foreach (var line in Flatten(node, context))
+            {
+                player.SendChat(line);
+            }
+        }
+    }
+
+    public void Clear(IPlayer player)
+    {
+        // Nothing persistent on screen, so nothing to remove.
+    }
+
+    private static IEnumerable<string> Flatten(MenuNode node, IMenuRenderContext context)
+    {
+        switch (node)
+        {
+            case MenuTextNode text:
+                yield return text.Text;
+                break;
+
+            case MenuLineNode line:
+                yield return string.Concat(line.Children.SelectMany(c => Flatten(c, context)));
+                break;
+
+            case MenuStackNode stack:
+                foreach (var line in stack.Children.SelectMany(c => Flatten(c, context)))
+                {
+                    yield return line;
+                }
+                break;
+
+            case MenuBlankNode blank:
+                for (var i = 0; i < blank.Lines; i++)
+                {
+                    yield return " ";
+                }
+                break;
+
+            case MenuSelectionNode selection:
+                yield return selection.Focused ? ">" : " ";
+                break;
+
+            case MenuRawNode raw when raw.RendererId == "myplugin.plain":
+                yield return raw.Payload;
+                break;
+
+            case MenuRawNode:
+                break; // aimed at another renderer, ignore it
+
+            default:
+                context.ReportUnsupported(node);
+                break;
+        }
+    }
+}
+```
+
+Register it from your plugin, then select it by id like any other renderer:
+
+```csharp
+public override void Load(bool hotReload)
+{
+    _renderer = Core.Menu.Renderers.Register(new PlainChatRenderer());
+}
+
+public override void Unload()
+{
+    _renderer?.Dispose(); // optional, released on unload anyway
+}
+
+var menu = Core.Menu.CreateMenu("myplugin.info")
+    .WithRenderer("myplugin.plain")
+    .WithTitle("Info")
+    .Build();
+```
+
+- `Register` returns an `IDisposable`; disposing it removes the renderer. Registering an id that already exists replaces the old renderer.
+- Registrations made through `Core.Menu` are released when your plugin unloads.
+- Use a plugin-namespaced id (`"myplugin.plain"`) so it never clashes with another plugin or with `MenuRendererIds`.
+- A menu that asks for an unregistered id fails in `Build()`. The server owner can also force your renderer on any menu with `"Renderer": "myplugin.plain"` in `menus.jsonc`.
 
 <Callout type="warning">
     `IMenuRenderer.Render` runs on a dedicated background thread, not the game
     thread. Use only the data in the render context and calls that are safe off
-    the game thread. `Clear` runs on the game thread.
+    the game thread, such as sending text to the client. Never reach back into
+    live player, controller or pawn state. `Clear` runs on the game thread.
 </Callout>
+
+### The Render Context
+
+<ApiRef name="IMenuRenderContext" /> carries everything a frame needs:
+
+| Member                | Description                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------- |
+| `Frame`               | The composed <ApiRef name="MenuFrame" />: `Header`, `Body` and `Footer` node lists.               |
+| `Menu`, `Session`     | The menu and the player's session being drawn.                                                    |
+| `Player`              | The player the frame is for.                                                                      |
+| `ReportUnsupported(node)` | Reports a node you cannot draw. Deduplicated per renderer and node type, so it is safe to call every frame. |
+
+### Header, Body and Footer
+
+A frame is split into three regions. The split is made by the menu, never by the renderer: components are placed in a region when added (`AddHeader` / `WithTitle`, `Add`, `AddFooter`, or `MenuRegion` with `menu.Add` / `menu.Insert`), and the renderer receives one node list per region.
+
+| Region   | `Frame` property | Behaviour                                                                                                              |
+| -------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Header   | `Header`         | Pinned above the body. Never scrolls, never takes focus. Holds the title by default.                                   |
+| Body     | `Body`           | The scrolling part. Already reduced to the visible page. Focusable entries carry a `MenuSelectionNode` marker slot.    |
+| Footer   | `Footer`         | Pinned below the body. Never scrolls, never takes focus. Holds action key hints and the focused component's `Comment`. |
+
+- Draw the regions top to bottom: header, body, footer. Keep the header and footer visible on every page.
+- Only the body is paged. `MaxVisibleLines` and `WithItemsPerPage` limit body entries, so header and footer lines are extra.
+- A region can be empty. Draw nothing for it, not a blank gap.
+- Visibility is already applied: components hidden by `Visible` / `VisibleWhen` are absent from the lists.
+
+By the time `Render` is called, focus, paging and visibility are already resolved. `Frame.Body` holds only the visible page, `Frame.PageOffset` is the index of its first entry and `Frame.TotalItems` the number of focusable entries across all pages, which is enough to draw a page indicator.
+
+### Node Types
+
+| Node                                  | Meaning                                                                                                                          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="MenuTextNode" />        | A run of text with a <ApiRef name="MenuTextStyle" /> (`Color` as hex, `Bold`, `Size`).                                           |
+| <ApiRef name="MenuLineNode" />        | `Children` laid out horizontally on one line.                                                                                    |
+| <ApiRef name="MenuStackNode" />       | `Children` stacked vertically, one per line.                                                                                     |
+| <ApiRef name="MenuBlankNode" />       | `Lines` of empty vertical space.                                                                                                 |
+| <ApiRef name="MenuSelectionNode" />   | The selection marker slot of a body entry. `Focused` says if it holds the selection, `Number` is the `!n` value under `Chat` input (`0` when not numbered). The renderer chooses the indicator. |
+| <ApiRef name="MenuRawNode" />         | `Payload` aimed at one `RendererId`. Ignore raw nodes addressed to another renderer.                                             |
+
+Rules for a well-behaved renderer:
+
+- Skip a node type you do not understand and call `ReportUnsupported`. Never throw, since new node types can appear.
+- Map `MenuTextSize` (`ExtraSmall` to `ExtraLarge`) and colours onto whatever your output supports, or ignore them.
+- Pair your renderer with an input method: menus drawn by the `chat` renderer default to `MenuInputMethod.Chat`, every other renderer defaults to `Buttons`. If your output shows `!1`, `!2`, ... numbers, call `WithInputMethod(MenuInputMethod.Chat)` on the menu, or add a `WithInputMethodSource`.
+- Frames are sent only when a session is invalidated, so a renderer does not need its own refresh loop.
+- Remove anything you keep on screen in `Clear`. It runs when the session closes.
+
+### Component Renderers
+
+Components draw themselves through `Render`. To give one component type richer output on one particular renderer, implement <ApiRef name="IComponentRenderer" /> and register it:
+
+```csharp
+public sealed class SliderPlainRenderer : IComponentRenderer
+{
+    public string RendererId => "myplugin.plain";
+    public Type ComponentType => typeof(SliderComponent); // derived types match too
+
+    public bool TryRender(IMenuComponent component, IMenuComponentRenderContext context, out MenuNode? node)
+    {
+        var slider = (SliderComponent)component;
+        node = new MenuTextNode($"{slider.Text}: {slider.GetValue(context.Session)}");
+        return true;
+    }
+}
+
+_componentRenderer = Core.Menu.Renderers.RegisterComponentRenderer(new SliderPlainRenderer());
+```
+
+- Return `false` from `TryRender` to fall back to the component's own `Render`.
+- `RendererId` can be a built-in one (`MenuRendererIds.Chat`) to change how a component looks there. This is how a plugin teaches an existing renderer about a component it has never seen.
+- <ApiRef name="IMenuComponentRenderContext" /> gives `Component`, `Menu`, `Session`, `Player`, `IsFocused`, `IsEnabled` and `RendererId`.
+- Without a matching component renderer the component's own output is used, so an unrecognised component is never an error.
+- Like renderers, component renderers are released when your plugin unloads.
+
+To target a renderer from inside a custom component instead, check `context.RendererId` in `Render` and return a `MenuRawNode`. Always return usable generic nodes when the id is not one you know.
 
 ## Menus, Sessions and Events
 
