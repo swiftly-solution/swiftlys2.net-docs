@@ -6,7 +6,16 @@
     "task": "Document core.jsonc from the native C++ code, which is the single source of truth for keys, types and defaults. Config keys are registered across the C++ source (start with src/server/configuration/configuration.cpp, then grep for where keys are read/registered, e.g. src/monitor/consolelogger/consolelogger.cpp and src/server/commands/manager.cpp; grep for key names such as CommandPrefixes, Rotation, Unlocker, Menu, SteamAuth).\nCover every key you can verify in the C++ code, including nested ones.\nThen compare against plugin_files/configs/core.example.jsonc on the beta branch. For every key the C++ code supports that the example lacks (or has with a wrong default/type), update the example with write_upstream_file, keeping its existing JSONC style and comments. Do not remove keys unless the C++ code no longer has them.",
     "watch": [
       "plugin_files/configs/core.example.jsonc",
-      "src"
+      "src/server/configuration",
+      "src/scripting/engine/enginehelpers.cpp",
+      "src/monitor/consolelogger/consolelogger.cpp",
+      "src/core/entrypoint.cpp",
+      "src/scripting/server/helpers.cpp",
+      "src/scripting/core/core.cpp",
+      "src/server/players/player.cpp",
+      "src/server/commands/manager.cpp",
+      "src/engine/convars/convars.cpp",
+      "src/server/translations/translations.cpp"
     ]
   },
   {
