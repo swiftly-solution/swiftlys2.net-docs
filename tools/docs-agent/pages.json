@@ -109,5 +109,183 @@
       "managed/src/SwiftlyS2.Generated/Schemas/Interfaces/CBaseModelEntity.cs",
       "managed/src/SwiftlyS2.Generated/Schemas/Interfaces/CBasePlayerPawn.cs"
     ]
+  },
+  {
+    "slug": "getting-started",
+    "page": "docs/development/getting-started.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: plugin project setup and metadata: BasePlugin lifecycle (constructor, Load/Unload, hot reload), PluginMetadata and SwiftlyCoreAttribute, and the ConfigureSharedInterface/UseSharedInterface calls mentioned in the page.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Plugins",
+      "managed/src/SwiftlyS2.Shared/PluginMetadata.cs",
+      "managed/src/SwiftlyS2.Shared/SwiftlyCoreAttribute.cs",
+      "managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs"
+    ]
+  },
+  {
+    "slug": "swiftly-core",
+    "page": "docs/development/swiftly-core.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: ISwiftlyCore and its service properties (Event, GameEvent, NetMessage, GameHooks, Engine, Game, Helpers, Command, ConsoleOutput, EntitySystem, ConVar, Configuration, GameData, PlayerManager, Memory, Scheduler, ...). Make sure the service table lists every property on ISwiftlyCore with the correct interface.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/ISwiftlyCore.cs",
+      "managed/src/SwiftlyS2.Shared/Plugins"
+    ]
+  },
+  {
+    "slug": "using-attributes",
+    "page": "docs/development/using-attributes.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: every attribute a plugin can apply to methods or classes to register handlers: CommandAttribute, CommandAliasAttribute, ClientCommandHookHandlerAttribute, ClientChatHookHandlerAttribute, EventHandlerAttribute, GameEventHandlerAttribute, GameHookHandlerAttribute, NetMessageHandlerAttribute, EntityInputHandlerAttribute, EntityOutputHandlerAttribute, TraceResultCollisionAttribute. List each with its parameters and valid targets.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Commands/Attributes",
+      "managed/src/SwiftlyS2.Shared/Modules/Events",
+      "managed/src/SwiftlyS2.Shared/Modules/GameEvents/GameEventHandlerAttribute.cs",
+      "managed/src/SwiftlyS2.Shared/Modules/GameHooks/GameHookHandlerAttribute.cs",
+      "managed/src/SwiftlyS2.Shared/Modules/NetMessages/NetMessageHandlerAttribute.cs",
+      "managed/src/SwiftlyS2.Shared/Modules/EntitySystem",
+      "managed/src/SwiftlyS2.Shared/Modules/Trace/TraceResultCollisionAttribute.cs"
+    ]
+  },
+  {
+    "slug": "thread-safety",
+    "page": "docs/development/thread-safety.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Verify which APIs the page calls out as thread-unsafe against the public API docs/XML comments and the Scheduler API (ISchedulerService, ITimerContext). Make the page list the main-thread dispatch options that exist in the public API and remove any claim that the public API cannot back up. Do not describe internals.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Scheduler",
+      "managed/src/SwiftlyS2.Shared/Modules/Database"
+    ]
+  },
+  {
+    "slug": "translations",
+    "page": "docs/development/translations.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: ITranslationService, ILocalizer and Language: how keys are looked up, how player language is resolved, and the formatting/fallback behavior exposed by the API.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Translations"
+    ]
+  },
+  {
+    "slug": "entitykeyvalues",
+    "page": "docs/development/entitykeyvalues.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: CEntityKeyValues and CEntityKeyValuesSafeHandle: creating, reading and writing keyvalues, and how the safe handle is disposed. Document every public member.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValues.cs",
+      "managed/src/SwiftlyS2.Shared/Modules/EntitySystem/CEntityKeyValuesSafeHandle.cs"
+    ]
+  },
+  {
+    "slug": "game-events",
+    "page": "docs/development/game-events.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IGameEventService, IGameEvent, IGameEventAccessor and GameEventHandlerAttribute: subscribing to game events, reading and setting fields, and the hook/post modes exposed by the API.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/GameEvents"
+    ]
+  },
+  {
+    "slug": "netmessages",
+    "page": "docs/development/netmessages.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: INetMessageService, INetMessage, ITypedProtobuf, IProtobufAccessor, IProtobufRepeatedField, NetMessageHandlerAttribute: creating, sending and handling net messages and reading/writing protobuf fields.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/NetMessages"
+    ]
+  },
+  {
+    "slug": "menus",
+    "page": "docs/development/menus.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IMenuManagerAPI, IMenuBuilderAPI, IMenuDesignAPI, IMenuAPI, IMenuOption and KeyBind: building, showing and closing menus, option types, and the design options.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Menus"
+    ]
+  },
+  {
+    "slug": "native-functions-and-hooks",
+    "page": "docs/development/native-functions-and-hooks.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IGameHooks, GameHookHandlerAttribute, HookMode, HookResult, HooksCategories, IUnmanagedFunction, IUnmanagedMemory, IMemoryService and IGameDataService: how plugins hook and call native functions through the public API, and the hook result/mode semantics.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/GameHooks",
+      "managed/src/SwiftlyS2.Shared/Modules/Memory",
+      "managed/src/SwiftlyS2.Shared/Modules/GameData",
+      "managed/src/SwiftlyS2.Shared/Natives",
+      "managed/src/SwiftlyS2.Shared/Misc/HookMode.cs",
+      "managed/src/SwiftlyS2.Shared/Misc/HookResult.cs"
+    ]
+  },
+  {
+    "slug": "scheduler",
+    "page": "docs/development/scheduler.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: ISchedulerService, ITimerContext and TimerStep: main-thread dispatch, delayed and repeating timers, cancellation and the timer context members.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Scheduler"
+    ]
+  },
+  {
+    "slug": "shared-api",
+    "page": "docs/development/shared-api.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IInterfaceManager (AddSharedInterface, TryGetSharedInterface, GetSharedInterface, HasSharedInterface) and the BasePlugin shared-interface methods (ConfigureSharedInterface, UseSharedInterface, OnSharedInterfaceInjected). Check the examples only call members that exist.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/IInterfaceManager.cs",
+      "managed/src/SwiftlyS2.Shared/Plugins"
+    ]
+  },
+  {
+    "slug": "permissions",
+    "page": "docs/development/permissions.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IPermissionManager: access checks, grant/revoke, and permission hierarchy members exposed by the API.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Permissions"
+    ]
+  },
+  {
+    "slug": "profiler",
+    "page": "docs/development/profiler.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IContextedProfilerService: starting and stopping profiled contexts and what the API exposes for reading results.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Profiler"
+    ]
+  },
+  {
+    "slug": "soundevents",
+    "page": "docs/development/soundevents.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: SoundEvent: creating, configuring and playing sound events through the public API, with every public member documented.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Sounds"
+    ]
+  },
+  {
+    "slug": "steamworks",
+    "page": "docs/development/steamworks.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: Steam API access in Modules/SteamAPI: Steam, CallbackDispatcher, CallbackIdentity and the callback registration pattern exposed by the public API.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/SteamAPI"
+    ]
   }
 ]
