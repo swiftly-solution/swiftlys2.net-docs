@@ -1,0 +1,102 @@
+---
+title: Extensions
+---
+
+SwiftlyS2's extension service loads and unloads native extensions - native libraries that exchange raw pointers with plugins - and holds the pointers they share.
+
+Access it through `Core.Extension` (<ApiRef name="ISwiftlyCore" member="Extension" />, type <ApiRef name="IExtensionService" />).
+
+## Loading and Unloading by Id
+
+<ApiRef name="IExtensionService" member="Load" /> loads the extension whose library sits at `extensions/{id}/{id}.dll` or `extensions/{id}/{id}.so`; <ApiRef name="IExtensionService" member="Unload" /> unloads an already loaded extension and invokes the unload callback it registered. Both take the extension's `id` and return whether the operation succeeded.
+
+```csharp
+public override void Load(bool hotReload)
+{
+    if (!Core.Extension.Load("MyExtension"))
+    {
+        Core.Logger.LogWarning("MyExtension could not be loaded.");
+    }
+}
+
+public override void Unload()
+{
+    Core.Extension.Unload("MyExtension");
+}
+```
+
+## Loading and Unloading by Path
+
+<ApiRef name="IExtensionService" member="LoadFromPath" /> and <ApiRef name="IExtensionService" member="UnloadFromPath" /> do the same by an absolute path to the library, for extensions that aren't loaded from their own `extensions/{id}/` folder. The library's file name without its extension becomes the extension ID, so the example below loads an extension with the ID `MyExtension`:
+
+```csharp
+string libraryPath = Path.Combine(Core.PluginPath, "MyExtension", "MyExtension.dll");
+
+Core.Extension.LoadFromPath(libraryPath);
+// ... later ...
+Core.Extension.UnloadFromPath(libraryPath);
+```
+
+Both throw `ArgumentException` when the path is empty or not fully qualified, so pass the full path - a bare file name is rejected.
+
+## Shared Pointers
+
+The service also holds a string-keyed registry of native pointers, which is how a plugin and an extension hand pointers to each other. Both sides address an entry by the same `string` key, and the stored values are `nint`:
+
+| Member                                                            | Behavior                                                                      |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| <ApiRef name="IExtensionService" member="SetSharedPointer" />      | Inserts or replaces the pointer stored under the key. The pointer can be `0`.  |
+| <ApiRef name="IExtensionService" member="GetSharedPointer" />      | Returns the stored pointer, or `0` when the key does not exist.                |
+| <ApiRef name="IExtensionService" member="HasSharedPointer" />      | Reports whether the key exists, including keys whose value is `0`.             |
+| <ApiRef name="IExtensionService" member="RemoveSharedPointer" />   | Removes the key. Missing keys are ignored.                                    |
+
+A missing key and a key holding a zero pointer both read as `0`, so check presence with `HasSharedPointer` whenever the difference matters:
+
+```csharp
+nint extensionApi = Core.Extension.GetSharedPointer("MyExtension.Api");
+
+if (!Core.Extension.HasSharedPointer("MyExtension.Api"))
+{
+    Core.Logger.LogWarning("The extension hasn't published its API yet.");
+    return;
+}
+
+// The key exists here - `extensionApi` can still be 0 if the extension stored a zero pointer.
+
+// Publish a pointer of our own for the extension to pick up (an address resolved earlier).
+Core.Extension.SetSharedPointer("MyPlugin.Api", pluginPointer);
+Core.Extension.RemoveSharedPointer("MyPlugin.Api");
+```
+
+<Callout type="warning">
+    The registry only stores pointer values. It doesn't own the objects they
+    point at and never frees them: storing a pointer over an existing key
+    doesn't free the replaced value, and removing a key doesn't free the stored
+    one. Freeing the object stays the responsibility of whichever side
+    allocated it.
+</Callout>
+
+## Members
+
+| Member                                                           | Signature                                         | Returns                                                                                                                |
+| ---------------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IExtensionService" member="Load" />                | `bool Load(string id)`                            | whether the extension was loaded successfully                                                                          |
+| <ApiRef name="IExtensionService" member="Unload" />              | `bool Unload(string id)`                          | whether the extension was unloaded successfully                                                                        |
+| <ApiRef name="IExtensionService" member="LoadFromPath" />        | `bool LoadFromPath(string absolutePath)`          | whether the extension was loaded successfully; throws `ArgumentException` when the path is empty or not fully qualified |
+| <ApiRef name="IExtensionService" member="UnloadFromPath" />      | `bool UnloadFromPath(string absolutePath)`        | whether the extension was unloaded successfully; throws `ArgumentException` when the path is empty or not fully qualified |
+| <ApiRef name="IExtensionService" member="GetSharedPointer" />    | `nint GetSharedPointer(string key)`               | the stored pointer, or `0` when the key does not exist                                                                 |
+| <ApiRef name="IExtensionService" member="SetSharedPointer" />    | `void SetSharedPointer(string key, nint pointer)` | -                                                                                                                      |
+| <ApiRef name="IExtensionService" member="HasSharedPointer" />    | `bool HasSharedPointer(string key)`               | whether the key exists, including keys with a `0` value                                                                |
+| <ApiRef name="IExtensionService" member="RemoveSharedPointer" /> | `void RemoveSharedPointer(string key)`            | -                                                                                                                      |
+
+`GetSharedPointer` and `RemoveSharedPointer` are deliberately lenient: a key that isn't registered reads as `0`, and removing one is a no-op instead of an error.
+
+## Writing an Extension
+
+Extensions are native libraries, not C# plugins. The API reference for writing one - both the C and the C++ API - is the [SwiftlyS2 Extension SDK](https://github.com/swiftly-solution/swiftlys2-extension-sdk), whose `API.md` documents the C and C++ APIs.
+
+## Beta Changes
+
+These are available on the beta branch only.
+
+The extension service itself is new on beta: `Core.Extension` (<ApiRef name="IExtensionService" />) doesn't exist on stable, so everything on this page - `Load`, `Unload`, `LoadFromPath`, `UnloadFromPath` and the shared pointer registry - requires a beta build.

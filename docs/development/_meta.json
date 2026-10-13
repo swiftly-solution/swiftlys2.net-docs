@@ -67,5 +67,8 @@
     },
     "steamworks": {
         "page": "steamworks.mdx"
+    },
+    "extensions": {
+        "page": "extensions.mdx"
     }
 }
