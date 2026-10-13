@@ -1,0 +1,435 @@
+---
+title: Menu System
+---
+
+The menu system is a component-based framework for per-player menus. A menu is an arrangement of components (<ApiRef name="IMenuComponent" />) drawn by a renderer (<ApiRef name="IMenuRenderer" />) and driven by a keymap, through `Core.Menu` (<ApiRef name="ISwiftlyCore" member="Menu" />, type <ApiRef name="IMenuService" />).
+
+<Callout type="warning">
+    The menu system is available on the beta branch only. It replaces the
+    classic `Core.MenusAPI`, which is now obsolete and documented on the
+    [Menus](/docs/development/menus) page.
+</Callout>
+
+Components describe _what_ to show and how they react to actions; renderers decide _how_ it looks. A menu opened as centre-screen HTML (the default) can be switched to chat lines by the server owner without any plugin change.
+
+## Quick Start
+
+```csharp
+using SwiftlyS2.Shared.Menu;
+using SwiftlyS2.Shared.Menu.Components;
+
+var menu = Core.Menu.CreateMenu("myplugin.settings")
+    .WithTitle("Settings")
+    .Add(new ButtonComponent("Say hello", ctx =>
+    {
+        ctx.Player.SendChat("Hello!");
+        return ValueTask.CompletedTask;
+    }))
+    .Add(new ToggleComponent("Show damage", defaultValue: true, onChanged: change =>
+    {
+        change.Player.SendChat($"Show damage: {change.NewValue}");
+    }))
+    .Build();
+
+menu.Open(player);
+```
+
+1. `Core.Menu.CreateMenu(id)` starts an <ApiRef name="IMenuBuilder" />.
+2. Configure it (`With*` methods) and add components to the header, body or footer.
+3. `Build()` returns the <ApiRef name="IMenu" />. Open it with `menu.Open(player)` or `menu.OpenForAll()`.
+
+The menu `id` is also its configuration scope for key binds, renderer and input method (see [Server Configuration](#server-configuration)). Namespace it with your plugin id, such as `"myplugin.shop"`.
+
+## The Menu Service
+
+<ApiRef name="IMenuService" /> is your plugin's entry point. Everything you create or register through it belongs to your plugin and is released when the plugin unloads, so one plugin unloading never disturbs another plugin's menus.
+
+| Member                                                                     | Description                                                                                                    |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IMenuService" member="CreateMenu" />(`string id`)            | Starts building a menu.                                                                                        |
+| <ApiRef name="IMenuService" member="GetSession" />(`IPlayer player`)       | The <ApiRef name="IMenuSession" /> of whatever menu the player has open, or `null`. Spans every plugin.        |
+| <ApiRef name="IMenuService" member="CloseFor" />(`IPlayer player`)         | Closes the player's open menu, only when it belongs to your plugin.                                            |
+| <ApiRef name="IMenuService" member="CloseAll" />                           | Closes every open menu that belongs to your plugin.                                                            |
+| <ApiRef name="IMenuService" member="Actions" />                            | The <ApiRef name="IMenuActionRegistry" />: the catalogue of bindable actions.                                  |
+| <ApiRef name="IMenuService" member="Renderers" />                          | The <ApiRef name="IMenuRendererRegistry" />: the catalogue of renderers and per-renderer component drawing.   |
+
+A player has at most one open menu at a time, across every plugin. Opening a menu replaces the one they had.
+
+## Building a Menu
+
+Every <ApiRef name="IMenuBuilder" /> method returns the builder, except `Build()`:
+
+| Method                                                                                                          | Description                                                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <ApiRef name="IMenuBuilder" member="WithTitle" />(`string title`)                                               | Adds a title line to the header.                                                                                                                                                     |
+| <ApiRef name="IMenuBuilder" member="AddHeader" />(`IMenuComponent`)                                             | Appends a component to the header (pinned above the body, never scrolls, never takes focus).                                                                                         |
+| <ApiRef name="IMenuBuilder" member="Add" />(`IMenuComponent`)                                                   | Appends a component to the scrollable body.                                                                                                                                          |
+| <ApiRef name="IMenuBuilder" member="AddFooter" />(`IMenuComponent`)                                             | Appends a component to the footer (pinned below the body, never scrolls, never takes focus).                                                                                         |
+| <ApiRef name="IMenuBuilder" member="WithParent" />(`IMenu parent`)                                              | Sets the menu returned to when this one closes.                                                                                                                                      |
+| <ApiRef name="IMenuBuilder" member="WithItemsPerPage" />(`int itemsPerPage`)                                    | Largest number of body entries shown at once (minimum `1`, default `5`). See the note below.                                                                                         |
+| <ApiRef name="IMenuBuilder" member="WithAutoClose" />(`TimeSpan? delay`)                                        | Closes the session after the delay, counted from when it opens (not from the last input). `null` disables it, which is the default.                                                  |
+| <ApiRef name="IMenuBuilder" member="WithAction" />(...)                                                         | Declares an extra key bind for this menu, see [Actions and Key Binds](#actions-and-key-binds).                                                                                       |
+| <ApiRef name="IMenuBuilder" member="WithRenderer" />(`string rendererId`)                                       | Chooses the renderer. Defaults to `MenuRendererIds.CenterHtml`. `Build()` throws when the id is not registered.                                                                      |
+| <ApiRef name="IMenuBuilder" member="WithInputMethod" />(`MenuInputMethod`)                                      | Chooses how players interact with the menu, see [Input Methods](#input-methods).                                                                                                     |
+| <ApiRef name="IMenuBuilder" member="WithKeybindSource" /> / <ApiRef name="IMenuBuilder" member="WithRendererSource" /> / <ApiRef name="IMenuBuilder" member="WithInputMethodSource" /> | Adds a source of overrides, for enforcing a choice from your plugin's own configuration. The server-wide file still wins. |
+| <ApiRef name="IMenuBuilder" member="Build" />                                                                   | Builds and returns the <ApiRef name="IMenu" />.                                                                                                                                      |
+
+<Callout type="info">
+    `WithItemsPerPage` is an upper bound, not a guarantee. The server-wide
+    `MaxVisibleLines` limit counts rendered _lines_, so a spacer or a two-line
+    component leaves room for fewer neighbours. This keeps the last entries of a
+    long menu reachable instead of pushing them off screen.
+</Callout>
+
+Only components with `IsFocusable == true` in the body can hold the selection. Non-focusable body entries (dividers, spacers, progress bars) scroll past.
+
+## Components
+
+All built-in components live in `SwiftlyS2.Shared.Menu.Components`.
+
+| Component                                                      | Focusable | Description                                                                                                |
+| -------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="TextComponent" />(`text`)                        | yes       | A line of text. Does nothing when activated.                                                               |
+| <ApiRef name="TitleComponent" />(`title`)                      | no        | The title line (what `WithTitle` adds).                                                                    |
+| <ApiRef name="ButtonComponent" />(`text`, `onSelect`)          | yes       | Runs `onSelect` when activated.                                                                            |
+| <ApiRef name="ToggleComponent" />(`text`, `defaultValue`, `onChanged`) | yes | Per-player on/off value.                                                                                  |
+| <ApiRef name="SliderComponent" />(`text`, `min`, `max`, `defaultValue`, `step`, `onChanged`) | yes | Per-player number drawn as a bar. Left/Right step it.                                      |
+| <ApiRef name="ChoiceComponent" />(`text`, `choices`, `defaultIndex`, `onItemChanged`) | yes | Cycles forward through a list on each activation. Also generic: `ChoiceComponent<TItem>`.    |
+| <ApiRef name="SelectorComponent`1" />(`text`, `choices`, `defaultIndex`, `onItemChanged`) | yes | Steps through a list with Left/Right and shows the neighbouring items.                     |
+| <ApiRef name="InputComponent" />(`text`, `defaultValue`, `validator`, `onChanged`) | yes | Takes the player's next chat message as its value.                                                    |
+| <ApiRef name="ProgressBarComponent" />(`text`, `progressProvider`, `multiLine`) | no | Bar for a value something else owns (`0` to `1`). Redraws itself when the value moves.                   |
+| <ApiRef name="SubmenuComponent" />(`text`, `IMenu` or factory) | yes       | Opens another menu.                                                                                        |
+| <ApiRef name="ChatColoredTextComponent" />(`text`, `chatColor`) | yes      | Text coloured with a `Helper.ChatColors` tag. On the centre-HTML renderer it maps to the closest hex colour. |
+| <ApiRef name="DividerComponent" />(`length`, `color`)          | no        | A horizontal rule drawn from `─` characters.                                                               |
+| <ApiRef name="SpacerComponent" />(`lines`)                     | no        | Blank vertical space.                                                                                      |
+
+Every constructor also takes an optional trailing `id` (a stable id, generated when omitted).
+
+### Common Properties
+
+These come from <ApiRef name="MenuComponentBase" /> and apply to every built-in component:
+
+| Property                                  | Description                                                                                                                                  |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Visible` / `Enabled`                     | Show or enable the component for every player.                                                                                               |
+| `VisibleWhen` / `EnabledWhen`             | `Func<IMenuSession, bool>` deciding it per player, evaluated every frame. When set, combined with `Visible`/`Enabled`.                      |
+| `Comment`                                 | Hint shown in the footer while the component holds the selection.                                                                            |
+| `PlaySound`                               | Whether activating the component plays the selection sound (default `true`).                                                                 |
+| `Validating`                              | `Func<MenuActionContext, ValueTask<bool>>` that runs before an activation; return `false` to cancel it.                                      |
+| `WaitingText` / `WaitingColor`            | What is drawn while an async activation is still running (default `"Waiting..."`). The same player cannot trigger it twice meanwhile.        |
+| `Tag`                                     | Free-form object for your own bookkeeping.                                                                                                   |
+
+Text-based components (<ApiRef name="TextComponent" /> and everything derived from it) also have `Text`, `TextProvider` (`Func<IMenuSession, string?>` for per-player text), `Style` (<ApiRef name="MenuTextStyle" />), `DisabledColor`, `MaxWidth` and `Overflow`. `Overflow` is a <ApiRef name="MenuTextOverflow" />: `None`, `TruncateEnd`, `TruncateBothEnds`, `ScrollLeftFade`, `ScrollRightFade`, `ScrollLeftLoop` or `ScrollRightLoop`.
+
+Colours are hex strings such as `"#FFD700"`.
+
+### Buttons
+
+```csharp
+var close = new ButtonComponent("Apply and close", async ctx =>
+{
+    await SaveAsync(ctx.Player);
+    ctx.Player.SendChat("Saved.");
+})
+{
+    CloseOnSelect = true,
+    FocusedColor = "#FFD700"
+};
+```
+
+`OnSelect` is asynchronous: while it runs, the button draws `WaitingText` and ignores further presses from the same player. Set `CloseOnSelect` to close the menu once it finishes.
+
+### Per-Player Values
+
+Value components (toggle, slider, choice, selector, input) keep their value in the player's **session**, so one component instance serves every player without their values touching. The value is gone when the menu closes: persist it in `OnChanged` and read it back with `DefaultValueProvider`.
+
+```csharp
+var volume = new SliderComponent("Volume", min: 0, max: 100, defaultValue: 50, step: 10)
+{
+    TotalBars = 10,
+    DefaultValueProvider = session => LoadVolume(session.Player),
+    OnChanged = change => SaveVolume(change.Player, change.NewValue)
+};
+
+var quality = new ChoiceComponent("Quality", ["Low", "Medium", "High"], defaultIndex: 1,
+    onItemChanged: change => Core.Logger.LogInformation("{Old} -> {New}", change.OldValue, change.NewValue));
+
+var team = new SelectorComponent<string>("Team", ["T", "CT", "Spectator"]);
+```
+
+You can also read and write a player's value directly:
+
+```csharp
+float current = volume.GetValue(session);
+volume.SetValue(session, 80f); // returns true when the value actually changed
+```
+
+`OnChanged` receives a <ApiRef name="MenuValueChangedContext`1" /> with `Session`, `Component`, `OldValue`, `NewValue` and `Player`. For choice and selector components the underlying value is the **index** (`OnChanged` gets `int`), while `OnItemChanged` gets the item itself; `GetItem(session)` reads the current item.
+
+### Input
+
+```csharp
+var nickname = new InputComponent(
+    "Nickname",
+    defaultValue: "",
+    validator: value => value.Length >= 3,
+    onChanged: change => change.Player.SendChat($"Nickname set to {change.NewValue}"))
+{
+    MaxLength = 24
+};
+```
+
+Activating the component captures that player's next chat message as the value. The message never reaches the chat, and activating again while waiting cancels. Rejected values show `InvalidText`. Empty input is always rejected.
+
+### Progress Bars
+
+```csharp
+var bar = new ProgressBarComponent(
+    "Round progress",
+    session => RoundProgress(),   // 0..1
+    multiLine: true);
+```
+
+The bar polls `ProgressProvider` and redraws on its own whenever the number of filled segments changes, so you do not need to invalidate anything.
+
+### Submenus
+
+```csharp
+var advanced = Core.Menu.CreateMenu("myplugin.advanced")
+    .WithTitle("Advanced")
+    .Add(new TextComponent("Nothing here yet"))
+    .Build();
+
+var main = Core.Menu.CreateMenu("myplugin.main")
+    .WithTitle("Main")
+    .Add(new SubmenuComponent("Advanced", advanced))
+    .Add(new SubmenuComponent("Built on demand", session =>
+        Core.Menu.CreateMenu("myplugin.lazy").WithTitle("Lazy").Build()))
+    .Build();
+```
+
+A submenu without a parent of its own adopts the menu that opened it, so closing it returns the player there. The factory overloads (sync and `ValueTask`) can return `null` to cancel the open.
+
+### Dynamic Components
+
+Components can be added to or removed from an open menu. Sessions redraw automatically.
+
+```csharp
+var online = new TextComponent { TextProvider = _ => $"Players online: {Core.PlayerManager.PlayerCount}" };
+menu.Insert(MenuRegion.Body, 0, online);
+menu.Add(MenuRegion.Footer, new DividerComponent());
+menu.Remove(online);
+var body = menu.GetComponents(MenuRegion.Body);
+```
+
+## Actions and Key Binds
+
+Navigation is built from **actions**, each bound to a <ApiRef name="MenuKey" />. Every menu inherits the built-in actions from <ApiRef name="MenuActions" />:
+
+| Action                       | Default key | Effect                                                                                              |
+| ---------------------------- | ----------- | --------------------------------------------------------------------------------------------------- |
+| `MenuActions.NavigateUp`     | `Shift`     | Moves the selection up (wraps around).                                                              |
+| `MenuActions.NavigateDown`   | `F`         | Moves the selection down (wraps around).                                                            |
+| `MenuActions.NavigateLeft`   | `A`         | Does nothing on its own. Sliders and selectors take it over while focused.                          |
+| `MenuActions.NavigateRight`  | `D`         | Does nothing on its own. Sliders and selectors take it over while focused.                          |
+| `MenuActions.Select`         | `E`         | Activates the focused component.                                                                    |
+| `MenuActions.Close`          | `Tab`       | Closes the menu, returning to its parent if it has one.                                             |
+
+<ApiRef name="MenuKey" /> is a `[Flags]` enum, so one action can use several keys: `MenuKey.E | MenuKey.Mouse1`. Available keys: `Mouse1`, `Mouse2`, `Space`, `Ctrl`, `W`, `A`, `S`, `D`, `E`, `Esc`, `R`, `Alt`, `Shift`, `Weapon1`, `Weapon2`, `Grenade1`, `Grenade2`, `Tab`, `F`.
+
+### Custom Actions
+
+`WithAction` declares an extra key for one menu. With a handler it runs regardless of which row is selected:
+
+```csharp
+var menu = Core.Menu.CreateMenu("myplugin.shop")
+    .WithTitle("Shop")
+    .WithAction("Refresh", MenuKey.R, async ctx =>
+    {
+        await ReloadStockAsync();
+        ctx.Session.Invalidate();
+    }, label: "Reload")
+    .Add(new ButtonComponent("Buy"))
+    .Build();
+```
+
+- The key shows in the footer as `label: KEY` (the name is used when `label` is `null`).
+- Declaring an action with the name of a built-in one (for example `"Close"`) rebinds it for this menu only.
+- The focused component is offered every action first (<ApiRef name="IMenuComponent" member="HandleActionAsync" />). The menu-level handler only runs when it does not consume the key.
+- For full control use the <ApiRef name="MenuActionDescriptor" /> overload (`Id`, `DefaultKey`, `Label`, `ShowInFooter`, `Order`).
+
+Handlers receive a <ApiRef name="MenuActionContext" /> with `Action`, `Key`, `Session`, `Player` and `Menu`.
+
+### Key Resolution
+
+For each action the key is taken from the first source that answers, highest priority first:
+
+| Priority                              | Source                                                                       |
+| ------------------------------------- | ---------------------------------------------------------------------------- |
+| `MenuKeybindPriority.Global` (`100`)  | The server-wide `menus.jsonc`.                                               |
+| `MenuKeybindPriority.Plugin` (`50`)   | Sources you add with `WithKeybindSource`, for example from plugin config.    |
+| `MenuKeybindPriority.CodeDefault` (`0`) | The `DefaultKey` declared on the action.                                   |
+
+Renderer and input method resolve the same way (<ApiRef name="IMenuRendererSource" />, <ApiRef name="IMenuInputMethodSource" />).
+
+## Input Methods
+
+<ApiRef name="MenuInputMethod" /> decides how players interact:
+
+- `Buttons` - keyboard keys bound to actions, as above.
+- `Chat` - players type `!1`, `!2`, ... to select the entry with that number on the current page, and `!0` to close. Keyboard keys are ignored for that menu, and matching messages never reach the chat.
+
+If you do not set one, menus drawn by the `chat` renderer use `Chat` and every other menu uses `Buttons`.
+
+## Renderers
+
+| Id (`MenuRendererIds`)   | Description                                      |
+| ------------------------ | ------------------------------------------------ |
+| `CenterHtml` (`"centerhtml"`) | Centre-screen HTML. The default.            |
+| `Chat` (`"chat"`)        | A block of chat lines.                           |
+
+```csharp
+var menu = Core.Menu.CreateMenu("myplugin.info")
+    .WithRenderer(MenuRendererIds.Chat)
+    .WithTitle("Info")
+    .Build();
+```
+
+Components produce a tree of <ApiRef name="MenuNode" /> values (`MenuTextNode`, `MenuLineNode`, `MenuStackNode`, `MenuBlankNode`, `MenuSelectionNode`, `MenuRawNode`) instead of markup, which is why every component works on every renderer. A plugin can add a renderer by implementing <ApiRef name="IMenuRenderer" /> and registering it with `Core.Menu.Renderers.Register(renderer)`, and can teach a renderer to draw a specific component type with <ApiRef name="IComponentRenderer" /> and `RegisterComponentRenderer`. Both registrations are released when your plugin unloads.
+
+<Callout type="warning">
+    `IMenuRenderer.Render` runs on a dedicated background thread, not the game
+    thread. Use only the data in the render context and calls that are safe off
+    the game thread. `Clear` runs on the game thread.
+</Callout>
+
+## Menus, Sessions and Events
+
+<ApiRef name="IMenu" /> is the shared definition; <ApiRef name="IMenuSession" /> is one player's live view of it.
+
+| <ApiRef name="IMenu" /> member                                                   | Description                                                                          |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `Id`, `Renderer`, `Keymap`, `InputMethod`, `ItemsPerPage`, `AutoCloseDelay`      | What the menu was built with (resolved after server-side overrides).                 |
+| `Parent`                                                                         | The menu to return to on close. Writable, so lazily built submenus can be told.      |
+| `Tag`                                                                            | Free-form object for your own bookkeeping.                                           |
+| `Sessions` / `GetSession(player)`                                                | Sessions currently viewing the menu.                                                 |
+| `Open(player)` / `OpenForAll()`                                                  | Opens for one player, or for every connected non-bot player. Returns the sessions.   |
+| `Close(player)` / `CloseAll()`                                                   | Closes for one player or everyone viewing it.                                        |
+| `GetComponents(region)`, `Add`, `Insert`, `Remove`                               | Reads and edits components, see [Dynamic Components](#dynamic-components).           |
+| `Opened`, `Closed`, `FocusChanged`                                               | `event Action<IMenuSession>`.                                                        |
+
+`IMenu` is `IDisposable`; disposing closes it for everyone and clears its components.
+
+| <ApiRef name="IMenuSession" /> member | Description                                                                                                          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `Player`, `Menu`, `IsOpen`            | Who is viewing what, and whether it is still open.                                                                   |
+| `FocusedIndex`, `FocusedComponent`    | The selection, counted among visible focusable body components.                                                      |
+| `MoveFocus(delta)`, `SetFocus(index)` | Moves the selection. `MoveFocus` wraps at both ends. Both return `true` when the selection changed.                  |
+| `GetState<T>(component)` / `SetState` | Per-player state for a component (`T` needs a parameterless constructor), created on first use.                      |
+| `CaptureChat(onMessage)`              | Routes the player's next chat messages to `onMessage`. Return `true` to swallow the message. Dispose the handle to stop. Dropped when the menu closes. |
+| `Invalidate()`                        | Requests a redraw on the next tick.                                                                                  |
+| `Close()`                             | Closes the session, returning to the parent menu if there is one.                                                    |
+
+<Callout type="info">
+    Frames are only sent when a session is invalidated (or a visible component
+    reports `NeedsRedraw`). After changing anything that affects what a player
+    sees, call `session.Invalidate()`. Adding, inserting or removing components
+    does it for you.
+</Callout>
+
+```csharp
+menu.Opened += session => Core.Logger.LogInformation("{Player} opened {Menu}", session.Player.PlayerID, session.Menu.Id);
+menu.Closed += session => SaveSettings(session.Player);
+menu.FocusChanged += session => { /* selection moved */ };
+```
+
+## Writing a Custom Component
+
+Derive from <ApiRef name="MenuComponentBase" /> and override `Render`. Keep per-player data in session state, never on the component, so one instance can be shared across menus and players.
+
+```csharp
+public sealed class CounterComponent : MenuComponentBase
+{
+    public override bool IsFocusable => true;
+
+    public override MenuNode Render(IMenuComponentRenderContext context)
+    {
+        var count = context.Session.GetState<CounterState>(this).Count;
+        var color = context.IsFocused ? "#FFD700" : "#FFFFFF";
+        return new MenuTextNode($"Clicks: {count}", MenuTextStyle.Default.WithColor(color));
+    }
+
+    public override ValueTask<bool> HandleActionAsync(MenuActionContext context)
+    {
+        if (!Matches(context, MenuActions.Select))
+        {
+            return ValueTask.FromResult(false); // not ours, let the menu handle it
+        }
+
+        return ActivateAsync(context, ctx =>
+        {
+            ctx.Session.GetState<CounterState>(this).Count++;
+            ctx.Session.Invalidate();
+            return ValueTask.CompletedTask;
+        });
+    }
+
+    private sealed class CounterState
+    {
+        public int Count { get; set; }
+    }
+}
+```
+
+- Return `true` from `HandleActionAsync` to consume the action; return `false` to let the menu navigate or close as usual.
+- `ActivateAsync` runs your work through the shared pipeline: it honours `Enabled`, `Validating` and the busy/waiting state.
+- Override `LineCount` when `Render` returns more than one line (a `MenuStackNode` costs the sum of its children, a `MenuBlankNode` its `Lines`). Otherwise the page is budgeted for one line and overflows.
+- Override `GetHint` to show a hint while focused, and `NeedsRedraw(session, now)` for animated or live content (asked once per tick for every visible component, so keep it cheap).
+- Return a `MenuLineNode` to put several styled parts on one line, and a `MenuRawNode` to aim output at one specific renderer id.
+
+## Server Configuration
+
+Server owners tune menus in `configs/menus/menus.jsonc`. The file is optional and reloaded live; `configs/menus/menus.example.jsonc` ships as a template:
+
+```jsonc
+{
+    "Menus": {
+        // "Renderer": "centerhtml",   // for every menu
+        // "InputMethod": "buttons",   // for every menu
+        "core.menu": {
+            "NavigateUp": "shift",
+            "NavigateDown": "f",
+            "NavigateLeft": "a",
+            "NavigateRight": "d",
+            "Select": "e",
+            "Close": "tab"
+        }
+        // , "myplugin.shop": { "Renderer": "chat", "Select": ["e", "space"], "Close": "esc" }
+    },
+    "MenuLayout": { "MaxVisibleLines": 5 },
+    "MenuSounds": {
+        "Scroll": { "Name": "UI.ContractType", "Volume": 0.75 },
+        "Select": { "Name": "Vote.Cast.Yes", "Volume": 0.75 },
+        "Exit": { "Name": "Vote.Failed", "Volume": 0.75 },
+        "Fail": { "Name": "Vote.Cast.No", "Volume": 0.75 }
+    }
+}
+```
+
+| Key                              | Description                                                                                                                                              |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Menus.core.menu.<Action>`       | Key binds every menu inherits. A value is a key name or an array of key names.                                                                           |
+| `Menus.<menuId>.<Action>`        | Overrides one action for the menu with that id.                                                                                                          |
+| `Menus.<menuId>.Renderer` / `InputMethod` | Forces a renderer or input method for one menu. Directly under `Menus` it applies to every menu. The menu's own value wins. They override what plugins request in code. |
+| `MenuLayout.MaxVisibleLines`     | Cap on how many lines the scrolling body draws at once. Clamped to `1`-`32`, default `5`.                                                                |
+| `MenuSounds.<Scroll\|Select\|Exit\|Fail>` | Sound `Name` and `Volume` (default `0.75`). An empty `Name` silences it.                                                                        |
+
+Key binds only apply to menus using the `Buttons` input method. An unregistered `Renderer` id makes that menu fail to build.
+
+## Common Pitfalls
+
+- Give every menu a unique, plugin-namespaced id, or server key binds for one menu will apply to another.
+- Do not store per-player data on a component; use session state or `OnChanged`/`DefaultValueProvider`.
+- Call `session.Invalidate()` after changing anything displayed from outside a component.
+- Declare `LineCount` on custom multi-line components.
+- Keep `NeedsRedraw` and `TextProvider` cheap; they run every tick/frame.

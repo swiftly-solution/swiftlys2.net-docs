@@ -38,6 +38,9 @@
     "menus": {
         "page": "menus.mdx"
     },
+    "menu-system": {
+        "page": "menu-system.mdx"
+    },
     "convars": {
         "page": "convars.mdx"
     },

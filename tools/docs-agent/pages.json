@@ -222,6 +222,17 @@
     ]
   },
   {
+    "slug": "menu-system",
+    "page": "docs/development/menu-system.mdx",
+    "upstream": false,
+    "task": "Document the new component-based menu framework (IMenuService, reached through ISwiftlyCore.Menu), which only exists on the beta branch. It lives in managed/src/SwiftlyS2.Shared/Modules/Menu (public API) and managed/src/SwiftlyS2.Core/Modules/Menu (implementation; read it only to verify behavior and the menus.jsonc config keys, do not describe internals).\nCover IMenuService, IMenuBuilder, IMenu, IMenuSession, IMenuComponent/MenuComponentBase and every built-in component, actions and key binds (MenuKey, MenuActions, keybind/renderer/input-method sources and their priorities), input methods, renderers, and the menus.jsonc file (plugin_files/configs/menus/menus.example.jsonc).\nEnsure every code example only uses members that exist. The classic Core.MenusAPI is obsolete and documented on docs/development/menus.mdx; link to it instead of repeating it.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Menu",
+      "managed/src/SwiftlyS2.Core/Modules/Menu",
+      "plugin_files/configs/menus/menus.example.jsonc"
+    ]
+  },
+  {
     "slug": "native-functions-and-hooks",
     "page": "docs/development/native-functions-and-hooks.mdx",
     "upstream": false,
