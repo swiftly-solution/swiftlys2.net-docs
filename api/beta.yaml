@@ -44874,6 +44874,13 @@ categories:
       - text: Vector
         url: SwiftlyS2.Shared.Natives.Vector.html
         uid: SwiftlyS2.Shared.Natives.Vector
+    - name: Scale
+      uid: SwiftlyS2.Shared.Natives.CTransform.Scale
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CTransform.cs#L12
+      declaration: public float Scale
+      valueType:
+      - text: float
+        url: https://learn.microsoft.com/dotnet/api/system.single
     methods:
     - name: ToString()
       uid: SwiftlyS2.Shared.Natives.CTransform.ToString
