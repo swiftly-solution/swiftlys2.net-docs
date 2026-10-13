@@ -9,13 +9,13 @@ SwiftlyS2 lets you register commands, events, and hooks by decorating methods wi
 Attribute discovery runs on registered object instances:
 
 - Your plugin class (the one inheriting `BasePlugin`) is registered automatically.
-- Any other class must be registered explicitly with `Core.Registrator.Register(instance)`.
+- Any other class must be registered explicitly with `Core.Registrator.Register(instance)` (<ApiRef name="IRegistratorService" />).
 
 ```csharp
 public sealed class ModerationHandlers
 {
     [ClientChatHookHandler]
-    public HookResult OnClientChat(int playerId, string text, bool teamOnly)
+    public HookResult OnClientChat(int playerId, string text, bool teamonly)
     {
         if (text.Contains("badword", StringComparison.OrdinalIgnoreCase))
         {
@@ -41,11 +41,31 @@ public override void Load(bool hotReload)
 
 Attribute-decorated methods must match the expected delegate: same parameter order/types, same return type (`void` vs `HookResult`), and same generic event/message type where the attribute is generic. Otherwise the handler won't be picked up.
 
+Attributes that take no arguments of their own (`[ClientCommandHookHandler]`, `[ClientChatHookHandler]`, the net-message handlers) get the event or message type from the method signature - that signature is the only thing that says which hook the method serves.
+
 ## Attribute Reference
+
+`Valid target` is where each attribute goes; all of them allow one instance per target (`AllowMultiple = false`), except <ApiRef name="CommandAlias" />:
+
+| Attribute                                                                                       | Valid target                | Handler signature                                                     |
+| ----------------------------------------------------------------------------------------------- | --------------------------- | --------------------------------------------------------------------- |
+| <ApiRef name="PluginMetadata" />                                                                | plugin class                | -                                                                     |
+| <ApiRef name="Command" />                                                                       | method                      | `void (ICommandContext context)`                                      |
+| <ApiRef name="CommandAlias" />                                                                  | method carrying `[Command]` | same signature as `[Command]` on that method                          |
+| <ApiRef name="GameEventHandler" />                                                              | method                      | `HookResult (TEvent eventObj)`                                        |
+| <ApiRef name="EventListener`1" />                                                               | method                      | the signature of delegate `T`                                         |
+| <ApiRef name="GameHookHandler" />                                                               | method                      | the hooked delegate, e.g. `void (ref TakeDamageEntityPreContext ctx)` |
+| <ApiRef name="ClientCommandHookHandler" />                                                      | method                      | `HookResult (int playerId, string commandLine)`                       |
+| <ApiRef name="ClientChatHookHandler" />                                                         | method                      | `HookResult (int playerId, string text, bool teamonly)`               |
+| <ApiRef name="ServerNetMessageHandler" />                                                       | method                      | `HookResult (T msg)`                                                  |
+| <ApiRef name="ServerNetMessageInternalHandler" />                                               | method                      | `HookResult (T msg, int playerId)`                                    |
+| <ApiRef name="ClientNetMessageHandler" />                                                       | method                      | `HookResult (T msg, int playerId)`                                    |
+| <ApiRef name="EntityOutputHandlerAttribute" /> / <ApiRef name="EntityOutputHandlerAttribute`1" /> | method                    | `void (IOnEntityFireOutputHookEvent @event)`                          |
+| <ApiRef name="EntityInputHandlerAttribute" /> / <ApiRef name="EntityInputHandlerAttribute`1" />   | method                    | `void (IOnEntityIdentityAcceptInputHookEvent @event)`                 |
 
 ### <ApiRef name="PluginMetadata" />
 
-On your plugin class. `Id` and `Version` are required; the rest optional:
+On your plugin class. `Id` and `Version` are required; the rest optional - `Name` falls back to `Id` and `MinimumAPIVersion` defaults to `"0.0.0"`. See [Getting Started](/docs/development/getting-started) for the defaults of every property:
 
 ```csharp
 [PluginMetadata(Id = "my.plugin", Version = "1.0.0", Name = "My Plugin", Author = "Author", Description = "...", Website = "...")]
@@ -56,7 +76,14 @@ public partial class MyPlugin : BasePlugin
 
 ### <ApiRef name="Command" />
 
-Registers a chat/console command; `permission` gates it via [Permissions](/docs/development/permissions). Full registration/lookup API on <ApiRef name="ICommandService" /> - see [Commands](/docs/development/commands).
+Registers a chat/console command. The method must match `ICommandService.CommandListener` (`void (ICommandContext context)`), and the attribute takes `(name, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")`:
+
+- `name` is the command name as typed by the user - it registers as `sw_<name>` unless `registerRaw` is `true`.
+- `registerRaw` registers the name as-is, without the `sw_` prefix.
+- `permission` is checked through [Permissions](/docs/development/permissions) before the handler runs.
+- `helpText` is the description shown in command listings.
+
+A method can carry only one `[Command]` (`AllowMultiple = false`) - extra names go through <ApiRef name="CommandAlias" /> below. Full registration/lookup API on <ApiRef name="ICommandService" /> - see [Commands](/docs/development/commands).
 
 ```csharp
 [Command("heal", permission: "myplugin.heal", helpText: "Heals yourself")]
@@ -68,16 +95,23 @@ public void OnHealCommand(ICommandContext context)
 
 ### <ApiRef name="CommandAlias" />
 
-Adds an alternate name for a command registered elsewhere (attribute or <ApiRef name="ICommandService" member="RegisterCommand" />):
+Adds an alternate name for the command registered by the `[Command]` on the same method. Takes `(alias, registerRaw = false)`:
 
 ```csharp
-[CommandAlias("heal", "h")]
-private void HealAlias() { } // body is unused, only the attribute matters
+[Command("heal")]
+[CommandAlias("hp")]
+[CommandAlias("h")]
+public void OnHealCommand(ICommandContext context)
+{
+    // reachable as sw_heal, sw_hp and sw_h
+}
 ```
+
+`AllowMultiple = true`, so stack one attribute per extra name; `registerRaw` must match how the command name itself was registered. This is the attribute-based equivalent of <ApiRef name="ICommandService" member="RegisterCommandAlias" />.
 
 ### <ApiRef name="GameEventHandler" />
 
-Hooks a generated game event (`EventPlayerDeath`, `EventRoundStart`, ...) - see <ApiRef name="IGameEventService" /> and [Game Events](/docs/development/game-events) for the full hook/fire API. `HookMode.Pre` runs before the game processes it, `Post` runs after:
+Hooks a generated game event (`EventPlayerDeath`, `EventRoundStart`, ...). Takes `(hookMode)`, where `HookMode.Pre` runs before the game processes the event and `HookMode.Post` after, and the method must match `IGameEventService.GameEventHandler<T>` (`HookResult (T eventObj)`) for the event type you want - see <ApiRef name="IGameEventService" /> and [Game Events](/docs/development/game-events) for the full hook/fire API:
 
 ```csharp
 [GameEventHandler(HookMode.Post)]
@@ -89,7 +123,7 @@ private HookResult OnPlayerDeath(EventPlayerDeath @event)
 
 ### <ApiRef name="EventListener`1" /> (`[EventListener<T>]`)
 
-Subscribes a method to one of the framework's own events, via delegates on <ApiRef name="EventDelegates" /> mirroring <ApiRef name="IEventSubscriber" /> (e.g. `EventDelegates.OnEntityCreated`):
+Subscribes a method to one of the framework's own events. `T` must be a delegate on <ApiRef name="EventDelegates" />, which mirror <ApiRef name="IEventSubscriber" /> (e.g. `EventDelegates.OnEntityCreated`), and the method must match that delegate's signature:
 
 ```csharp
 [EventListener<EventDelegates.OnEntityCreated>]
@@ -98,22 +132,27 @@ public void OnEntityCreated(IOnEntityCreatedEvent @event)
 }
 ```
 
-This is the attribute-based equivalent of `Core.Event.OnEntityCreated += OnEntityCreated;`.
+The attribute is parameterless and allows one per method (`AllowMultiple = false`) - use `+=` when a single method has to listen to several events. This is the attribute-based equivalent of `Core.Event.OnEntityCreated += OnEntityCreated;`, see [Core Events](/docs/development/core-events).
 
 ### <ApiRef name="GameHookHandler" />
 
-Hooks a category under <ApiRef name="IGameHooks" /> (e.g. entity take-damage):
+Hooks one of the `Pre`/`Post` callbacks exposed by a category under <ApiRef name="IGameHooks" /> (e.g. entity take-damage). Takes `(hookMode)`, and the method signature has to match the delegate of the hook you want - for `Core.GameHooks.Entities.TakeDamage.Pre` that is `void (ref TakeDamageEntityPreContext ctx)`:
 
 ```csharp
 [GameHookHandler(HookMode.Pre)]
 private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
 {
+    ref var info = ref ctx.Params.Info;
+
+    // ctx.SetHookResult(HookResult.Stop); // blocks the damage
 }
 ```
 
+Game-hook callbacks take the result on the context via `SetHookResult(HookResult)` instead of returning it, see [Native Functions and Hooks](/docs/development/native-functions-and-hooks).
+
 ### <ApiRef name="ClientCommandHookHandler" />
 
-Intercepts a raw client console command before the server processes it - see <ApiRef name="ICommandService" member="HookClientCommand" />:
+Intercepts a raw client console command before the server processes it. Parameterless; the method must match `ICommandService.ClientCommandHandler` (`HookResult (int playerId, string commandLine)`) - see <ApiRef name="ICommandService" member="HookClientCommand" />:
 
 ```csharp
 [ClientCommandHookHandler]
@@ -125,19 +164,21 @@ public HookResult OnClientCommand(int playerId, string commandLine)
 
 ### <ApiRef name="ClientChatHookHandler" />
 
-Intercepts a chat message before it's broadcast - same shape as above, with chat-specific parameters, see <ApiRef name="ICommandService" member="HookClientChat" /> (and the `ModerationHandlers` example at the top of this page):
+Intercepts a chat message before it's broadcast. Parameterless; the method must match `ICommandService.ClientChatHandler` (`HookResult (int playerId, string text, bool teamonly)`) - see <ApiRef name="ICommandService" member="HookClientChat" />:
 
 ```csharp
 [ClientChatHookHandler]
-public HookResult OnClientChat(int playerId, string text, bool teamOnly)
+public HookResult OnClientChat(int playerId, string text, bool teamonly)
 {
     return HookResult.Continue;
 }
 ```
 
+Returning `HookResult.Stop` from a chat hook drops the message and skips the remaining hooks, so use it deliberately.
+
 ### <ApiRef name="EntityOutputHandlerAttribute" /> / <ApiRef name="EntityOutputHandlerAttribute`1" />
 
-Hooks an entity I/O output by designer name, or generically by schema class (`<T>` resolves `T.ClassName` for you):
+Hooks an entity I/O output by designer name, or generically by schema class (`<T>` resolves `T.ClassName` for you, and throws `ArgumentException` when `T` has no designer name). The non-generic form takes `(designerName, outputName)`, the generic one `(outputName)`:
 
 ```csharp
 [EntityOutputHandler("func_door", "OnOpen")]
@@ -156,7 +197,7 @@ Set `@event.Result = HookResult.Stop` to block the output from firing.
 
 ### <ApiRef name="EntityInputHandlerAttribute" /> / <ApiRef name="EntityInputHandlerAttribute`1" />
 
-Same shape as the output handler, for entity I/O inputs instead:
+Same shape as the output handler, for entity I/O inputs instead - `(designerName, inputName)` or the generic `<T>(inputName)`, with the input name in place of the output name:
 
 ```csharp
 [EntityInputHandler("func_door", "Open")]
@@ -175,7 +216,7 @@ Set `@event.Result = HookResult.Stop` to block the input from being accepted.
 
 ### <ApiRef name="ServerNetMessageHandler" />
 
-Hooks a net message the server sends to clients - see <ApiRef name="INetMessageService" /> and [Net Messages](/docs/development/netmessages):
+Hooks a net message the server sends to clients. Parameterless - the message type comes from the method parameter, which must satisfy the same constraints as the programmatic hook delegate (`ITypedProtobuf<T>`, `INetMessage<T>` and `IDisposable`, which every generated message does) - see <ApiRef name="INetMessageService" /> and [Net Messages](/docs/development/netmessages):
 
 ```csharp
 [ServerNetMessageHandler]
@@ -188,7 +229,7 @@ public HookResult OnServerSound(CMsgSosStartSoundEvent msg)
 
 ### <ApiRef name="ServerNetMessageInternalHandler" />
 
-Same as <ApiRef name="ServerNetMessageHandler" />, but for internal server messages, which carry a target `playerId`:
+Same as <ApiRef name="ServerNetMessageHandler" />, but for internal server messages, whose handler also receives the target `playerId`:
 
 ```csharp
 [ServerNetMessageInternalHandler]
@@ -201,7 +242,7 @@ public HookResult OnServerSoundInternal(CMsgSosStartSoundEvent msg, int playerId
 
 ### <ApiRef name="ClientNetMessageHandler" />
 
-Hooks a net message a client sends to the server:
+Hooks a net message a client sends to the server, with the sending `playerId`:
 
 ```csharp
 [ClientNetMessageHandler]
@@ -217,3 +258,7 @@ public HookResult OnClientMove(CCLCMsg_Move msg, int playerId)
     [Entity](/docs/development/entity) for the programmatic
     (`Core.NetMessage`/`Core.EntitySystem`) equivalents of the attributes above.
 </Callout>
+
+## Related Attributes
+
+Two more attributes are applied by plugins but don't register handlers: <ApiRef name="SwiftlyInject" /> on a field or property, which makes SwiftlyS2 inject the matching service into that member (see [Getting Started](/docs/development/getting-started)), and <ApiRef name="ThreadUnsafeAttribute" />, which annotates framework APIs that must only run on the game thread (see [Thread Safety](/docs/development/thread-safety)).

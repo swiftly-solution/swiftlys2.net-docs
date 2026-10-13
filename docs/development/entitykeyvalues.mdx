@@ -2,19 +2,26 @@
 title: Entity Key Values
 ---
 
-SwiftlyS2 provides <ApiRef name="CEntityKeyValues" /> as a typed key-value container for entity spawn/configuration values.
+SwiftlyS2 provides <ApiRef name="CEntityKeyValues" /> (`SwiftlyS2.Shared.EntitySystem`) as a typed key-value container for entity spawn/configuration values.
 
 ## Creating and Disposing
 
-Default constructor. Implements `IDisposable`, so prefer `using`.
+The default constructor allocates the container, and <ApiRef name="CEntityKeyValues" member="Dispose" /> releases it - so prefer `using`:
 
 ```csharp
 using var keyValues = new CEntityKeyValues();
 ```
 
+<Callout type="warning">
+    The container owns its native allocation. Once disposed, no member can be used
+    any more - <ApiRef name="CEntityKeyValues" member="Address" /> throws
+    `ObjectDisposedException`. Create a new `CEntityKeyValues` instead of reusing
+    a disposed one.
+</Callout>
+
 ## Address Property
 
-Exposes its native address through `Address`.
+Exposes the native address of the container through <ApiRef name="CEntityKeyValues" member="Address" />:
 
 ```csharp
 nint address = keyValues.Address;
@@ -23,6 +30,24 @@ nint address = keyValues.Address;
 ## Setting and Getting Values
 
 A type-specific `SetX`/`GetX` pair exists for every supported type - `GetX` mirrors `SetX` 1:1, taking the same key and returning what was stored:
+
+| Value type        | Setter           | Getter           |
+| ----------------- | ---------------- | ---------------- |
+| `bool`            | `SetBool`        | `GetBool`        |
+| `int`             | `SetInt32`       | `GetInt32`       |
+| `uint`            | `SetUInt32`      | `GetUInt32`      |
+| `long`            | `SetInt64`       | `GetInt64`       |
+| `ulong`           | `SetUInt64`      | `GetUInt64`      |
+| `float`           | `SetFloat`       | `GetFloat`       |
+| `double`          | `SetDouble`      | `GetDouble`      |
+| `string`          | `SetString`      | `GetString`      |
+| `nint`            | `SetPtr`         | `GetPtr`         |
+| `CUtlStringToken` | `SetStringToken` | `GetStringToken` |
+| `Color`           | `SetColor`       | `GetColor`       |
+| `Vector`          | `SetVector`      | `GetVector`      |
+| `Vector2D`        | `SetVector2D`    | `GetVector2D`    |
+| `Vector4D`        | `SetVector4D`    | `GetVector4D`    |
+| `QAngle`          | `SetQAngle`      | `GetQAngle`      |
 
 ```csharp
 keyValues.SetBool("is_enabled", true);
@@ -34,7 +59,7 @@ keyValues.SetFloat("speed", 250.5f);
 keyValues.SetDouble("precise_value", 3.14159265359);
 keyValues.SetString("name", "example");
 keyValues.SetPtr("pointer", nint.Zero);
-keyValues.SetStringToken("token", stringToken);
+keyValues.SetStringToken("token", new CUtlStringToken("token"));
 keyValues.SetColor("color", new Color(255, 0, 0, 255));
 keyValues.SetVector("position", new Vector(0, 0, 100));
 keyValues.SetVector2D("position_2d", new Vector2D(10, 20));
@@ -42,10 +67,17 @@ keyValues.SetVector4D("position_4d", new Vector4D(1, 2, 3, 4));
 keyValues.SetQAngle("angle", new QAngle(0, 90, 0));
 
 int health = keyValues.GetInt32("health");
-bool hasHealth = keyValues.Has("health"); // check a key exists
 ```
 
-Or the generic `Set<T>`/`Get<T>` form for the same types:
+Use <ApiRef name="CEntityKeyValues" member="Has" /> to check whether a key was set:
+
+```csharp
+bool hasHealth = keyValues.Has("health");
+```
+
+## Generic Set and Get
+
+`Set<T>`/`Get<T>` are the untyped entry points for the same types, useful when the value type is only known at runtime:
 
 ```csharp
 keyValues.Set<int>("health", 100);

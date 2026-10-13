@@ -11,6 +11,22 @@ SwiftlyS2 menus provide an interactive, per-player UI layer for settings, select
 3. Add options and call `Build()`.
 4. Open and close through `Core.MenusAPI`.
 
+The manager methods below cover the whole lifecycle:
+
+| Method                                                                            | Description                                                                                        |
+| --------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IMenuManagerAPI" member="CreateBuilder" />                          | Creates a new <ApiRef name="IMenuBuilderAPI" />.                                                   |
+| <ApiRef name="IMenuManagerAPI" member="CreateMenu" />                             | Builds a menu directly from <ApiRef name="MenuConfiguration" />/<ApiRef name="MenuKeybindOverrides" /> objects. |
+| <ApiRef name="IMenuManagerAPI" member="OpenMenuForPlayer" />                      | Opens a menu for one player, closing any menu they already have open.                              |
+| <ApiRef name="IMenuManagerAPI" member="OpenMenu" />                               | Opens a menu for every player.                                                                     |
+| <ApiRef name="IMenuManagerAPI" member="CloseMenuForPlayer" />                     | Closes a specific menu for one player; no effect if the player does not have it open.              |
+| <ApiRef name="IMenuManagerAPI" member="CloseActiveMenu" />                        | Closes whatever menu the player currently has open.                                                |
+| <ApiRef name="IMenuManagerAPI" member="CloseMenu" />                              | Closes a menu for every player who has it open.                                                    |
+| <ApiRef name="IMenuManagerAPI" member="CloseAllMenus" />                          | Closes every open menu for every player.                                                           |
+| <ApiRef name="IMenuManagerAPI" member="GetCurrentMenu" />                         | Returns the player's active menu, or `null` if they have none open.                                 |
+
+<ApiRef name="IMenuManagerAPI" member="Configuration" /> exposes the resolved core menu settings (`ItemsPerPage`, navigation prefix, input mode, button and sound mappings) - see [Core Configuration](/docs/resources/core-config).
+
 ## Builder Configuration
 
 Every call under `.Design` returns back to the builder, so chain `.Design.` again for each design call:
@@ -46,6 +62,49 @@ Core.MenusAPI.OpenMenuForPlayer(player, menu);
     Configuration](/docs/resources/core-config)) - out-of-range values log an
     error and reset to `-1`.
 </Callout>
+
+Every <ApiRef name="IMenuBuilderAPI" /> method returns the builder for chaining, except <ApiRef name="IMenuBuilderAPI" member="Build" />:
+
+| Method                                                                                                                                                | Description                                                                                                        |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| <ApiRef name="IMenuBuilderAPI" member="BindToParent" />(`IMenuAPI parent`)                                                                             | Binds the menu to a parent menu, so closing it returns to that menu.                                               |
+| <ApiRef name="IMenuBuilderAPI" member="AddOption" />(`IMenuOption option`)                                                                             | Adds an option to the menu.                                                                                        |
+| <ApiRef name="IMenuBuilderAPI" member="EnableSound" /> / <ApiRef name="IMenuBuilderAPI" member="DisableSound" />                                       | Turns interaction sounds on or off.                                                                                |
+| <ApiRef name="IMenuBuilderAPI" member="EnableExit" /> / <ApiRef name="IMenuBuilderAPI" member="DisableExit" />                                         | Turns the exit button for this menu on or off.                                                                     |
+| <ApiRef name="IMenuBuilderAPI" member="SetPlayerFrozen" />(`bool frozen = false`)                                                                      | Freezes player movement while the menu is open.                                                                    |
+| <ApiRef name="IMenuBuilderAPI" member="SetAutoCloseDelay" />(`float seconds = 0f`)                                                                     | Closes the menu automatically after the given number of seconds; `0` disables auto-close.                          |
+| <ApiRef name="IMenuBuilderAPI" member="SetSelectButton" /> / <ApiRef name="IMenuBuilderAPI" member="SetMoveForwardButton" /> / <ApiRef name="IMenuBuilderAPI" member="SetMoveBackwardButton" /> / <ApiRef name="IMenuBuilderAPI" member="SetExitButton" /> (`KeyBind`) | Overrides one navigation key bind of this menu. Combine keys with `\|`. |
+| <ApiRef name="IMenuBuilderAPI" member="AddExtraButton" />(`KeyBind keyBind, string label, Action<IPlayer, IMenuAPI> action`)                           | Adds a custom button that is shown in the menu footer and runs `action` when pressed.                              |
+| <ApiRef name="IMenuBuilderAPI" member="Build" />                                                                                                       | Builds and returns the finished <ApiRef name="IMenuAPI" />.                                                        |
+
+The `Set*Button` overrides replace the corresponding default from `Menu.Buttons` in `configs/core.jsonc`; a key bind that is not overridden keeps its default.
+
+## Menu Design
+
+`builder.Design` (<ApiRef name="IMenuDesignAPI" />) controls appearance. Like the builder, every call returns the builder:
+
+| Method                                                                                                             | Description                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IMenuDesignAPI" member="SetMenuTitle" />(`string? title = null`)                                     | Title displayed at the top of the menu; `null` clears it.                                                                     |
+| <ApiRef name="IMenuDesignAPI" member="SetMenuTitleVisible" />(`bool visible = true`)                               | Shows or hides the title.                                                                                                     |
+| <ApiRef name="IMenuDesignAPI" member="SetMenuTitleItemCountVisible" />(`bool visible = true`)                      | Shows or hides the item count in the title.                                                                                   |
+| <ApiRef name="IMenuDesignAPI" member="SetMenuFooterVisible" />(`bool visible = true`)                              | Shows or hides the footer.                                                                                                    |
+| <ApiRef name="IMenuDesignAPI" member="SetCommentVisible" />(`bool visible = true`)                                 | Shows or hides option comments.                                                                                               |
+| <ApiRef name="IMenuDesignAPI" member="SetDefaultComment" />(`string comment`)                                      | Comment used for options that do not set their own.                                                                           |
+| <ApiRef name="IMenuDesignAPI" member="SetMaxVisibleItems" />(`int count = 5`)                                      | Maximum number of options visible at once. Valid range is `[1, 5]`; menus with more options are paginated.                    |
+| <ApiRef name="IMenuDesignAPI" member="EnableAutoAdjustVisibleItems" /> / <ApiRef name="IMenuDesignAPI" member="DisableAutoAdjustVisibleItems" /> | Turns automatic adjustment of the visible item count on or off. When enabled, hiding the title or footer increases the effective visible count during rendering, without changing the `SetMaxVisibleItems` value. |
+| <ApiRef name="IMenuDesignAPI" member="SetGlobalScrollStyle" />(`MenuOptionScrollStyle style`)                      | Default scroll style for all options; individual options can override it.                                                     |
+| `SetNavigationMarkerColor` / `SetMenuFooterColor` / `SetVisualGuideLineColor` / `SetDisabledColor`                 | Sets the color of navigation markers, the footer, the visual guide lines or disabled options. Each takes an overload for a hex string (`null` resets to the default), a `Natives.Color`, or a `System.Drawing.Color`. |
+
+Hex colors accept `"#RGB"`, `"#RGBA"`, `"#RRGGBB"` and `"#RRGGBBAA"`; an invalid value logs an error and the color resets to the default.
+
+## Key Binds
+
+<ApiRef name="KeyBind" /> is a `[Flags]` `uint` enum, so several keys can be combined with `|`:
+
+`Mouse1`, `Mouse2`, `Space`, `Ctrl`, `W`, `A`, `S`, `D`, `E`, `Esc`, `R`, `Alt`, `Shift`, `Weapon1`, `Weapon2`, `Grenade1`, `Grenade2`, `Tab`, `F`.
+
+In WASD input mode (`Menu.InputMode` in `configs/core.jsonc`), key bind overrides do not take effect.
 
 ## Option Types
 
@@ -120,9 +179,34 @@ Core.MenusAPI.CloseAllMenus();
 var current = Core.MenusAPI.GetCurrentMenu(player);
 ```
 
+Both open methods have an overload taking a callback that runs when the menu is closed for that player:
+
+```csharp
+Core.MenusAPI.OpenMenuForPlayer(player, menu, (p, m) => p.SendChat("Menu closed."));
+Core.MenusAPI.OpenMenu(menu, (p, m) => p.SendChat("Menu closed for a player."));
+```
+
 <ApiRef name="IMenuAPI" member="ShowForPlayer" />/
 <ApiRef name="IMenuAPI" member="HideForPlayer" /> only affect visual display -
 prefer the manager methods above for full state handling and events.
+
+### Menu Members
+
+| Member                                                                      | Description                                                                                                                     |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IMenuAPI" member="MenuManager" />                             | The <ApiRef name="IMenuManagerAPI" /> this menu belongs to.                                                                     |
+| <ApiRef name="IMenuAPI" member="Configuration" />                           | The <ApiRef name="MenuConfiguration" /> of this menu.                                                                            |
+| <ApiRef name="IMenuAPI" member="KeybindOverrides" />                        | The <ApiRef name="MenuKeybindOverrides" /> of this menu.                                                                         |
+| <ApiRef name="IMenuAPI" member="OptionScrollStyle" />                       | The <ApiRef name="MenuOptionScrollStyle" /> of this menu.                                                                        |
+| <ApiRef name="IMenuAPI" member="Builder" />                                 | The builder this menu came from, if it was created with `CreateBuilder`.                                                        |
+| <ApiRef name="IMenuAPI" member="Tag" />                                     | Free-form object for your own bookkeeping.                                                                                      |
+| <ApiRef name="IMenuAPI" member="Parent" />                                  | `(IMenuAPI? ParentMenu, IMenuOption? TriggerOption)` - the parent menu, and the option that opened this submenu.                |
+| <ApiRef name="IMenuAPI" member="Options" />                                 | Read-only list of the options in this menu.                                                                                     |
+| <ApiRef name="IMenuAPI" member="AddOption" /> / <ApiRef name="IMenuAPI" member="RemoveOption" /> | Adds an option at runtime, or removes one (returns `false` if it was not found).                                    |
+| <ApiRef name="IMenuAPI" member="MoveToOption" /> / <ApiRef name="IMenuAPI" member="MoveToOptionIndex" /> | Moves a player's selection to an option (or an index), returning `false` if it does not exist.                      |
+| <ApiRef name="IMenuAPI" member="GetCurrentOption" /> / <ApiRef name="IMenuAPI" member="GetCurrentOptionIndex" /> | Reads a player's highlighted option, or `null`/`-1` if nothing is selected.                                       |
+
+Like <ApiRef name="IMenuOption" />, <ApiRef name="IMenuAPI" /> implements `IDisposable`.
 
 ## Events
 
@@ -150,7 +234,7 @@ private void OnMenuOpened(object? sender, MenuManagerEventArgs args)
 private void OnMenuClosed(object? sender, MenuManagerEventArgs args) { /* same shape */ }
 ```
 
-Both handlers receive <ApiRef name="MenuManagerEventArgs" />.
+Both handlers receive <ApiRef name="MenuManagerEventArgs" /> (`Player`, `Menu`).
 
 ### Per-menu and per-option events
 
@@ -161,7 +245,10 @@ adminOnly.Validating += (sender, args) =>
 {
     // args.Player, args.Option are also available here
     if (!Core.Permission.PlayerHasPermission(args.Player.SteamID, "admin"))
+    {
         args.Cancel = true;
+        args.CancelReason = "You are not an admin.";
+    }
 };
 
 adminOnly.Click += (sender, args) =>
@@ -175,17 +262,20 @@ adminOnly.AfterFormat += (sender, args) => args.CustomText = $"<font color='#FFD
 
 var menu = Core.MenusAPI.CreateBuilder().Design.SetMenuTitle("Admin").AddOption(adminOnly).Build();
 
-// menu.OptionHovering: fired every render frame while hovering - keep this cheap.
-// menu.OptionHovered: fired only when the hovered option changes.
-// menu.OptionSelected: fired when a selection is activated.
+menu.OptionHovering += (sender, args) => { /* fired every render frame while hovering */ };
+menu.OptionHovered += (sender, args) => { /* fired only when the hovered option changes */ };
+menu.OptionSelected += (sender, args) => { /* fired when a selection is activated */ };
 ```
 
-<Callout type="warning">
-    <ApiRef name="MenuOptionValidatingEventArgs" /> only exposes `Player`,
-    `Option`, and a settable `Cancel` bool - there is no `CancelReason`. Send a
-    chat message from the `Validating` handler yourself before setting `Cancel =
-    true` if the player needs to know why.
-</Callout>
+| Event                                                                                      | Event args and notes                                                                                        |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IMenuOption" member="Validating" />                                          | <ApiRef name="MenuOptionValidatingEventArgs" /> (`Player`, `Option`, settable `Cancel` and `CancelReason`). Runs before `Click`. |
+| <ApiRef name="IMenuOption" member="Click" />                                               | <ApiRef name="MenuOptionClickEventArgs" /> (`Player`, plus a read-only `CloseMenu` flag). Asynchronous - return `ValueTask.CompletedTask`. |
+| <ApiRef name="IMenuOption" member="BeforeFormat" /> / <ApiRef name="IMenuOption" member="AfterFormat" /> | <ApiRef name="MenuOptionFormattingEventArgs" /> (`Player`, `Option`, settable `CustomText`).    |
+| <ApiRef name="IMenuOption" member="VisibilityChanged" /> / <ApiRef name="IMenuOption" member="EnabledChanged" /> / <ApiRef name="IMenuOption" member="TextChanged" /> | <ApiRef name="MenuOptionEventArgs" />; `Player` is `null` because these are global property changes. |
+| <ApiRef name="IMenuAPI" member="OptionHovering" />                                         | <ApiRef name="MenuEventArgs" />. Fired once per render frame while an option is hovered - keep the handler cheap. |
+| <ApiRef name="IMenuAPI" member="OptionHovered" />                                          | <ApiRef name="MenuEventArgs" />. Fired only when the hovered option changes.                                 |
+| <ApiRef name="IMenuAPI" member="OptionSelected" />                                         | <ApiRef name="MenuEventArgs" />. Fired when a selection is activated.                                       |
 
 ## Runtime Updates
 
@@ -202,7 +292,32 @@ option.SetEnabled(player, false);
 
 <ApiRef name="IMenuOption" member="Visible" />/
 <ApiRef name="IMenuOption" member="Enabled" /> are the global states;
-`SetVisible`/`SetEnabled(player, ...)` are per-player overrides on top of them.
+`SetVisible`/`SetEnabled(player, ...)` set per-player values on top of them.
+Per-player values have lower priority than the global property, so a globally
+hidden or disabled option stays hidden or disabled for every player.
+
+Other <ApiRef name="IMenuOption" /> members you can use while a menu is open:
+
+| Member                                                                                                            | Description                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| <ApiRef name="IMenuOption" member="Text" /> / <ApiRef name="IMenuOption" member="Comment" />                      | Displayed text and comment. Global - changing them affects what all players see.                 |
+| <ApiRef name="IMenuOption" member="Visible" /> / <ApiRef name="IMenuOption" member="Enabled" />                    | Global visibility and interaction state.                                                         |
+| <ApiRef name="IMenuOption" member="SetVisible" /> / <ApiRef name="IMenuOption" member="GetVisible" />               | Per-player visibility.                                                                           |
+| <ApiRef name="IMenuOption" member="SetEnabled" /> / <ApiRef name="IMenuOption" member="GetEnabled" />               | Per-player enabled state.                                                                        |
+| <ApiRef name="IMenuOption" member="Tag" />                                                                        | Free-form object for your own bookkeeping.                                                       |
+| <ApiRef name="IMenuOption" member="LineCount" />                                                                  | Number of lines the option occupies (read-only).                                                 |
+| <ApiRef name="IMenuOption" member="MaxWidth" />                                                                  | Maximum display width of the option text, in relative units.                                     |
+| <ApiRef name="IMenuOption" member="TextSize" />                                                                  | <ApiRef name="MenuOptionTextSize" />: `ExtraSmall`, `Small`, `SmallMedium`, `Medium`, `MediumLarge`, `Large`, `ExtraLarge`. |
+| <ApiRef name="IMenuOption" member="TextStyle" />                                                                  | <ApiRef name="MenuOptionTextStyle" />: `TruncateEnd`, `TruncateBothEnds`, `ScrollLeftFade`, `ScrollRightFade`, `ScrollLeftLoop`, `ScrollRightLoop`. |
+| <ApiRef name="IMenuOption" member="PlaySound" />                                                                  | Whether selecting this option plays the selection sound.                                          |
+| <ApiRef name="IMenuOption" member="CloseAfterClick" />                                                            | Whether the menu closes after the option is clicked (read-only).                                  |
+| <ApiRef name="IMenuOption" member="Menu" />                                                                      | The menu the option belongs to, or `null` until it is added to one.                                |
+
+For custom option implementations, <ApiRef name="IMenuOption" /> also exposes
+<ApiRef name="IMenuOption" member="GetDisplayText" />(`player`,
+`displayLine = 0`), <ApiRef name="IMenuOption" member="IsClickTaskCompleted" />,
+<ApiRef name="IMenuOption" member="OnValidatingAsync" /> and
+<ApiRef name="IMenuOption" member="OnClickAsync" />.
 
 ## Direct `CreateMenu` Usage
 
@@ -220,6 +335,37 @@ var menu = Core.MenusAPI.CreateMenu(
     optionTextStyle: MenuOptionTextStyle.TruncateEnd
 );
 ```
+
+`parent` defaults to `null`, `optionScrollStyle` to
+<ApiRef name="MenuOptionScrollStyle" member="CenterFixed" /> and
+`optionTextStyle` to <ApiRef name="MenuOptionTextStyle" member="TruncateEnd" />.
+
+### MenuConfiguration
+
+| Member                                                                                                  | Default  | Description                                                                                       |
+| ------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `Title` (`string`)                                                                                     | `"Menu"` | Title displayed at the top.                                                                        |
+| `HideTitle` / `HideTitleItemCount` / `HideFooter` / `HideComment` (`bool`)                              | `false`  | Hides the title, the item count in the title, the footer or the comments.                          |
+| `PlaySound` (`bool`)                                                                                    | `true`   | Whether interaction sounds play.                                                                   |
+| `MaxVisibleItems` (`int`)                                                                               | `-1`     | Options visible at once. Valid range `[1, 5]`; out-of-range values log an error and reset to `-1`, which falls back to `ItemsPerPage`. |
+| `AutoIncreaseVisibleItems` (`bool`)                                                                     | `true`   | Whether hiding the title or footer increases the effective visible item count during rendering.     |
+| `FreezePlayer` (`bool`)                                                                                 | `false`  | Whether player movement is frozen while the menu is open.                                           |
+| `DisableExit` (`bool`)                                                                                  | `false`  | Whether the exit button is disabled for this menu.                                                  |
+| `AutoCloseAfter` (`float`)                                                                              | `0f`     | Seconds before the menu closes automatically; `0` or less disables auto-close.                       |
+| `NavigationMarkerColor` / `FooterColor` / `VisualGuideLineColor` / `DisabledColor` (`string?`)          | `null`   | Hex colors for navigation markers, footer, visual guide lines and disabled options.                 |
+| `DefaultComment` (`string`)                                                                             | `""`     | Comment used for options that do not set their own.                                                 |
+| `ExtraButtons` (`List<MenuExtraButton>`)                                                                | empty    | Extra footer buttons, see <ApiRef name="MenuExtraButton" /> (`KeyBind`, `Label`, `Action`).          |
+
+### MenuKeybindOverrides
+
+All four members are `KeyBind?` and default to `null`, which keeps the core default from `Menu.Buttons`:
+
+| Member     | Description                            |
+| ---------- | -------------------------------------- |
+| `Select`   | Key bind for activating the selection. |
+| `Move`     | Key bind for moving forward.           |
+| `MoveBack` | Key bind for moving backward.          |
+| `Exit`     | Key bind for closing the menu.         |
 
 ## Common Pitfalls
 

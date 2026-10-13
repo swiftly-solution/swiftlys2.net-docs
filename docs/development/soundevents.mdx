@@ -10,21 +10,27 @@ parameters and recipient filters.
 ```csharp
 using var soundEvent = new SoundEvent();
 soundEvent.Name = "Weapon_AK47.Single";
+soundEvent.Volume = 0.8f;
+soundEvent.Pitch = 1.0f;
 
-// or initialize name, volume, and pitch directly
+// or initialize name, volume and pitch directly
 using var soundEvent2 = new SoundEvent("Weapon_AK47.Single", volume: 0.8f, pitch: 1.0f);
 ```
+
+`Name` starts out empty, `Volume` and `Pitch` at `1.0f`, and `SourceEntityIndex` at `-1` - the second constructor only overwrites the first three.
 
 ## Configuring Core Properties
 
 ```csharp
 soundEvent.Name = "Weapon_AK47.Single";
-soundEvent.Volume = 0.6f;               // volume scalar
-soundEvent.Pitch = 1.15f;               // pitch scalar
-soundEvent.SourceEntityIndex = -1;      // source entity index; -1 (default) = recipient location
+soundEvent.Volume = 0.6f;               // float; stored as the public.volume field
+soundEvent.Pitch = 1.15f;               // float; stored as the public.pitch field
+soundEvent.SourceEntityIndex = -1;      // source entity index; -1 (default) = no source entity
 
-soundEvent.SetSourceEntity(sourceEntity); // helper instead of setting SourceEntityIndex by hand
+soundEvent.SetSourceEntity(entity);     // helper instead of assigning entity.Index yourself
 ```
+
+`Name` is the sound event name as used in the game's scripts and prefabs, e.g. `Weapon_AK47.Single`. `Volume` and `Pitch` are convenience wrappers around the float fields `public.volume` and `public.pitch`, so `SetFloat("public.volume", 0.6f)` does the same thing. Setting a name, a parameter or `SourceEntityIndex` only changes the instance - the values are sent on the next emit.
 
 ## Setting Custom Sound Fields
 
@@ -42,9 +48,21 @@ bool someFlag = soundEvent.GetBool("public.some_flag");
 Vector pos = soundEvent.GetFloat3("public.position");
 ```
 
+Every setter takes the field name and the value, every getter the field name:
+
+| Getter / setter           | Field type |
+| ------------------------- | ---------- |
+| `SetBool` / `GetBool`     | `bool`     |
+| `SetInt32` / `GetInt32`   | `int`      |
+| `SetUInt32` / `GetUInt32` | `uint`     |
+| `SetFloat` / `GetFloat`   | `float`    |
+| `SetFloat3` / `GetFloat3` | `Vector`   |
+
+Getters return the type's default (`false`, `0`, `0.0f`, or a zero `Vector`) when the field was never set, or was set with a different type. Fields set on an instance stay set, so every later `Emit()` sends them again.
+
 ## Configuring Recipients
 
-Managed through <ApiRef name="CRecipientFilter" /> on `soundEvent.Recipients`.
+Recipients are managed through <ApiRef name="CRecipientFilter" />, exposed by the `Recipients` property - it returns the filter by reference, so you configure the filter of the sound event in place. A newly created `SoundEvent` has an empty filter, so add the players that should hear it.
 
 ```csharp
 // Broadcast to everyone
@@ -57,20 +75,49 @@ soundEvent.Recipients.AddRecipient(1);
 
 // Remove one player again
 soundEvent.Recipients.RemoveRecipient(1);
+
+int count = soundEvent.Recipients.GetRecipientCount();
+foreach (int slot in soundEvent.Recipients.GetRecipients())
+{
+    // every slot currently in the filter
+}
 ```
+
+`AddRecipient`/`RemoveRecipient` take player slots `0`-`63` and throw `IndexOutOfRangeException` outside that range. The filter also exposes `RecipientsMask` (`ulong`, the raw mask), `ToMask()`, `BufferType` (<ApiRef name="NetChannelBufType_t" />, `BUF_RELIABLE` for a newly constructed filter), and the `InitMessage`, `DisabledPrediction` and `PredictedSlot` fields - see [Network Messages](/docs/development/netmessages) for the filter's static `FromMask`, `FromPlayers` and `FromSingle` factories and the rest of its members.
 
 ## Emitting Sound Events
 
 ```csharp
-uint guid = soundEvent.Emit(); // main thread
-uint guid = await soundEvent.EmitAsync(); // non-main-thread
+uint guid = soundEvent.Emit();             // main thread only
+uint guid = await soundEvent.EmitAsync();  // schedules the emit onto the main thread
 ```
 
+`Emit()` returns the `uint` guid of the started sound event; you can observe the outgoing `CMsgSosStartSoundEvent` in a server net-message hook (see [Network Messages](/docs/development/netmessages)). Calling `Emit()` again on the same instance starts another event with a new guid.
+
 <Callout type="warning">
-    `Emit()` is thread-unsafe. Use `EmitAsync()` when you're not sure execution
-    is on the main thread.
+    `Emit()` is thread-unsafe (<ApiRef name="ThreadUnsafeAttribute" />) and must
+    run on the main thread. Use `EmitAsync()`, which returns `Task<uint>` and
+    dispatches the call back onto the game thread, whenever you're not sure
+    execution is on the main thread - see [Thread
+    Safety](/docs/development/thread-safety).
 </Callout>
 
 ## Disposing
 
-`SoundEvent` implements `IDisposable` - wrap it in `using` so its native handle is released once you're done emitting.
+`SoundEvent` implements `IDisposable` - wrap it in `using` (or call `Dispose()`) so its native resources are released once you're done emitting.
+
+## Members at a Glance
+
+| Member                                                                                   | Type                           | Notes                                                   |
+| ---------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------- |
+| `Name`                                                                                   | `string`                       | Sound event name to play; empty by default              |
+| `Volume`                                                                                 | `float`                        | `public.volume` field, `1.0f` by default                |
+| `Pitch`                                                                                  | `float`                        | `public.pitch` field, `1.0f` by default                 |
+| `SourceEntityIndex`                                                                      | `int`                          | Source entity index, `-1` by default (no source entity) |
+| `Recipients`                                                                             | `ref CRecipientFilter`         | Recipient filter, empty by default                      |
+| `SetSourceEntity`                                                                        | `void (CEntityInstance)`       | Assigns `entity.Index` to `SourceEntityIndex`           |
+| `SetBool` / `GetBool`, `SetInt32` / `GetInt32`, `SetUInt32` / `GetUInt32`, `SetFloat` / `GetFloat` | `bool`, `int`, `uint`, `float` | Custom sound fields, by field name                      |
+| `SetFloat3` (three `float`s or a `Vector`) / `GetFloat3`                                 | `Vector`                       | Custom 3D sound fields                                  |
+| `Emit`                                                                                   | `uint`                         | Thread-unsafe; returns the started event's guid         |
+| `EmitAsync`                                                                              | `Task<uint>`                   | Main-thread dispatch of `Emit`                          |
+| `Dispose`                                                                                | `void`                         | `IDisposable` implementation                            |

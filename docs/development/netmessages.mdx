@@ -9,6 +9,16 @@ SwiftlyS2's typed net-message API sends generated protobuf messages and intercep
     values inside the callback and don't store those objects for later use.
 </Callout>
 
+## Generated Message Interfaces
+
+Every generated message (`CUserMessageShake`, `CCLCMsg_Move`, `CMsgSosStartSoundEvent`, ...) implements three interfaces:
+
+- <ApiRef name="INetMessage`1" /> - sending: <ApiRef name="INetMessage`1" member="Send" />, `SendToAllPlayers()`, `SendToPlayer(int playerId)` and the <ApiRef name="INetMessage`1" member="Recipients" /> filter, plus the static abstract `MessageId` (`int`) and `MessageName` (`string`), which generic code can read through its type parameter (`T.MessageId`).
+- <ApiRef name="ITypedProtobuf`1" /> - field-based access through <ApiRef name="ITypedProtobuf`1" member="Accessor" /> (<ApiRef name="IProtobufAccessor" />).
+- `IDisposable` - only messages built with <ApiRef name="INetMessageService" member="Create" /> own a native handle, so dispose those (or wrap them in `using`) once you're done.
+
+Fields declared in the message's protobuf definition get typed properties directly on the generated type (`msg.Duration`, `msg.SoundeventHash`, ...). Declared repeated fields are typed as <ApiRef name="IProtobufRepeatedFieldValueType`1" /> - an `IList<T>` of scalar values - or <ApiRef name="IProtobufRepeatedFieldSubMessageType`1" /> for nested messages, which exposes `Count`, `Get(index)`, `Add()` and `Clear()` on top of enumeration. Both derive from the <ApiRef name="IRepeatedField" /> marker interface.
+
 ## Sending Net Messages
 
 <ApiRef name="INetMessageService" member="Send" /> builds the message, runs your
@@ -44,9 +54,32 @@ msg.Recipients.AddRecipient(1);
 msg.Send(); // or msg.SendToPlayer(0) / msg.SendToAllPlayers()
 ```
 
+`Create<T>` returns `T`, so a message you keep around can be reconfigured and sent again - change its fields or recipient filter and call `Send()` once more.
+
+### Recipient Filters
+
+`Recipients` is a <ApiRef name="CRecipientFilter" /> - a 64-bit player mask that `Send` and `Create` configure in place:
+
+```csharp
+msg.Recipients.AddAllPlayers();       // target every player
+msg.Recipients.RemoveAllPlayers();    // empty the filter
+msg.Recipients.AddRecipient(slot);    // add a single slot
+msg.Recipients.RemoveRecipient(slot); // remove a single slot
+
+int count = msg.Recipients.GetRecipientCount();
+foreach (int slot in msg.Recipients.GetRecipients())
+{
+    // every slot currently in the filter
+}
+```
+
+`AddRecipient`/`RemoveRecipient` take player slots `0`-`63` and throw `IndexOutOfRangeException` outside that range. The filter also exposes `RecipientsMask` (`ulong`, the raw mask) and `ToMask()`, the buffer type `BufferType` (<ApiRef name="NetChannelBufType_t" />: `BUF_DEFAULT`, `BUF_UNRELIABLE`, `BUF_RELIABLE`, `BUF_VOICE`, defaulting to `BUF_RELIABLE` for a newly constructed filter), and the `InitMessage`, `DisabledPrediction` and `PredictedSlot` fields. The static `FromMask(ulong)`, `FromPlayers(...)` and `FromSingle(int)` factories build a standalone filter for APIs that take one by value - see [Sound Events](/docs/development/soundevents) for another user of the same struct.
+
 ## Hooking Net Messages
 
-Three hook pipelines: client messages (<ApiRef name="INetMessageService" member="HookClientMessage" />, client-to-server), server messages (<ApiRef name="INetMessageService" member="HookServerMessage" />, server-to-client), and internal server messages (<ApiRef name="INetMessageService" member="HookServerMessageInternal" />, server-to-client with a target `playerId` - only a small subset of server-to-client messages use this pipeline). Each can be registered programmatically or via an attribute discovered on any registered class (your `BasePlugin` is registered by default).
+Three hook pipelines: client messages (<ApiRef name="INetMessageService" member="HookClientMessage" />, client-to-server), server messages (<ApiRef name="INetMessageService" member="HookServerMessage" />, server-to-client), and internal server messages (<ApiRef name="INetMessageService" member="HookServerMessageInternal" />, server-to-client with a target `playerId` - only a small subset of server-to-client messages use this pipeline). Each can be registered programmatically or via an attribute discovered on any registered class (your `BasePlugin` is registered by default - see [Using Attributes](/docs/development/using-attributes)).
+
+The handlers are the delegates declared on <ApiRef name="INetMessageService" />: <ApiRef name="INetMessageService" member="ClientNetMessageHandler" /> and <ApiRef name="INetMessageService" member="ServerNetMessageInternalHandler" /> take `(T msg, int playerId)`, <ApiRef name="INetMessageService" member="ServerNetMessageHandler" /> takes `(T msg)`, and all three return <ApiRef name="HookResult" />. `T` is constrained to <ApiRef name="ITypedProtobuf`1" />, <ApiRef name="INetMessage`1" /> and `IDisposable` - every generated message satisfies that. The matching attributes (<ApiRef name="ClientNetMessageHandler" />, <ApiRef name="ServerNetMessageHandler" />, <ApiRef name="ServerNetMessageInternalHandler" />) are parameterless, target methods and allow one per method (`AllowMultiple = false`), so the method parameter picks the message type.
 
 ### Client Hooks
 
@@ -106,7 +139,17 @@ public HookResult OnServerSoundInternal(CMsgSosStartSoundEvent msg, int playerId
 }
 ```
 
-Register the programmatic equivalents with <ApiRef name="INetMessageService" member="HookServerMessage" />/<ApiRef name="INetMessageService" member="HookServerMessageInternal" />, same `Load`/`Unload`/`Guid` pattern as the client hook above.
+Register the programmatic equivalents with <ApiRef name="INetMessageService" member="HookServerMessage" />/<ApiRef name="INetMessageService" member="HookServerMessageInternal" />, same `Load`/`Unload`/`Guid` pattern as the client hook above:
+
+```csharp
+private Guid _serverSoundHook;
+
+public override void Load(bool hotReload)
+{
+    _serverSoundHook = Core.NetMessage.HookServerMessage<CMsgSosStartSoundEvent>(OnServerSound);
+    // or Core.NetMessage.HookServerMessageInternal<CMsgSosStartSoundEvent>(OnServerSoundInternal);
+}
+```
 
 ## HookResult Behavior
 
@@ -124,7 +167,7 @@ Core.NetMessage.UnhookServerMessage<CMsgSosStartSoundEvent>();
 Core.NetMessage.UnhookServerMessageInternal<CMsgSosStartSoundEvent>();
 ```
 
-See <ApiRef name="INetMessageService" member="UnhookClientMessage" />, <ApiRef name="INetMessageService" member="UnhookServerMessage" /> and <ApiRef name="INetMessageService" member="UnhookServerMessageInternal" />. Their handler delegates are generic over `T` constrained to <ApiRef name="ITypedProtobuf`1" />, <ApiRef name="INetMessage`1" /> and `IDisposable`.
+See <ApiRef name="INetMessageService" member="UnhookClientMessage" />, <ApiRef name="INetMessageService" member="UnhookServerMessage" /> and <ApiRef name="INetMessageService" member="UnhookServerMessageInternal" /> - one pipeline each, with the same generic constraints as their hooking counterparts.
 
 ## Working with the Raw Payload Accessor
 
@@ -141,3 +184,52 @@ private HookResult OnServerSound(CMsgSosStartSoundEvent msg)
     return HookResult.Continue;
 }
 ```
+
+Every field type follows the same naming pattern: `Set<Type>(fieldName, value)` writes, `Get<Type>(fieldName)` reads, `Add<Type>(fieldName, value)` appends to a repeated field, and `SetRepeated<Type>(fieldName, index, value)` / `GetRepeated<Type>(fieldName, index)` address an element by index:
+
+| Field type | `<Type>` suffix |
+| ---------- | --------------- |
+| `bool`     | `Bool`          |
+| `int`      | `Int32`         |
+| `uint`     | `UInt32`        |
+| `long`     | `Int64`         |
+| `ulong`    | `UInt64`        |
+| `float`    | `Float`         |
+| `double`   | `Double`        |
+| `string`   | `String`        |
+| `byte[]`   | `Bytes`         |
+| `Vector2D` | `Vector2D`      |
+| `Vector`   | `Vector`        |
+| `Color`    | `Color`         |
+| `QAngle`   | `QAngle`        |
+
+With `msg` being the message you are reading from or writing to, and the strings being protobuf field names:
+
+```csharp
+msg.Accessor.SetFloat("amplitude", 0.5f);
+msg.Accessor.SetString("soundevent_name", "Weapon_AK47.Single");
+
+float amplitude = msg.Accessor.GetFloat("amplitude");
+Vector position = msg.Accessor.GetVector("origin");
+
+// repeated fields, addressed by name and index
+int size = msg.Accessor.GetRepeatedFieldSize("sounds");
+string first = msg.Accessor.GetRepeatedString("sounds", 0);
+msg.Accessor.ClearRepeatedField("sounds");
+```
+
+Use the accessor to write a field that has no generated property, e.g. in a hook before the message goes out, or to reset a message before reusing it:
+
+```csharp
+msg.Accessor.SetUInt32("soundevent_hash", 1234u);
+
+msg.Accessor.Clear(); // reset every field on the message
+```
+
+The remaining members cover nested messages and untyped values:
+
+- `GetNestedMessage(fieldName)`, `GetRepeatedNestedMessage(fieldName, index)` and `AddNestedMessage(fieldName)` return a native pointer (`nint`) to a nested message.
+- `HasField(fieldName)` checks for presence, `GetRepeatedFieldSize(fieldName)` counts the elements of a repeated field, `ClearRepeatedField(fieldName)` empties one repeated field and `Clear()` resets the whole message.
+- Generic `Set<T>`/`Get<T>`, `Add<T>` and `SetRepeated<T>`/`GetRepeated<T>` overloads are available alongside the typed helpers.
+
+As a native wrapper, the accessor is also an <ApiRef name="INativeHandle" /> - `IsValid` and `Address` are available on it.

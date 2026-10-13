@@ -8,11 +8,19 @@ SwiftlyS2's permission service handles access checks, grant/revoke, and permissi
 
 Available through `Core.Permission` (<ApiRef name="ISwiftlyCore" member="Permission" />, type <ApiRef name="IPermissionManager" />). All checks and mutations key off SteamID64 (`ulong`) - use `player.SteamID`.
 
+<Callout type="info">
+    `services.AddSwiftly(Core)` registers `Core.Permission` as a singleton, so
+    <ApiRef name="IPermissionManager" /> can be constructor-injected - see
+    [Dependency Injection](/docs/guides/dependency-injection).
+</Callout>
+
 ## Checking Permissions
 
-<ApiRef name="IPermissionManager" member="PlayerHasPermission" /> checks one
-key; <ApiRef name="IPermissionManager" member="PlayerHasPermissions" /> requires
-every key in a list; both support wildcard keys like `myplugin.admin.*`.
+<ApiRef name="IPermissionManager" member="PlayerHasPermission" /> takes `(ulong
+steamId, string permission)` and checks one key;
+<ApiRef name="IPermissionManager" member="PlayerHasPermissions" /> takes `(ulong
+steamId, IEnumerable<string> permissions)` and requires every key in the list.
+Both return `bool` and support `xxx.*` wildcard keys.
 
 ```csharp
 if (Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.admin"))
@@ -23,19 +31,21 @@ bool canUseRestrictedAction = Core.Permission.PlayerHasPermissions(
     ["myplugin.admin.kick", "myplugin.admin.ban"]
 );
 
-Core.Permission.AddPermission(player.SteamID, "myplugin.admin.*"); // grants both .kick and .ban
+bool isAdmin = Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.admin.*"); // wildcard key
 ```
 
 ## Granting and Revoking Permissions
 
-<ApiRef name="IPermissionManager" member="AddPermission" />,
-<ApiRef name="IPermissionManager" member="RemovePermission" />, and
-<ApiRef name="IPermissionManager" member="ClearPermissions" />:
+<ApiRef name="IPermissionManager" member="AddPermission" /> and
+<ApiRef name="IPermissionManager" member="RemovePermission" /> each take a
+`(ulong steamId, string permission)` pair;
+<ApiRef name="IPermissionManager" member="ClearPermissions" /> takes only the
+SteamID and clears all of the player's permissions, both base and temporary:
 
 ```csharp
 Core.Permission.AddPermission(player.SteamID, "myplugin.vip");
 Core.Permission.RemovePermission(player.SteamID, "myplugin.vip");
-Core.Permission.ClearPermissions(player.SteamID); // removes every directly-granted permission
+Core.Permission.ClearPermissions(player.SteamID); // clears both base and temporary permissions
 ```
 
 <Callout type="warning">
@@ -45,8 +55,9 @@ Core.Permission.ClearPermissions(player.SteamID); // removes every directly-gran
 
 ## Listing a Player's Permissions
 
-<ApiRef name="IPermissionManager" member="GetPlayerPermissions" /> returns
-everything a player effectively has, including inherited sub-permissions.
+<ApiRef name="IPermissionManager" member="GetPlayerPermissions" /> takes the
+`ulong steamId` and returns an `IEnumerable<string>` of everything the player
+effectively has, including permissions inherited from sub-permissions.
 
 ```csharp
 IEnumerable<string> permissions = Core.Permission.GetPlayerPermissions(player.SteamID);
@@ -54,19 +65,21 @@ IEnumerable<string> permissions = Core.Permission.GetPlayerPermissions(player.St
 
 ## Sub-Permissions (Hierarchy)
 
-One permission key can imply others.
+One permission key can imply another: <ApiRef name="IPermissionManager"
+member="AddSubPermission" /> takes `(string permission, string subPermission)`
+and records that `permission` also grants `subPermission`. Both hierarchy
+members take only the two keys, because the hierarchy is defined for the
+permission keys themselves rather than per player.
 
 ```csharp
 Core.Permission.AddSubPermission("myplugin.admin", "myplugin.moderator");
-Core.Permission.AddSubPermission("myplugin.moderator", "myplugin.helper");
 
 Core.Permission.AddPermission(player.SteamID, "myplugin.admin");
 
-bool isModerator = Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.moderator"); // true
-bool isHelper = Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.helper"); // true, transitively
+bool isModerator = Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.moderator"); // true, inherited from myplugin.admin
 ```
 
-Remove an edge with <ApiRef name="IPermissionManager" member="RemoveSubPermission" />:
+Remove an edge with <ApiRef name="IPermissionManager" member="RemoveSubPermission" />, which takes the same pair:
 
 ```csharp
 Core.Permission.RemoveSubPermission("myplugin.admin", "myplugin.moderator");
@@ -92,3 +105,16 @@ public void OnBanCommand(ICommandContext context)
 ```
 
 See the [Commands](/docs/development/commands) page for the full attribute reference.
+
+## Reference
+
+| Member | Signature | Returns |
+| --- | --- | --- |
+| <ApiRef name="IPermissionManager" member="PlayerHasPermission" /> | `bool PlayerHasPermission(ulong steamId, string permission)` | `true` if the player has `permission`; supports `xxx.*` wildcards |
+| <ApiRef name="IPermissionManager" member="PlayerHasPermissions" /> | `bool PlayerHasPermissions(ulong steamId, IEnumerable<string> permissions)` | `true` if the player has every key in `permissions` |
+| <ApiRef name="IPermissionManager" member="AddPermission" /> | `void AddPermission(ulong steamId, string permission)` | - |
+| <ApiRef name="IPermissionManager" member="RemovePermission" /> | `void RemovePermission(ulong steamId, string permission)` | - |
+| <ApiRef name="IPermissionManager" member="AddSubPermission" /> | `void AddSubPermission(string permission, string subPermission)` | - |
+| <ApiRef name="IPermissionManager" member="RemoveSubPermission" /> | `void RemoveSubPermission(string permission, string subPermission)` | - |
+| <ApiRef name="IPermissionManager" member="ClearPermissions" /> | `void ClearPermissions(ulong steamId)` | - |
+| <ApiRef name="IPermissionManager" member="GetPlayerPermissions" /> | `IEnumerable<string> GetPlayerPermissions(ulong steamId)` | every permission the player has, including inherited ones |

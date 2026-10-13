@@ -9,7 +9,7 @@ receives.
 ## How Core Is Provided
 
 <ApiRef name="BasePlugin" /> takes `ISwiftlyCore` in its constructor and exposes
-it as the protected `Core` property:
+it as the protected `Core` property, which only that constructor assigns:
 
 ```csharp
 public sealed class MyPlugin : BasePlugin
@@ -37,40 +37,40 @@ public sealed class MyPlugin : BasePlugin
 
 ## Core Services at a Glance
 
-| Property                             | Service                                                                                                  |
-| ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `Core.Event`                         | <ApiRef name="IEventSubscriber" /> - framework event subscription (client/map/entity lifecycle)          |
-| `Core.GameEvent`                     | <ApiRef name="IGameEventService" /> - game event (`EventPlayerDeath`, etc.) hook/fire APIs               |
-| `Core.NetMessage`                    | <ApiRef name="INetMessageService" /> - net message send/hook APIs                                        |
-| `Core.GameHooks`                     | <ApiRef name="IGameHooks" /> - virtual-function style hooks grouped by category                          |
-| `Core.Engine`                        | <ApiRef name="IEngineService" /> - console commands, particle effects                                    |
-| `Core.Game`                          | <ApiRef name="IGameService" /> - game-specific actions, e.g. grenade projectiles                         |
-| `Core.Helpers`                       | <ApiRef name="IHelpers" /> - misc helper utilities                                                       |
-| `Core.Command`                       | <ApiRef name="ICommandService" /> - command registration and aliasing                                    |
-| `Core.ConsoleOutput`                 | <ApiRef name="IConsoleOutputService" /> - console output access                                          |
-| `Core.EntitySystem`                  | <ApiRef name="IEntitySystemService" /> - entity creation and querying                                    |
-| `Core.ConVar`                        | <ApiRef name="IConVarService" /> - ConVar creation, lookup and value access                              |
-| `Core.Configuration`                 | <ApiRef name="IPluginConfigurationService" /> - plugin configuration file initialization/binding         |
-| `Core.GameData`                      | <ApiRef name="IGameDataService" /> - per-plugin signature/offset lookup                                  |
-| `Core.PlayerManager`                 | <ApiRef name="IPlayerManagerService" /> - player lookup and server-wide player actions                   |
-| `Core.Memory`                        | <ApiRef name="IMemoryService" /> - unmanaged function resolution and hooking                             |
-| `Core.Scheduler`                     | <ApiRef name="ISchedulerService" /> - main-thread dispatch, delayed and repeating tasks                  |
-| `Core.Database`                      | <ApiRef name="IDatabaseService" /> - database connection access                                          |
-| `Core.Translation`, `Core.Localizer` | <ApiRef name="ITranslationService" />, <ApiRef name="ILocalizer" /> - player and server localization     |
-| `Core.Permission`                    | <ApiRef name="IPermissionManager" /> - permission checks and assignment                                  |
-| `Core.Registrator`                   | <ApiRef name="IRegistratorService" /> - registers attribute-decorated instances beyond the plugin itself |
-| `Core.MenusAPI`                      | <ApiRef name="IMenuManagerAPI" /> - menu building and display                                            |
-| `Core.CommandLine`                   | <ApiRef name="ICommandLine" /> - server command-line argument access                                     |
-| `Core.GameFileSystem`                | <ApiRef name="IGameFileSystem" /> - game virtual file system access                                      |
-| `Core.PluginManager`                 | <ApiRef name="IPluginManager" /> - plugin discovery/metadata lookup                                      |
-| `Core.StringTable`                   | <ApiRef name="IStringTableService" /> - string table access                                              |
-| `Core.Profiler`                      | <ApiRef name="IContextedProfilerService" /> - profiling scopes and timers                                |
-| `Core.Trace`                         | <ApiRef name="ITraceManager" /> - trace/diagnostics manager                                              |
-| `Core.Logger`, `Core.LoggerFactory`  | Standard `Microsoft.Extensions.Logging` logger                                                           |
+| Property                              | Service                                                                                                                  |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `Core.Event`                          | <ApiRef name="IEventSubscriber" /> - framework event subscription (tick/world update, client, entity, map lifecycle)      |
+| `Core.GameEvent`                      | <ApiRef name="IGameEventService" /> - game event (`EventPlayerDeath`, etc.) hook/fire APIs                                |
+| `Core.NetMessage`                     | <ApiRef name="INetMessageService" /> - net message send/hook APIs                                                        |
+| `Core.GameHooks`                      | <ApiRef name="IGameHooks" /> - hooks grouped by category (controller, items, movement, pawn, weapons, entities, datamaps) |
+| `Core.Engine`                         | <ApiRef name="IEngineService" /> - server/map queries, command execution, particle effects                                |
+| `Core.Game`                           | <ApiRef name="IGameService" /> - match state and round control, e.g. grenade projectiles                                  |
+| `Core.Helpers`                        | <ApiRef name="IHelpers" /> - weapon/item lookups by definition index or classname                                         |
+| `Core.Command`                        | <ApiRef name="ICommandService" /> - command registration/aliasing, client command and chat hooks                          |
+| `Core.ConsoleOutput`                  | <ApiRef name="IConsoleOutputService" /> - writing to the server console and console output filtering                      |
+| `Core.EntitySystem`                   | <ApiRef name="IEntitySystemService" /> - entity creation and querying                                                     |
+| `Core.ConVar`                         | <ApiRef name="IConVarService" /> - ConVar creation, lookup, client replication and query                                  |
+| `Core.Configuration`                  | <ApiRef name="IPluginConfigurationService" /> - plugin configuration file initialization/binding                          |
+| `Core.GameData`                       | <ApiRef name="IGameDataService" /> - per-plugin signature, offset and patch lookup                                        |
+| `Core.PlayerManager`                  | <ApiRef name="IPlayerManagerService" /> - player lookup and server-wide player actions                                    |
+| `Core.Memory`                         | <ApiRef name="IMemoryService" /> - unmanaged function resolution and hooking                                              |
+| `Core.Scheduler`                      | <ApiRef name="ISchedulerService" /> - main-thread dispatch, delayed and repeating tasks                                   |
+| `Core.Database`                       | <ApiRef name="IDatabaseService" /> - database connection access                                                           |
+| `Core.Translation`, `Core.Localizer`  | <ApiRef name="ITranslationService" />, <ApiRef name="ILocalizer" /> - player and server localization                      |
+| `Core.Permission`                     | <ApiRef name="IPermissionManager" /> - permission checks and assignment                                                   |
+| `Core.Registrator`                    | <ApiRef name="IRegistratorService" /> - registers attribute-decorated instances beyond the plugin itself                  |
+| `Core.MenusAPI`                       | <ApiRef name="IMenuManagerAPI" /> - menu building and display                                                             |
+| `Core.CommandLine`                    | <ApiRef name="ICommandLine" /> - server command-line argument access                                                      |
+| `Core.GameFileSystem`                 | <ApiRef name="IGameFileSystem" /> - game virtual file system access                                                       |
+| `Core.PluginManager`                  | <ApiRef name="IPluginManager" /> - loading/unloading/reloading other plugins, status and metadata lookup                  |
+| `Core.StringTable`                    | <ApiRef name="IStringTableService" /> - string table access                                                               |
+| `Core.Profiler`                       | <ApiRef name="IContextedProfilerService" /> - named recordings and custom duration metrics                                |
+| `Core.Trace`                          | <ApiRef name="ITraceManager" /> - shape and line collision traces                                                         |
+| `Core.Logger`, `Core.LoggerFactory`   | Standard `Microsoft.Extensions.Logging` logger                                                                            |
 
 Full member list for any of these: <ApiRef name="ISwiftlyCore" />.
 
-Runtime paths follow the same pattern: `Core.PluginPath` (current plugin's directory), `Core.PluginDataDirectory` (per-plugin data directory), `Core.CSGODirectory` (`game/csgo`), `Core.GameFilesDirectory` and `Core.GameDirectory` (game root).
+Runtime paths are exposed on `Core` as well: `Core.PluginPath` (current plugin's directory), `Core.PluginDataDirectory` (per-plugin data directory, created by the framework if needed), `Core.GameFilesDirectory` (`game/csgo`) and `Core.GameDirectory` (game root). `Core.CSGODirectory` points at `game/csgo` too, but it is `[Obsolete]` - use `Core.GameFilesDirectory` instead.
 
 ## Thread Awareness
 
@@ -98,3 +98,15 @@ public void EnsureMainThreadAction(Action action)
 ## Registering Attribute Handlers on Other Classes
 
 Your plugin class is registered for attribute discovery automatically. Any other class needs `Core.Registrator.Register(instance)` - see [Using Attributes](/docs/development/using-attributes) for a full worked example and the complete attribute list.
+
+## Beta Changes
+
+These are available on the beta branch only.
+
+`Core.Extension` (<ApiRef name="IExtensionService" />) manages native extensions and the pointers shared with them:
+
+- `Load(string id)` / `Unload(string id)` (`bool`) - load or unload the extension at `extensions/{id}/{id}.dll` (or `.so`), returning whether it succeeded.
+- `LoadFromPath(string absolutePath)` / `UnloadFromPath(string absolutePath)` (`bool`) - the same, addressed by an absolute path to the extension library, whose file name without its extension becomes the extension ID. Both throw `ArgumentException` when the path is empty or not fully qualified.
+- `GetSharedPointer(string key)` (`nint`), `SetSharedPointer(string key, nint pointer)`, `HasSharedPointer(string key)` (`bool`) and `RemoveSharedPointer(string key)` - a string-keyed registry of native pointers. A missing key reads as `0`, so use `HasSharedPointer` to tell a stored zero apart from an absent key; the registry doesn't own the pointed-to objects and never frees them.
+
+The deprecated members of two services in the table above are also gone on beta: `Core.Engine.ExecuteCommandWithBuffer` / `ExecuteCommandWithBufferAsync` (use `Core.Engine.ExecuteCommandAsync`) and the `CTraceFilter`/`CGameTrace`-based `Core.Trace` overloads - `TracePlayerBBox(Vector, Vector, BBox_t, CTraceFilter, ref CGameTrace)`, `TraceShape` and `SimpleTrace` (use `TracePlayerBBox(in Vector start, in Vector end, in BBox_t bounds, in TraceParams? param = default)`, `TraceShapeLine` or `TraceShapeAngle`, which return <ApiRef name="TraceResult" />).

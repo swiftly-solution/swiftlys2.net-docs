@@ -4,6 +4,8 @@ title: Translations
 
 SwiftlyS2's translation APIs localize plugin text by key and automatically resolve player-specific language.
 
+Text is read either from <ApiRef name="ISwiftlyCore" member="Localizer" /> (`Core.Localizer`, an <ApiRef name="ILocalizer" />) for server-wide lookups, or from <ApiRef name="ISwiftlyCore" member="Translation" /> (`Core.Translation`, an <ApiRef name="ITranslationService" />) when the text depends on the receiving player.
+
 ## Translation File Layout
 
 Place `.jsonc` files named by language code under `resources/translations/` (for example `en.jsonc`, `fr.jsonc`, `pt-BR.jsonc`, `es-419.jsonc`). At least one must exist for the plugin's translations to load.
@@ -21,37 +23,37 @@ Place `.jsonc` files named by language code under `resources/translations/` (for
 
 ### Language Codes
 
-| Language                | Code              | File Name                     |
-| ----------------------- | ----------------- | ----------------------------- |
-| Arabic                  | `ar`              | `ar.jsonc`                    |
-| Bulgarian               | `bg`              | `bg.jsonc`                    |
-| Chinese (CN & TW)       | `zh-CN` / `zh-TW` | `zh-CN.jsonc` / `zh-TW.jsonc` |
-| Czech                   | `cs`              | `cs.jsonc`                    |
-| Danish                  | `da`              | `da.jsonc`                    |
-| Dutch                   | `nl`              | `nl.jsonc`                    |
-| English                 | `en`              | `en.jsonc`                    |
-| Finnish                 | `fi`              | `fi.jsonc`                    |
-| French                  | `fr`              | `fr.jsonc`                    |
-| German                  | `de`              | `de.jsonc`                    |
-| Greek                   | `el`              | `el.jsonc`                    |
-| Hungarian               | `hu`              | `hu.jsonc`                    |
-| Indonesian              | `id`              | `id.jsonc`                    |
-| Italian                 | `it`              | `it.jsonc`                    |
-| Japanese                | `ja`              | `ja.jsonc`                    |
-| Korean                  | `ko`              | `ko.jsonc`                    |
-| Norwegian               | `no`              | `no.jsonc`                    |
-| Polish                  | `pl`              | `pl.jsonc`                    |
-| Portuguese              | `pt`              | `pt.jsonc`                    |
-| Portuguese (Brazilian)  | `pt-BR`           | `pt-BR.jsonc`                 |
-| Romanian                | `ro`              | `ro.jsonc`                    |
-| Russian                 | `ru`              | `ru.jsonc`                    |
-| Spanish                 | `es`              | `es.jsonc`                    |
-| Spanish (Latin America) | `es-419`          | `es-419.jsonc`                |
-| Swedish                 | `sv`              | `sv.jsonc`                    |
-| Thai                    | `th`              | `th.jsonc`                    |
-| Turkish                 | `tr`              | `tr.jsonc`                    |
-| Ukrainian               | `uk`              | `uk.jsonc`                    |
-| Vietnamese              | `vn`              | `vn.jsonc`                    |
+| Language                | Code              | File Name                     | `Language` Field                            |
+| ----------------------- | ----------------- | ----------------------------- | ------------------------------------------- |
+| Arabic                  | `ar`              | `ar.jsonc`                    | `Language.Arabic`                           |
+| Bulgarian               | `bg`              | `bg.jsonc`                    | `Language.Bulgarian`                        |
+| Chinese (CN & TW)       | `zh-CN` / `zh-TW` | `zh-CN.jsonc` / `zh-TW.jsonc` | `Language.ChineseCN` / `Language.ChineseTW` |
+| Czech                   | `cs`              | `cs.jsonc`                    | `Language.Czech`                            |
+| Danish                  | `da`              | `da.jsonc`                    | `Language.Danish`                           |
+| Dutch                   | `nl`              | `nl.jsonc`                    | `Language.Dutch`                            |
+| English                 | `en`              | `en.jsonc`                    | `Language.English`                          |
+| Finnish                 | `fi`              | `fi.jsonc`                    | `Language.Finnish`                          |
+| French                  | `fr`              | `fr.jsonc`                    | `Language.French`                           |
+| German                  | `de`              | `de.jsonc`                    | `Language.German`                           |
+| Greek                   | `el`              | `el.jsonc`                    | `Language.Greek`                            |
+| Hungarian               | `hu`              | `hu.jsonc`                    | `Language.Hungarian`                        |
+| Indonesian              | `id`              | `id.jsonc`                    | `Language.Indonesian`                       |
+| Italian                 | `it`              | `it.jsonc`                    | `Language.Italian`                          |
+| Japanese                | `ja`              | `ja.jsonc`                    | `Language.Japanese`                         |
+| Korean                  | `ko`              | `ko.jsonc`                    | `Language.Korean`                           |
+| Norwegian               | `no`              | `no.jsonc`                    | `Language.Norwegian`                        |
+| Polish                  | `pl`              | `pl.jsonc`                    | `Language.Polish`                           |
+| Portuguese              | `pt`              | `pt.jsonc`                    | `Language.Portuguese`                       |
+| Portuguese (Brazilian)  | `pt-BR`           | `pt-BR.jsonc`                 | `Language.Brazilian`                        |
+| Romanian                | `ro`              | `ro.jsonc`                    | `Language.Romanian`                         |
+| Russian                 | `ru`              | `ru.jsonc`                    | `Language.Russian`                          |
+| Spanish                 | `es`              | `es.jsonc`                    | `Language.Spanish`                          |
+| Spanish (Latin America) | `es-419`          | `es-419.jsonc`                | `Language.LatinAmerica`                     |
+| Swedish                 | `sv`              | `sv.jsonc`                    | `Language.Swedish`                          |
+| Thai                    | `th`              | `th.jsonc`                    | `Language.Thai`                             |
+| Turkish                 | `tr`              | `tr.jsonc`                    | `Language.Turkish`                          |
+| Ukrainian               | `uk`              | `uk.jsonc`                    | `Language.Ukrainian`                        |
+| Vietnamese              | `vn`              | `vn.jsonc`                    | `Language.Vietnamese`                       |
 
 ## Example Translation File
 
@@ -80,18 +82,26 @@ Place `.jsonc` files named by language code under `resources/translations/` (for
 
 ## Server-Side Localization
 
-<ApiRef name="ISwiftlyCore" member="Localizer" /> (<ApiRef name="ILocalizer" />)
-is for messages that aren't player-specific. It supports `["key"]` and `["key",
-arg0, arg1, ...]` - keep placeholder order stable across languages:
+<ApiRef name="ILocalizer" /> is a read-only accessor for messages that aren't player-specific. It has no methods, only two indexers:
+
+| Indexer | Returns | Description |
+| --- | --- | --- |
+| `this[string key]` | `string` | The translation stored under `key`. |
+| `this[string key, params object[] args]` | `string` | The translation stored under `key`, formatted with `args`. |
+
+The overload taking `args` formats the translation with `string.Format(string, object[])`, so `{0}`, `{1}`, ... placeholders and standard format specifiers work exactly as they do elsewhere in .NET - keep placeholder order stable across languages:
 
 ```csharp
 string readyMessage = Core.Localizer["plugin.ready"];
 string versionMessage = Core.Localizer["plugin.version", "1.2.0"];
+string scoreMessage = Core.Localizer["plugin.score", player.Name, 1500, 0.75];
 ```
+
+`Core.Localizer` is the <ApiRef name="ISwiftlyCore" member="Localizer" /> property, and an injected `ILocalizer` resolves to the same instance.
 
 ## Player-Specific Localization
 
-Use <ApiRef name="ITranslationService" member="GetPlayerLocalizer" /> when output should match the player's language. <ApiRef name="IPlayer" member="PlayerLanguage" /> (a <ApiRef name="Language" /> value) is available for diagnostics or conditional flows:
+<ApiRef name="ITranslationService" /> exposes a single member: <ApiRef name="ITranslationService" member="GetPlayerLocalizer" /> takes an <ApiRef name="IPlayer" /> and returns the <ApiRef name="ILocalizer" /> for that player, with the same two indexers as above. Use it when the output should match the player's language:
 
 ```csharp
 public async Task GreetAsync(IPlayer player)
@@ -100,9 +110,59 @@ public async Task GreetAsync(IPlayer player)
     string message = localizer["welcome.message", player.Name];
 
     await player.SendChatAsync(message);
-    Core.Logger.LogInformation("Greeted {SteamId} in {Language}", player.SteamID, player.PlayerLanguage);
 }
 ```
+
+`GetPlayerLocalizer` only returns a localizer - sending the text is up to you. The player-facing send methods on <ApiRef name="IPlayer" /> (`SendChat`/`SendChatAsync`, `SendCenter`/`SendCenterAsync`, `SendChatEOT`/`SendChatEOTAsync`, `SendAlert`/`SendAlertAsync`, `SendNotify`/`SendNotifyAsync`, `SendConsole`/`SendConsoleAsync` and `SendCenterHTML`/`SendCenterHTMLAsync`) all take the finished `string`.
+
+### Broadcasting in Each Player's Language
+
+<ApiRef name="IPlayerManagerService" member="SendMessage" /> and <ApiRef name="IPlayerManagerService" member="SendMessageAsync" /> also have overloads taking a <ApiRef name="MessageType" /> plus a `Func<IPlayer, ILocalizer, string>` callback instead of a fixed string. The callback receives the recipient and their localizer, so a single call builds the message per player in that player's own language:
+
+```csharp
+Core.PlayerManager.SendMessageAsync(MessageType.Chat, (player, localizer) =>
+    localizer["plugin.welcome", player.Name]);
+
+// the CenterHTML variants also take the display duration in milliseconds
+Core.PlayerManager.SendMessageAsync(MessageType.CenterHTML, (player, localizer) =>
+    localizer["plugin.countdown", 30], htmlDuration: 3000);
+```
+
+| Member | Callback Overload | Notes |
+| --- | --- | --- |
+| `SendMessage` | `(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback)` | `[ThreadUnsafe]` |
+| `SendMessage` | `(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback, int htmlDuration = 5000)` | `[ThreadUnsafe]` |
+| `SendMessageAsync` | `(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback)` | Returns `Task` |
+| `SendMessageAsync` | `(MessageType kind, Func<IPlayer, ILocalizer, string> messageCallback, int htmlDuration = 5000)` | Returns `Task` |
+
+Off the game thread, use the `Async` variants (or `Core.Scheduler`) - see [Thread Safety](/docs/development/thread-safety).
+
+## The Language Type
+
+<ApiRef name="IPlayer" member="PlayerLanguage" /> is a <ApiRef name="Language" /> value, which is handy for diagnostics or conditional flows:
+
+```csharp
+if (player.PlayerLanguage == Language.German)
+{
+    Core.Logger.LogInformation("German client: {SteamId}", player.SteamID);
+}
+```
+
+<ApiRef name="Language" /> wraps a code string: `Value` is the code, `ToString()` returns it, and the type converts implicitly to `string`, so both of these hold the same code:
+
+```csharp
+string fromValue = player.PlayerLanguage.Value;
+string fromConversion = player.PlayerLanguage;
+```
+
+Two <ApiRef name="Language" /> instances are equal when their codes are equal, and the type implements `IEquatable<Language>`. The static fields in the [Language Codes](#language-codes) table cover the codes listed there; the constructor is public, so `new Language("en")` builds the same value as `Language.English`.
+
+<Callout type="info">
+    `services.AddSwiftly(Core)` registers `Core.Localizer` and
+    `Core.Translation` as singletons, so `ILocalizer` and
+    `ITranslationService` can be constructor-injected - see [Dependency
+    Injection](/docs/guides/dependency-injection).
+</Callout>
 
 ## Key Design Best Practices
 
