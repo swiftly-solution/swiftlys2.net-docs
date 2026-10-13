@@ -103,7 +103,16 @@ Your plugin class is registered for attribute discovery automatically. Any other
 
 These are available on the beta branch only.
 
-`Core.Extension` (<ApiRef name="IExtensionService" />) manages native extensions and the pointers shared with them:
+Two service properties are added to `Core`:
+
+| Property         | Service                                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `Core.Extension` | <ApiRef name="IExtensionService" /> - loading and unloading native extensions, and the pointer registry shared with them   |
+| `Core.Menu`      | <ApiRef name="IMenuService" /> - the component-based menu framework, see [Menu System](/docs/development/menu-system)      |
+
+`Core.MenusAPI` (<ApiRef name="IMenuManagerAPI" />) is `[Obsolete]` on beta and will be removed; new code should use `Core.Menu`. The classic menu API itself is unchanged.
+
+Members of <ApiRef name="IExtensionService" />:
 
 - `Load(string id)` / `Unload(string id)` (`bool`) - load or unload the extension at `extensions/{id}/{id}.dll` (or `.so`), returning whether it succeeded.
 - `LoadFromPath(string absolutePath)` / `UnloadFromPath(string absolutePath)` (`bool`) - the same, addressed by an absolute path to the extension library, whose file name without its extension becomes the extension ID. Both throw `ArgumentException` when the path is empty or not fully qualified.
