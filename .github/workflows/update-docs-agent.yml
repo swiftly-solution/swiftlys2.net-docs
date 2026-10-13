@@ -7,8 +7,6 @@ on:
         description: Re-run every page even if its source is unchanged
         type: boolean
         default: false
-  repository_dispatch:
-    types: [swiftlys2-updated]
 
 permissions:
   contents: write
