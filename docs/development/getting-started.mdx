@@ -78,7 +78,7 @@ public partial class MyPlugin : BasePlugin
 
 ### Plugin Metadata
 
-`[PluginMetadata]` supplies the metadata SwiftlyS2 reports for your plugin, at runtime through <ApiRef name="IPluginManager" member="GetPluginMetadata" /> and <ApiRef name="IPluginManager" member="GetAllPluginMetadata" />. `Id` and `Version` are required; `Name` falls back to `Id` when it isn't set, and the other properties have defaults:
+`[PluginMetadata]` supplies the metadata SwiftlyS2 reports for your plugin, at runtime through <ApiRef name="IPluginManager" member="GetPluginMetadata" /> and <ApiRef name="IPluginManager" member="GetAllPluginMetadata" /> (see the member table under Managing Plugins at Runtime). `Id` and `Version` are required; `Name` falls back to `Id` when it isn't set, and the other properties have defaults:
 
 | Property            | Required | Default                     |
 | ------------------- | -------- | --------------------------- |
@@ -126,9 +126,39 @@ public override void ConfigureSharedInterface(IInterfaceManager interfaceManager
 
 The three shared interface callbacks run in the order listed above, and they re-run whenever the plugin set changes - don't assume they only fire once at startup. See [Shared API](/docs/development/shared-api) for what to do inside each of them.
 
+### Managing Plugins at Runtime
+
+`Core.PluginManager` (<ApiRef name="ISwiftlyCore" member="PluginManager" />, type <ApiRef name="IPluginManager" />) loads, unloads and reloads plugins by ID while the server runs - the programmatic equivalent of a hot reload, which runs `Unload` and then `Load` with `hotReload` set to `true`:
+
+| Member                 | Signature                                                   | Returns                                      |
+| ---------------------- | ----------------------------------------------------------- | -------------------------------------------- |
+| `LoadPlugin`           | `bool LoadPlugin(string pluginId, bool silent = false)`     | whether the plugin was loaded successfully   |
+| `UnloadPlugin`         | `bool UnloadPlugin(string pluginId, bool silent = false)`   | whether the plugin was unloaded successfully |
+| `ReloadPlugin`         | `bool ReloadPlugin(string pluginId, bool silent = false)`   | whether the plugin was reloaded successfully |
+| `GetPluginStatus`      | `PluginStatus? GetPluginStatus(string pluginId)`            | the plugin's status                          |
+| `GetPluginMetadata`    | `PluginMetadata? GetPluginMetadata(string pluginId)`        | the plugin's metadata                        |
+| `GetPluginPath`        | `string? GetPluginPath(string pluginId)`                    | the plugin's path                            |
+| `GetPluginPaths`       | `Dictionary<string, string> GetPluginPaths()`               | every plugin path, keyed by plugin ID        |
+| `GetAllPluginStatuses` | `Dictionary<string, PluginStatus> GetAllPluginStatuses()`   | every plugin status, keyed by plugin ID      |
+| `GetAllPluginMetadata` | `Dictionary<string, PluginMetadata> GetAllPluginMetadata()` | every plugin's metadata, keyed by plugin ID  |
+| `GetAllPlugins`        | `IEnumerable<string> GetAllPlugins()`                       | every plugin ID                              |
+
+`silent` suppresses error messages for the three boolean members. `GetPluginStatus`, `GetPluginMetadata` and `GetPluginPath` return `null` for an unknown plugin ID, while the dictionary-returning members are keyed by plugin ID. `GetPluginStatus` reports a <ApiRef name="PluginStatus" />: `Loaded`, `Unloaded`, `Loading`, `Error` or `Indeterminate`.
+
+```csharp
+if (Core.PluginManager.ReloadPlugin("EconomyPlugin"))
+{
+    Core.Logger.LogInformation("EconomyPlugin reloaded.");
+}
+else
+{
+    Core.Logger.LogWarning("EconomyPlugin could not be reloaded (status: {Status}).", Core.PluginManager.GetPluginStatus("EconomyPlugin"));
+}
+```
+
 ### Injecting Services into the Plugin
 
-Besides the constructor, a service can be injected into a member: <ApiRef name="SwiftlyInject" /> (`SwiftlyS2.Shared`) applies to fields and properties, and SwiftlyS2 assigns the service to the marked member.
+Besides the constructor, a service can be injected into a member: <ApiRef name="SwiftlyInject" /> (`SwiftlyS2.Shared`) is parameterless and applies to fields and properties, and SwiftlyS2 assigns the service to the marked member.
 
 ```csharp
 public partial class MyPlugin : BasePlugin
