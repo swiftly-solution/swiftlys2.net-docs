@@ -73,6 +73,8 @@ Pages in `development/` reference API types with the `ApiRef` component, for exa
 | `task`     | Instructions for this page: what to focus on and what to verify.                                                                 |
 | `watch`    | Source paths the page depends on. The run is skipped when they (on `stable` and `beta`) and the `task` are unchanged.           |
 
+If `page` does not exist yet, the agent creates it and adds it to its folder's `_meta.json`. This is how features new on `beta` get their pages.
+
 Development pages use `scope: managed/src/SwiftlyS2.Shared`, so the agent only sees the public plugin API and does not describe internals. Resource pages see the native C++ source.
 
 ### Running locally

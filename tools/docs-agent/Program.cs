@@ -164,6 +164,17 @@ static string TryPath(string? args)
 
 static string Clip(string s) => s.Length > MaxOut ? s[..MaxOut] : s;
 
+void RegisterInNav()
+{
+    var metaPath = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(page))!, "_meta.json");
+    if (!File.Exists(metaPath)) return;
+    var name = Path.GetFileNameWithoutExtension(page);
+    var meta = JsonNode.Parse(File.ReadAllText(metaPath))!.AsObject();
+    if (meta.ContainsKey(name)) return;
+    meta[name] = new JsonObject { ["page"] = Path.GetFileName(page) };
+    File.WriteAllText(metaPath, meta.ToJsonString(new System.Text.Json.JsonSerializerOptions { WriteIndented = true, IndentSize = 4 }) + "\n", new UTF8Encoding(false));
+}
+
 // Safe() plus the --scope allowlist. Only the tools the agent reads source with use this.
 string Scoped(string root, string rel)
 {
@@ -245,12 +256,15 @@ string Run(string name, JsonNode a)
                 : Clip(File.ReadAllText(d));
         }
         case "read_page":
-            return File.ReadAllText(page);
+            return File.Exists(page) ? File.ReadAllText(page) : "(page does not exist yet: create it with write_page)";
         case "write_page":
         {
             var c = (string)a["content"]!;
             if (!c.StartsWith("---")) return "ERROR: page must start with frontmatter (---).";
+            var isNew = !File.Exists(page);
+            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(page))!);
             File.WriteAllText(page, c.TrimEnd('\n') + "\n", new UTF8Encoding(false));
+            if (isNew) RegisterInNav();
             return "page written";
         }
         case "write_upstream_file":
@@ -271,6 +285,7 @@ string Run(string name, JsonNode a)
     }
 }
 
+var pageIsNew = !File.Exists(page);
 var messages = new JsonArray
 {
     new JsonObject { ["role"] = "system", ["content"] = SystemPrompt },
@@ -278,6 +293,7 @@ var messages = new JsonArray
     {
         ["role"] = "user",
         ["content"] = $"Docs page: {page}\n\nTask:\n{task}"
+            + (pageIsNew ? "\n\nThe page does not exist yet (the feature is new on beta). Create it with write_page: frontmatter (`---`, `title:`, `---`), then the full content in the same structure as the sibling pages. Document only what the source supports." : "")
             + (allowUpstream ? $"\n\nYou MAY fix drifted files under {UpstreamPrefix} via write_upstream_file. These edits go to the beta branch, so verify against the beta source." : ""),
     },
 };

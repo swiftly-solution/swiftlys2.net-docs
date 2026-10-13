@@ -287,5 +287,15 @@
     "watch": [
       "managed/src/SwiftlyS2.Shared/Modules/SteamAPI"
     ]
+  },
+  {
+    "slug": "extensions",
+    "page": "docs/development/extensions.mdx",
+    "upstream": false,
+    "scope": "managed/src/SwiftlyS2.Shared",
+    "task": "You can only see the public API (scoped source folders), not the core implementation or native code. Make the page match the API: signatures, parameters, return types, defaults and members; ensure every code example only uses members that exist; document public API that is missing from the page. Do not describe internals.\nFocus: IExtensionService: loading and unloading native extensions by id (Load, Unload) and by absolute path (LoadFromPath, UnloadFromPath), and the shared pointer registry (GetSharedPointer, SetSharedPointer, HasSharedPointer, RemoveSharedPointer): zero values versus missing keys, and that the registry does not own or free pointed-to objects.\nAPI reference for native extensions: the C and C++ SDK at https://github.com/swiftly-solution/swiftlys2-extension-sdk (its API.md documents the C and C++ APIs). Add a short section on the page that links to it as the API reference for writing native extensions. Do not copy the SDK's API into the page, and do not link any other SDK URLs.",
+    "watch": [
+      "managed/src/SwiftlyS2.Shared/Modules/Extensions"
+    ]
   }
 ]
