@@ -52266,20 +52266,20 @@ categories:
     properties:
     - name: Count
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Count
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L716
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L720
       declaration: public readonly uint Count { get; }
       valueType:
       - text: uint
         url: https://learn.microsoft.com/dotnet/api/system.uint32
     - name: MaxElement
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.MaxElement
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L717
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L721
       declaration: public TKey MaxElement { get; }
       valueType:
       - TKey
     - name: this[TKey]
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Item(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L715
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L719
       declaration: public ref TValue this[TKey i] { get; }
       valueType:
       - TValue
@@ -52307,7 +52307,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: Dispose()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Dispose
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L511
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L515
       summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
       declaration: public void Dispose()
     - name: EnsureCapacity(TKey)
@@ -52320,7 +52320,7 @@ categories:
         - TKey
     - name: Find(TValue)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Find(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L454
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L458
       declaration: public TKey Find(TValue value)
       parameters:
       - name: value
@@ -52331,7 +52331,7 @@ categories:
         - TKey
     - name: FindInsertionPosition(TValue, out TKey, out bool)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.FindInsertionPosition(`0,`1@,System.Boolean@)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L410
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L414
       declaration: public void FindInsertionPosition(TValue val, out TKey parent, out bool leftchild)
       parameters:
       - name: val
@@ -52346,28 +52346,28 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: FirstInorder()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.FirstInorder
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L516
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L520
       declaration: public TKey FirstInorder()
       returns:
         type:
         - TKey
     - name: FirstPostorder()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.FirstPostorder
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L636
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L640
       declaration: public TKey FirstPostorder()
       returns:
         type:
         - TKey
     - name: FirstPreorder()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.FirstPreorder
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L586
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L590
       declaration: public TKey FirstPreorder()
       returns:
         type:
         - TKey
     - name: FreeNode(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.FreeNode(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L102
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L106
       declaration: public void FreeNode(TKey i)
       parameters:
       - name: i
@@ -52375,7 +52375,7 @@ categories:
         - TKey
     - name: Insert(TValue)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Insert(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L697
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L701
       declaration: public TKey Insert(TValue val)
       parameters:
       - name: val
@@ -52386,7 +52386,7 @@ categories:
         - TKey
     - name: InsertAt(TKey, bool)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.InsertAt(`1,System.Boolean)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L247
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L251
       declaration: public TKey InsertAt(TKey parent, bool leftchild)
       parameters:
       - name: parent
@@ -52401,7 +52401,7 @@ categories:
         - TKey
     - name: InsertIfNotFound(TValue)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.InsertIfNotFound(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L706
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L710
       declaration: public TKey InsertIfNotFound(TValue val)
       parameters:
       - name: val
@@ -52412,7 +52412,7 @@ categories:
         - TKey
     - name: InsertRebalance(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.InsertRebalance(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L165
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L169
       declaration: public void InsertRebalance(TKey elem)
       parameters:
       - name: elem
@@ -52499,7 +52499,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: IsValid()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.IsValid
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L687
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L691
       declaration: public bool IsValid()
       returns:
         type:
@@ -52519,14 +52519,14 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: LastInorder()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.LastInorder
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L574
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L578
       declaration: public TKey LastInorder()
       returns:
         type:
         - TKey
     - name: LastPreorder()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.LastPreorder
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L617
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L621
       declaration: public TKey LastPreorder()
       returns:
         type:
@@ -52544,7 +52544,7 @@ categories:
         - TKey
     - name: Link(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Link(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L400
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L404
       declaration: public void Link(TKey elem)
       parameters:
       - name: elem
@@ -52552,7 +52552,7 @@ categories:
         - TKey
     - name: LinkToParent(TKey, TKey, bool)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.LinkToParent(`1,`1,System.Boolean)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L225
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L229
       declaration: public void LinkToParent(TKey i, TKey parent, bool isLeft)
       parameters:
       - name: i
@@ -52583,14 +52583,14 @@ categories:
         - '>'
     - name: NewNode()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.NewNode
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L84
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L88
       declaration: public TKey NewNode()
       returns:
         type:
         - TKey
     - name: NextInorder(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.NextInorder(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L528
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L532
       declaration: public TKey NextInorder(TKey i)
       parameters:
       - name: i
@@ -52601,7 +52601,7 @@ categories:
         - TKey
     - name: NextPostorder(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.NextPostorder(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L653
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L657
       declaration: public TKey NextPostorder(TKey i)
       parameters:
       - name: i
@@ -52612,7 +52612,7 @@ categories:
         - TKey
     - name: NextPreorder(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.NextPreorder(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L591
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L595
       declaration: public TKey NextPreorder(TKey i)
       parameters:
       - name: i
@@ -52634,7 +52634,7 @@ categories:
         - TKey
     - name: PrevInorder(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.PrevInorder(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L551
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L555
       declaration: public TKey PrevInorder(TKey i)
       parameters:
       - name: i
@@ -52645,7 +52645,7 @@ categories:
         - TKey
     - name: PrevPreorder(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.PrevPreorder(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L615
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L619
       declaration: public TKey PrevPreorder(TKey i)
       parameters:
       - name: i
@@ -52656,11 +52656,11 @@ categories:
         - TKey
     - name: Purge()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Purge
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L503
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L507
       declaration: public void Purge()
     - name: Reinsert(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Reinsert(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L678
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L682
       declaration: public void Reinsert(TKey i)
       parameters:
       - name: i
@@ -52668,7 +52668,7 @@ categories:
         - TKey
     - name: Remove(TValue)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Remove(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L445
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L449
       declaration: public bool Remove(TValue value)
       parameters:
       - name: value
@@ -52680,11 +52680,11 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: RemoveAll()
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.RemoveAll
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L480
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L484
       declaration: public void RemoveAll()
     - name: RemoveAt(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.RemoveAt(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L435
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L439
       declaration: public void RemoveAt(TKey elem)
       parameters:
       - name: elem
@@ -52692,7 +52692,7 @@ categories:
         - TKey
     - name: RemoveRebalance(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.RemoveRebalance(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L255
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L259
       declaration: public void RemoveRebalance(TKey elem)
       parameters:
       - name: elem
@@ -52711,7 +52711,7 @@ categories:
         - TKey
     - name: RotateLeft(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.RotateLeft(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L112
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L116
       declaration: public void RotateLeft(TKey elem)
       parameters:
       - name: elem
@@ -52719,7 +52719,7 @@ categories:
         - TKey
     - name: RotateRight(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.RotateRight(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L138
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L142
       declaration: public void RotateRight(TKey elem)
       parameters:
       - name: elem
@@ -52751,7 +52751,7 @@ categories:
         - TKey
     - name: SetLessFunc(LessFunc)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.SetLessFunc(SwiftlyS2.Shared.Natives.CUtlRBTree{`0,`1}.LessFunc)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L692
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L696
       declaration: public void SetLessFunc(CUtlRBTree<TValue, TKey>.LessFunc func)
       parameters:
       - name: func
@@ -52793,7 +52793,7 @@ categories:
         - TKey
     - name: Unlink(TKey)
       uid: SwiftlyS2.Shared.Natives.CUtlRBTree`2.Unlink(`1)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L337
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Natives/Structs/CUtlRBTree.cs#L341
       declaration: public void Unlink(TKey elem)
       parameters:
       - name: elem
