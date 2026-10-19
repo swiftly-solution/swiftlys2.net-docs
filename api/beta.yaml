@@ -21623,6 +21623,111 @@ categories:
       - text: HookMode
         url: SwiftlyS2.Shared.Misc.HookMode.html
         uid: SwiftlyS2.Shared.Misc.HookMode
+  - name: GetItemInLoadoutParams
+    type: Struct
+    uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams
+    parent: SwiftlyS2.Shared.GameHooks
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L7
+    declaration: public struct GetItemInLoadoutParams
+    properties:
+    - name: Player
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L9
+      declaration: public required IPlayer Player { readonly get; init; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Slot
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams.Slot
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L11
+      declaration: public required loadout_slot_t Slot { readonly get; init; }
+      valueType:
+      - text: loadout_slot_t
+        url: SwiftlyS2.Shared.SchemaDefinitions.loadout_slot_t.html
+        uid: SwiftlyS2.Shared.SchemaDefinitions.loadout_slot_t
+    - name: Team
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams.Team
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L10
+      declaration: public required Team Team { readonly get; init; }
+      valueType:
+      - text: Team
+        url: SwiftlyS2.Shared.Players.Team.html
+        uid: SwiftlyS2.Shared.Players.Team
+  - name: GetItemInLoadoutPostContext
+    type: Struct
+    uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPostContext
+    parent: SwiftlyS2.Shared.GameHooks
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L32
+    declaration: public ref struct GetItemInLoadoutPostContext
+    fields:
+    - name: Params
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPostContext.Params
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L34
+      declaration: public GetItemInLoadoutParams Params
+      valueType:
+      - text: GetItemInLoadoutParams
+        url: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams.html
+        uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams
+    properties:
+    - name: Return
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPostContext.Return
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L40
+      summary: The item the game gets back, null when the slot is empty. Replace it to answer with another item. The object is only valid during the callback; keep the item's address instead if you need it later.
+      declaration: public CEconItemView? Return { readonly get; set; }
+      valueType:
+      - text: CEconItemView
+        url: SwiftlyS2.Shared.SchemaDefinitions.CEconItemView.html
+        uid: SwiftlyS2.Shared.SchemaDefinitions.CEconItemView
+      - '?'
+    methods:
+    - name: SetHookResult(HookResult)
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPostContext.SetHookResult(SwiftlyS2.Shared.Misc.HookResult)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L43
+      declaration: public void SetHookResult(HookResult result)
+      parameters:
+      - name: result
+        type:
+        - text: HookResult
+          url: SwiftlyS2.Shared.Misc.HookResult.html
+          uid: SwiftlyS2.Shared.Misc.HookResult
+  - name: GetItemInLoadoutPreContext
+    type: Struct
+    uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPreContext
+    parent: SwiftlyS2.Shared.GameHooks
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L14
+    declaration: public ref struct GetItemInLoadoutPreContext
+    fields:
+    - name: Params
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPreContext.Params
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L16
+      declaration: public GetItemInLoadoutParams Params
+      valueType:
+      - text: GetItemInLoadoutParams
+        url: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams.html
+        uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutParams
+    methods:
+    - name: SetHookResult(HookResult)
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPreContext.SetHookResult(SwiftlyS2.Shared.Misc.HookResult)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L25
+      declaration: public void SetHookResult(HookResult result)
+      parameters:
+      - name: result
+        type:
+        - text: HookResult
+          url: SwiftlyS2.Shared.Misc.HookResult.html
+          uid: SwiftlyS2.Shared.Misc.HookResult
+    - name: SetReturn(CEconItemView)
+      uid: SwiftlyS2.Shared.GameHooks.GetItemInLoadoutPreContext.SetReturn(SwiftlyS2.Shared.SchemaDefinitions.CEconItemView)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L24
+      summary: Sets the item the game gets back. Only used when the hook result is Stop or CancelOriginal.
+      declaration: public void SetReturn(CEconItemView item)
+      parameters:
+      - name: item
+        type:
+        - text: CEconItemView
+          url: SwiftlyS2.Shared.SchemaDefinitions.CEconItemView.html
+          uid: SwiftlyS2.Shared.SchemaDefinitions.CEconItemView
   - name: GroundAccelerateMovementParams
     type: Struct
     uid: SwiftlyS2.Shared.GameHooks.GroundAccelerateMovementParams
@@ -32389,6 +32494,15 @@ categories:
       - text: ICanAcquireItemHook
         url: SwiftlyS2.Shared.GameHooks.ICanAcquireItemHook.html
         uid: SwiftlyS2.Shared.GameHooks.ICanAcquireItemHook
+    - name: GetItemInLoadout
+      uid: SwiftlyS2.Shared.GameHooks.IGameHookItem.GetItemInLoadout
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IItems.cs#L15
+      summary: Hook triggered when the game looks up the item in a player's loadout slot for a team (CCSPlayerInventory::GetItemInLoadout), e.g. to pick the skin of a weapon it gives. Requires "FollowCS2ServerGuidelines" to be disabled in core.jsonc.
+      declaration: IGetItemInLoadoutHook GetItemInLoadout { get; }
+      valueType:
+      - text: IGetItemInLoadoutHook
+        url: SwiftlyS2.Shared.GameHooks.IGetItemInLoadoutHook.html
+        uid: SwiftlyS2.Shared.GameHooks.IGetItemInLoadoutHook
   - name: IGameHookMovement
     type: Interface
     uid: SwiftlyS2.Shared.GameHooks.IGameHookMovement
@@ -32741,6 +32855,12 @@ categories:
       - text: IGameHookWeapon
         url: SwiftlyS2.Shared.GameHooks.IGameHookWeapon.html
         uid: SwiftlyS2.Shared.GameHooks.IGameHookWeapon
+  - name: IGetItemInLoadoutHook
+    type: Interface
+    uid: SwiftlyS2.Shared.GameHooks.IGetItemInLoadoutHook
+    parent: SwiftlyS2.Shared.GameHooks
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L50
+    declaration: public interface IGetItemInLoadoutHook
   - name: IGroundAccelerateMovementHook
     type: Interface
     uid: SwiftlyS2.Shared.GameHooks.IGroundAccelerateMovementHook
@@ -36198,6 +36318,18 @@ categories:
     parent: SwiftlyS2.Shared.GameHooks
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Movement/IFullWalkMove.cs#L29
     declaration: public delegate void OnFullWalkMoveMovementPreDelegate(ref FullWalkMoveMovementPreContext ctx)
+  - name: OnGetItemInLoadoutPostDelegate
+    type: Delegate
+    uid: SwiftlyS2.Shared.GameHooks.OnGetItemInLoadoutPostDelegate
+    parent: SwiftlyS2.Shared.GameHooks
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L48
+    declaration: public delegate void OnGetItemInLoadoutPostDelegate(ref GetItemInLoadoutPostContext ctx)
+  - name: OnGetItemInLoadoutPreDelegate
+    type: Delegate
+    uid: SwiftlyS2.Shared.GameHooks.OnGetItemInLoadoutPreDelegate
+    parent: SwiftlyS2.Shared.GameHooks
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/GameHooks/HooksCategories/Items/IGetItemInLoadout.cs#L47
+    declaration: public delegate void OnGetItemInLoadoutPreDelegate(ref GetItemInLoadoutPreContext ctx)
   - name: OnGroundAccelerateMovementPostDelegate
     type: Delegate
     uid: SwiftlyS2.Shared.GameHooks.OnGroundAccelerateMovementPostDelegate
@@ -63704,6 +63836,34 @@ categories:
           url: SwiftlyS2.Shared.Players.ListenOverride.html
           uid: SwiftlyS2.Shared.Players.ListenOverride
         description: A ListenOverride object containing the listen override settings for the specified player.
+    - name: GetLoadoutItem(Team, loadout_slot_t)
+      uid: SwiftlyS2.Shared.Players.IPlayer.GetLoadoutItem(SwiftlyS2.Shared.Players.Team,SwiftlyS2.Shared.SchemaDefinitions.loadout_slot_t)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L504
+      summary: Gets the item in one of the player's loadout slots for a team, e.g. their AK-47 (with its skin) from the T rifle slots while they play CT. GetItemInLoadout hooks don't run for this lookup, so a hook can call it to read other slots. Requires "FollowCS2ServerGuidelines" to be disabled in core.jsonc. Thread unsafe.
+      declaration: >-
+        [ThreadUnsafe]
+
+        CEconItemView? GetLoadoutItem(Team team, loadout_slot_t slot)
+      parameters:
+      - name: team
+        type:
+        - text: Team
+          url: SwiftlyS2.Shared.Players.Team.html
+          uid: SwiftlyS2.Shared.Players.Team
+        description: The team whose loadout to read (T or CT).
+      - name: slot
+        type:
+        - text: loadout_slot_t
+          url: SwiftlyS2.Shared.SchemaDefinitions.loadout_slot_t.html
+          uid: SwiftlyS2.Shared.SchemaDefinitions.loadout_slot_t
+        description: The loadout slot to read.
+      returns:
+        type:
+        - text: CEconItemView
+          url: SwiftlyS2.Shared.SchemaDefinitions.CEconItemView.html
+          uid: SwiftlyS2.Shared.SchemaDefinitions.CEconItemView
+        - '?'
+        description: The item, or null when the slot is empty or the player has no inventory.
     - name: IsTransmitEntityBlocked(int)
       uid: SwiftlyS2.Shared.Players.IPlayer.IsTransmitEntityBlocked(System.Int32)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Players/IPlayer.cs#L337
