@@ -39863,6 +39863,43 @@ categories:
         - text: bool
           url: https://learn.microsoft.com/dotnet/api/system.boolean
         description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> when the selection changed.
+  - name: MenuCollectionItemContext`1
+    type: Struct
+    uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionItemContext`1
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L5
+    declaration: 'public readonly record struct MenuCollectionItemContext<TItem> : IEquatable<MenuCollectionItemContext<TItem>>'
+    typeParameters:
+    - name: TItem
+    implements:
+    - text: IEquatable<MenuCollectionItemContext<TItem>>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    properties:
+    - name: Item
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionItemContext`1.Item
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L15
+      summary: The item that was selected.
+      declaration: public required TItem Item { get; init; }
+      valueType:
+      - TItem
+    - name: Player
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionItemContext`1.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L20
+      summary: The player who selected the item.
+      declaration: public IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Session
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionItemContext`1.Session
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L10
+      summary: The session that selected the item.
+      declaration: public required IMenuSession Session { get; init; }
+      valueType:
+      - text: IMenuSession
+        url: SwiftlyS2.Shared.Menu.IMenuSession.html
+        uid: SwiftlyS2.Shared.Menu.IMenuSession
   - name: MenuValueChangedContext`1
     type: Struct
     uid: SwiftlyS2.Shared.Menu.Components.MenuValueChangedContext`1
@@ -40179,6 +40216,257 @@ categories:
       declaration: public TValue? Value { get; set; }
       valueType:
       - TValue
+      - '?'
+  - name: PagedCollectionComponent`1
+    type: Class
+    uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L23
+    declaration: 'public sealed class PagedCollectionComponent<TItem> : MenuComponentBase, IMenuComponent, IMenuRowSource'
+    typeParameters:
+    - name: TItem
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    - text: MenuComponentBase
+      url: SwiftlyS2.Shared.Menu.MenuComponentBase.html
+      uid: SwiftlyS2.Shared.Menu.MenuComponentBase
+    implements:
+    - text: IMenuComponent
+      url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+      uid: SwiftlyS2.Shared.Menu.IMenuComponent
+    - text: IMenuRowSource
+      url: SwiftlyS2.Shared.Menu.IMenuRowSource.html
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource
+    constructors:
+    - name: PagedCollectionComponent(Func<Task<IReadOnlyList<TItem>>>, string?)
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.#ctor(System.Func{System.Threading.Tasks.Task{System.Collections.Generic.IReadOnlyList{`0}}},System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L37
+      summary: Creates a collection.
+      declaration: public PagedCollectionComponent(Func<Task<IReadOnlyList<TItem>>> loader, string? id = null)
+      parameters:
+      - name: loader
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-1
+        - <
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+        - <
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - TItem
+        - '>'
+        - '>'
+        - '>'
+        description: Produces the items. Runs on the collection loader thread.
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: A stable id, or null to generate one.
+        optional: true
+    properties:
+    - name: EmptyColor
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.EmptyColor
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L88
+      summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.EmptyText" data-throw-if-not-resolved="false"></xref>, or null for the default colour.
+      declaration: public string? EmptyColor { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: EmptyText
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.EmptyText
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L83
+      summary: The text shown when the loader returns no items.
+      declaration: public string? EmptyText { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: FailedColor
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.FailedColor
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L98
+      summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.FailedText" data-throw-if-not-resolved="false"></xref>, or null for the default colour.
+      declaration: public string? FailedColor { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: FailedText
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.FailedText
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L93
+      summary: The text shown when the loader throws.
+      declaration: public string? FailedText { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: Formatter
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.Formatter
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L48
+      summary: Turns an item into the text shown for it.
+      declaration: public Func<TItem, string> Formatter { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - TItem
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
+    - name: ItemHint
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.ItemHint
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L63
+      summary: The hint shown while an item row holds the selection, or null for none.
+      declaration: public Func<TItem, string?>? ItemHint { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - TItem
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+      - '>'
+      - '?'
+    - name: ItemStyle
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.ItemStyle
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L58
+      summary: The style of an item row.
+      declaration: public MenuTextStyle ItemStyle { get; set; }
+      valueType:
+      - text: MenuTextStyle
+        url: SwiftlyS2.Shared.Menu.MenuTextStyle.html
+        uid: SwiftlyS2.Shared.Menu.MenuTextStyle
+    - name: LoadingColor
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.LoadingColor
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L78
+      summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.LoadingText" data-throw-if-not-resolved="false"></xref>, or null for the default colour.
+      declaration: public string? LoadingColor { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: LoadingText
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.LoadingText
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L73
+      summary: The text shown while the loader is running.
+      declaration: public string? LoadingText { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: NodeFormatter
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.NodeFormatter
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L53
+      summary: Turns an item into a full node, for lines with several colours. Takes over from <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.Formatter" data-throw-if-not-resolved="false"></xref> when set.
+      declaration: public Func<TItem, MenuNode>? NodeFormatter { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - TItem
+      - ','
+      - ' '
+      - text: MenuNode
+        url: SwiftlyS2.Shared.Menu.MenuNode.html
+        uid: SwiftlyS2.Shared.Menu.MenuNode
+      - '>'
+      - '?'
+    - name: OnItemSelected
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.OnItemSelected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L68
+      summary: Runs when a player activates an item row.
+      declaration: public Action<MenuCollectionItemContext<TItem>>? OnItemSelected { get; set; }
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action-1
+      - <
+      - text: MenuCollectionItemContext
+        url: SwiftlyS2.Shared.Menu.Components.MenuCollectionItemContext-1.html
+        uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionItemContext-1
+      - <
+      - TItem
+      - '>'
+      - '>'
+      - '?'
+    - name: ShowFailureMessage
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.ShowFailureMessage
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L103
+      summary: Whether the exception message is appended to <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.FailedText" data-throw-if-not-resolved="false"></xref>.
+      declaration: public bool ShowFailureMessage { get; set; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    methods:
+    - name: GetRows(Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.GetRows(System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L106
+      summary: The body entries this component stands for right now.
+      declaration: public IReadOnlyList<IMenuComponent> GetRows(Func<string, string> translate)
+      parameters:
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+        description: Looks up a menu translation by key.
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: IMenuComponent
+          url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponent
+        - '>'
+    - name: Reload()
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.Reload
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L125
+      summary: Runs the loader again. Open menus update when it finishes. Does nothing before the first layout.
+      declaration: public void Reload()
+    - name: Render(IMenuComponentRenderContext)
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L144
+      summary: Produces this component's renderer-agnostic output.
+      declaration: public override MenuNode Render(IMenuComponentRenderContext context)
+      parameters:
+      - name: context
+        type:
+        - text: IMenuComponentRenderContext
+          url: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext
+        description: The player and focus state to draw for.
+      returns:
+        type:
+        - text: MenuNode
+          url: SwiftlyS2.Shared.Menu.MenuNode.html
+          uid: SwiftlyS2.Shared.Menu.MenuNode
+        description: The nodes describing this component.
+      remarks: 'Never drawn: the menu replaces this component with <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.GetRows(System.Func%7bSystem.String%2cSystem.String%7d)" data-throw-if-not-resolved="false"></xref> when it lays out the body.'
+    - name: RowsChanged
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.RowsChanged
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L43
+      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(System.Func%7bSystem.String%2cSystem.String%7d)" data-throw-if-not-resolved="false"></xref> would return something different.
+      declaration: public event Action? RowsChanged
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action
       - '?'
   - name: ProgressBarComponent
     type: Class
@@ -42944,6 +43232,50 @@ categories:
         - text: bool
           url: https://learn.microsoft.com/dotnet/api/system.boolean
         description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> when this source overrides the menu.
+  - name: IMenuRowSource
+    type: Interface
+    uid: SwiftlyS2.Shared.Menu.IMenuRowSource
+    parent: SwiftlyS2.Shared.Menu
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L3
+    declaration: public interface IMenuRowSource
+    methods:
+    - name: GetRows(Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L9
+      summary: The body entries this component stands for right now.
+      declaration: IReadOnlyList<IMenuComponent> GetRows(Func<string, string> translate)
+      parameters:
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+        description: Looks up a menu translation by key.
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: IMenuComponent
+          url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponent
+        - '>'
+    - name: RowsChanged
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource.RowsChanged
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L14
+      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(System.Func%7bSystem.String%2cSystem.String%7d)" data-throw-if-not-resolved="false"></xref> would return something different.
+      declaration: event Action? RowsChanged
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action
+      - '?'
   - name: IMenuService
     type: Interface
     uid: SwiftlyS2.Shared.Menu.IMenuService
