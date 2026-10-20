@@ -39310,6 +39310,141 @@ categories:
         - '?'
         description: A stable id, or null to generate one.
         optional: true
+  - name: CollectionSelectionComponent`1
+    type: Class
+    uid: SwiftlyS2.Shared.Menu.Components.CollectionSelectionComponent`1
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/CollectionSelectionComponent.cs#L3
+    declaration: 'public sealed class CollectionSelectionComponent<TItem> : SelectionComponentBase<TItem>, IMenuComponent, IMenuRowSource'
+    typeParameters:
+    - name: TItem
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    - text: MenuComponentBase
+      url: SwiftlyS2.Shared.Menu.MenuComponentBase.html
+      uid: SwiftlyS2.Shared.Menu.MenuComponentBase
+    - text: SelectionComponentBase<TItem>
+      url: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase-1.html
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase-1
+    implements:
+    - text: IMenuComponent
+      url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+      uid: SwiftlyS2.Shared.Menu.IMenuComponent
+    - text: IMenuRowSource
+      url: SwiftlyS2.Shared.Menu.IMenuRowSource.html
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource
+    constructors:
+    - name: CollectionSelectionComponent(Func<Task<IReadOnlyList<TItem>>>, string?, IEqualityComparer<TItem>?)
+      uid: SwiftlyS2.Shared.Menu.Components.CollectionSelectionComponent`1.#ctor(System.Func{System.Threading.Tasks.Task{System.Collections.Generic.IReadOnlyList{`0}}},System.String,System.Collections.Generic.IEqualityComparer{`0})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/CollectionSelectionComponent.cs#L14
+      summary: Creates a selection list.
+      declaration: public CollectionSelectionComponent(Func<Task<IReadOnlyList<TItem>>> loader, string? id = null, IEqualityComparer<TItem>? comparer = null)
+      parameters:
+      - name: loader
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-1
+        - <
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+        - <
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - TItem
+        - '>'
+        - '>'
+        - '>'
+        description: Produces the items. Runs on the collection loader thread.
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: A stable id, or null to generate one.
+        optional: true
+      - name: comparer
+        type:
+        - text: IEqualityComparer
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+        - <
+        - TItem
+        - '>'
+        - '?'
+        description: How items are compared, or null for the default. Items are kept across reloads by this comparison.
+        optional: true
+    properties:
+    - name: List
+      uid: SwiftlyS2.Shared.Menu.Components.CollectionSelectionComponent`1.List
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/CollectionSelectionComponent.cs#L37
+      summary: The list underneath. Use it for the loading, empty and failed texts. Its <code>RowRenderer</code>, <code>OnItemSelected</code> and formatters are owned by this component.
+      declaration: public PagedCollectionComponent<TItem> List { get; }
+      valueType:
+      - text: PagedCollectionComponent
+        url: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent-1.html
+        uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent-1
+      - <
+      - TItem
+      - '>'
+    methods:
+    - name: GetInnerRows(IMenuSession, MenuRowContext)
+      uid: SwiftlyS2.Shared.Menu.Components.CollectionSelectionComponent`1.GetInnerRows(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/CollectionSelectionComponent.cs#L45
+      summary: The rows of the list underneath.
+      declaration: protected override IReadOnlyList<IMenuComponent> GetInnerRows(IMenuSession session, MenuRowContext context)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: IMenuComponent
+          url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponent
+        - '>'
+    - name: Reload()
+      uid: SwiftlyS2.Shared.Menu.Components.CollectionSelectionComponent`1.Reload
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/CollectionSelectionComponent.cs#L42
+      summary: Runs the loader again. Selected items that are still loaded stay selected.
+      declaration: public void Reload()
+    - name: TryGetCandidates(IMenuSession, MenuRowContext, out IEnumerable<TItem>)
+      uid: SwiftlyS2.Shared.Menu.Components.CollectionSelectionComponent`1.TryGetCandidates(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext,System.Collections.Generic.IEnumerable{`0}@)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/CollectionSelectionComponent.cs#L49
+      summary: Every item <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.DefaultSelected" data-throw-if-not-resolved="false"></xref> should be asked about. Return false while they are not known yet.
+      declaration: protected override bool TryGetCandidates(IMenuSession session, MenuRowContext context, out IEnumerable<TItem> candidates)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+      - name: candidates
+        type:
+        - text: IEnumerable
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+        - <
+        - TItem
+        - '>'
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
   - name: DividerComponent
     type: Class
     uid: SwiftlyS2.Shared.Menu.Components.DividerComponent
@@ -39475,7 +39610,7 @@ categories:
     properties:
     - name: AcceptedColor
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.AcceptedColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L81
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L84
       summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.InputComponent.AcceptedText" data-throw-if-not-resolved="false"></xref>.
       declaration: public string? AcceptedColor { get; set; }
       valueType:
@@ -39484,24 +39619,26 @@ categories:
       - '?'
     - name: AcceptedText
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.AcceptedText
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L66
-      summary: The text shown briefly after a value is accepted.
-      declaration: public string AcceptedText { get; set; }
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L69
+      summary: The text shown briefly after a value is accepted, or null for the translated default.
+      declaration: public string? AcceptedText { get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
     - name: EmptyText
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.EmptyText
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L56
-      summary: The text shown while no value has been entered.
-      declaration: public string EmptyText { get; set; }
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L59
+      summary: The text shown while no value has been entered, or null for the translated default.
+      declaration: public string? EmptyText { get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
     - name: HintMessage
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.HintMessage
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L51
-      summary: The message sent to the player when the capture starts, or null to send nothing.
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L54
+      summary: The message sent to the player when the capture starts. Null sends the translated default, and an empty string sends nothing.
       declaration: public string? HintMessage { get; set; }
       valueType:
       - text: string
@@ -39509,7 +39646,7 @@ categories:
       - '?'
     - name: InvalidColor
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.InvalidColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L86
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L89
       summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.InputComponent.InvalidText" data-throw-if-not-resolved="false"></xref>.
       declaration: public string? InvalidColor { get; set; }
       valueType:
@@ -39518,15 +39655,16 @@ categories:
       - '?'
     - name: InvalidText
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.InvalidText
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L71
-      summary: The text shown briefly after a value is rejected.
-      declaration: public string InvalidText { get; set; }
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L74
+      summary: The text shown briefly after a value is rejected, or null for the translated default.
+      declaration: public string? InvalidText { get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
     - name: MaxLength
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.MaxLength
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L38
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L41
       summary: The longest value accepted. Longer input is cut. Never below one.
       declaration: public int MaxLength { get; set; }
       valueType:
@@ -39534,7 +39672,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: StatusDurationMs
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.StatusDurationMs
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L91
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L94
       summary: How long an accepted or invalid status stays on screen, in milliseconds.
       declaration: public int StatusDurationMs { get; set; }
       valueType:
@@ -39542,7 +39680,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: Validator
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.Validator
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L46
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L49
       summary: Decides whether a typed value is acceptable, or null to accept anything non-empty.
       declaration: public Func<string, bool>? Validator { get; set; }
       valueType:
@@ -39559,7 +39697,7 @@ categories:
       - '?'
     - name: WaitingForInputColor
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.WaitingForInputColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L76
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L79
       summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.InputComponent.WaitingForInputText" data-throw-if-not-resolved="false"></xref>.
       declaration: public string? WaitingForInputColor { get; set; }
       valueType:
@@ -39568,16 +39706,17 @@ categories:
       - '?'
     - name: WaitingForInputText
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.WaitingForInputText
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L61
-      summary: The text shown while waiting for the player to type.
-      declaration: public string WaitingForInputText { get; set; }
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L64
+      summary: The text shown while waiting for the player to type, or null for the translated default.
+      declaration: public string? WaitingForInputText { get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
     methods:
     - name: Coerce(IMenuSession, string)
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.Coerce(SwiftlyS2.Shared.Menu.IMenuSession,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L172
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L177
       summary: Adjusts a value before it is stored.
       declaration: protected override string Coerce(IMenuSession session, string value)
       parameters:
@@ -39598,9 +39737,41 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.string
         description: The value to store.
       remarks: Used for clamping into a range or into the bounds of a list.
+    - name: GetHint(IMenuSession, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.Components.InputComponent.GetHint(SwiftlyS2.Shared.Menu.IMenuSession,System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L35
+      summary: Produces the hint shown while this component holds the selection.
+      declaration: public override string? GetHint(IMenuSession session, Func<string, string> translate)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+        description: The session asking.
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+        description: Translates a key into the language of the player asking. Returns the key when it is missing.
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: The hint text, or null to show nothing.
+      remarks: Use this for a per-entry explanation, or to advertise keys the component takes over through <xref href="SwiftlyS2.Shared.Menu.IMenuComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)" data-throw-if-not-resolved="false"></xref>.
     - name: HandleActionAsync(MenuActionContext)
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L140
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L143
       summary: Offers an action to this component before the menu handles it.
       declaration: public override ValueTask<bool> HandleActionAsync(MenuActionContext context)
       parameters:
@@ -39622,7 +39793,7 @@ categories:
       remarks: Only the focused component is offered actions. Returning <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> is how a component takes over a key that would otherwise navigate or close the menu.
     - name: NeedsRedraw(IMenuSession, DateTime)
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.NeedsRedraw(SwiftlyS2.Shared.Menu.IMenuSession,System.DateTime)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L94
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L97
       summary: Whether this component needs a new frame even though nothing invalidated the session.
       declaration: public override bool NeedsRedraw(IMenuSession session, DateTime now)
       parameters:
@@ -39645,7 +39816,7 @@ categories:
       remarks: Asked once per tick for every visible component of an otherwise clean session, so keep the check cheap. Animated text and live values are what this exists for.
     - name: Render(IMenuComponentRenderContext)
       uid: SwiftlyS2.Shared.Menu.Components.InputComponent.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L102
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/InputComponent.cs#L105
       summary: Produces this component's renderer-agnostic output.
       declaration: public override MenuNode Render(IMenuComponentRenderContext context)
       parameters:
@@ -39739,11 +39910,12 @@ categories:
     - name: EmptyText
       uid: SwiftlyS2.Shared.Menu.Components.MenuChoiceComponentBase`1.EmptyText
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/MenuChoiceComponentBase.cs#L48
-      summary: The text shown when <xref href="SwiftlyS2.Shared.Menu.Components.MenuChoiceComponentBase%601.Choices" data-throw-if-not-resolved="false"></xref> is empty.
-      declaration: public string EmptyText { get; set; }
+      summary: The text shown when <xref href="SwiftlyS2.Shared.Menu.Components.MenuChoiceComponentBase%601.Choices" data-throw-if-not-resolved="false"></xref> is empty, or null for the translated default.
+      declaration: public string? EmptyText { get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
     - name: Formatter
       uid: SwiftlyS2.Shared.Menu.Components.MenuChoiceComponentBase`1.Formatter
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/MenuChoiceComponentBase.cs#L38
@@ -39787,7 +39959,7 @@ categories:
     methods:
     - name: Coerce(IMenuSession, int)
       uid: SwiftlyS2.Shared.Menu.Components.MenuChoiceComponentBase`1.Coerce(SwiftlyS2.Shared.Menu.IMenuSession,System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/MenuChoiceComponentBase.cs#L119
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/MenuChoiceComponentBase.cs#L120
       summary: Adjusts a value before it is stored.
       declaration: protected override int Coerce(IMenuSession session, int value)
       parameters:
@@ -39808,12 +39980,18 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.int32
         description: The value to store.
       remarks: Used for clamping into a range or into the bounds of a list.
-    - name: Format(int)
-      uid: SwiftlyS2.Shared.Menu.Components.MenuChoiceComponentBase`1.Format(System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/MenuChoiceComponentBase.cs#L111
+    - name: Format(IMenuComponentRenderContext, int)
+      uid: SwiftlyS2.Shared.Menu.Components.MenuChoiceComponentBase`1.Format(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/MenuChoiceComponentBase.cs#L112
       summary: Formats the item at an index, tolerating an empty list.
-      declaration: protected string Format(int index)
+      declaration: protected string Format(IMenuComponentRenderContext context, int index)
       parameters:
+      - name: context
+        type:
+        - text: IMenuComponentRenderContext
+          url: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext
+        description: The context being drawn, used for the translated default.
       - name: index
         type:
         - text: int
@@ -39900,6 +40078,314 @@ categories:
       - text: IMenuSession
         url: SwiftlyS2.Shared.Menu.IMenuSession.html
         uid: SwiftlyS2.Shared.Menu.IMenuSession
+  - name: MenuCollectionRowContext`1
+    type: Struct
+    uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext`1
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L23
+    declaration: 'public readonly record struct MenuCollectionRowContext<TItem> : IEquatable<MenuCollectionRowContext<TItem>>'
+    typeParameters:
+    - name: TItem
+    implements:
+    - text: IEquatable<MenuCollectionRowContext<TItem>>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    properties:
+    - name: Index
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext`1.Index
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L38
+      summary: The position of the item in the loaded list, from zero.
+      declaration: public required int Index { get; init; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: IsFocused
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext`1.IsFocused
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L43
+      summary: Whether the row holds the selection.
+      declaration: public required bool IsFocused { get; init; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Item
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext`1.Item
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L33
+      summary: The item the row stands for.
+      declaration: public required TItem Item { get; init; }
+      valueType:
+      - TItem
+    - name: Player
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext`1.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L53
+      summary: The player who is looking at the menu.
+      declaration: public IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Session
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext`1.Session
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L28
+      summary: The session being drawn.
+      declaration: public required IMenuSession Session { get; init; }
+      valueType:
+      - text: IMenuSession
+        url: SwiftlyS2.Shared.Menu.IMenuSession.html
+        uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: Translate
+      uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext`1.Translate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L48
+      summary: Translates a key for the player who is looking at the menu.
+      declaration: public required Func<string, string> Translate { get; init; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
+  - name: MenuPlayerContext
+    type: Struct
+    uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L5
+    declaration: 'public readonly record struct MenuPlayerContext : IEquatable<MenuPlayerContext>'
+    implements:
+    - text: IEquatable<MenuPlayerContext>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    properties:
+    - name: Player
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L20
+      summary: The player who made the selection.
+      declaration: public IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Session
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext.Session
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L10
+      summary: The session that selected the player.
+      declaration: public required IMenuSession Session { get; init; }
+      valueType:
+      - text: IMenuSession
+        url: SwiftlyS2.Shared.Menu.IMenuSession.html
+        uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: Target
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext.Target
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L15
+      summary: The player that was selected.
+      declaration: public required IPlayer Target { get; init; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+  - name: MenuPlayerRowContext
+    type: Struct
+    uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L23
+    declaration: 'public readonly record struct MenuPlayerRowContext : IEquatable<MenuPlayerRowContext>'
+    implements:
+    - text: IEquatable<MenuPlayerRowContext>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    properties:
+    - name: Index
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext.Index
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L38
+      summary: The position of the row among the listed players, from zero.
+      declaration: public required int Index { get; init; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: IsFocused
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext.IsFocused
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L43
+      summary: Whether the row holds the selection.
+      declaration: public required bool IsFocused { get; init; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Player
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L53
+      summary: The player who is looking at the menu.
+      declaration: public IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Session
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext.Session
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L28
+      summary: The session being drawn.
+      declaration: public required IMenuSession Session { get; init; }
+      valueType:
+      - text: IMenuSession
+        url: SwiftlyS2.Shared.Menu.IMenuSession.html
+        uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: Target
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext.Target
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L33
+      summary: The player the row stands for.
+      declaration: public required IPlayer Target { get; init; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Translate
+      uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext.Translate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L48
+      summary: Translates a key for the player who is looking at the menu.
+      declaration: public required Func<string, string> Translate { get; init; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
+  - name: MenuSelectionContext`1
+    type: Struct
+    uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext`1
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L5
+    declaration: 'public readonly record struct MenuSelectionContext<TItem> : IEquatable<MenuSelectionContext<TItem>>'
+    typeParameters:
+    - name: TItem
+    implements:
+    - text: IEquatable<MenuSelectionContext<TItem>>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    properties:
+    - name: IsSelected
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext`1.IsSelected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L20
+      summary: Whether <xref href="SwiftlyS2.Shared.Menu.Components.MenuSelectionContext%601.Item" data-throw-if-not-resolved="false"></xref> is now selected.
+      declaration: public required bool IsSelected { get; init; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Item
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext`1.Item
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L15
+      summary: The item that was ticked or unticked.
+      declaration: public required TItem Item { get; init; }
+      valueType:
+      - TItem
+    - name: Player
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext`1.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L30
+      summary: The player who made the change.
+      declaration: public IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Selected
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext`1.Selected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L25
+      summary: Every selected item after the change.
+      declaration: public required IReadOnlyList<TItem> Selected { get; init; }
+      valueType:
+      - text: IReadOnlyList
+        url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+      - <
+      - TItem
+      - '>'
+    - name: Session
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext`1.Session
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L10
+      summary: The session that changed the selection.
+      declaration: public required IMenuSession Session { get; init; }
+      valueType:
+      - text: IMenuSession
+        url: SwiftlyS2.Shared.Menu.IMenuSession.html
+        uid: SwiftlyS2.Shared.Menu.IMenuSession
+  - name: MenuSelectionRowContext`1
+    type: Struct
+    uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L33
+    declaration: 'public readonly record struct MenuSelectionRowContext<TItem> : IEquatable<MenuSelectionRowContext<TItem>>'
+    typeParameters:
+    - name: TItem
+    implements:
+    - text: IEquatable<MenuSelectionRowContext<TItem>>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    properties:
+    - name: Index
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1.Index
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L48
+      summary: The position of the row, from zero.
+      declaration: public required int Index { get; init; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: IsFocused
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1.IsFocused
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L53
+      summary: Whether the row holds the selection cursor.
+      declaration: public required bool IsFocused { get; init; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: IsSelected
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1.IsSelected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L58
+      summary: Whether the item is ticked.
+      declaration: public required bool IsSelected { get; init; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Item
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1.Item
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L43
+      summary: The item the row stands for.
+      declaration: public required TItem Item { get; init; }
+      valueType:
+      - TItem
+    - name: Player
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L68
+      summary: The player who is looking at the menu.
+      declaration: public IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Session
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1.Session
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L38
+      summary: The session being drawn.
+      declaration: public required IMenuSession Session { get; init; }
+      valueType:
+      - text: IMenuSession
+        url: SwiftlyS2.Shared.Menu.IMenuSession.html
+        uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: Translate
+      uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext`1.Translate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L63
+      summary: Translates a key for the player who is looking at the menu.
+      declaration: public required Func<string, string> Translate { get; init; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
   - name: MenuValueChangedContext`1
     type: Struct
     uid: SwiftlyS2.Shared.Menu.Components.MenuValueChangedContext`1
@@ -40221,7 +40707,7 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1
     parent: SwiftlyS2.Shared.Menu.Components
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L23
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L56
     declaration: 'public sealed class PagedCollectionComponent<TItem> : MenuComponentBase, IMenuComponent, IMenuRowSource'
     typeParameters:
     - name: TItem
@@ -40241,7 +40727,7 @@ categories:
     constructors:
     - name: PagedCollectionComponent(Func<Task<IReadOnlyList<TItem>>>, string?)
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.#ctor(System.Func{System.Threading.Tasks.Task{System.Collections.Generic.IReadOnlyList{`0}}},System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L37
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L70
       summary: Creates a collection.
       declaration: public PagedCollectionComponent(Func<Task<IReadOnlyList<TItem>>> loader, string? id = null)
       parameters:
@@ -40271,7 +40757,7 @@ categories:
     properties:
     - name: EmptyColor
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.EmptyColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L88
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L127
       summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.EmptyText" data-throw-if-not-resolved="false"></xref>, or null for the default colour.
       declaration: public string? EmptyColor { get; set; }
       valueType:
@@ -40280,7 +40766,7 @@ categories:
       - '?'
     - name: EmptyText
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.EmptyText
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L83
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L122
       summary: The text shown when the loader returns no items.
       declaration: public string? EmptyText { get; set; }
       valueType:
@@ -40289,7 +40775,7 @@ categories:
       - '?'
     - name: FailedColor
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.FailedColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L98
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L137
       summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.FailedText" data-throw-if-not-resolved="false"></xref>, or null for the default colour.
       declaration: public string? FailedColor { get; set; }
       valueType:
@@ -40298,7 +40784,7 @@ categories:
       - '?'
     - name: FailedText
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.FailedText
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L93
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L132
       summary: The text shown when the loader throws.
       declaration: public string? FailedText { get; set; }
       valueType:
@@ -40307,7 +40793,7 @@ categories:
       - '?'
     - name: Formatter
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.Formatter
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L48
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L81
       summary: Turns an item into the text shown for it.
       declaration: public Func<TItem, string> Formatter { get; set; }
       valueType:
@@ -40322,7 +40808,7 @@ categories:
       - '>'
     - name: ItemHint
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.ItemHint
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L63
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L102
       summary: The hint shown while an item row holds the selection, or null for none.
       declaration: public Func<TItem, string?>? ItemHint { get; set; }
       valueType:
@@ -40339,7 +40825,7 @@ categories:
       - '?'
     - name: ItemStyle
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.ItemStyle
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L58
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L97
       summary: The style of an item row.
       declaration: public MenuTextStyle ItemStyle { get; set; }
       valueType:
@@ -40348,7 +40834,7 @@ categories:
         uid: SwiftlyS2.Shared.Menu.MenuTextStyle
     - name: LoadingColor
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.LoadingColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L78
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L117
       summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.LoadingText" data-throw-if-not-resolved="false"></xref>, or null for the default colour.
       declaration: public string? LoadingColor { get; set; }
       valueType:
@@ -40357,7 +40843,7 @@ categories:
       - '?'
     - name: LoadingText
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.LoadingText
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L73
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L112
       summary: The text shown while the loader is running.
       declaration: public string? LoadingText { get; set; }
       valueType:
@@ -40366,7 +40852,7 @@ categories:
       - '?'
     - name: NodeFormatter
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.NodeFormatter
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L53
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L86
       summary: Turns an item into a full node, for lines with several colours. Takes over from <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.Formatter" data-throw-if-not-resolved="false"></xref> when set.
       declaration: public Func<TItem, MenuNode>? NodeFormatter { get; set; }
       valueType:
@@ -40383,7 +40869,7 @@ categories:
       - '?'
     - name: OnItemSelected
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.OnItemSelected
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L68
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L107
       summary: Runs when a player activates an item row.
       declaration: public Action<MenuCollectionItemContext<TItem>>? OnItemSelected { get; set; }
       valueType:
@@ -40398,34 +40884,55 @@ categories:
       - '>'
       - '>'
       - '?'
+    - name: RowRenderer
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.RowRenderer
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L92
+      summary: Draws an item row with full control over its layout, including its index and focus. Takes over from <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.NodeFormatter" data-throw-if-not-resolved="false"></xref> and <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.Formatter" data-throw-if-not-resolved="false"></xref> when set. The busy placeholder still shows while a row waits on an action.
+      declaration: public Func<MenuCollectionRowContext<TItem>, MenuNode>? RowRenderer { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: MenuCollectionRowContext
+        url: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext-1.html
+        uid: SwiftlyS2.Shared.Menu.Components.MenuCollectionRowContext-1
+      - <
+      - TItem
+      - '>'
+      - ','
+      - ' '
+      - text: MenuNode
+        url: SwiftlyS2.Shared.Menu.MenuNode.html
+        uid: SwiftlyS2.Shared.Menu.MenuNode
+      - '>'
+      - '?'
     - name: ShowFailureMessage
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.ShowFailureMessage
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L103
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L142
       summary: Whether the exception message is appended to <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.FailedText" data-throw-if-not-resolved="false"></xref>.
       declaration: public bool ShowFailureMessage { get; set; }
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     methods:
-    - name: GetRows(Func<string, string>)
-      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.GetRows(System.Func{System.String,System.String})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L106
+    - name: GetRows(IMenuSession, MenuRowContext)
+      uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.GetRows(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L145
       summary: The body entries this component stands for right now.
-      declaration: public IReadOnlyList<IMenuComponent> GetRows(Func<string, string> translate)
+      declaration: public IReadOnlyList<IMenuComponent> GetRows(IMenuSession session, MenuRowContext context)
       parameters:
-      - name: translate
+      - name: session
         type:
-        - text: Func
-          url: https://learn.microsoft.com/dotnet/api/system.func-2
-        - <
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - ','
-        - ' '
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - '>'
-        description: Looks up a menu translation by key.
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+        description: The session the rows are for.
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+        description: Services the rows need.
       returns:
         type:
         - text: IReadOnlyList
@@ -40437,12 +40944,12 @@ categories:
         - '>'
     - name: Reload()
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.Reload
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L125
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L164
       summary: Runs the loader again. Open menus update when it finishes. Does nothing before the first layout.
       declaration: public void Reload()
     - name: Render(IMenuComponentRenderContext)
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L144
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L183
       summary: Produces this component's renderer-agnostic output.
       declaration: public override MenuNode Render(IMenuComponentRenderContext context)
       parameters:
@@ -40458,16 +40965,545 @@ categories:
           url: SwiftlyS2.Shared.Menu.MenuNode.html
           uid: SwiftlyS2.Shared.Menu.MenuNode
         description: The nodes describing this component.
-      remarks: 'Never drawn: the menu replaces this component with <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.GetRows(System.Func%7bSystem.String%2cSystem.String%7d)" data-throw-if-not-resolved="false"></xref> when it lays out the body.'
+      remarks: 'Never drawn: the menu replaces this component with <xref href="SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent%601.GetRows(SwiftlyS2.Shared.Menu.IMenuSession%2cSwiftlyS2.Shared.Menu.MenuRowContext)" data-throw-if-not-resolved="false"></xref> when it lays out the body.'
     - name: RowsChanged
       uid: SwiftlyS2.Shared.Menu.Components.PagedCollectionComponent`1.RowsChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L43
-      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(System.Func%7bSystem.String%2cSystem.String%7d)" data-throw-if-not-resolved="false"></xref> would return something different.
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PagedCollectionComponent.cs#L76
+      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(SwiftlyS2.Shared.Menu.IMenuSession%2cSwiftlyS2.Shared.Menu.MenuRowContext)" data-throw-if-not-resolved="false"></xref> would return something different.
       declaration: public event Action? RowsChanged
       valueType:
       - text: Action
         url: https://learn.microsoft.com/dotnet/api/system.action
       - '?'
+  - name: PlayerListComponent
+    type: Class
+    uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L56
+    declaration: 'public sealed class PlayerListComponent : MenuComponentBase, IMenuComponent, IMenuRowSource'
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    - text: MenuComponentBase
+      url: SwiftlyS2.Shared.Menu.MenuComponentBase.html
+      uid: SwiftlyS2.Shared.Menu.MenuComponentBase
+    implements:
+    - text: IMenuComponent
+      url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+      uid: SwiftlyS2.Shared.Menu.IMenuComponent
+    - text: IMenuRowSource
+      url: SwiftlyS2.Shared.Menu.IMenuRowSource.html
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource
+    constructors:
+    - name: PlayerListComponent(string?)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.#ctor(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L62
+      summary: Creates a player list.
+      declaration: public PlayerListComponent(string? id = null)
+      parameters:
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: A stable id, or null to generate one.
+        optional: true
+    properties:
+    - name: ClearButton
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.ClearButton
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L88
+      summary: The button that clears the search. Only shown while a search is active.
+      declaration: public ButtonComponent ClearButton { get; }
+      valueType:
+      - text: ButtonComponent
+        url: SwiftlyS2.Shared.Menu.Components.ButtonComponent.html
+        uid: SwiftlyS2.Shared.Menu.Components.ButtonComponent
+    - name: DefaultTarget
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.DefaultTarget
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L103
+      summary: The target used when the search is empty.
+      declaration: public string DefaultTarget { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: EmptyColor
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.EmptyColor
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L179
+      summary: The colour of <xref href="SwiftlyS2.Shared.Menu.Components.PlayerListComponent.EmptyText" data-throw-if-not-resolved="false"></xref>, or null for the default colour.
+      declaration: public string? EmptyColor { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: EmptyText
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.EmptyText
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L174
+      summary: The text shown when nobody matches, or null for the translated default.
+      declaration: public string? EmptyText { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+    - name: Filter
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.Filter
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L118
+      summary: An extra filter applied after the search, or null to keep every match. Receives the viewer and the candidate.
+      declaration: public Func<IPlayer, IPlayer, bool>? Filter { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-3
+      - <
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+      - ','
+      - ' '
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+      - ','
+      - ' '
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+      - '>'
+      - '?'
+    - name: Formatter
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.Formatter
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L138
+      summary: Turns a player into the text shown for them. An empty result shows the translated unknown-player text.
+      declaration: public Func<IPlayer, string> Formatter { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
+    - name: ItemHint
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.ItemHint
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L159
+      summary: The hint shown while a player row holds the selection, or null for none.
+      declaration: public Func<IPlayer, string?>? ItemHint { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
+      - '>'
+      - '?'
+    - name: ItemStyle
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.ItemStyle
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L154
+      summary: The style of a player row.
+      declaration: public MenuTextStyle ItemStyle { get; set; }
+      valueType:
+      - text: MenuTextStyle
+        url: SwiftlyS2.Shared.Menu.MenuTextStyle.html
+        uid: SwiftlyS2.Shared.Menu.MenuTextStyle
+    - name: MaxResults
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.MaxResults
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L128
+      summary: The most players listed, or null for no limit.
+      declaration: public int? MaxResults { get; set; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+      - '?'
+    - name: NameComparison
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.NameComparison
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L113
+      summary: How player names are compared.
+      declaration: public StringComparison NameComparison { get; set; }
+      valueType:
+      - text: StringComparison
+        url: https://learn.microsoft.com/dotnet/api/system.stringcomparison
+    - name: NodeFormatter
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.NodeFormatter
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L143
+      summary: Turns a player into a full node, for lines with several colours. Takes over from <xref href="SwiftlyS2.Shared.Menu.Components.PlayerListComponent.Formatter" data-throw-if-not-resolved="false"></xref> when set.
+      declaration: public Func<IPlayer, MenuNode>? NodeFormatter { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+      - ','
+      - ' '
+      - text: MenuNode
+        url: SwiftlyS2.Shared.Menu.MenuNode.html
+        uid: SwiftlyS2.Shared.Menu.MenuNode
+      - '>'
+      - '?'
+    - name: OnPlayerDeselected
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.OnPlayerDeselected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L169
+      summary: Runs when the focus leaves a player row. <xref href="SwiftlyS2.Shared.Menu.Components.MenuPlayerContext.Target" data-throw-if-not-resolved="false"></xref> is the player it left.
+      declaration: public Action<MenuPlayerContext>? OnPlayerDeselected { get; set; }
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action-1
+      - <
+      - text: MenuPlayerContext
+        url: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext.html
+        uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext
+      - '>'
+      - '?'
+    - name: OnPlayerSelected
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.OnPlayerSelected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L164
+      summary: Runs when a player activates a row.
+      declaration: public Action<MenuPlayerContext>? OnPlayerSelected { get; set; }
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action-1
+      - <
+      - text: MenuPlayerContext
+        url: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext.html
+        uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerContext
+      - '>'
+      - '?'
+    - name: RefreshInterval
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.RefreshInterval
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L133
+      summary: How often the list is looked up again so joins and leaves show up.
+      declaration: public TimeSpan RefreshInterval { get; set; }
+      valueType:
+      - text: TimeSpan
+        url: https://learn.microsoft.com/dotnet/api/system.timespan
+    - name: RowRenderer
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.RowRenderer
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L149
+      summary: Draws a player row with full control over its layout, including its index and focus. Takes over from <xref href="SwiftlyS2.Shared.Menu.Components.PlayerListComponent.NodeFormatter" data-throw-if-not-resolved="false"></xref> and <xref href="SwiftlyS2.Shared.Menu.Components.PlayerListComponent.Formatter" data-throw-if-not-resolved="false"></xref> when set. The busy placeholder still shows while a row waits on an action.
+      declaration: public Func<MenuPlayerRowContext, MenuNode>? RowRenderer { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: MenuPlayerRowContext
+        url: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext.html
+        uid: SwiftlyS2.Shared.Menu.Components.MenuPlayerRowContext
+      - ','
+      - ' '
+      - text: MenuNode
+        url: SwiftlyS2.Shared.Menu.MenuNode.html
+        uid: SwiftlyS2.Shared.Menu.MenuNode
+      - '>'
+      - '?'
+    - name: SearchInput
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.SearchInput
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L83
+      summary: The search line. Its empty text and hint come from the translation file on every rebuild, so set them there.
+      declaration: public InputComponent SearchInput { get; }
+      valueType:
+      - text: InputComponent
+        url: SwiftlyS2.Shared.Menu.Components.InputComponent.html
+        uid: SwiftlyS2.Shared.Menu.Components.InputComponent
+    - name: SearchMode
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.SearchMode
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L108
+      summary: The search mode passed to <xref href="SwiftlyS2.Shared.Players.IPlayerManagerService.FindTargettedPlayers(SwiftlyS2.Shared.Players.IPlayer%2cSystem.String%2cSwiftlyS2.Shared.Players.TargetSearchMode%2cSystem.StringComparison)" data-throw-if-not-resolved="false"></xref>.
+      declaration: public TargetSearchMode SearchMode { get; set; }
+      valueType:
+      - text: TargetSearchMode
+        url: SwiftlyS2.Shared.Players.TargetSearchMode.html
+        uid: SwiftlyS2.Shared.Players.TargetSearchMode
+    - name: ShowClearButton
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.ShowClearButton
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L98
+      summary: Whether <xref href="SwiftlyS2.Shared.Menu.Components.PlayerListComponent.ClearButton" data-throw-if-not-resolved="false"></xref> is shown while a search is active.
+      declaration: public bool ShowClearButton { get; set; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: ShowSearch
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.ShowSearch
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L93
+      summary: Whether the search line is shown. The filter can still be set with <xref href="SwiftlyS2.Shared.Menu.Components.PlayerListComponent.SetFilter(SwiftlyS2.Shared.Menu.IMenuSession%2cSystem.String)" data-throw-if-not-resolved="false"></xref>.
+      declaration: public bool ShowSearch { get; set; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Sorter
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.Sorter
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L123
+      summary: Orders the matches, or null to keep the order the search returns.
+      declaration: public Func<IEnumerable<IPlayer>, IEnumerable<IPlayer>>? Sorter { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: IEnumerable
+        url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+      - <
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+      - '>'
+      - ','
+      - ' '
+      - text: IEnumerable
+        url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+      - <
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+      - '>'
+      - '>'
+      - '?'
+    methods:
+    - name: GetFilter(IMenuSession)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.GetFilter(SwiftlyS2.Shared.Menu.IMenuSession)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L184
+      summary: Reads the search text of one session.
+      declaration: public string GetFilter(IMenuSession session)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: GetRows(IMenuSession, MenuRowContext)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.GetRows(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L201
+      summary: The body entries this component stands for right now.
+      declaration: public IReadOnlyList<IMenuComponent> GetRows(IMenuSession session, MenuRowContext context)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+        description: The session the rows are for.
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+        description: Services the rows need.
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: IMenuComponent
+          url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponent
+        - '>'
+    - name: Refresh(IMenuSession)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.Refresh(SwiftlyS2.Shared.Menu.IMenuSession)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L194
+      summary: Looks the list up again for one session on its next draw.
+      declaration: public void Refresh(IMenuSession session)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: Render(IMenuComponentRenderContext)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L233
+      summary: Produces this component's renderer-agnostic output.
+      declaration: public override MenuNode Render(IMenuComponentRenderContext context)
+      parameters:
+      - name: context
+        type:
+        - text: IMenuComponentRenderContext
+          url: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext
+        description: The player and focus state to draw for.
+      returns:
+        type:
+        - text: MenuNode
+          url: SwiftlyS2.Shared.Menu.MenuNode.html
+          uid: SwiftlyS2.Shared.Menu.MenuNode
+        description: The nodes describing this component.
+      remarks: 'Never drawn: the menu replaces this component with <xref href="SwiftlyS2.Shared.Menu.Components.PlayerListComponent.GetRows(SwiftlyS2.Shared.Menu.IMenuSession%2cSwiftlyS2.Shared.Menu.MenuRowContext)" data-throw-if-not-resolved="false"></xref> when it lays out the body.'
+    - name: SetFilter(IMenuSession, string)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.SetFilter(SwiftlyS2.Shared.Menu.IMenuSession,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L189
+      summary: Sets the search text of one session.
+      declaration: public void SetFilter(IMenuSession session, string text)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: text
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: RowsChanged
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.RowsChanged
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerListComponent.cs#L75
+      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(SwiftlyS2.Shared.Menu.IMenuSession%2cSwiftlyS2.Shared.Menu.MenuRowContext)" data-throw-if-not-resolved="false"></xref> would return something different.
+      declaration: public event Action? RowsChanged
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action
+      - '?'
+  - name: PlayerSelectionComponent
+    type: Class
+    uid: SwiftlyS2.Shared.Menu.Components.PlayerSelectionComponent
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerSelectionComponent.cs#L5
+    declaration: 'public sealed class PlayerSelectionComponent : SelectionComponentBase<IPlayer>, IMenuComponent, IMenuRowSource'
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    - text: MenuComponentBase
+      url: SwiftlyS2.Shared.Menu.MenuComponentBase.html
+      uid: SwiftlyS2.Shared.Menu.MenuComponentBase
+    - text: SelectionComponentBase<IPlayer>
+      url: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase-1.html
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase-1
+    implements:
+    - text: IMenuComponent
+      url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+      uid: SwiftlyS2.Shared.Menu.IMenuComponent
+    - text: IMenuRowSource
+      url: SwiftlyS2.Shared.Menu.IMenuRowSource.html
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource
+    constructors:
+    - name: PlayerSelectionComponent(string?)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerSelectionComponent.#ctor(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerSelectionComponent.cs#L11
+      summary: Creates a selection list.
+      declaration: public PlayerSelectionComponent(string? id = null)
+      parameters:
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: A stable id, or null to generate one.
+        optional: true
+    properties:
+    - name: List
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerSelectionComponent.List
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerSelectionComponent.cs#L25
+      summary: The list underneath. Use it for the search, filter, sorter, limits and the empty text. Its <code>RowRenderer</code>, <code>OnPlayerSelected</code> and formatters are owned by this component.
+      declaration: public PlayerListComponent List { get; }
+      valueType:
+      - text: PlayerListComponent
+        url: SwiftlyS2.Shared.Menu.Components.PlayerListComponent.html
+        uid: SwiftlyS2.Shared.Menu.Components.PlayerListComponent
+    methods:
+    - name: FormatText(IPlayer, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerSelectionComponent.FormatText(SwiftlyS2.Shared.Players.IPlayer,System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerSelectionComponent.cs#L42
+      summary: The text of an item in the default row. Uses <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.Formatter" data-throw-if-not-resolved="false"></xref> unless overridden.
+      declaration: protected override string FormatText(IPlayer item, Func<string, string> translate)
+      parameters:
+      - name: item
+        type:
+        - text: IPlayer
+          url: SwiftlyS2.Shared.Players.IPlayer.html
+          uid: SwiftlyS2.Shared.Players.IPlayer
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: GetInnerRows(IMenuSession, MenuRowContext)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerSelectionComponent.GetInnerRows(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerSelectionComponent.cs#L28
+      summary: The rows of the list underneath.
+      declaration: protected override IReadOnlyList<IMenuComponent> GetInnerRows(IMenuSession session, MenuRowContext context)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: IMenuComponent
+          url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponent
+        - '>'
+    - name: IsAlive(IPlayer)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerSelectionComponent.IsAlive(SwiftlyS2.Shared.Players.IPlayer)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerSelectionComponent.cs#L39
+      summary: Whether an item still exists. Gone items are dropped from the selection.
+      declaration: protected override bool IsAlive(IPlayer item)
+      parameters:
+      - name: item
+        type:
+        - text: IPlayer
+          url: SwiftlyS2.Shared.Players.IPlayer.html
+          uid: SwiftlyS2.Shared.Players.IPlayer
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: TryGetCandidates(IMenuSession, MenuRowContext, out IEnumerable<IPlayer>)
+      uid: SwiftlyS2.Shared.Menu.Components.PlayerSelectionComponent.TryGetCandidates(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext,System.Collections.Generic.IEnumerable{SwiftlyS2.Shared.Players.IPlayer}@)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/PlayerSelectionComponent.cs#L32
+      summary: Every item <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.DefaultSelected" data-throw-if-not-resolved="false"></xref> should be asked about. Return false while they are not known yet.
+      declaration: protected override bool TryGetCandidates(IMenuSession session, MenuRowContext context, out IEnumerable<IPlayer> candidates)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+      - name: candidates
+        type:
+        - text: IEnumerable
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+        - <
+        - text: IPlayer
+          url: SwiftlyS2.Shared.Players.IPlayer.html
+          uid: SwiftlyS2.Shared.Players.IPlayer
+        - '>'
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
   - name: ProgressBarComponent
     type: Class
     uid: SwiftlyS2.Shared.Menu.Components.ProgressBarComponent
@@ -40719,6 +41755,437 @@ categories:
           url: SwiftlyS2.Shared.Menu.MenuNode.html
           uid: SwiftlyS2.Shared.Menu.MenuNode
         description: The nodes describing this component.
+  - name: SelectionComponentBase`1
+    type: Class
+    uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1
+    parent: SwiftlyS2.Shared.Menu.Components
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L71
+    declaration: 'public abstract class SelectionComponentBase<TItem> : MenuComponentBase, IMenuComponent, IMenuRowSource'
+    typeParameters:
+    - name: TItem
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    - text: MenuComponentBase
+      url: SwiftlyS2.Shared.Menu.MenuComponentBase.html
+      uid: SwiftlyS2.Shared.Menu.MenuComponentBase
+    implements:
+    - text: IMenuComponent
+      url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+      uid: SwiftlyS2.Shared.Menu.IMenuComponent
+    - text: IMenuRowSource
+      url: SwiftlyS2.Shared.Menu.IMenuRowSource.html
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource
+    constructors:
+    - name: SelectionComponentBase(string?, IEqualityComparer<TItem>?)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.#ctor(System.String,System.Collections.Generic.IEqualityComparer{`0})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L77
+      declaration: protected SelectionComponentBase(string? id, IEqualityComparer<TItem>? comparer = null)
+      parameters:
+      - name: id
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: A stable id, or null to generate one.
+      - name: comparer
+        type:
+        - text: IEqualityComparer
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1
+        - <
+        - TItem
+        - '>'
+        - '?'
+        description: How items are compared, or null for the default.
+        optional: true
+    properties:
+    - name: DefaultSelected
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.DefaultSelected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L124
+      summary: Decides what starts selected, given the session and a candidate, or null to start with nothing. Runs once per session, as soon as the candidates are known, so later arrivals start unselected.
+      declaration: public Func<IMenuSession, TItem, bool>? DefaultSelected { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-3
+      - <
+      - text: IMenuSession
+        url: SwiftlyS2.Shared.Menu.IMenuSession.html
+        uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - ','
+      - ' '
+      - TItem
+      - ','
+      - ' '
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+      - '>'
+      - '?'
+    - name: Formatter
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.Formatter
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L88
+      summary: The text shown for an item.
+      declaration: public Func<TItem, string> Formatter { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - TItem
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
+    - name: MaxSelected
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.MaxSelected
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L118
+      summary: The most items that can be selected at once, or null for no limit. Extra ticks are ignored.
+      declaration: public int? MaxSelected { get; set; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+      - '?'
+    - name: OnSelectionChanged
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.OnSelectionChanged
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L129
+      summary: Runs after an item is ticked or unticked.
+      declaration: public Action<MenuSelectionContext<TItem>>? OnSelectionChanged { get; set; }
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action-1
+      - <
+      - text: MenuSelectionContext
+        url: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext-1.html
+        uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionContext-1
+      - <
+      - TItem
+      - '>'
+      - '>'
+      - '?'
+    - name: RowRenderer
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.RowRenderer
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L93
+      summary: Draws a row with full control. Takes over from <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.Formatter" data-throw-if-not-resolved="false"></xref> when set.
+      declaration: public Func<MenuSelectionRowContext<TItem>, MenuNode>? RowRenderer { get; set; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: MenuSelectionRowContext
+        url: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext-1.html
+        uid: SwiftlyS2.Shared.Menu.Components.MenuSelectionRowContext-1
+      - <
+      - TItem
+      - '>'
+      - ','
+      - ' '
+      - text: MenuNode
+        url: SwiftlyS2.Shared.Menu.MenuNode.html
+        uid: SwiftlyS2.Shared.Menu.MenuNode
+      - '>'
+      - '?'
+    - name: SelectedMark
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.SelectedMark
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L98
+      summary: Put before the text of a selected item.
+      declaration: public string SelectedMark { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: SelectedStyle
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.SelectedStyle
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L108
+      summary: The style of a selected row.
+      declaration: public MenuTextStyle SelectedStyle { get; set; }
+      valueType:
+      - text: MenuTextStyle
+        url: SwiftlyS2.Shared.Menu.MenuTextStyle.html
+        uid: SwiftlyS2.Shared.Menu.MenuTextStyle
+    - name: UnselectedMark
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.UnselectedMark
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L103
+      summary: Put before the text of an item that is not selected.
+      declaration: public string UnselectedMark { get; set; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: UnselectedStyle
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.UnselectedStyle
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L113
+      summary: The style of a row that is not selected.
+      declaration: public MenuTextStyle UnselectedStyle { get; set; }
+      valueType:
+      - text: MenuTextStyle
+        url: SwiftlyS2.Shared.Menu.MenuTextStyle.html
+        uid: SwiftlyS2.Shared.Menu.MenuTextStyle
+    methods:
+    - name: Clear(IMenuSession)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.Clear(SwiftlyS2.Shared.Menu.IMenuSession)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L178
+      summary: Clears the selection of one session.
+      declaration: public void Clear(IMenuSession session)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: DrawRow(IMenuSession, TItem, int, bool, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.DrawRow(SwiftlyS2.Shared.Menu.IMenuSession,`0,System.Int32,System.Boolean,System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L235
+      summary: Draws one row for the list underneath.
+      declaration: protected MenuNode DrawRow(IMenuSession session, TItem item, int index, bool isFocused, Func<string, string> translate)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: item
+        type:
+        - TItem
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: isFocused
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+      returns:
+        type:
+        - text: MenuNode
+          url: SwiftlyS2.Shared.Menu.MenuNode.html
+          uid: SwiftlyS2.Shared.Menu.MenuNode
+    - name: FormatText(TItem, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.FormatText(`0,System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L259
+      summary: The text of an item in the default row. Uses <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.Formatter" data-throw-if-not-resolved="false"></xref> unless overridden.
+      declaration: protected virtual string FormatText(TItem item, Func<string, string> translate)
+      parameters:
+      - name: item
+        type:
+        - TItem
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+    - name: GetInnerRows(IMenuSession, MenuRowContext)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.GetInnerRows(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L215
+      summary: The rows of the list underneath.
+      declaration: protected abstract IReadOnlyList<IMenuComponent> GetInnerRows(IMenuSession session, MenuRowContext context)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: IMenuComponent
+          url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponent
+        - '>'
+    - name: GetRows(IMenuSession, MenuRowContext)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.GetRows(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L181
+      summary: The body entries this component stands for right now.
+      declaration: public IReadOnlyList<IMenuComponent> GetRows(IMenuSession session, MenuRowContext context)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+        description: The session the rows are for.
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+        description: Services the rows need.
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: IMenuComponent
+          url: SwiftlyS2.Shared.Menu.IMenuComponent.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponent
+        - '>'
+    - name: GetSelected(IMenuSession)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.GetSelected(SwiftlyS2.Shared.Menu.IMenuSession)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L134
+      summary: The items one session has selected. Items that are gone are dropped.
+      declaration: public IReadOnlyList<TItem> GetSelected(IMenuSession session)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - TItem
+        - '>'
+    - name: IsAlive(TItem)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.IsAlive(`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L225
+      summary: Whether an item still exists. Gone items are dropped from the selection.
+      declaration: protected virtual bool IsAlive(TItem item)
+      parameters:
+      - name: item
+        type:
+        - TItem
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: IsSelected(IMenuSession, TItem)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.IsSelected(SwiftlyS2.Shared.Menu.IMenuSession,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L148
+      summary: Whether one session has selected an item.
+      declaration: public bool IsSelected(IMenuSession session, TItem item)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: item
+        type:
+        - TItem
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: RaiseRowsChanged()
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.RaiseRowsChanged
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L230
+      summary: Raises <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.RowsChanged" data-throw-if-not-resolved="false"></xref>.
+      declaration: protected void RaiseRowsChanged()
+    - name: Render(IMenuComponentRenderContext)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L210
+      summary: Produces this component's renderer-agnostic output.
+      declaration: public override MenuNode Render(IMenuComponentRenderContext context)
+      parameters:
+      - name: context
+        type:
+        - text: IMenuComponentRenderContext
+          url: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext
+        description: The player and focus state to draw for.
+      returns:
+        type:
+        - text: MenuNode
+          url: SwiftlyS2.Shared.Menu.MenuNode.html
+          uid: SwiftlyS2.Shared.Menu.MenuNode
+        description: The nodes describing this component.
+      remarks: 'Never drawn: the menu replaces this component with <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.GetRows(SwiftlyS2.Shared.Menu.IMenuSession%2cSwiftlyS2.Shared.Menu.MenuRowContext)" data-throw-if-not-resolved="false"></xref> when it lays out the body.'
+    - name: SetSelected(IMenuSession, IEnumerable<TItem>)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.SetSelected(SwiftlyS2.Shared.Menu.IMenuSession,System.Collections.Generic.IEnumerable{`0})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L161
+      summary: Replaces the selection of one session.
+      declaration: public void SetSelected(IMenuSession session, IEnumerable<TItem> items)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: items
+        type:
+        - text: IEnumerable
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+        - <
+        - TItem
+        - '>'
+    - name: Toggle(IMenuSession, TItem)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.Toggle(SwiftlyS2.Shared.Menu.IMenuSession,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L264
+      summary: Ticks or unticks an item for the list underneath.
+      declaration: protected void Toggle(IMenuSession session, TItem item)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: item
+        type:
+        - TItem
+    - name: TryGetCandidates(IMenuSession, MenuRowContext, out IEnumerable<TItem>)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.TryGetCandidates(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext,System.Collections.Generic.IEnumerable{`0}@)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L220
+      summary: Every item <xref href="SwiftlyS2.Shared.Menu.Components.SelectionComponentBase%601.DefaultSelected" data-throw-if-not-resolved="false"></xref> should be asked about. Return false while they are not known yet.
+      declaration: protected abstract bool TryGetCandidates(IMenuSession session, MenuRowContext context, out IEnumerable<TItem> candidates)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+      - name: candidates
+        type:
+        - text: IEnumerable
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+        - <
+        - TItem
+        - '>'
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: RowsChanged
+      uid: SwiftlyS2.Shared.Menu.Components.SelectionComponentBase`1.RowsChanged
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectionComponentBase.cs#L83
+      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(SwiftlyS2.Shared.Menu.IMenuSession%2cSwiftlyS2.Shared.Menu.MenuRowContext)" data-throw-if-not-resolved="false"></xref> would return something different.
+      declaration: public event Action? RowsChanged
+      valueType:
+      - text: Action
+        url: https://learn.microsoft.com/dotnet/api/system.action
+      - '?'
   - name: SelectorComponent`1
     type: Class
     uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1
@@ -40803,7 +42270,7 @@ categories:
     properties:
     - name: ClosingBracket
       uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1.ClosingBracket
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L50
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L53
       summary: The bracket drawn after the current item.
       declaration: public string ClosingBracket { get; set; }
       valueType:
@@ -40811,7 +42278,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: NeighbourColor
       uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1.NeighbourColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L40
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L43
       summary: The colour of the neighbouring items.
       declaration: public string? NeighbourColor { get; set; }
       valueType:
@@ -40820,7 +42287,7 @@ categories:
       - '?'
     - name: OpeningBracket
       uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1.OpeningBracket
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L45
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L48
       summary: The bracket drawn before the current item.
       declaration: public string OpeningBracket { get; set; }
       valueType:
@@ -40828,16 +42295,48 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: ShowNeighbours
       uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1.ShowNeighbours
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L35
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L38
       summary: Whether the items either side of the current one are shown.
       declaration: public bool ShowNeighbours { get; set; }
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     methods:
+    - name: GetHint(IMenuSession, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1.GetHint(SwiftlyS2.Shared.Menu.IMenuSession,System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L32
+      summary: Produces the hint shown while this component holds the selection.
+      declaration: public override string? GetHint(IMenuSession session, Func<string, string> translate)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+        description: The session asking.
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+        description: Translates a key into the language of the player asking. Returns the key when it is missing.
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: The hint text, or null to show nothing.
+      remarks: Use this for a per-entry explanation, or to advertise keys the component takes over through <xref href="SwiftlyS2.Shared.Menu.IMenuComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)" data-throw-if-not-resolved="false"></xref>.
     - name: HandleActionAsync(MenuActionContext)
       uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L86
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L89
       summary: Offers an action to this component before the menu handles it.
       declaration: public override ValueTask<bool> HandleActionAsync(MenuActionContext context)
       parameters:
@@ -40859,7 +42358,7 @@ categories:
       remarks: Only the focused component is offered actions. Returning <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> is how a component takes over a key that would otherwise navigate or close the menu.
     - name: Render(IMenuComponentRenderContext)
       uid: SwiftlyS2.Shared.Menu.Components.SelectorComponent`1.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L53
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SelectorComponent.cs#L56
       summary: Produces this component's renderer-agnostic output.
       declaration: public override MenuNode Render(IMenuComponentRenderContext context)
       parameters:
@@ -40963,7 +42462,7 @@ categories:
     properties:
     - name: ClosingBracket
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.ClosingBracket
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L98
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L101
       summary: The bracket drawn after the bar.
       declaration: public string ClosingBracket { get; set; }
       valueType:
@@ -40971,7 +42470,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: ClosingBracketColor
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.ClosingBracketColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L108
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L111
       summary: The colour of the closing bracket, or null to keep <xref href="SwiftlyS2.Shared.Menu.Components.TextComponent.Style" data-throw-if-not-resolved="false"></xref>.
       declaration: public string? ClosingBracketColor { get; set; }
       valueType:
@@ -40980,7 +42479,7 @@ categories:
       - '?'
     - name: EmptyChar
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.EmptyChar
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L83
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L86
       summary: The character drawn for an empty segment.
       declaration: public string EmptyChar { get; set; }
       valueType:
@@ -40988,7 +42487,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: EmptyColor
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.EmptyColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L88
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L91
       summary: The colour of the empty segments.
       declaration: public string? EmptyColor { get; set; }
       valueType:
@@ -40997,7 +42496,7 @@ categories:
       - '?'
     - name: FilledChar
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.FilledChar
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L78
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L81
       summary: The character drawn for a filled segment.
       declaration: public string FilledChar { get; set; }
       valueType:
@@ -41005,7 +42504,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: Max
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.Max
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L52
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L55
       summary: The highest value.
       declaration: public float Max { get; set; }
       valueType:
@@ -41013,7 +42512,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.single
     - name: Min
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.Min
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L47
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L50
       summary: The lowest value.
       declaration: public float Min { get; set; }
       valueType:
@@ -41021,7 +42520,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.single
     - name: OpeningBracket
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.OpeningBracket
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L93
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L96
       summary: The bracket drawn before the bar.
       declaration: public string OpeningBracket { get; set; }
       valueType:
@@ -41029,7 +42528,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: OpeningBracketColor
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.OpeningBracketColor
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L103
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L106
       summary: The colour of the opening bracket, or null to keep <xref href="SwiftlyS2.Shared.Menu.Components.TextComponent.Style" data-throw-if-not-resolved="false"></xref>.
       declaration: public string? OpeningBracketColor { get; set; }
       valueType:
@@ -41038,7 +42537,7 @@ categories:
       - '?'
     - name: ShowValue
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.ShowValue
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L113
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L116
       summary: Whether the number itself is shown next to the bar.
       declaration: public bool ShowValue { get; set; }
       valueType:
@@ -41046,7 +42545,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Step
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.Step
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L57
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L60
       summary: How far one press moves the value. Never zero or negative.
       declaration: public float Step { get; set; }
       valueType:
@@ -41054,7 +42553,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.single
     - name: TotalBars
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.TotalBars
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L65
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L68
       summary: How many segments the bar is drawn with. Never below one.
       declaration: public int TotalBars { get; set; }
       valueType:
@@ -41062,7 +42561,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: ValueFormat
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.ValueFormat
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L118
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L121
       summary: How the number is formatted.
       declaration: public string ValueFormat { get; set; }
       valueType:
@@ -41070,7 +42569,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.string
     - name: WrapAround
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.WrapAround
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L73
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L76
       summary: Whether stepping past either end continues from the other.
       declaration: public bool WrapAround { get; set; }
       valueType:
@@ -41079,7 +42578,7 @@ categories:
     methods:
     - name: Coerce(IMenuSession, float)
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.Coerce(SwiftlyS2.Shared.Menu.IMenuSession,System.Single)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L212
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L215
       summary: Adjusts a value before it is stored.
       declaration: protected override float Coerce(IMenuSession session, float value)
       parameters:
@@ -41100,9 +42599,41 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.single
         description: The value to store.
       remarks: Used for clamping into a range or into the bounds of a list.
+    - name: GetHint(IMenuSession, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.GetHint(SwiftlyS2.Shared.Menu.IMenuSession,System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L44
+      summary: Produces the hint shown while this component holds the selection.
+      declaration: public override string? GetHint(IMenuSession session, Func<string, string> translate)
+      parameters:
+      - name: session
+        type:
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+        description: The session asking.
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+        description: Translates a key into the language of the player asking. Returns the key when it is missing.
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+        description: The hint text, or null to show nothing.
+      remarks: Use this for a per-entry explanation, or to advertise keys the component takes over through <xref href="SwiftlyS2.Shared.Menu.IMenuComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)" data-throw-if-not-resolved="false"></xref>.
     - name: HandleActionAsync(MenuActionContext)
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L194
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L197
       summary: Offers an action to this component before the menu handles it.
       declaration: public override ValueTask<bool> HandleActionAsync(MenuActionContext context)
       parameters:
@@ -41124,7 +42655,7 @@ categories:
       remarks: Only the focused component is offered actions. Returning <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> is how a component takes over a key that would otherwise navigate or close the menu.
     - name: Render(IMenuComponentRenderContext)
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L152
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L155
       summary: Produces this component's renderer-agnostic output.
       declaration: public override MenuNode Render(IMenuComponentRenderContext context)
       parameters:
@@ -41142,7 +42673,7 @@ categories:
         description: The nodes describing this component.
     - name: StepValue(IMenuSession, int)
       uid: SwiftlyS2.Shared.Menu.Components.SliderComponent.StepValue(SwiftlyS2.Shared.Menu.IMenuSession,System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L126
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Components/SliderComponent.cs#L129
       summary: Moves this player's value by one <xref href="SwiftlyS2.Shared.Menu.Components.SliderComponent.Step" data-throw-if-not-resolved="false"></xref>.
       declaration: public bool StepValue(IMenuSession session, int direction)
       parameters:
@@ -42659,11 +44190,11 @@ categories:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     methods:
-    - name: GetHint(IMenuSession)
-      uid: SwiftlyS2.Shared.Menu.IMenuComponent.GetHint(SwiftlyS2.Shared.Menu.IMenuSession)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L67
+    - name: GetHint(IMenuSession, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.IMenuComponent.GetHint(SwiftlyS2.Shared.Menu.IMenuSession,System.Func{System.String,System.String})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L68
       summary: Produces the hint shown while this component holds the selection.
-      declaration: string? GetHint(IMenuSession session)
+      declaration: string? GetHint(IMenuSession session, Func<string, string> translate)
       parameters:
       - name: session
         type:
@@ -42671,6 +44202,19 @@ categories:
           url: SwiftlyS2.Shared.Menu.IMenuSession.html
           uid: SwiftlyS2.Shared.Menu.IMenuSession
         description: The session asking.
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+        description: Translates a key into the language of the player asking. Returns the key when it is missing.
       returns:
         type:
         - text: string
@@ -42680,7 +44224,7 @@ categories:
       remarks: Use this for a per-entry explanation, or to advertise keys the component takes over through <xref href="SwiftlyS2.Shared.Menu.IMenuComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)" data-throw-if-not-resolved="false"></xref>.
     - name: HandleActionAsync(MenuActionContext)
       uid: SwiftlyS2.Shared.Menu.IMenuComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L99
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L100
       summary: Offers an action to this component before the menu handles it.
       declaration: ValueTask<bool> HandleActionAsync(MenuActionContext context)
       parameters:
@@ -42736,7 +44280,7 @@ categories:
         description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> when the component should be drawn.
     - name: NeedsRedraw(IMenuSession, DateTime)
       uid: SwiftlyS2.Shared.Menu.IMenuComponent.NeedsRedraw(SwiftlyS2.Shared.Menu.IMenuSession,System.DateTime)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L79
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L80
       summary: Whether this component needs a new frame even though nothing invalidated the session.
       declaration: bool NeedsRedraw(IMenuSession session, DateTime now)
       parameters:
@@ -42759,7 +44303,7 @@ categories:
       remarks: Asked once per tick for every visible component of an otherwise clean session, so keep the check cheap. Animated text and live values are what this exists for.
     - name: Render(IMenuComponentRenderContext)
       uid: SwiftlyS2.Shared.Menu.IMenuComponent.Render(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L86
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuComponent.cs#L87
       summary: Produces this component's renderer-agnostic output.
       declaration: MenuNode Render(IMenuComponentRenderContext context)
       parameters:
@@ -42844,6 +44388,22 @@ categories:
       - text: IMenuSession
         url: SwiftlyS2.Shared.Menu.IMenuSession.html
         uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: Translate
+      uid: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext.Translate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L52
+      summary: Translates a key from the translation file, returning the key when it is missing.
+      declaration: Func<string, string> Translate { get; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
   - name: IMenuInputMethodSource
     type: Interface
     uid: SwiftlyS2.Shared.Menu.IMenuInputMethodSource
@@ -42994,13 +44554,13 @@ categories:
     type: Interface
     uid: SwiftlyS2.Shared.Menu.IMenuRenderContext
     parent: SwiftlyS2.Shared.Menu
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L53
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L58
     summary: Everything a renderer needs to draw one composed frame.
     declaration: public interface IMenuRenderContext
     properties:
     - name: Frame
       uid: SwiftlyS2.Shared.Menu.IMenuRenderContext.Frame
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L73
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L78
       summary: The composed frame to draw.
       declaration: MenuFrame Frame { get; }
       valueType:
@@ -43009,7 +44569,7 @@ categories:
         uid: SwiftlyS2.Shared.Menu.MenuFrame
     - name: Menu
       uid: SwiftlyS2.Shared.Menu.IMenuRenderContext.Menu
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L58
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L63
       summary: The menu being drawn.
       declaration: IMenu Menu { get; }
       valueType:
@@ -43018,7 +44578,7 @@ categories:
         uid: SwiftlyS2.Shared.Menu.IMenu
     - name: Player
       uid: SwiftlyS2.Shared.Menu.IMenuRenderContext.Player
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L68
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L73
       summary: The player the menu is being drawn for.
       declaration: IPlayer Player { get; }
       valueType:
@@ -43027,7 +44587,7 @@ categories:
         uid: SwiftlyS2.Shared.Players.IPlayer
     - name: Session
       uid: SwiftlyS2.Shared.Menu.IMenuRenderContext.Session
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L63
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L68
       summary: The session being drawn.
       declaration: IMenuSession Session { get; }
       valueType:
@@ -43037,7 +44597,7 @@ categories:
     methods:
     - name: ReportUnsupported(MenuNode)
       uid: SwiftlyS2.Shared.Menu.IMenuRenderContext.ReportUnsupported(SwiftlyS2.Shared.Menu.MenuNode)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L83
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Rendering/IMenuRenderContext.cs#L88
       summary: Reports a node the renderer could not draw.
       declaration: void ReportUnsupported(MenuNode node)
       parameters:
@@ -43236,28 +44796,27 @@ categories:
     type: Interface
     uid: SwiftlyS2.Shared.Menu.IMenuRowSource
     parent: SwiftlyS2.Shared.Menu
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L3
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L18
     declaration: public interface IMenuRowSource
     methods:
-    - name: GetRows(Func<string, string>)
-      uid: SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(System.Func{System.String,System.String})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L9
+    - name: GetRows(IMenuSession, MenuRowContext)
+      uid: SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(SwiftlyS2.Shared.Menu.IMenuSession,SwiftlyS2.Shared.Menu.MenuRowContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L25
       summary: The body entries this component stands for right now.
-      declaration: IReadOnlyList<IMenuComponent> GetRows(Func<string, string> translate)
+      declaration: IReadOnlyList<IMenuComponent> GetRows(IMenuSession session, MenuRowContext context)
       parameters:
-      - name: translate
+      - name: session
         type:
-        - text: Func
-          url: https://learn.microsoft.com/dotnet/api/system.func-2
-        - <
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - ','
-        - ' '
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        - '>'
-        description: Looks up a menu translation by key.
+        - text: IMenuSession
+          url: SwiftlyS2.Shared.Menu.IMenuSession.html
+          uid: SwiftlyS2.Shared.Menu.IMenuSession
+        description: The session the rows are for.
+      - name: context
+        type:
+        - text: MenuRowContext
+          url: SwiftlyS2.Shared.Menu.MenuRowContext.html
+          uid: SwiftlyS2.Shared.Menu.MenuRowContext
+        description: Services the rows need.
       returns:
         type:
         - text: IReadOnlyList
@@ -43269,8 +44828,8 @@ categories:
         - '>'
     - name: RowsChanged
       uid: SwiftlyS2.Shared.Menu.IMenuRowSource.RowsChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L14
-      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(System.Func%7bSystem.String%2cSystem.String%7d)" data-throw-if-not-resolved="false"></xref> would return something different.
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L30
+      summary: Raised when <xref href="SwiftlyS2.Shared.Menu.IMenuRowSource.GetRows(SwiftlyS2.Shared.Menu.IMenuSession%2cSwiftlyS2.Shared.Menu.MenuRowContext)" data-throw-if-not-resolved="false"></xref> would return something different.
       declaration: event Action? RowsChanged
       valueType:
       - text: Action
@@ -43580,6 +45139,22 @@ categories:
       - text: IMenuSession
         url: SwiftlyS2.Shared.Menu.IMenuSession.html
         uid: SwiftlyS2.Shared.Menu.IMenuSession
+    - name: Translate
+      uid: SwiftlyS2.Shared.Menu.MenuActionContext.Translate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Input/MenuActionContext.cs#L38
+      summary: Translates a key from the translation file, returning the key when it is missing.
+      declaration: public required Func<string, string> Translate { get; init; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
   - name: MenuActionDescriptor
     type: Class
     uid: SwiftlyS2.Shared.Menu.MenuActionDescriptor
@@ -43818,7 +45393,7 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.Menu.MenuComponentBase.MenuActivationState
     parent: SwiftlyS2.Shared.Menu
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L164
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L170
     summary: Per-player activation bookkeeping.
     declaration: protected sealed class MenuComponentBase.MenuActivationState
     inherits:
@@ -43827,7 +45402,7 @@ categories:
     properties:
     - name: IsBusy
       uid: SwiftlyS2.Shared.Menu.MenuComponentBase.MenuActivationState.IsBusy
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L169
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L175
       summary: Whether an activation is running right now.
       declaration: public bool IsBusy { get; set; }
       valueType:
@@ -43866,7 +45441,7 @@ categories:
     - name: Comment
       uid: SwiftlyS2.Shared.Menu.MenuComponentBase.Comment
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L55
-      summary: The hint shown while this component holds the selection, or null for none.
+      summary: The hint shown while this component holds the selection, or null for the component's translated default (none for most). An empty string shows nothing.
       declaration: public string? Comment { get; set; }
       valueType:
       - text: string
@@ -44001,15 +45576,16 @@ categories:
     - name: WaitingText
       uid: SwiftlyS2.Shared.Menu.MenuComponentBase.WaitingText
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L73
-      summary: The text shown in place of this component's own while an activation is still running.
-      declaration: public string WaitingText { get; set; }
+      summary: The text shown in place of this component's own while an activation is still running, or null for the translated default.
+      declaration: public string? WaitingText { get; set; }
       valueType:
       - text: string
         url: https://learn.microsoft.com/dotnet/api/system.string
+      - '?'
     methods:
     - name: ActivateAsync(MenuActionContext, Func<MenuActionContext, ValueTask>)
       uid: SwiftlyS2.Shared.Menu.MenuComponentBase.ActivateAsync(SwiftlyS2.Shared.Menu.MenuActionContext,System.Func{SwiftlyS2.Shared.Menu.MenuActionContext,System.Threading.Tasks.ValueTask})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L121
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L127
       summary: Runs an activation through the shared pipeline.
       declaration: protected ValueTask<bool> ActivateAsync(MenuActionContext context, Func<MenuActionContext, ValueTask> body)
       parameters:
@@ -44043,11 +45619,11 @@ categories:
         - '>'
         description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> once the action has been consumed.
       remarks: Refuses when the component is disabled or a previous activation for the same player is still running, then consults <xref href="SwiftlyS2.Shared.Menu.MenuComponentBase.Validating" data-throw-if-not-resolved="false"></xref>. While <code class="paramref">body</code> runs the component draws <xref href="SwiftlyS2.Shared.Menu.MenuComponentBase.WaitingText" data-throw-if-not-resolved="false"></xref>, so a slow callback cannot be triggered twice.
-    - name: GetHint(IMenuSession)
-      uid: SwiftlyS2.Shared.Menu.MenuComponentBase.GetHint(SwiftlyS2.Shared.Menu.IMenuSession)
+    - name: GetHint(IMenuSession, Func<string, string>)
+      uid: SwiftlyS2.Shared.Menu.MenuComponentBase.GetHint(SwiftlyS2.Shared.Menu.IMenuSession,System.Func{System.String,System.String})
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L92
       summary: Produces the hint shown while this component holds the selection.
-      declaration: public virtual string? GetHint(IMenuSession session)
+      declaration: public virtual string? GetHint(IMenuSession session, Func<string, string> translate)
       parameters:
       - name: session
         type:
@@ -44055,6 +45631,19 @@ categories:
           url: SwiftlyS2.Shared.Menu.IMenuSession.html
           uid: SwiftlyS2.Shared.Menu.IMenuSession
         description: The session asking.
+      - name: translate
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-2
+        - <
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - ','
+        - ' '
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '>'
+        description: Translates a key into the language of the player asking. Returns the key when it is missing.
       returns:
         type:
         - text: string
@@ -44062,6 +45651,22 @@ categories:
         - '?'
         description: The hint text, or null to show nothing.
       remarks: Use this for a per-entry explanation, or to advertise keys the component takes over through <xref href="SwiftlyS2.Shared.Menu.IMenuComponent.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)" data-throw-if-not-resolved="false"></xref>.
+    - name: GetWaitingText(IMenuComponentRenderContext)
+      uid: SwiftlyS2.Shared.Menu.MenuComponentBase.GetWaitingText(SwiftlyS2.Shared.Menu.IMenuComponentRenderContext)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L114
+      summary: 'The text to draw while busy: <xref href="SwiftlyS2.Shared.Menu.MenuComponentBase.WaitingText" data-throw-if-not-resolved="false"></xref>, or the translated default when it is null.'
+      declaration: protected string GetWaitingText(IMenuComponentRenderContext context)
+      parameters:
+      - name: context
+        type:
+        - text: IMenuComponentRenderContext
+          url: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext.html
+          uid: SwiftlyS2.Shared.Menu.IMenuComponentRenderContext
+        description: The context being drawn.
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
     - name: HandleActionAsync(MenuActionContext)
       uid: SwiftlyS2.Shared.Menu.MenuComponentBase.HandleActionAsync(SwiftlyS2.Shared.Menu.MenuActionContext)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L101
@@ -44137,7 +45742,7 @@ categories:
         description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> when the component should be drawn.
     - name: Matches(MenuActionContext, MenuActionId)
       uid: SwiftlyS2.Shared.Menu.MenuComponentBase.Matches(SwiftlyS2.Shared.Menu.MenuActionContext,SwiftlyS2.Shared.Menu.MenuActionId)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L158
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/MenuComponentBase.cs#L164
       summary: Whether an action matches a built-in or declared action by name.
       declaration: protected static bool Matches(MenuActionContext context, MenuActionId action)
       parameters:
@@ -44746,6 +46351,41 @@ categories:
       valueType:
       - text: int
         url: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: MenuRowContext
+    type: Struct
+    uid: SwiftlyS2.Shared.Menu.MenuRowContext
+    parent: SwiftlyS2.Shared.Menu
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L5
+    declaration: 'public readonly record struct MenuRowContext : IEquatable<MenuRowContext>'
+    implements:
+    - text: IEquatable<MenuRowContext>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    properties:
+    - name: Players
+      uid: SwiftlyS2.Shared.Menu.MenuRowContext.Players
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L15
+      summary: Resolves player searches.
+      declaration: public required IPlayerManagerService Players { get; init; }
+      valueType:
+      - text: IPlayerManagerService
+        url: SwiftlyS2.Shared.Players.IPlayerManagerService.html
+        uid: SwiftlyS2.Shared.Players.IPlayerManagerService
+    - name: Translate
+      uid: SwiftlyS2.Shared.Menu.MenuRowContext.Translate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Menu/Abstractions/IMenuRowSource.cs#L10
+      summary: Looks up a menu translation by key.
+      declaration: public required Func<string, string> Translate { get; init; }
+      valueType:
+      - text: Func
+        url: https://learn.microsoft.com/dotnet/api/system.func-2
+      - <
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - ','
+      - ' '
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+      - '>'
   - name: MenuSelectionNode
     type: Class
     uid: SwiftlyS2.Shared.Menu.MenuSelectionNode
