@@ -162,7 +162,7 @@ Guid midHookId = mem.AddHook((ref MidHookContext ctx) =>
 mem.RemoveHook(midHookId);
 ```
 
-`AddHook` here takes a <ApiRef name="MidHookDelegate" /> (`void (ref MidHookContext)`) and returns a `Guid`, and the wrapper exposes `Address`. See <ApiRef name="MidHookContext" /> for the full register list - every general-purpose register (`RAX`, `RBX`, `RCX`, `RDX`, `RSI`, `RDI`, `RBP`, `RSP`, `R8`-`R15`, `RIP`, `RFLAGS`, plus the internal `TRAMPOLINE_RSP`) and `XMM0`-`XMM15` as <ApiRef name="Xmm" /> structs (fixed buffers `U8`, `U16`, `U32`, `U64`, `F32`, `F64`).
+`AddHook` here takes a <ApiRef name="MidHookDelegate" /> (`void (ref MidHookContext)`) and returns a `Guid`, and the wrapper exposes `Address`. See <ApiRef name="MidHookContext" /> for the full register list - every general-purpose register (`RAX`, `RBX`, `RCX`, `RDX`, `RSI`, `RDI`, `RBP`, `RSP`, `R8`-`R15`, `RIP`, `RFLAGS`, plus the internal `TRAMPOLINE_RSP`) and `XMM0`-`XMM15` as <ApiRef name="Xmm" /> structs (fixed buffers `U8`, `U16`, `U32`, `U64`, `F32`, `F64`). `MidHookContext.ToString()` dumps every register in one go.
 
 ## Hook Modes and Results
 
@@ -220,11 +220,13 @@ private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
 | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Controller | `Core.GameHooks.Controller` | `ProcessUsercmds`, `SimulateUserCommands`                                                                                                                                                                                                                                                                                                                    |
 | Entities   | `Core.GameHooks.Entities`   | `TakeDamage`, `StartTouch`, `Touch`, `EndTouch`, `AcceptInput`, `FireOutput`                                                                                                                                                                                                                                                                                 |
-| Items      | `Core.GameHooks.Items`      | `CanAcquire`                                                                                                                                                                                                                                                                                                                                                 |
+| Items      | `Core.GameHooks.Items`      | `CanAcquire`, `GetItemInLoadout`                                                                                                                                                                                                                                                                                                                             |
 | Movement   | `Core.GameHooks.Movement`   | `RunCommand`, `SetupMove`, `ProcessMovement`, `CheckFalling`, `CategorizePosition`, `TryPlayerMove`, `WalkMove`, `Friction`, `AirAccelerate`, `AirMove`, `OnJumpModern`, `OnJumpLegacy`, `CheckJumpButtonModern`, `CheckJumpButtonLegacy`, `LadderMove`, `CanUnduck`, `Duck`, `CheckVelocity`, `WaterMove`, `CheckWater`, `MoveInit`, `FullWalkMove`, `CheckParameters`, `PlayerMove`, `GroundAccelerate` |
 | Pawn       | `Core.GameHooks.Pawn`       | `PostThink`, `CanMove`                                                                                                                                                                                                                                                                                                                                       |
 | Weapons    | `Core.GameHooks.Weapons`    | `Drop`, `CanUse`                                                                                                                                                                                                                                                                                                                                             |
 | Datamaps   | `Core.GameHooks.Datamaps`   | Datamap (`think`/`touch`/`use`) function hooks, grouped by owning schema class                                                                                                                                                                                                                                                                                |
+
+`Items.GetItemInLoadout` is the one exception that needs a server setting: subscribing its `Pre`/`Post` throws unless `FollowCS2ServerGuidelines` is disabled in `core.jsonc`.
 
 ### Hook Params
 
@@ -239,6 +241,7 @@ Every hook has a `Pre` and a `Post` context, both carrying a `Params` field with
 | `Entities.AcceptInput`                      | `Identity` (`CEntityIdentity`), `EntityInstance` (`CEntityInstance`), `DesignerName` (`string`), `InputName` (`string`), `Activator` and `Caller` (both `CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `OutputId` (`int`)                |
 | `Entities.FireOutput`                       | `EntityIO` (`ref CEntityIOOutput`), `DesignerName` (`string`), `OutputName` (`string`), `Activator` and `Caller` (both `CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `Delay` (`float`)                                                 |
 | `Items.CanAcquire`                          | `Player` (`IPlayer`), `EconItemView` (`CEconItemView`), `WeaponVData` (`CCSWeaponBaseVData?`), `AcquireMethod` (<ApiRef name="AcquireMethod" />)                                                                                                                        |
+| `Items.GetItemInLoadout`                    | `Player` (`IPlayer`), `Team` (`Team`), `Slot` (`loadout_slot_t`)                                                                                                                                                                                                        |
 | `Pawn.PostThink` / `CanMove`                | `Player` (`IPlayer`)                                                                                                                                                                                                                                                    |
 | `Weapons.Drop`                              | `Player` (`IPlayer`), `Weapon` (`CBasePlayerWeapon?`), `SwappingWeapon` (`bool`)                                                                                                                                                                                        |
 | `Weapons.CanUse`                            | `Player` (`IPlayer`), `Weapon` (`CCSWeaponBase`)                                                                                                                                                                                                                        |
@@ -246,7 +249,7 @@ Every hook has a `Pre` and a `Post` context, both carrying a `Params` field with
 | `Movement.SetupMove`                        | `Player` (`IPlayer`), `UserCmd` (<ApiRef name="IUserCmd" />), `MoveData` (<ApiRef name="IMoveData" />)                                                                                                                                                                   |
 | every other `Movement` hook                 | `Player` (`IPlayer`), `MoveData` (<ApiRef name="IMoveData" />)                                                                                                                                                                                                           |
 
-Some hooks carry extra settable params: `Movement.AirAccelerate` adds `WishDirection` (`Vector`), `WishSpeed` (`float`) and `Acceleration` (`float`), `Movement.GroundAccelerate` adds `WishDirection`, `FrameTime` (`float`, read-only), `WishSpeed` and `Acceleration`, `Movement.CategorizePosition` a `StayOnGround` (`bool`), and `Movement.FullWalkMove` a `Ground` (`bool`).
+Some hooks carry extra settable params: `Movement.AirAccelerate` adds `WishDirection` (`Vector`), `WishSpeed` (`float`) and `Acceleration` (`float`), `Movement.GroundAccelerate` adds `WishDirection`, `FrameTime` (`float`, read-only), `WishSpeed` and `Acceleration`, `Movement.TryPlayerMove` adds `FirstDest` (`Vector`), `FirstTrace` (<ApiRef name="TraceResult" />, read-only) and `IsSurfing` (`bool`), `Movement.CategorizePosition` a `StayOnGround` (`bool`), and `Movement.FullWalkMove` a `Ground` (`bool`).
 
 `IMoveData` and `IUserCmd` wrap native pointers - `IMoveData.From(address)` and `IUserCmd.From(address)` build one from an address, and `Address`/`TypedAddress` are exposed back.
 
@@ -254,15 +257,18 @@ Some hooks carry extra settable params: `Movement.AirAccelerate` adds `WishDirec
 
 Hooks whose original function returns a value expose it on the context:
 
-| Hook                                 | Return type     | Set it in `Pre`      | Read/overwrite it in `Post` |
-| ------------------------------------ | --------------- | -------------------- | --------------------------- |
-| `Core.GameHooks.Items.CanAcquire`    | `AcquireResult` | `ctx.SetReturn(...)` | `ctx.Return`                |
-| `Core.GameHooks.Weapons.CanUse`      | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
-| `Core.GameHooks.Pawn.CanMove`        | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
-| `Core.GameHooks.Movement.CanUnduck`  | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
-| `Core.GameHooks.Movement.LadderMove` | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
-| `Core.GameHooks.Movement.MoveInit`   | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
-| `Core.GameHooks.Movement.PlayerMove` | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
-| `Core.GameHooks.Movement.CheckWater` | `bool`          | `ctx.SetReturn(...)` | `ctx.Return`                |
+| Hook                                   | Return type       | Set it in `Pre`      | Read/overwrite it in `Post` |
+| -------------------------------------- | ----------------- | -------------------- | --------------------------- |
+| `Core.GameHooks.Items.CanAcquire`      | `AcquireResult`   | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Items.GetItemInLoadout` | `CEconItemView?` | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Weapons.CanUse`        | `bool`            | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Pawn.CanMove`          | `bool`            | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.CanUnduck`    | `bool`            | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.LadderMove`   | `bool`            | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.MoveInit`     | `bool`            | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.PlayerMove`   | `bool`            | `ctx.SetReturn(...)` | `ctx.Return`                |
+| `Core.GameHooks.Movement.CheckWater`   | `bool`            | `ctx.SetReturn(...)` | `ctx.Return`                |
+
+`Items.GetItemInLoadout` behaves a little differently: the `Pre` `SetReturn(item)` is only used when the hook result is `Stop` or `CancelOriginal`, and the `Post` `Return` object is only valid during the callback - keep the item's address instead if you need it later.
 
 Every other hook has no return value - use `SetHookResult(HookResult.CancelOriginal)` when you need to stop the original call.

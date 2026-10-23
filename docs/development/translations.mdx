@@ -74,10 +74,10 @@ Place `.jsonc` files named by language code under `resources/translations/` (for
 ```
 
 <Callout type="info">
-    Values are chat-color-processed automatically, so `[red]`/`[green]`/etc.
-    bracket syntax works directly inside translation strings. See [Chat &
-    CenterHTML Styling](/docs/guides/chat-and-html-styling) for the full color
-    list.
+    Translation values are plain strings, so chat color codes such as `[red]` or
+    `[green]` can be written directly inside them and are applied when the text
+    is sent. See [Chat & CenterHTML
+    Styling](/docs/guides/chat-and-html-styling) for the full color list.
 </Callout>
 
 ## Server-Side Localization
@@ -98,6 +98,10 @@ string scoreMessage = Core.Localizer["plugin.score", player.Name, 1500, 0.75];
 ```
 
 `Core.Localizer` is the <ApiRef name="ISwiftlyCore" member="Localizer" /> property, and an injected `ILocalizer` resolves to the same instance.
+
+### Missing Keys and Fallback
+
+Lookup is all the API exposes. Both indexers return a non-nullable `string` and there is no `TryGet`-style variant, and neither <ApiRef name="ILocalizer" /> nor <ApiRef name="ITranslationService" /> lets a plugin see which language a lookup resolved to or configure a fallback order. A key missing from the active language file therefore can't be detected through the localizer, so keep the same key set in every file - and take the resolved language from the player when you need it (`player.PlayerLanguage`, see [The Language Type](#the-language-type)).
 
 ## Player-Specific Localization
 
@@ -139,23 +143,32 @@ Off the game thread, use the `Async` variants (or `Core.Scheduler`) - see [Threa
 
 ## The Language Type
 
-<ApiRef name="IPlayer" member="PlayerLanguage" /> is a <ApiRef name="Language" /> value, which is handy for diagnostics or conditional flows:
+<ApiRef name="Language" /> is a sealed class wrapping a language code. <ApiRef name="IPlayer" member="PlayerLanguage" /> returns one, which is handy for diagnostics or conditional flows:
 
 ```csharp
-if (player.PlayerLanguage == Language.German)
+if (player.PlayerLanguage.Equals(Language.German))
 {
     Core.Logger.LogInformation("German client: {SteamId}", player.SteamID);
 }
 ```
 
-<ApiRef name="Language" /> wraps a code string: `Value` is the code, `ToString()` returns it, and the type converts implicitly to `string`, so both of these hold the same code:
+<Callout type="warning">
+    <ApiRef name="Language" /> does not overload `==`, so
+    `player.PlayerLanguage == Language.German` compares references and only
+    matches the very same instance. Use `Equals`, or compare `Value`, for value
+    comparison.
+</Callout>
+
+`Value` is the code and `ToString()` returns it. The type converts implicitly to `string`, but not the other way round - building one from a code string takes the constructor:
 
 ```csharp
 string fromValue = player.PlayerLanguage.Value;
 string fromConversion = player.PlayerLanguage;
+
+var custom = new Language("en"); // equal to Language.English
 ```
 
-Two <ApiRef name="Language" /> instances are equal when their codes are equal, and the type implements `IEquatable<Language>`. The static fields in the [Language Codes](#language-codes) table cover the codes listed there; the constructor is public, so `new Language("en")` builds the same value as `Language.English`.
+Two <ApiRef name="Language" /> instances are equal when their codes are equal: the type implements `IEquatable<Language>`, and `GetHashCode` is derived from the code, so a <ApiRef name="Language" /> works as a dictionary key or in a set. The static fields in the [Language Codes](#language-codes) table cover the codes listed there; since the constructor is public, `new Language("en")` builds a value equal to `Language.English`.
 
 <Callout type="info">
     `services.AddSwiftly(Core)` registers `Core.Localizer` and

@@ -87,6 +87,8 @@ Both override lists store indices into the layout's id/name lists instead of the
 | `ClassNameIndex` (`ushort`)             | Index into `CCSCustomHudLayout.ClassNames` |
 | `ClassStatus` (`EHudPanelClassStatus_t`) | Whether the panel has the class          |
 
+Each entry has its own `...Updated()` method as well - `PanelIdIndexUpdated`, `DialogVariableIndexUpdated`, `ValueUpdated` and `IsSetUpdated` for `HUDPanelDialogVariableString_t`; `PanelIdIndexUpdated`, `ClassNameIndexUpdated` and `ClassStatusUpdated` for `HUDPanelHasClass_t`.
+
 The methods in the sections below take the `panelId`, `variableName` and `className` strings directly, so you rarely need these indices yourself.
 
 ## Dynamic Strings
@@ -115,7 +117,7 @@ Control whether a HUD element has a CSS class. `panelId` is the element's `id`; 
 | `k_eHudPanelClassStatus_DoesNotHaveClass` | The element does not have the class                                                         |
 | `k_eHudPanelClassStatus_Undefined`        | Doesn't override the existing status; also returned when reading a state that doesn't exist |
 
-Both getters return `k_eHudPanelClassStatus_Undefined` if the `panelId`/`className`/state doesn't exist.
+Both getters return `k_eHudPanelClassStatus_Undefined` if the `panelId`/`className`/state doesn't exist, and `GetHasClassForPlayer` reads only the player's own state - it never falls back to the global class status.
 
 ```csharp
 hud.SetHasClass("main_panel", "highlight", EHudPanelClassStatus_t.k_eHudPanelClassStatus_HasClass);
@@ -166,11 +168,11 @@ private void OnCustomHudClicked(<ApiRef name="IOnCustomHudClickedEvent" /> @even
 }
 ```
 
-| Property          | Description                                                      |
-| ----------------- | ---------------------------------------------------------------- |
-| `PlayerId`        | The ID of the player who clicked the button                      |
-| `ButtonId`        | The clicked button's `id` from the Panorama XML layout           |
-| `CustomHudLayout` | The `CCSCustomHudLayout` entity that contains the clicked button |
+| Property                         | Description                                                      |
+| -------------------------------- | ---------------------------------------------------------------- |
+| `PlayerId` (`int`)               | The ID of the player who clicked the button                      |
+| `ButtonId` (`string`)            | The clicked button's `id` from the Panorama XML layout           |
+| `CustomHudLayout` (`CCSCustomHudLayout`) | The `CCSCustomHudLayout` entity that contains the clicked button |
 
 `OnCustomHudClicked` fires for clicks from every Custom HUD layout - if a plugin creates multiple layouts, compare against the layout entity you stored.
 

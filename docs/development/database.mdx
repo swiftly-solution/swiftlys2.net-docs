@@ -4,6 +4,18 @@ title: Database
 
 SwiftlyS2's database service lets plugins fetch named connections from one global configuration, through <ApiRef name="ISwiftlyCore" member="Database" /> (<ApiRef name="IDatabaseService" />).
 
+## Service Members
+
+`Type` is the return type of the method:
+
+| Member | Type | Description |
+|---|---|---|
+| <ApiRef name="IDatabaseService" member="GetConnectionString" /> | `string` | Connection string of a connection, for `(string connectionName)` |
+| <ApiRef name="IDatabaseService" member="GetConnectionInfo" /> | <ApiRef name="DatabaseConnectionInfo" /> | Parsed metadata of a connection, for `(string connectionName)` |
+| <ApiRef name="IDatabaseService" member="GetConnection" /> | `IDbConnection` | A connection to the database, for `(string connectionName)` |
+
+All three resolve `connectionName` from the global configuration and return the default connection when the name isn't found.
+
 ## Global Database Configuration
 
 Connections are defined in `configs/database.jsonc` and referenced by name from plugins:
@@ -73,7 +85,7 @@ A connection can also be an object. Besides `driver`, `host`, `port`, `database`
 }
 ```
 
-Every keyword that the driver supports works, with the same names and synonyms as in its own connection string:
+`options` takes the connection string keywords of the driver used for that connection - MySqlConnector for `mysql`, Npgsql for `postgresql` and System.Data.SQLite for `sqlite`:
 
 | Driver | Library | Keywords |
 |---|---|---|
@@ -81,7 +93,7 @@ Every keyword that the driver supports works, with the same names and synonyms a
 | `postgresql` | Npgsql | [Connection string parameters](https://www.npgsql.org/doc/connection-string-parameters.html) |
 | `sqlite` | System.Data.SQLite | The properties of `SQLiteConnectionStringBuilder`, such as `Journal Mode`, `Foreign Keys`, `Cache Size`, `Default Timeout` and `Pooling` |
 
-Values can be strings, numbers or booleans. Options are applied after the other fields, so an option can override one of them, for example `Server`.
+Every keyword that the driver supports works, with the same names and synonyms as in its own connection string. Values can be strings, numbers or booleans. Options are applied after the other fields, so an option can override one of them, for example `Server`.
 
 <Callout type="warning">
     A keyword or a value that the driver doesn't know is an error when the
@@ -120,7 +132,9 @@ Console.WriteLine(info.ToString()); // connection string built from the info
 | `Timeout` | `uint` | Timeout value of the connection |
 | `Port` | `ushort` | Port of the database server |
 | `RawUri` | `string` | The raw connection URI, when one is available |
-| `Options` | `IReadOnlyDictionary<string, string>` | The parsed `options`, empty when the connection has none |
+| `Options` | `IReadOnlyDictionary<string, string>` | The parsed `options` of the connection, empty when it has none |
+
+`Options` is the one member outside the positional parameter list: it is an init-only property, set with an object initializer, and it holds the configured values as strings - including those written as numbers or booleans in the configuration.
 
 <ApiRef name="DatabaseConnectionInfo" member="ToString" /> renders the connection string: it returns `RawUri` unchanged when that is set, otherwise it builds the driver's own format - `Data Source=...` for `sqlite`, `Server=...;Port=...;Database=...;User ID=...;Password=...` (plus `Timeout` when it is greater than `0`) for `mysql` and `postgresql`, and `driver://user:pass@host:port/database` for any other driver - and appends every entry of `Options`. When `Port` is `0` on a `mysql` or `postgresql` connection, the default port is used (`3306` and `5432`). Values with leading or trailing whitespace, or containing `;`, `"`, `'` or `=`, are quoted.
 

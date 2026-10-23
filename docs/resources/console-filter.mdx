@@ -10,14 +10,25 @@ Edit the following file:
 
 `addons/swiftlys2/configs/confilter.jsonc`
 
-If the file does not exist yet, SwiftlyS2 creates it on startup by copying `addons/swiftlys2/configs/confilter.example.jsonc`, which ships with the default rules. Change the location with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
+If the file does not exist yet, SwiftlyS2 creates it on startup from `addons/swiftlys2/configs/confilter.example.jsonc`, which ships with the default rules. Every `*.example.jsonc` in the configs directory is copied without the `.example` part when the matching file is missing, so deleting `confilter.jsonc` restores the default rules on the next start. Change the location with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
 
 ## File Format
 
-The file is a JSONC object where each entry defines one filter rule. Both `//` and `/* */` comments are allowed.
+The file is a single JSONC object where each entry defines one filter rule:
 
-- Key: rule name used to identify the rule in `sw confilter status` and in error messages. Rule names are otherwise free-form.
+```jsonc
+{
+    "Tick_number": "empty starved x",  // rule name -> PCRE2 pattern
+    "Ticks": "ticks this frame",
+    /* multi-line comments work as well */
+    "Framerate_Values": "\\d+\\.\\d+ms\\s+\\d+\\.\\d+%\\s+\\d+\\.\\d+ms\\s+[A-Za-z\\s]+"
+}
+```
+
+- Key: rule name used to identify the rule in `sw confilter status` and in error messages. Rule names are otherwise free-form and have to be unique.
 - Value: [PCRE2](https://www.pcre.org/) pattern matched against the console line. Values have to be JSON strings, so a backslash is escaped as `\\` - `"\\d+"` in the file is the pattern `\d+`.
+
+Both `//` and `/* */` comments are stripped before the file is parsed. The root has to be a flat object of string values - nested objects, arrays and trailing commas are not supported.
 
 The shipped `confilter.example.jsonc` contains the default rules:
 
@@ -72,12 +83,13 @@ The shipped `confilter.example.jsonc` contains the default rules:
 
 ## How It Works
 
-- Every value is compiled once as a PCRE2 regular expression when the file is loaded.
+- Every value is compiled once as a PCRE2 regular expression when the file is loaded, and JIT-compiled.
 - Patterns are unanchored and case-sensitive, so they match anywhere in the line - use `^`/`$` when the pattern must match the whole line and `(?i)` for case-insensitive matching.
-- Rules are checked in the order they appear in the file. A line is dropped as soon as any rule matches it, and the counter of that rule is incremented, so a line matching several rules counts towards the first one.
+- Rules are evaluated in alphabetical order of the rule name, not in the order they appear in the file. A line is dropped as soon as a rule matches it and that rule's counter is incremented, so a line matching several rules counts towards the rule whose name sorts first.
 - If a regular expression fails to compile, the error is logged with the rule name and the failing offset, and only that rule is skipped.
-- Rule names `Framerate_Values` and `Framerate_Total` are handled specially: the next line that contains nothing but a newline is dropped as well, keeping the framerate report grouped.
+- Rules named `Framerate_Values` and `Framerate_Total` are handled specially: the next line that contains nothing but a newline is dropped as well, keeping the framerate report grouped.
 - Rule names are only labels for `sw confilter status` and for error messages.
+- If the file is missing or not valid JSON, no rule is loaded and nothing is filtered; none of these cases is logged, so check the file syntax first when filtering stops working.
 
 ## Enabling and Disabling
 
@@ -85,7 +97,7 @@ The shipped `confilter.example.jsonc` contains the default rules:
 
 ## Command Management
 
-`sw confilter` is restricted to the server console. Run it without a subcommand to print the subcommand list; an unrecognized subcommand prints `Unknown command`.
+`sw confilter` is restricted to the server console; `sw help` lists it as `Console Filter Menu`. Run it without a subcommand to print the subcommand list; an unrecognized subcommand prints `Unknown command`.
 
 | Subcommand | Description                            |
 | ---------- | -------------------------------------- |
@@ -94,9 +106,18 @@ The shipped `confilter.example.jsonc` contains the default rules:
 | `status`   | Show the status of the console filter. |
 | `reload`   | Reload console filter configuration.   |
 
-`status` prints the current state followed by one counter line per rule, e.g. `- Tick_number -> 42`, including rules that never matched. Counters are reset by `reload`, which also recompiles every pattern; it does not change whether filtering is enabled.
+`status` prints the current state followed by one counter line per rule, including rules that never matched:
 
-Plugins reach the same state through <ApiRef name="IConsoleOutputService" /> - `IsFilterEnabled`, `ToggleFilter` and `ReloadFilterConfiguration`.
+```
+Console filtering is currently enabled.
+Below are some statistics for the filtering process:
+- BotProfile -> 0
+- Tick_number -> 42
+```
+
+Counters are reset by `reload`, which also recompiles every pattern; it does not change whether filtering is enabled.
+
+Plugins reach the same state through <ApiRef name="IConsoleOutputService" /> - `IsFilterEnabled`, `ToggleFilter`, `ReloadFilterConfiguration`, `NeedsFiltering` and `GetCounterText`.
 
 ## Typical Workflow
 

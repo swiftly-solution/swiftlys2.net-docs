@@ -34,14 +34,15 @@ public override void Load(bool hotReload)
 
 <Callout type="warning">
     Register each handler instance once - registering the same instance
-    repeatedly duplicates callbacks.
+    repeatedly duplicates callbacks. <ApiRef name="IRegistratorService" /> exposes
+    only `Register(object instance)`, so there's no unregister call to pair it with.
 </Callout>
 
 ## Signature Rules
 
 Attribute-decorated methods must match the expected delegate: same parameter order/types, same return type (`void` vs `HookResult`), and same generic event/message type where the attribute is generic. Otherwise the handler won't be picked up.
 
-Attributes that take no arguments of their own (`[ClientCommandHookHandler]`, `[ClientChatHookHandler]`, the net-message handlers) get the event or message type from the method signature - that signature is the only thing that says which hook the method serves.
+Attributes either carry their configuration as constructor arguments (`[Command]`, `[CommandAlias]`, `[GameEventHandler]`, `[GameHookHandler]`, `[EntityOutputHandler]`, `[EntityInputHandler]`) or are parameterless (`[ClientCommandHookHandler]`, `[ClientChatHookHandler]`, the net-message handlers). Where the handler type comes from a type parameter or from the method's parameter - `[EventListener<T>]`, `[GameEventHandler]`, the net-message handlers - that type is the only thing saying which event or message the method serves.
 
 ## Attribute Reference
 
@@ -83,7 +84,7 @@ Registers a chat/console command. The method must match `ICommandService.Command
 - `permission` is checked through [Permissions](/docs/development/permissions) before the handler runs.
 - `helpText` is the description shown in command listings.
 
-A method can carry only one `[Command]` (`AllowMultiple = false`) - extra names go through <ApiRef name="CommandAlias" /> below. Full registration/lookup API on <ApiRef name="ICommandService" /> - see [Commands](/docs/development/commands).
+`Name`, `RegisterRaw`, `Permission` and `HelpText` are settable properties as well, so `[Command("heal", HelpText = "Heals yourself")]` works too. A method can carry only one `[Command]` (`AllowMultiple = false`) - extra names go through <ApiRef name="CommandAlias" /> below. Full registration/lookup API on <ApiRef name="ICommandService" /> - see [Commands](/docs/development/commands).
 
 ```csharp
 [Command("heal", permission: "myplugin.heal", helpText: "Heals yourself")]
@@ -95,7 +96,7 @@ public void OnHealCommand(ICommandContext context)
 
 ### <ApiRef name="CommandAlias" />
 
-Adds an alternate name for the command registered by the `[Command]` on the same method. Takes `(alias, registerRaw = false)`:
+Adds an alternate name for the command registered by the `[Command]` on the same method. Takes `(alias, registerRaw = false)`, both also exposed as the settable properties `Alias` and `RegisterRaw`:
 
 ```csharp
 [Command("heal")]
@@ -178,7 +179,7 @@ Returning `HookResult.Stop` from a chat hook drops the message and skips the rem
 
 ### <ApiRef name="EntityOutputHandlerAttribute" /> / <ApiRef name="EntityOutputHandlerAttribute`1" />
 
-Hooks an entity I/O output by designer name, or generically by schema class (`<T>` resolves `T.ClassName` for you, and throws `ArgumentException` when `T` has no designer name). The non-generic form takes `(designerName, outputName)`, the generic one `(outputName)`:
+Hooks an entity I/O output by designer name, or generically by schema class (`<T>` resolves `T.ClassName` for you, and throws `ArgumentException` when `T` has no designer name). The non-generic form takes `(designerName, outputName)`, the generic one `(outputName)`; both are exposed as the settable properties `DesignerName` and `OutputName`:
 
 ```csharp
 [EntityOutputHandler("func_door", "OnOpen")]
@@ -197,7 +198,7 @@ Set `@event.Result = HookResult.Stop` to block the output from firing.
 
 ### <ApiRef name="EntityInputHandlerAttribute" /> / <ApiRef name="EntityInputHandlerAttribute`1" />
 
-Same shape as the output handler, for entity I/O inputs instead - `(designerName, inputName)` or the generic `<T>(inputName)`, with the input name in place of the output name:
+Same shape as the output handler, for entity I/O inputs instead - `(designerName, inputName)` or the generic `<T>(inputName)`, with the input name in place of the output name. `DesignerName` and `InputName` are the settable properties, and the generic form resolves `DesignerName` from `T.ClassName` the same way:
 
 ```csharp
 [EntityInputHandler("func_door", "Open")]
@@ -262,3 +263,5 @@ public HookResult OnClientMove(CCLCMsg_Move msg, int playerId)
 ## Related Attributes
 
 Two more attributes are applied by plugins but don't register handlers: <ApiRef name="SwiftlyInject" /> on a field or property, which makes SwiftlyS2 inject the matching service into that member (see [Getting Started](/docs/development/getting-started)), and <ApiRef name="ThreadUnsafeAttribute" />, which annotates framework APIs that must only run on the game thread (see [Thread Safety](/docs/development/thread-safety)).
+
+Not every type named like an attribute is one: <ApiRef name="TraceCollisionAttributes" /> describes the collision shape of a trace hit and is read from <ApiRef name="TraceResult" /> (`ShapeAttributes`), not applied to your code.

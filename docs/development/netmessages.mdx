@@ -14,7 +14,7 @@ SwiftlyS2's typed net-message API sends generated protobuf messages and intercep
 Every generated message (`CUserMessageShake`, `CCLCMsg_Move`, `CMsgSosStartSoundEvent`, ...) implements three interfaces:
 
 - <ApiRef name="INetMessage`1" /> - sending: <ApiRef name="INetMessage`1" member="Send" />, `SendToAllPlayers()`, `SendToPlayer(int playerId)` and the <ApiRef name="INetMessage`1" member="Recipients" /> filter, plus the static abstract `MessageId` (`int`) and `MessageName` (`string`), which generic code can read through its type parameter (`T.MessageId`).
-- <ApiRef name="ITypedProtobuf`1" /> - field-based access through <ApiRef name="ITypedProtobuf`1" member="Accessor" /> (<ApiRef name="IProtobufAccessor" />).
+- <ApiRef name="ITypedProtobuf`1" /> - field-based access through <ApiRef name="ITypedProtobuf`1" member="Accessor" /> (<ApiRef name="IProtobufAccessor" />). It is an <ApiRef name="INativeHandle" /> as well, so `IsValid` and `Address` are available on the message itself.
 - `IDisposable` - only messages built with <ApiRef name="INetMessageService" member="Create" /> own a native handle, so dispose those (or wrap them in `using`) once you're done.
 
 Fields declared in the message's protobuf definition get typed properties directly on the generated type (`msg.Duration`, `msg.SoundeventHash`, ...). Declared repeated fields are typed as <ApiRef name="IProtobufRepeatedFieldValueType`1" /> - an `IList<T>` of scalar values - or <ApiRef name="IProtobufRepeatedFieldSubMessageType`1" /> for nested messages, which exposes `Count`, `Get(index)`, `Add()` and `Clear()` on top of enumeration. Both derive from the <ApiRef name="IRepeatedField" /> marker interface.
@@ -73,7 +73,15 @@ foreach (int slot in msg.Recipients.GetRecipients())
 }
 ```
 
-`AddRecipient`/`RemoveRecipient` take player slots `0`-`63` and throw `IndexOutOfRangeException` outside that range. The filter also exposes `RecipientsMask` (`ulong`, the raw mask) and `ToMask()`, the buffer type `BufferType` (<ApiRef name="NetChannelBufType_t" />: `BUF_DEFAULT`, `BUF_UNRELIABLE`, `BUF_RELIABLE`, `BUF_VOICE`, defaulting to `BUF_RELIABLE` for a newly constructed filter), and the `InitMessage`, `DisabledPrediction` and `PredictedSlot` fields. The static `FromMask(ulong)`, `FromPlayers(...)` and `FromSingle(int)` factories build a standalone filter for APIs that take one by value - see [Sound Events](/docs/development/soundevents) for another user of the same struct.
+`AddRecipient`/`RemoveRecipient` take player slots `0`-`63` and throw `IndexOutOfRangeException` outside that range. The filter also exposes `RecipientsMask` (`ulong`, the raw mask) and `ToMask()`, the buffer type `BufferType` (<ApiRef name="NetChannelBufType_t" />: `BUF_DEFAULT`, `BUF_UNRELIABLE`, `BUF_RELIABLE`, `BUF_VOICE`, defaulting to `BUF_RELIABLE` for a newly constructed filter), and the `InitMessage`, `DisabledPrediction` and `PredictedSlot` fields. The static `FromMask(ulong)`, `FromPlayers(...)` and `FromSingle(int)` factories build a standalone filter for APIs that take one by value.
+
+`Recipients` is returned by reference, so next to changing the filter in place you can assign a whole one - useful when you already built a filter elsewhere:
+
+```csharp
+msg.Recipients = CRecipientFilter.FromSingle(0);
+```
+
+See [Sound Events](/docs/development/soundevents) for another user of the same struct.
 
 ## Hooking Net Messages
 
@@ -228,7 +236,7 @@ msg.Accessor.Clear(); // reset every field on the message
 
 The remaining members cover nested messages and untyped values:
 
-- `GetNestedMessage(fieldName)`, `GetRepeatedNestedMessage(fieldName, index)` and `AddNestedMessage(fieldName)` return a native pointer (`nint`) to a nested message.
+- `GetNestedMessage(fieldName)`, `GetRepeatedNestedMessage(fieldName, index)` and `AddNestedMessage(fieldName)` return a native pointer (`nint`) to a nested message - wrap it in a typed message again with <ApiRef name="Helper" member="AsProtobuf" />, `Helper.AsProtobuf<T>(nint ptr, bool manuallyAllocated)`, where `manuallyAllocated` tells the wrapper whether it owns the pointer (`true` for a message you allocated yourself, `false` for one borrowed from the game).
 - `HasField(fieldName)` checks for presence, `GetRepeatedFieldSize(fieldName)` counts the elements of a repeated field, `ClearRepeatedField(fieldName)` empties one repeated field and `Clear()` resets the whole message.
 - Generic `Set<T>`/`Get<T>`, `Add<T>` and `SetRepeated<T>`/`GetRepeated<T>` overloads are available alongside the typed helpers.
 
