@@ -3,7 +3,9 @@ title: Sound Events
 ---
 
 <ApiRef name="SoundEvent" /> lets plugins emit game sound events with custom
-parameters and recipient filters.
+parameters and recipient filters. There is no `Core` service for it - you
+construct the class yourself (`SwiftlyS2.Shared.Sounds`) and dispose it once
+you're done.
 
 ## Creating Sound Events
 
@@ -17,7 +19,12 @@ soundEvent.Pitch = 1.0f;
 using var soundEvent2 = new SoundEvent("Weapon_AK47.Single", volume: 0.8f, pitch: 1.0f);
 ```
 
-`Name` starts out empty, `Volume` and `Pitch` at `1.0f`, and `SourceEntityIndex` at `-1` - the second constructor only overwrites the first three.
+| Constructor                                    | Defaults                                                          |
+| ---------------------------------------------- | ----------------------------------------------------------------- |
+| `SoundEvent()`                                 | `Name` is `""`, `Volume` and `Pitch` are `1.0f`                   |
+| `SoundEvent(string name, float volume = 1.0f, float pitch = 1.0f)` | `name` is required, `volume` and `pitch` fall back to `1.0f` |
+
+Both constructors leave `SourceEntityIndex` at `-1`, so a new instance has no source entity until you assign one.
 
 ## Configuring Core Properties
 
@@ -83,6 +90,13 @@ foreach (int slot in soundEvent.Recipients.GetRecipients())
 }
 ```
 
+Because `Recipients` is returned by reference, you can also assign a whole filter built elsewhere:
+
+```csharp
+soundEvent.Recipients = CRecipientFilter.FromSingle(0);
+soundEvent.Recipients = CRecipientFilter.FromMask(0b11UL);
+```
+
 `AddRecipient`/`RemoveRecipient` take player slots `0`-`63` and throw `IndexOutOfRangeException` outside that range. The filter also exposes `RecipientsMask` (`ulong`, the raw mask), `ToMask()`, `BufferType` (<ApiRef name="NetChannelBufType_t" />, `BUF_RELIABLE` for a newly constructed filter), and the `InitMessage`, `DisabledPrediction` and `PredictedSlot` fields - see [Network Messages](/docs/development/netmessages) for the filter's static `FromMask`, `FromPlayers` and `FromSingle` factories and the rest of its members.
 
 ## Emitting Sound Events
@@ -110,11 +124,12 @@ uint guid = await soundEvent.EmitAsync();  // schedules the emit onto the main t
 
 | Member                                                                                   | Type                           | Notes                                                   |
 | ---------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------- |
+| `SoundEvent()` / `SoundEvent(string name, float volume = 1.0f, float pitch = 1.0f)`      | constructors                   | `Volume`/`Pitch` are `1.0f`, `SourceEntityIndex` is `-1` |
 | `Name`                                                                                   | `string`                       | Sound event name to play; empty by default              |
 | `Volume`                                                                                 | `float`                        | `public.volume` field, `1.0f` by default                |
 | `Pitch`                                                                                  | `float`                        | `public.pitch` field, `1.0f` by default                 |
 | `SourceEntityIndex`                                                                      | `int`                          | Source entity index, `-1` by default (no source entity) |
-| `Recipients`                                                                             | `ref CRecipientFilter`         | Recipient filter, empty by default                      |
+| `Recipients`                                                                             | `ref CRecipientFilter`         | Recipient filter, empty by default; assignable          |
 | `SetSourceEntity`                                                                        | `void (CEntityInstance)`       | Assigns `entity.Index` to `SourceEntityIndex`           |
 | `SetBool` / `GetBool`, `SetInt32` / `GetInt32`, `SetUInt32` / `GetUInt32`, `SetFloat` / `GetFloat` | `bool`, `int`, `uint`, `float` | Custom sound fields, by field name                      |
 | `SetFloat3` (three `float`s or a `Vector`) / `GetFloat3`                                 | `Vector`                       | Custom 3D sound fields                                  |

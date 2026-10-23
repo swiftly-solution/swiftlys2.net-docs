@@ -2,7 +2,7 @@
 title: Scheduler
 ---
 
-SwiftlyS2 provides a scheduler service for main-thread dispatching and timer-based execution, available through <ApiRef name="ISwiftlyCore" member="Scheduler" /> (<ApiRef name="ISchedulerService" />).
+SwiftlyS2 provides a scheduler service for main-thread dispatching and timer-based execution, available through <ApiRef name="ISwiftlyCore" member="Scheduler" /> (<ApiRef name="ISchedulerService" />). Every callback you hand to it runs on the game thread, so it is the way to call thread-unsafe APIs from a background flow or to delay work until later.
 
 ## Scheduling on the Main Loop
 
@@ -14,6 +14,8 @@ runs on the next world update phase instead:
 Core.Scheduler.NextTick(() => Console.WriteLine("Runs on next tick."));
 Core.Scheduler.NextWorldUpdate(() => Console.WriteLine("Runs on next world update."));
 ```
+
+Both take an `Action` and return `void`.
 
 ### Awaitable Variants
 
@@ -34,6 +36,8 @@ Don't pass an async callback (`Func<Task>`/`Func<Task<T>>`) to `NextTick`, `Next
 
 ## Timer APIs
 
+Every timer method returns a `CancellationTokenSource` you can cancel, and takes the callback as an `Action` that runs on the game thread.
+
 ### Tick-Based Timers
 
 ```csharp
@@ -43,7 +47,8 @@ var delayRepeatCts = Core.Scheduler.DelayAndRepeat(32, 64, () => Console.WriteLi
 ```
 
 Intervals for these three are `int` ticks. See <ApiRef name="ISchedulerService" member="Delay" />,
-<ApiRef name="ISchedulerService" member="Repeat" />, and <ApiRef name="ISchedulerService" member="DelayAndRepeat" />.
+<ApiRef name="ISchedulerService" member="Repeat" />, and
+<ApiRef name="ISchedulerService" member="DelayAndRepeat" />.
 
 ### Second-Based Timers
 
@@ -94,15 +99,20 @@ Every run receives an <ApiRef name="ITimerContext" />, whose only member is
 <ApiRef name="ITimerContext" member="ExecutionCount" /> - a `ulong` counting the
 runs of that timer, starting at `0` for the first one.
 
-<ApiRef name="TimerStep" /> helpers:
+| Member                                          | Signature                        | Description                                              |
+| ----------------------------------------------- | -------------------------------- | -------------------------------------------------------- |
+| <ApiRef name="ITimerContext" member="ExecutionCount" /> | `ulong ExecutionCount { get; }`  | Number of runs so far, starting at `0` for the first run |
 
-| Method                                             | Behavior                                                                                    |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `TimerStep.Spin()`                                 | Run again on the very next tick                                                             |
-| `TimerStep.WaitForTicks(long ticks)`               | Wait the given number of ticks before the next run                                          |
-| `TimerStep.WaitForMilliseconds(long milliseconds)` | Wait the given number of milliseconds before the next run                                   |
-| `TimerStep.WaitForSeconds(float seconds)`          | Wait the given number of seconds before the next run (converted to milliseconds internally) |
-| `TimerStep.Stop()`                                 | Stop the timer, no further runs                                                             |
+<ApiRef name="TimerStep" /> is an abstract record with a private constructor, so
+you always get one of the steps below from its static helpers:
+
+| Method                                             | Signature                                     | Behavior                                                                                    |
+| -------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `TimerStep.Spin()`                                 | `static TimerStep Spin()`                     | Run again on the very next tick                                                             |
+| `TimerStep.WaitForTicks(long ticks)`               | `static TimerStep WaitForTicks(long ticks)`   | Wait the given number of ticks before the next run                                          |
+| `TimerStep.WaitForMilliseconds(long milliseconds)` | `static TimerStep WaitForMilliseconds(long milliseconds)` | Wait the given number of milliseconds before the next run                        |
+| `TimerStep.WaitForSeconds(float seconds)`          | `static TimerStep WaitForSeconds(float seconds)` | Wait the given number of seconds before the next run (converted to milliseconds internally) |
+| `TimerStep.Stop()`                                 | `static TimerStep Stop()`                     | Stop the timer, no further runs                                                             |
 
 <Callout type="info">
     `WaitForTicks` and `WaitForMilliseconds` require an argument greater than `0`
@@ -110,3 +120,35 @@ runs of that timer, starting at `0` for the first one.
     to whole milliseconds, sub-millisecond values round down to `0` and are
     rejected the same way.
 </Callout>
+
+## Members
+
+<ApiRef name="ISchedulerService" /> members, in the `SwiftlyS2.Shared.Scheduler` namespace:
+
+| Member                                                                    | Signature                                                                     | Returns                                        |
+| ------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------- |
+| <ApiRef name="ISchedulerService" member="NextTick" />                     | `void NextTick(Action task)`                                                  | -                                              |
+| <ApiRef name="ISchedulerService" member="NextTickAsync" />                | `Task NextTickAsync(Action task)`                                             | Completes once `task` has run on the next tick |
+| <ApiRef name="ISchedulerService" member="NextTickAsync" />                | `Task<T> NextTickAsync<T>(Func<T> task)`                                      | The value returned by `task`                   |
+| <ApiRef name="ISchedulerService" member="NextWorldUpdate" />              | `void NextWorldUpdate(Action task)`                                           | -                                              |
+| <ApiRef name="ISchedulerService" member="NextWorldUpdateAsync" />         | `Task NextWorldUpdateAsync(Action task)`                                      | Completes once `task` has run on the next world update |
+| <ApiRef name="ISchedulerService" member="NextWorldUpdateAsync" />         | `Task<T> NextWorldUpdateAsync<T>(Func<T> task)`                               | The value returned by `task`                   |
+| <ApiRef name="ISchedulerService" member="Delay" />                        | `CancellationTokenSource Delay(int delayTick, Action task)`                   | Cancellation source for the timer              |
+| <ApiRef name="ISchedulerService" member="Repeat" />                       | `CancellationTokenSource Repeat(int periodTick, Action task)`                 | Cancellation source for the timer              |
+| <ApiRef name="ISchedulerService" member="DelayAndRepeat" />               | `CancellationTokenSource DelayAndRepeat(int delayTick, int periodTick, Action task)` | Cancellation source for the timer       |
+| <ApiRef name="ISchedulerService" member="DelayBySeconds" />               | `CancellationTokenSource DelayBySeconds(float delaySeconds, Action task)`     | Cancellation source for the timer              |
+| <ApiRef name="ISchedulerService" member="RepeatBySeconds" />              | `CancellationTokenSource RepeatBySeconds(float periodSeconds, Action task)`   | Cancellation source for the timer              |
+| <ApiRef name="ISchedulerService" member="DelayAndRepeatBySeconds" />      | `CancellationTokenSource DelayAndRepeatBySeconds(float delaySeconds, float periodSeconds, Action task)` | Cancellation source for the timer |
+| <ApiRef name="ISchedulerService" member="AddTimer" />                     | `CancellationTokenSource AddTimer(Func<ITimerContext, TimerStep> task)`       | Cancellation source for the timer              |
+| <ApiRef name="ISchedulerService" member="StopOnMapChange" />              | `void StopOnMapChange(CancellationTokenSource cts)`                           | -                                              |
+
+On top of those, `NextTick`, `NextTickAsync`, `NextWorldUpdate` and
+`NextWorldUpdateAsync` each declare two `[Obsolete]` overloads taking
+`Func<Task?>`/`Func<Task<T?>>`; they throw `InvalidOperationException` and are
+documented in the callout above only so you don't use them.
+
+## Reference
+
+See [Thread Safety](/docs/development/thread-safety) for when to dispatch through
+`Core.Scheduler` instead of calling a thread-unsafe API directly, and
+[Swiftly Core](/docs/development/swiftly-core) for the full service list.

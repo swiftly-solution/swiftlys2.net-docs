@@ -6,6 +6,13 @@ SwiftlyS2's command system lets you register commands, hook client commands and 
 
 Access it through `Core.Command` (<ApiRef name="ISwiftlyCore" member="Command" />, type <ApiRef name="ICommandService" />).
 
+<Callout type="info">
+    Every attribute on this page is discovered on registered instances: the
+    plugin class is registered automatically, any other class needs
+    `Core.Registrator.Register(instance)` (<ApiRef name="IRegistratorService" />)
+    - see [Using Attributes](/docs/development/using-attributes).
+</Callout>
+
 ## Registering Commands
 
 ### With Attributes
@@ -26,7 +33,7 @@ public void OnHealCommand(ICommandContext context)
 }
 ```
 
-<ApiRef name="Command" /> takes `(name, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")` - `registerRaw` skips the `sw_` prefix (so `heal` above registers as `sw_heal`), `permission` is checked through [Permissions](/docs/development/permissions) before the handler runs, and `helpText` is the description shown in command listings. A method takes only one `[Command]` (`AllowMultiple = false`) - see Command Aliases below for extra names.
+<ApiRef name="Command" /> takes `(name, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")` - `registerRaw` skips the `sw_` prefix (so `heal` above registers as `sw_heal`), `permission` is checked through [Permissions](/docs/development/permissions) before the handler runs, and `helpText` is the description shown in command listings. All four values are also settable properties (`Name`, `RegisterRaw`, `Permission`, `HelpText`), so `[Command("heal", HelpText = "Heals yourself")]` works too, and an overload taking `(name, registerRaw, permission)` without `helpText` is kept for backward compatibility. A method takes only one `[Command]` (`AllowMultiple = false`) - see Command Aliases below for extra names.
 
 ### Programmatically
 
@@ -70,7 +77,7 @@ Aliases register the same handler under extra command names.
 
 ### With Attributes
 
-Stack <ApiRef name="CommandAlias" /> on an already-`[Command]`-registered method - it takes `(alias, registerRaw = false)` and allows multiple attributes per method, so `heal` can gain both `hp` and `h`:
+Stack <ApiRef name="CommandAlias" /> on an already-`[Command]`-registered method - it takes `(alias, registerRaw = false)`, exposing both as the settable `Alias` and `RegisterRaw` properties, and allows multiple attributes per method, so `heal` can gain both `hp` and `h`:
 
 ```csharp
 [Command("heal")]

@@ -30,7 +30,8 @@ public override void Unload()
 <ApiRef name="IExtensionService" member="LoadFromPath" /> and <ApiRef name="IExtensionService" member="UnloadFromPath" /> do the same by an absolute path to the library, for extensions that aren't loaded from their own `extensions/{id}/` folder. The library's file name without its extension becomes the extension ID, so the example below loads an extension with the ID `MyExtension`:
 
 ```csharp
-string libraryPath = Path.Combine(Core.PluginPath, "MyExtension", "MyExtension.dll");
+string libraryName = OperatingSystem.IsWindows() ? "MyExtension.dll" : "MyExtension.so";
+string libraryPath = Path.Combine(Core.PluginPath, "MyExtension", libraryName);
 
 Core.Extension.LoadFromPath(libraryPath);
 // ... later ...
@@ -94,9 +95,3 @@ Core.Extension.RemoveSharedPointer("MyPlugin.Api");
 ## Writing an Extension
 
 Extensions are native libraries, not C# plugins. The API reference for writing one - both the C and the C++ API - is the [SwiftlyS2 Extension SDK](https://github.com/swiftly-solution/swiftlys2-extension-sdk), whose `API.md` documents the C and C++ APIs.
-
-## Beta Changes
-
-These are available on the beta branch only.
-
-The extension service itself is new on beta: `Core.Extension` (<ApiRef name="IExtensionService" />) doesn't exist on stable, so everything on this page - `Load`, `Unload`, `LoadFromPath`, `UnloadFromPath` and the shared pointer registry - requires a beta build.

@@ -22,6 +22,8 @@ public override void UseSharedInterface(IInterfaceManager interfaceManager) { /*
 public override void OnSharedInterfaceInjected(IInterfaceManager interfaceManager) { /* optional: react once everyone has resolved */ }
 ```
 
+The manager is only handed to these callbacks - it is not exposed on `ISwiftlyCore` - so keep what you resolve in a field for later use instead of re-querying it from `Core`.
+
 <Callout type="info">
     This sequence re-runs whenever the plugin set changes (e.g. hot reload
     adds/removes a plugin) - don't assume
@@ -51,10 +53,13 @@ public override void ConfigureSharedInterface(IInterfaceManager interfaceManager
 
 <ApiRef name="IInterfaceManager" member="TryGetSharedInterface" /> is preferred
 for optional dependencies - it returns `false` instead of failing, and leaves
-the out parameter `null` when the key isn't registered;
+the out parameter `null` when the key isn't registered; its out parameter is
+`TInterface?` annotated `[NotNullWhen(true)]`, so after a `true` return the
+value is known to be non-null.
 <ApiRef name="IInterfaceManager" member="GetSharedInterface" /> returns the
-interface directly and doesn't report a missing key, so use it for mandatory
-dependencies whose provider is always present;
+implementation registered under the key as a plain `TInterface`, without the
+`bool` result `TryGetSharedInterface` gives - use it for mandatory dependencies
+whose provider is always present.
 <ApiRef name="IInterfaceManager" member="HasSharedInterface" /> is a quick
 presence check.
 

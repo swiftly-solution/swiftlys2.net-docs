@@ -9,11 +9,17 @@ title: Game Events
     Events](/docs/development/core-events) when an equivalent exists.
 </Callout>
 
-SwiftlyS2 generates a strongly-typed interface for every CS2 game event, exposed through the plugin-scoped `Core.GameEvent` service (<ApiRef name="ISwiftlyCore" member="GameEvent" />, type <ApiRef name="IGameEventService" />).
+SwiftlyS2 generates a strongly-typed interface for every CS2 game event, exposed through the plugin-scoped `Core.GameEvent` service (<ApiRef name="ISwiftlyCore" member="GameEvent" />, type <ApiRef name="IGameEventService" />). Every generated event implements <ApiRef name="IGameEvent`1" />.
 
 ## Firing Events
 
-`Fire` broadcasts to every player, `FireToPlayer` targets a slot, `FireToServer` stays server-side. Each has an overload taking an `Action<T>` to configure the event before it is sent, and an async counterpart (`FireAsync`, `FireToPlayerAsync`, `FireToServerAsync`, all returning `Task`) for off-main-thread use - the sync overloads are thread-unsafe, see [Thread Safety](/docs/development/thread-safety).
+Three targets, each with the same four members:
+
+- `Fire<T>()` / `Fire<T>(Action<T>)` and `FireAsync<T>()` / `FireAsync<T>(Action<T>)` - broadcast to every player.
+- `FireToPlayer<T>(int slot)` / `FireToPlayer<T>(int slot, Action<T>)` and their `FireToPlayerAsync` counterparts - a single player slot.
+- `FireToServer<T>()` / `FireToServer<T>(Action<T>)` and their `FireToServerAsync` counterparts - server-side only.
+
+The `Action<T>` overloads configure the event before it is sent, and every `Async` member returns `Task` for off-main-thread use - the sync members are marked `[ThreadUnsafe]`, see [Thread Safety](/docs/development/thread-safety).
 
 ```csharp
 // To everyone, with an optional configure callback
@@ -45,7 +51,11 @@ Every event has a settable `DontBroadcast` flag - set it inside the configure ca
 
 ## Hooking Events
 
-Register hooks by attribute or manually through the service, in `Pre` (`0`) or `Post` (`1`) mode (<ApiRef name="HookMode" />) - `Pre` runs before the game processes the event, `Post` after. Handlers match the <ApiRef name="IGameEventService" member="GameEventHandler" /> delegate, `HookResult (T eventObj)` for the event type they take, and return <ApiRef name="HookResult" />:
+Register hooks by attribute or manually through the service. The handler is the <ApiRef name="IGameEventService" member="GameEventHandler" /> delegate - `HookResult (T eventObj)`, with `T` constrained to `IGameEvent<T>` - and returns <ApiRef name="HookResult" />. Hooks run in `Pre` (`0`) or `Post` (`1`) mode (<ApiRef name="HookMode" />): `Pre` runs before the game processes the event, `Post` after.
+
+- <ApiRef name="IGameEventService" member="HookPre" /> / <ApiRef name="IGameEventService" member="HookPost" /> take a `GameEventHandler<T>` and return a `Guid` identifying the hook.
+- <ApiRef name="IGameEventService" member="Unhook" /> takes that `Guid` and removes the single hook.
+- `UnhookPre<T>()` / `UnhookPost<T>()` drop every pre or post hook registered for one event type.
 
 <Tabs>
   <Tab label="With attribute">
@@ -89,7 +99,7 @@ Register hooks by attribute or manually through the service, in `Pre` (`0`) or `
   </Tab>
 </Tabs>
 
-<ApiRef name="GameEventHandler" /> takes the mode in its constructor and the event type from the method's single parameter, and a method can carry only one (`AllowMultiple = false`). The attribute-based equivalents of `HookPre`/`HookPost` are discovered on the registered instances of your plugin - see [Using Attributes](/docs/development/using-attributes).
+<ApiRef name="GameEventHandler" /> takes the mode in its constructor, exposes it as the settable `HookMode` property, and takes the event type from the method's single parameter - a method can carry only one (`AllowMultiple = false`). The attribute-based equivalents of `HookPre`/`HookPost` are discovered on the registered instances of your plugin - see [Using Attributes](/docs/development/using-attributes).
 
 <Callout type="warning">
     In a pre hook, `HookResult.Stop` cancels the event and skips the remaining
@@ -103,6 +113,15 @@ Drop every hook registered for an event type at once:
 ```csharp
 Core.GameEvent.UnhookPre<EventPlayerDeath>();
 Core.GameEvent.UnhookPost<EventPlayerDeath>();
+```
+
+## Checking Event Listeners
+
+<ApiRef name="IGameEventService" member="IsListeningToEvent" /> checks whether a player slot is listening for an event - by event name (`"player_death"`), or through the typed overload that takes the event type as a generic argument:
+
+```csharp
+bool byName = Core.GameEvent.IsListeningToEvent(0, "player_death");
+bool typed = Core.GameEvent.IsListeningToEvent<EventPlayerDeath>(0);
 ```
 
 ## Reading and Setting Event Data
@@ -149,5 +168,3 @@ Every getter takes the field name, every setter the field name and the value:
 <ApiRef name="IGameEventAccessor" /> also exposes read-only helpers, resolved through the player manager: `GetPlayer(key)` (`IPlayer?`), `GetPlayerController(key)` (`CCSPlayerController`), `GetPlayerPawn(key)` (`CCSPlayerPawn`), `GetPawnEntityIndex(key)` (`int`), `IsReliable()` and `IsLocal()` (`bool`). Player references are stored as slots in the payload, which is why `userid`/`playerid` are read with `GetPlayerSlot`/`GetPlayer` (see [Terminologies](/docs/guides/terminologies)).
 
 As a native wrapper, the accessor is also an <ApiRef name="INativeHandle" /> - `IsValid` and `Address` are available on it.
-
-Check whether a slot is listening for an event with <ApiRef name="IGameEventService" member="IsListeningToEvent" /> - by event name (`"player_death"`) or the typed `IsListeningToEvent<EventPlayerDeath>(playerId)` overload.

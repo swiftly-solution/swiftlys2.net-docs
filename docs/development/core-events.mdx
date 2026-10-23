@@ -34,13 +34,15 @@ Subscribe with a plain `+=`, or with `[EventListener<T>]` where `T` is the match
   </Tab>
 </Tabs>
 
-Match the delegate signature exactly - `EventDelegates.OnClientConnected` is `void(IOnClientConnectedEvent @event)`; `OnTick`, `OnWorldUpdate`, `OnSteamAPIActivated` and `OnStartupServer` take no parameters at all.
+Match the delegate signature exactly - `EventDelegates.OnClientConnected` is `void(IOnClientConnectedEvent @event)`; `OnTick`, `OnWorldUpdate`, `OnSteamAPIActivated` and `OnStartupServer` take no parameters at all, so their handlers are `void ()`.
 
-<ApiRef name="EventListener`1" /> takes exactly one delegate type and a method can carry only one of them (`AllowMultiple = false`) - use `+=` when a single method or instance has to listen to several events.
+<ApiRef name="EventListener`1" /> takes no arguments and its type parameter is constrained to delegates (`where T : Delegate`); a method can carry only one of them (`AllowMultiple = false`) - use `+=` when a single method or instance has to listen to several events.
+
+Attribute handlers are discovered on registered instances: your plugin class is registered automatically, any other class must be passed to `Core.Registrator.Register(instance)` - see [Using Attributes](/docs/development/using-attributes).
 
 ## Blocking a Client from Joining
 
-Some client-lifecycle events expose a settable `Result` to reject the action, e.g. <ApiRef name="IOnClientConnectedEvent" /> - set it to `HookResult.Stop` or `HookResult.CancelOriginal`:
+Some events expose a settable `Result` to reject the action. <ApiRef name="IOnClientConnectedEvent" /> is the client-lifecycle one - set it to `HookResult.Stop` or `HookResult.CancelOriginal`:
 
 ```csharp
 [EventListener<EventDelegates.OnClientConnected>]
@@ -52,6 +54,8 @@ public void OnClientConnected(IOnClientConnectedEvent @event)
     }
 }
 ```
+
+The other events with a settable `Result` are `OnCommandExecuteHook` (only in the `Pre` pass) and the obsolete `OnEntityTakeDamage`, `OnWeaponServicesDropWeaponHook`, `OnEntityIdentityAcceptInputHook` and `OnEntityFireOutputHook`. What each <ApiRef name="HookResult" /> value does to the remaining hooks and the original call is described in [Native Functions and Hooks](/docs/development/native-functions-and-hooks#hook-modes-and-results).
 
 ## Unsubscribing
 
@@ -80,7 +84,7 @@ public override void Unload()
 
 ## Hot Path Events
 
-`OnTick`, `OnWorldUpdate`, and the obsolete `OnClientProcessUsercmds` fire every tick/frame - keep handlers allocation-free and cheap; push anything heavier to a scheduled task or a flag.
+`OnTick`, `OnWorldUpdate`, and the obsolete `OnClientProcessUsercmds` are the hot-path callbacks - the first two fire every tick/frame, `OnClientProcessUsercmds` once per user-command batch of a client. Keep handlers allocation-free and cheap; push anything heavier to a scheduled task or a flag.
 
 `OnTick` doesn't run while the server is in hibernation, `OnWorldUpdate` does.
 
@@ -88,18 +92,20 @@ public override void Unload()
 
 Several `Core.Event` members that used to be the only way to intercept a native call are `[Obsolete]` in favor of the more structured [`Core.GameHooks`](/docs/development/native-functions-and-hooks) categories - separate pre/post delegates and a richer context object instead of one generic event:
 
-| Obsolete event                                              | Use instead                                           |
-| ----------------------------------------------------------- | ----------------------------------------------------- |
-| `OnClientProcessUsercmds`                                   | `Core.GameHooks.Controller.ProcessUsercmds`           |
-| `OnEntityTakeDamage`                                        | `Core.GameHooks.Entities.TakeDamage`                  |
-| `OnItemServicesCanAcquireHook`                              | `Core.GameHooks.Items.CanAcquire`                     |
-| `OnWeaponServicesCanUseHook`                                | `Core.GameHooks.Weapons.CanUse`                       |
-| `OnWeaponServicesDropWeaponHook`                            | `Core.GameHooks.Weapons.Drop`                         |
+| Obsolete event                                              | Use instead                                          |
+| ----------------------------------------------------------- | ---------------------------------------------------- |
+| `OnClientProcessUsercmds`                                   | `Core.GameHooks.Controller.ProcessUsercmds`          |
+| `OnEntityTakeDamage`                                        | `Core.GameHooks.Entities.TakeDamage`                 |
+| `OnItemServicesCanAcquireHook`                              | `Core.GameHooks.Items.CanAcquire`                    |
+| `OnWeaponServicesCanUseHook`                                | `Core.GameHooks.Weapons.CanUse`                      |
+| `OnWeaponServicesDropWeaponHook`                            | `Core.GameHooks.Weapons.Drop`                        |
 | `OnEntityStartTouch` / `OnEntityTouch` / `OnEntityEndTouch` | `Core.GameHooks.Entities.{StartTouch,Touch,EndTouch}` |
-| `OnMovementServicesRunCommandHook`                          | `Core.GameHooks.Movement.RunCommand`                  |
-| `OnPlayerPawnPostThink`                                     | `Core.GameHooks.Pawn.PostThink`                       |
-| `OnEntityIdentityAcceptInputHook`                           | `Core.GameHooks.Entities.AcceptInput`                 |
-| `OnEntityFireOutputHook`                                    | `Core.GameHooks.Entities.FireOutput`                  |
+| `OnMovementServicesRunCommandHook`                          | `Core.GameHooks.Movement.RunCommand`                 |
+| `OnPlayerPawnPostThink`                                     | `Core.GameHooks.Pawn.PostThink`                      |
+| `OnEntityIdentityAcceptInputHook`                           | `Core.GameHooks.Entities.AcceptInput`                |
+| `OnEntityFireOutputHook`                                    | `Core.GameHooks.Entities.FireOutput`                 |
+
+The parameter interfaces of these events are `[Obsolete]` as well, so a handler that takes one of these event objects produces a compiler warning too.
 
 Their event objects still carry the parameters they always did:
 
@@ -115,6 +121,8 @@ Their event objects still carry the parameters they always did:
 | `OnPlayerPawnPostThink`                                     | <ApiRef name="IOnPlayerPawnPostThinkHookEvent" />                                                                              | `PlayerPawn` (`CCSPlayerPawn`)                                                                                                                                                                                                                    |
 | `OnEntityIdentityAcceptInputHook`                           | <ApiRef name="IOnEntityIdentityAcceptInputHookEvent" />                                                                        | `Identity` (`CEntityIdentity`), `EntityInstance` (`CEntityInstance`), `DesignerName` (`string`), `InputName` (`string`), `Activator` (`CEntityInstance?`), `Caller` (`CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `OutputId` (`int`), settable `Result` (`HookResult`) |
 | `OnEntityFireOutputHook`                                    | <ApiRef name="IOnEntityFireOutputHookEvent" />                                                                                 | `EntityIO` (`ref CEntityIOOutput`), `DesignerName` (`string`), `OutputName` (`string`), `Activator` (`CEntityInstance?`), `Caller` (`CEntityInstance?`), `VariantValue` (`ref CVariant<CVariantDefaultAllocator>`), `Delay` (`float`), settable `Result` (`HookResult`) |
+
+`IOnEntityTakeDamageEvent.DamageResult` throws `InvalidOperationException` when the native call did not provide a result - the `Core.GameHooks.Entities.TakeDamage` context exposes the nullable native result instead.
 
 ## Event Reference
 

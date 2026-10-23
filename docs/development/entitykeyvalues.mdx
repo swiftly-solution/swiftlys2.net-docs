@@ -12,20 +12,21 @@ The default constructor allocates the container, and <ApiRef name="CEntityKeyVal
 using var keyValues = new CEntityKeyValues();
 ```
 
-<Callout type="warning">
-    The container owns its native allocation. Once disposed, no member can be used
-    any more - <ApiRef name="CEntityKeyValues" member="Address" /> throws
-    `ObjectDisposedException`. Create a new `CEntityKeyValues` instead of reusing
-    a disposed one.
-</Callout>
+<ApiRef name="CEntityKeyValues" /> owns a safe handle that holds the native allocation (`CEntityKeyValuesSafeHandle` is internal, so you never create or dispose it yourself). Three consequences are worth knowing:
+
+- `Dispose` is idempotent: calling it twice, or both explicitly and through `using`, is safe.
+- If you never call `Dispose`, the safe handle's finalizer releases the allocation at some later GC point - still dispose deterministically with `using` so the memory doesn't linger.
+- After disposal the container is unusable: every member that touches the allocation - <ApiRef name="CEntityKeyValues" member="Address" />, `Set*`, `Get*` and <ApiRef name="CEntityKeyValues" member="Has" /> - throws `ObjectDisposedException`. Create a new `CEntityKeyValues` instead of reusing a disposed one.
 
 ## Address Property
 
-Exposes the native address of the container through <ApiRef name="CEntityKeyValues" member="Address" />:
+Exposes the native address of the container through <ApiRef name="CEntityKeyValues" member="Address" /> (read-only `nint`):
 
 ```csharp
 nint address = keyValues.Address;
 ```
+
+It's meant for interop that expects the raw pointer - don't cache it, since it stops being valid once the container is disposed.
 
 ## Setting and Getting Values
 
@@ -49,6 +50,8 @@ A type-specific `SetX`/`GetX` pair exists for every supported type - `GetX` mirr
 | `Vector4D`        | `SetVector4D`    | `GetVector4D`    |
 | `QAngle`          | `SetQAngle`      | `GetQAngle`      |
 
+Setters return `void` and take `(string key, T value)`; getters take the key only and return the type from the table:
+
 ```csharp
 keyValues.SetBool("is_enabled", true);
 keyValues.SetInt32("health", 100);
@@ -69,10 +72,13 @@ keyValues.SetQAngle("angle", new QAngle(0, 90, 0));
 int health = keyValues.GetInt32("health");
 ```
 
-Use <ApiRef name="CEntityKeyValues" member="Has" /> to check whether a key was set:
+Use <ApiRef name="CEntityKeyValues" member="Has" /> to check whether a key was set before reading it:
 
 ```csharp
-bool hasHealth = keyValues.Has("health");
+if (keyValues.Has("health"))
+{
+    int storedHealth = keyValues.GetInt32("health");
+}
 ```
 
 ## Generic Set and Get
@@ -87,6 +93,8 @@ int health = keyValues.Get<int>("health");
 Vector position = keyValues.Get<Vector>("position");
 ```
 
+`Set<T>` picks the matching typed setter from the runtime type of `value`, so boxing through a wider type still stores the underlying supported type. `Get<T>` matches `typeof(T)` exactly instead - `keyValues.Get<object>("health")` throws even though `Set<object>("health", 100)` worked.
+
 ## Supported Generic Types
 
 `Set<T>`/`Get<T>` support `bool`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `string`, `nint`, `CUtlStringToken`, `Color`, `Vector`, `Vector2D`, `Vector4D`, `QAngle`.
@@ -94,6 +102,19 @@ Vector position = keyValues.Get<Vector>("position");
 <Callout type="warning">
 Using an unsupported type with `Set<T>` or `Get<T>` throws `InvalidOperationException`.
 </Callout>
+
+## Members
+
+| Member                                              | Signature                          | Description                                                         |
+| --------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------- |
+| `CEntityKeyValues()`                                | constructor                        | Allocates the container                                             |
+| <ApiRef name="CEntityKeyValues" member="Dispose" /> | `void Dispose()`                   | Releases the native allocation; safe to call more than once         |
+| <ApiRef name="CEntityKeyValues" member="Address" /> | `nint Address { get; }`            | Native address of the container                                     |
+| <ApiRef name="CEntityKeyValues" member="Has" />     | `bool Has(string key)`             | Whether `key` is present in the container                           |
+| `Set<T>`                                            | `void Set<T>(string key, T value)` | Stores `value` under `key`; throws `InvalidOperationException` for unsupported types |
+| `Get<T>`                                            | `T Get<T>(string key)`             | Reads the value stored under `key`; throws `InvalidOperationException` for unsupported types |
+
+The fifteen typed `Set*`/`Get*` pairs listed above complete the surface. Once the container is disposed, every member except `Dispose` throws `ObjectDisposedException`.
 
 ## Using with Entity DispatchSpawn
 

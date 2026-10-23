@@ -54,12 +54,14 @@ public sealed class MyPlugin : BasePlugin
 | `Core.GameData`                       | <ApiRef name="IGameDataService" /> - per-plugin signature, offset and patch lookup                                        |
 | `Core.PlayerManager`                  | <ApiRef name="IPlayerManagerService" /> - player lookup and server-wide player actions                                    |
 | `Core.Memory`                         | <ApiRef name="IMemoryService" /> - unmanaged function resolution and hooking                                              |
+| `Core.Extension`                      | <ApiRef name="IExtensionService" /> - loading and unloading native extensions, and the pointer registry shared with them  |
 | `Core.Scheduler`                      | <ApiRef name="ISchedulerService" /> - main-thread dispatch, delayed and repeating tasks                                   |
 | `Core.Database`                       | <ApiRef name="IDatabaseService" /> - database connection access                                                           |
 | `Core.Translation`, `Core.Localizer`  | <ApiRef name="ITranslationService" />, <ApiRef name="ILocalizer" /> - player and server localization                      |
 | `Core.Permission`                     | <ApiRef name="IPermissionManager" /> - permission checks and assignment                                                   |
 | `Core.Registrator`                    | <ApiRef name="IRegistratorService" /> - registers attribute-decorated instances beyond the plugin itself                  |
-| `Core.MenusAPI`                       | <ApiRef name="IMenuManagerAPI" /> - menu building and display                                                             |
+| `Core.Menu`                           | <ApiRef name="IMenuService" /> - the component-based menu framework                                                       |
+| `Core.MenusAPI`                       | <ApiRef name="IMenuManagerAPI" /> - the classic menu API (`[Obsolete]`, use `Core.Menu` instead)                          |
 | `Core.CommandLine`                    | <ApiRef name="ICommandLine" /> - server command-line argument access                                                      |
 | `Core.GameFileSystem`                 | <ApiRef name="IGameFileSystem" /> - game virtual file system access                                                       |
 | `Core.PluginManager`                  | <ApiRef name="IPluginManager" /> - loading/unloading/reloading other plugins, status and metadata lookup                  |
@@ -69,6 +71,8 @@ public sealed class MyPlugin : BasePlugin
 | `Core.Logger`, `Core.LoggerFactory`   | Standard `Microsoft.Extensions.Logging` logger                                                                            |
 
 Full member list for any of these: <ApiRef name="ISwiftlyCore" />.
+
+`Core.Menu` is the component-based menu framework described in [Menu System](/docs/development/menu-system). It replaces `Core.MenusAPI`, which is `[Obsolete]` and documented in [Menus](/docs/development/menus) for plugins that still use it.
 
 Runtime paths are exposed on `Core` as well: `Core.PluginPath` (current plugin's directory), `Core.PluginDataDirectory` (per-plugin data directory, created by the framework if needed), `Core.GameFilesDirectory` (`game/csgo`) and `Core.GameDirectory` (game root). `Core.CSGODirectory` points at `game/csgo` too, but it is `[Obsolete]` - use `Core.GameFilesDirectory` instead.
 
@@ -98,24 +102,3 @@ public void EnsureMainThreadAction(Action action)
 ## Registering Attribute Handlers on Other Classes
 
 Your plugin class is registered for attribute discovery automatically. Any other class needs `Core.Registrator.Register(instance)` - see [Using Attributes](/docs/development/using-attributes) for a full worked example and the complete attribute list.
-
-## Beta Changes
-
-These are available on the beta branch only.
-
-Two service properties are added to `Core`:
-
-| Property         | Service                                                                                                                    |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `Core.Extension` | <ApiRef name="IExtensionService" /> - loading and unloading native extensions, and the pointer registry shared with them   |
-| `Core.Menu`      | <ApiRef name="IMenuService" /> - the component-based menu framework, see [Menu System](/docs/development/menu-system)      |
-
-`Core.MenusAPI` (<ApiRef name="IMenuManagerAPI" />) is `[Obsolete]` on beta and will be removed; new code should use `Core.Menu`. The classic menu API itself is unchanged.
-
-Members of <ApiRef name="IExtensionService" />:
-
-- `Load(string id)` / `Unload(string id)` (`bool`) - load or unload the extension at `extensions/{id}/{id}.dll` (or `.so`), returning whether it succeeded.
-- `LoadFromPath(string absolutePath)` / `UnloadFromPath(string absolutePath)` (`bool`) - the same, addressed by an absolute path to the extension library, whose file name without its extension becomes the extension ID. Both throw `ArgumentException` when the path is empty or not fully qualified.
-- `GetSharedPointer(string key)` (`nint`), `SetSharedPointer(string key, nint pointer)`, `HasSharedPointer(string key)` (`bool`) and `RemoveSharedPointer(string key)` - a string-keyed registry of native pointers. A missing key reads as `0`, so use `HasSharedPointer` to tell a stored zero apart from an absent key; the registry doesn't own the pointed-to objects and never frees them.
-
-The deprecated members of two services in the table above are also gone on beta: `Core.Engine.ExecuteCommandWithBuffer` / `ExecuteCommandWithBufferAsync` (use `Core.Engine.ExecuteCommandAsync`) and the `CTraceFilter`/`CGameTrace`-based `Core.Trace` overloads - `TracePlayerBBox(Vector, Vector, BBox_t, CTraceFilter, ref CGameTrace)`, `TraceShape` and `SimpleTrace` (use `TracePlayerBBox(in Vector start, in Vector end, in BBox_t bounds, in TraceParams? param = default)`, `TraceShapeLine` or `TraceShapeAngle`, which return <ApiRef name="TraceResult" />).

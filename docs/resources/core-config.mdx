@@ -14,31 +14,31 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 
 ## Global Settings
 
-| Key                            | Type       | Default                                                          | Description                                                                                                |
-| ------------------------------ | ---------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `CommandPrefixes`              | `string[]` | `["!"]`                                                          | Prefixes recognized for normal command execution.                                                          |
-| `CommandSilentPrefixes`        | `string[]` | `["/"]`                                                          | Prefixes recognized for silent command execution.                                                          |
-| `AutoHotReload`                | `boolean`  | `true`                                                           | Enables automatic hot reload behavior.                                                                     |
-| `ProfilerLevel`                | `number`   | `0`                                                              | Default profiler level. `0` disables profiling, `1` enables EventPipe profiling.                           |
-| `ConsoleFilter`                | `boolean`  | `true`                                                           | Enables or disables console filtering globally.                                                            |
-| `PatchesToPerform`             | `string[]` | `[]`                                                             | Patch identifiers to perform on startup.                                                                   |
-| `CS2ServerGuidelines`          | `string`   | `"https://blog.counter-strike.net/index.php/server_guidelines/"` | URL of the CS2 server guidelines. Registered on CS2 only.                                                  |
-| `Follow<Game>ServerGuidelines` | `boolean`  | `true`                                                           | Applies server guideline behavior. Key name depends on the current game, e.g. `FollowCS2ServerGuidelines`. |
-| `Language`                     | `string`   | `"en"`                                                           | Default language code used by the server.                                                                  |
-| `UsePlayerLanguage`            | `boolean`  | `true`                                                           | Uses player language when available.                                                                       |
-| `ManualLoadPlugins`            | `boolean`  | `false`                                                          | Toggles manual plugin loading mode.                                                                        |
-| `PluginLoadOrder`              | `string[]` | `[]`                                                             | Plugin load order list used by the core loader.                                                            |
-| `DotnetCrashTracerLevel`       | `number`   | `0`                                                              | .NET crash tracer level. A value greater than `0` enables the tracer.                                      |
-| `WindowsFullDump`              | `boolean`  | `false`                                                          | Windows-only crash dump toggle. Not read by the core at the moment, so it has no effect.                    |
+| Key                            | Type       | Default                                                          | Description                                                                                                                                                    |
+| ------------------------------ | ---------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CommandPrefixes`              | `string[]` | `["!"]`                                                          | Prefixes recognized for normal command execution.                                                                                                              |
+| `CommandSilentPrefixes`        | `string[]` | `["/"]`                                                          | Prefixes recognized for silent command execution.                                                                                                              |
+| `AutoHotReload`                | `boolean`  | `true`                                                           | Reloads a plugin automatically when its `.dll` file changes.                                                                                                   |
+| `ProfilerLevel`                | `number`   | `0`                                                              | Default profiler level. `0` disables profiling, `1` enables EventPipe profiling.                                                                               |
+| `ConsoleFilter`                | `boolean`  | `true`                                                           | Enables console filtering on startup - see [Console Filter](/docs/resources/console-filter).                                                                   |
+| `PatchesToPerform`             | `string[]` | `[]`                                                             | Identifiers of the game data patches applied on startup. Identifiers that do not exist for the current game are logged and skipped.                            |
+| `CS2ServerGuidelines`          | `string`   | `"https://blog.counter-strike.net/index.php/server_guidelines/"` | URL of the CS2 server guidelines. Only registered on CS2, and not read by the core at the moment.                                                              |
+| `Follow<Game>ServerGuidelines` | `boolean`  | `true`                                                           | Keeps SwiftlyS2 inside the server guidelines: while enabled, protected schema fields and loadout item access throw instead of returning data. Key name depends on the current game, e.g. `FollowCS2ServerGuidelines`. |
+| `Language`                     | `string`   | `"en"`                                                           | Default language code, used when a player has no language of its own.                                                                                          |
+| `UsePlayerLanguage`            | `boolean`  | `true`                                                           | Prefers the language reported by the player's game client for translations.                                                                                    |
+| `ManualLoadPlugins`            | `boolean`  | `false`                                                          | Skips plugin loading on startup; plugins are then loaded with `sw plugins load` from the server console.                                                       |
+| `PluginLoadOrder`              | `string[]` | `[]`                                                             | Plugin IDs loaded on startup, in the listed order, when `ManualLoadPlugins` is `true`.                                                                         |
+| `DotnetCrashTracerLevel`       | `number`   | `0`                                                              | .NET crash tracer level. A value greater than `0` enables the tracer.                                                                                          |
+| `WindowsFullDump`              | `boolean`  | `false`                                                          | Windows-only crash dump toggle. Not read by the core at the moment, so it has no effect.                                                                       |
 
 ## Unlocker Settings
 
 `Unlocker` controls which restricted engine features are exposed.
 
-| Key           | Type      | Default | Description                          |
-| ------------- | --------- | ------- | ------------------------------------ |
-| `Convars`     | `boolean` | `false` | Unlocks restricted convars.          |
-| `ConCommands` | `boolean` | `false` | Unlocks restricted console commands. |
+| Key           | Type      | Default | Description                                                 |
+| ------------- | --------- | ------- | ----------------------------------------------------------- |
+| `Convars`     | `boolean` | `false` | Removes the restricted flag from locked convars on startup. |
+| `ConCommands` | `boolean` | `false` | Removes the restricted flag from locked console commands.   |
 
 ## Console Logger Settings
 
@@ -46,10 +46,10 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 
 | Key                             | Type       | Default                           | Description                                                                                  |
 | ------------------------------- | ---------- | --------------------------------- | -------------------------------------------------------------------------------------------- |
-| `Enable`                        | `boolean`  | `true`                            | Enables console logging to file.                                                             |
-| `ManagedEnable`                 | `boolean`  | `true`                            | Enables console logging for managed (.NET) output.                                           |
+| `Enable`                        | `boolean`  | `true`                            | Enables console logging to files in `logs/console/`.                                         |
+| `ManagedEnable`                 | `boolean`  | `true`                            | Also writes managed (.NET) plugin logs to files in `logs/managed/`.                           |
 | `WriteIntervalMs`               | `number`   | `2000`                            | Interval, in milliseconds, between log file writes. Values below `1` fall back to `2000`.    |
-| `Rotation.Enable`               | `boolean`  | `true`                            | Enables log file rotation.                                                                   |
+| `Rotation.Enable`               | `boolean`  | `true`                            | Enables log file rotation, applied on startup and after every write.                         |
 | `Rotation.Mode`                 | `string`   | `"file_count"`                    | Rotation mode. Available: `"file_count"`, `"time_interval"`. Any other value leaves rotation inactive. |
 | `Rotation.AvailableModes`       | `string[]` | `["file_count", "time_interval"]` | Rotation modes listed for `Rotation.Mode`.                                                   |
 | `Rotation.MaximumFiles`         | `number`   | `60`                              | Maximum number of rotated log files to keep (`file_count` mode). Values below `1` disable this rotation. |
@@ -64,7 +64,7 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 | `AvailableInputModes` | `string[]` | `["button", "wasd"]` | Menu input modes listed for `InputMode`.                                                           |
 | `InputMode`           | `string`   | `"button"`           | Active menu input mode. `"wasd"` enables WASD navigation, any other value uses the `Menu.Buttons` mappings. |
 | `NavigationPrefix`    | `string`   | `"➤"`                | Prefix shown for the currently selected menu item.                                                 |
-| `ItemsPerPage`        | `number`   | `5`                  | Number of menu items shown per page.                                                               |
+| `ItemsPerPage`        | `number`   | `5`                  | Number of menu items shown per page, used by menus that do not set their own limit. Values are clamped between `1` and `5`. |
 
 ### Menu Buttons
 
@@ -74,6 +74,8 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 | `Scroll`     | `"shift"` |
 | `ScrollBack` | `"f"`     |
 | `Use`        | `"e"`     |
+
+Values are matched case-insensitively against a fixed set of key names: `mouse1`, `mouse2`, `space`, `ctrl`, `w`, `a`, `s`, `d`, `e`, `esc`, `r`, `alt`, `shift`, `weapon1`, `weapon2`, `grenade1`, `grenade2`, `tab`, `f`. A name outside this set leaves the action unbound, so the key never triggers it.
 
 ### Menu Sound
 
@@ -97,5 +99,6 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 ## Notes
 
 - Every key is read while the core starts, so restart the server after editing `core.jsonc`. Console filtering is the exception: `sw confilter enable` and `sw confilter disable` toggle it at runtime without writing the change back to the file - see [Console Filter](/docs/resources/console-filter).
+- The `SetSchemaHammerUniqueId` patch is applied on startup even when `PatchesToPerform` is empty.
 - A key with an incompatible type is reset to its default, while an individual array entry with an incompatible type is skipped with a logged error and the remaining entries are kept.
 - `ConsoleLogger.Rotation.AvailableModes`, `Menu.AvailableInputModes` and `SteamAuth.AvailableModes` only list the values their `Mode` counterpart understands; the core does not validate `Mode` against them.

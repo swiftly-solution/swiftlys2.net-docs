@@ -4,6 +4,23 @@ title: Configuration
 
 SwiftlyS2's configuration system lets your plugin create config files, bind typed models, and reload settings at runtime, through <ApiRef name="ISwiftlyCore" member="Configuration" /> (<ApiRef name="IPluginConfigurationService" />).
 
+## Service Members
+
+`Type` is the type of the property, or the return type of the method:
+
+| Member | Type | Description |
+|---|---|---|
+| <ApiRef name="IPluginConfigurationService" member="BasePath" /> | `string` | Base path of the plugin's configuration files |
+| <ApiRef name="IPluginConfigurationService" member="BasePathExists" /> | `bool` | Whether `BasePath` exists in the file system |
+| <ApiRef name="IPluginConfigurationService" member="GetConfigPath" /> | `string` | Path of a file inside `BasePath`, for `(string name)` with the extension included in `name` |
+| <ApiRef name="IPluginConfigurationService" member="Manager" /> | `IConfigurationManager` | The configuration manager the service is backed by |
+| <ApiRef name="IPluginConfigurationService" member="InitializeWithTemplate" /> | <ApiRef name="IPluginConfigurationService" /> | Initializes a file from a packaged template, for `(string name, string templateName)` |
+| <ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" /> | <ApiRef name="IPluginConfigurationService" /> | Initializes a JSON file from a model, for `(string name, string sectionName)` and `(string name, string sectionName, bool addMissingKeys)` |
+| <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> | <ApiRef name="IPluginConfigurationService" /> | Initializes a TOML file from a model, for `(string name, string sectionName)` and `(string name, string sectionName, bool addMissingKeys)` |
+| <ApiRef name="IPluginConfigurationService" member="Configure" /> | <ApiRef name="IPluginConfigurationService" /> | Configures the internal manager, for `(Action<IConfigurationBuilder> configure)` |
+
+Every method returns <ApiRef name="IPluginConfigurationService" />, so calls chain.
+
 ## Paths
 
 ```csharp
@@ -46,6 +63,22 @@ public class DatabaseConfig
     public int Port { get; set; } = 3306;
 }
 ```
+
+### Adding Missing Keys
+
+Both model initializers have an extra overload taking `addMissingKeys`, for filling in keys added to the model after the file was first written:
+
+```csharp
+Core.Configuration.InitializeJsonWithModel<MainConfig>("config.jsonc", "Main", addMissingKeys: true);
+Core.Configuration.InitializeTomlWithModel<DatabaseConfig>("database.toml", "Database", addMissingKeys: true);
+```
+
+They behave like the overloads without `addMissingKeys` when the file does not exist yet. When the file exists and `addMissingKeys` is `true`, keys present in the model but missing from the file are inserted with their default value, including keys of nested objects. Keys are matched case-insensitively, the same way the configuration binder reads them. Everything else in the file, including existing values, comments and formatting, is left untouched.
+
+- JSON: each inserted key gets its `[Description]` as `//` comment lines above it in a `.jsonc` file. Dictionary entries and list items are never added, and a file that is not valid JSON is not changed.
+- TOML: keys missing from a table are inserted after the table's last value, and tables missing from the file are appended at its end, each with its `[Description]` as `#` comment lines. Members of inline tables and entries of table arrays are never added, and a file that is not valid TOML is not changed.
+
+## Registering Config Sources
 
 See <ApiRef name="IPluginConfigurationService" member="InitializeWithTemplate" />, <ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" /> and <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> - all three return <ApiRef name="IPluginConfigurationService" />, so they chain, followed by <ApiRef name="IPluginConfigurationService" member="Configure" /> to register the file as a live, reloadable source:
 
@@ -106,7 +139,7 @@ public override void Load(bool hotReload)
 
 `services.AddSwiftly(Core, addLogger = true, addConfiguration = true)` registers <ApiRef name="IPluginConfigurationService" />, its `IConfigurationManager` (<ApiRef name="IPluginConfigurationService" member="Manager" />) and an `IConfiguration` resolving to that same manager as singletons - but only when <ApiRef name="IPluginConfigurationService" member="BasePathExists" /> is `true`, so pass `addConfiguration: false` to leave them out. See [Dependency Injection](/docs/guides/dependency-injection) for more on `services.AddSwiftly(Core)`.
 
-`AddSwiftly` also replaces the default options factory with <ApiRef name="SwiftlyOptionsFactory`1" />, so values read from the file replace the model's code defaults instead of merging with them - a list or dictionary in the file replaces the default collection instead of being appended to it. A default collection is only cleared for a key the configuration actually contains, and members are matched by `[ConfigurationKeyName]`, then `[JsonPropertyName]`, then the member name.
+`AddSwiftly` also replaces the default options factory with <ApiRef name="SwiftlyOptionsFactory`1" />, so values read from the file replace the model's code defaults instead of merging with them - a list or dictionary in the file replaces the default collection instead of being appended to it. A default collection is only cleared for a key the configuration actually contains, and members are matched by `[ConfigurationKeyName]`, then `[JsonPropertyName]`, then the member name. The factory also runs every `IValidateOptions<T>` registered in the container and throws `OptionsValidationException` when one of them fails.
 
 Consume with `IOptionsMonitor<T>` to react to reloads:
 
@@ -119,19 +152,3 @@ public class ExampleService
     }
 }
 ```
-
-## Beta Changes
-
-These are available on the beta branch only.
-
-`InitializeJsonWithModel<T>` and `InitializeTomlWithModel<T>` have an extra overload taking `addMissingKeys`, for filling in keys added to the model after the file was first written:
-
-```csharp
-Core.Configuration.InitializeJsonWithModel<MainConfig>("config.jsonc", "Main", addMissingKeys: true);
-Core.Configuration.InitializeTomlWithModel<DatabaseConfig>("database.toml", "Database", addMissingKeys: true);
-```
-
-Both overloads behave like the ones without `addMissingKeys` when the file does not exist yet. When the file exists and `addMissingKeys` is `true`, keys present in the model but missing from the file are inserted with their default value, including keys of nested objects. Keys are matched case-insensitively, the same way the configuration binder reads them. Everything else in the file, including existing values, comments and formatting, is left untouched.
-
-- JSON: each inserted key gets its `[Description]` as `//` comment lines above it in a `.jsonc` file. Dictionary entries and list items are never added, and a file that is not valid JSON is not changed.
-- TOML: keys missing from a table are inserted after the table's last value, and tables missing from the file are appended at its end, each with its `[Description]` as `#` comment lines. Members of inline tables and entries of table arrays are never added, and a file that is not valid TOML is not changed.

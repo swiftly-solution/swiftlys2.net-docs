@@ -4,6 +4,14 @@ title: Menus (Deprecated)
 
 SwiftlyS2 menus provide an interactive, per-player UI layer for settings, selections, and action flows, through `Core.MenusAPI` (<ApiRef name="IMenuManagerAPI" />).
 
+<Callout type="warning">
+    The classic menu API is deprecated: every interface, event args class and
+    enum in `SwiftlyS2.Shared.Menus`, and `Core.MenusAPI` itself, is marked
+    `[Obsolete]` and will be removed in a future version. Use `Core.Menu`
+    (<ApiRef name="IMenuService" />) for new plugins - see
+    [Menu System](/docs/development/menu-system).
+</Callout>
+
 ## Recommended Workflow
 
 1. Create a builder with `Core.MenusAPI.CreateBuilder()`.
@@ -25,7 +33,7 @@ The manager members below cover the whole lifecycle:
 | <ApiRef name="IMenuManagerAPI" member="CloseAllMenus" />      | Closes every open menu for every player.                                                                        |
 | <ApiRef name="IMenuManagerAPI" member="GetCurrentMenu" />     | Returns the player's active menu, or `null` if they have none open.                                             |
 
-<ApiRef name="IMenuManagerAPI" member="Core" /> is the <ApiRef name="ISwiftlyCore" /> instance the manager belongs to, and <ApiRef name="IMenuManagerAPI" member="Configuration" /> exposes the resolved core menu settings:
+<ApiRef name="IMenuManagerAPI" member="Core" /> is the <ApiRef name="ISwiftlyCore" /> instance the manager belongs to, and <ApiRef name="IMenuManagerAPI" member="Configuration" /> exposes the resolved core menu settings as a <ApiRef name="MenuManagerConfiguration" />:
 
 | Member                                                                          | Description                                                                      |
 | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
@@ -78,6 +86,7 @@ Every <ApiRef name="IMenuBuilderAPI" /> method returns the builder for chaining,
 
 | Method                                                                                                                                                                                                                                                                 | Description                                                                               |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| <ApiRef name="IMenuBuilderAPI" member="Design" /> (`IMenuDesignAPI`)                                                                                                                                                                                                   | The design interface of this menu, see [Menu Design](#menu-design).                       |
 | <ApiRef name="IMenuBuilderAPI" member="BindToParent" />(`IMenuAPI parent`)                                                                                                                                                                                             | Binds the menu to a parent menu, so closing it returns to that menu.                      |
 | <ApiRef name="IMenuBuilderAPI" member="AddOption" />(`IMenuOption option`)                                                                                                                                                                                             | Adds an option to the menu.                                                               |
 | <ApiRef name="IMenuBuilderAPI" member="EnableSound" /> / <ApiRef name="IMenuBuilderAPI" member="DisableSound" />                                                                                                                                                       | Turns interaction sounds on or off.                                                       |
@@ -291,6 +300,8 @@ menu.OptionSelected += (sender, args) => { /* fired when a selection is activate
 | <ApiRef name="IMenuAPI" member="OptionHovered" />                                                                                                                     | <ApiRef name="MenuEventArgs" /> (`Player`, `Options`). Fired only when the hovered option changes.                                          |
 | <ApiRef name="IMenuAPI" member="OptionSelected" />                                                                                                                    | <ApiRef name="MenuEventArgs" /> (`Player`, `Options`). Fired when a selection is activated.                                                 |
 
+`Click` is declared as <ApiRef name="AsyncEventHandler`1" /> - `ValueTask (object? sender, MenuOptionClickEventArgs args)` - the async counterpart of `EventHandler<T>` that the other events use.
+
 ## Runtime Updates
 
 ```csharp
@@ -331,9 +342,10 @@ For custom option implementations, <ApiRef name="IMenuOption" /> also exposes
 
 <ApiRef name="IMenuOption" member="GetDisplayText" />
 (`player`, `displayLine = 0`),
-<ApiRef name="IMenuOption" member="IsClickTaskCompleted" />,
-<ApiRef name="IMenuOption" member="OnValidatingAsync" /> and
-<ApiRef name="IMenuOption" member="OnClickAsync" />.
+<ApiRef name="IMenuOption" member="IsClickTaskCompleted" /> (`player`),
+<ApiRef name="IMenuOption" member="OnValidatingAsync" /> (`player`, returns
+`ValueTask<bool>`) and <ApiRef name="IMenuOption" member="OnClickAsync" />
+(`player`, returns `ValueTask`).
 
 ## Direct `CreateMenu` Usage
 
@@ -389,11 +401,3 @@ All four members are `KeyBind?` and default to `null`, which keeps the core defa
 - Open and close menus through `Core.MenusAPI` manager methods, not only `ShowForPlayer`/`HideForPlayer`.
 - Keep heavy logic out of `OptionHovering` - it runs every render frame while hovering.
 - Unsubscribe manager-level events (`MenuOpened`/`MenuClosed`) during plugin `Unload()`.
-
-## Beta Changes
-
-These are available on the beta branch only.
-
-On beta the whole namespace is deprecated: <ApiRef name="IMenuManagerAPI" />, <ApiRef name="IMenuBuilderAPI" />, <ApiRef name="IMenuDesignAPI" />, <ApiRef name="IMenuAPI" />, <ApiRef name="IMenuOption" />, <ApiRef name="KeyBind" /> and every configuration, event args and enum type on this page carry an `[Obsolete]` attribute telling you to use `Core.Menu` (<ApiRef name="IMenuService" />) instead. <ApiRef name="ISwiftlyCore" member="MenusAPI" /> is marked the same way - see [Menu System](/docs/development/menu-system) for the replacement.
-
-Apart from those attributes nothing changed: no member, signature, parameter default or option differs from the stable branch.

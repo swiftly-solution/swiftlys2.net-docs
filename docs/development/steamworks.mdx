@@ -51,6 +51,8 @@ Core.Event.OnClientSteamAuthorizeFail += @event =>
     Core.Logger.LogWarning("Steam auth failed for slot {PlayerId}", @event.PlayerId);
 ```
 
+Both events carry a single `int PlayerId` (<ApiRef name="IOnClientSteamAuthorizeEvent" />, <ApiRef name="IOnClientSteamAuthorizeFailEvent" />). The outcome is also readable from the player object afterwards: `IPlayer.IsAuthorized` tells you whether the player is authorized, and `IPlayer.UnauthorizedSteamID` holds the Steam ID that wasn't verified yet.
+
 ## Server Metadata
 
 ```csharp
@@ -112,7 +114,7 @@ Downloads complete asynchronously through a Steam callback struct - see below.
 
 ## Steam Callbacks and Call Results
 
-Steam surfaces two async patterns: <ApiRef name="Callback`1" /> fires whenever a matching struct is posted; <ApiRef name="CallResult`1" /> is a one-shot result tied to a `SteamAPICall_t` from a request method. Both are `IDisposable` and both are constrained to a callback struct (`where T : struct`) - dispose them, typically in `Unload`.
+Steam surfaces two async patterns: <ApiRef name="Callback`1" /> fires whenever a matching struct is posted; <ApiRef name="CallResult`1" /> is a one-shot result tied to a `SteamAPICall_t` from a request method. Both are sealed `IDisposable` classes constrained to a callback struct (`where T : struct`) with a private constructor, so `Create` is the only way to obtain an instance - dispose them, typically in `Unload`.
 
 <Tabs>
   <Tab label="Callback<T>">
@@ -161,7 +163,11 @@ Steam surfaces two async patterns: <ApiRef name="Callback`1" /> fires whenever a
   </Tab>
 </Tabs>
 
-`Callback<T>` stays registered until you dispose it. `CallResult<T>` disposes itself right after its result fires, so keeping the instance in a field is only useful to cancel it early or to reuse it.
+`Callback<T>` stays registered until you dispose it, so keep the instance in a field and dispose it in `Unload`; disposing twice is a no-op, but a disposed instance can't be registered again.
+
+`CallResult<T>` disposes itself right after its result fires, so keeping the instance in a field is only useful to cancel the pending call early. A disposed instance ignores further `Set` calls, so each request needs its own `CallResult<T>` instead of a re-pointed one.
+
+`T` has to be one of the generated Steam callback structs - it must carry a callback identity, otherwise `Callback<T>.Create` (through <ApiRef name="CallbackIdentities" member="GetCallbackIdentity" />) throws.
 
 ### Registration Members
 
@@ -170,10 +176,10 @@ Steam surfaces two async patterns: <ApiRef name="Callback`1" /> fires whenever a
 | <ApiRef name="Callback`1" member="Create" />         | `static Callback<T> Create(Action<T> callback)`                 | creates and registers the handler in one step                                                     |
 | <ApiRef name="Callback`1" member="Dispose" />        | `void Dispose()`                                                | unregisters the handler                                                                            |
 | <ApiRef name="CallResult`1" member="Create" />       | `static CallResult<T> Create(ulong hAPICall, Action<T, bool> callback)` | `hAPICall` is the `SteamAPICall_t` handle, the callback receives the result struct and `ioFailure` |
-| <ApiRef name="CallResult`1" member="Set" />          | `void Set(ulong hAPICall)`                                      | re-points an existing instance at another call handle, unregistering the previous one; pass `0` to only unregister |
+| <ApiRef name="CallResult`1" member="Set" />          | `void Set(ulong hAPICall)`                                      | re-points an existing instance at another call handle, unregistering the previous one; pass `0` to only unregister, and a no-op once the instance is disposed |
 | <ApiRef name="CallResult`1" member="Dispose" />      | `void Dispose()`                                                | cancels the pending call                                                                           |
 
-<ApiRef name="CallResult`1" member="Set" /> is for reuse - e.g. a single stats call result that is re-pointed at every new `RequestUserStats` handle instead of allocating a `CallResult<T>` per request.
+`Set` is for re-pointing a result that hasn't fired yet - e.g. dropping a pending `RequestUserStats` call and waiting on a newer handle with the same callback.
 
 ## Auth Sessions
 
@@ -192,9 +198,9 @@ SteamGameServer.EndAuthSession(steamId);
 
 ## Helpers
 
-- <ApiRef name="InteropHelp" /> - `TestIfAvailableGameServer()` throws when the game server API isn't initialized yet, see [Waiting for the Steam API](#waiting-for-the-steam-api).
-- <ApiRef name="CallbackIdentities" /> - <ApiRef name="CallbackIdentities" member="GetCallbackIdentity" /> takes a callback struct `Type` and returns its numeric Steam callback ID (`int`), throwing when the struct carries no identity. Mostly useful for logging which callback fired.
-- `Packsize` - `Packsize.value` is the `const int` pack size (`8` on Windows, `4` on other platforms) the generated Steam structs are declared with.
+- <ApiRef name="InteropHelp" /> - `static void TestIfAvailableGameServer()` throws `InvalidOperationException` when the game server API isn't initialized yet, see [Waiting for the Steam API](#waiting-for-the-steam-api).
+- <ApiRef name="CallbackIdentities" /> - `static int GetCallbackIdentity(Type callbackStruct)` takes a callback struct `Type` and returns its numeric Steam callback ID (`int`), throwing when the struct carries no identity. Mostly useful for logging which callback fired.
+- <ApiRef name="Packsize" /> - `Packsize.value` is the `const int` pack size (`8` on Windows, `4` on other platforms) the generated Steam structs are declared with.
 
 ## Quick Reference
 
