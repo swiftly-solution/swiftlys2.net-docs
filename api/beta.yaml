@@ -5798,10 +5798,13 @@ categories:
     fields:
     - name: Bot
       default: 1
+    - name: HLTV
+      default: 2
     - name: Player
       default: 0
     - name: Unknown
       default: 2
+      deprecated: Please use ClientKind.HLTV instead
   - name: EventDelegates.OnClientConnected
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientConnected
