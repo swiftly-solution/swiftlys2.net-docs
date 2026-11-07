@@ -49381,8 +49381,8 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.Misc.Atomic`1
     parent: SwiftlyS2.Shared.Misc
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L12
-    summary: A thread-safe cell, the counterpart of C++ <code>std::atomic&lt;T&gt;</code>. Every operation is atomic and acts as a full memory barrier.
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L10
+    summary: A thread-safe cell, the counterpart of C++ <code>std::atomic&lt;T&gt;</code>. Every operation is atomic and acts as a full memory barrier, except <xref href="SwiftlyS2.Shared.Misc.Atomic%601.Load" data-throw-if-not-resolved="false"></xref> on 4- and 8-byte types, which is an acquire load.
     declaration: 'public sealed class Atomic<T> where T : struct'
     typeParameters:
     - name: T
@@ -49393,7 +49393,7 @@ categories:
     constructors:
     - name: Atomic(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.#ctor(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L16
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L14
       declaration: public Atomic(T initialValue = default)
       parameters:
       - name: initialValue
@@ -49403,7 +49403,7 @@ categories:
     properties:
     - name: Value
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Value
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L24
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L22
       summary: Gets or sets the current value (<code>load</code> / <code>store</code>).
       declaration: public T Value { get; set; }
       valueType:
@@ -49411,7 +49411,7 @@ categories:
     methods:
     - name: CompareExchange(T, T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.CompareExchange(`0,`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L47
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L45
       summary: Stores <code class="paramref">newValue</code> only if the current value equals <code class="paramref">comparand</code>.
       declaration: public T CompareExchange(T newValue, T comparand)
       parameters:
@@ -49426,7 +49426,7 @@ categories:
         - T
     - name: Exchange(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Exchange(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L42
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L40
       summary: Stores <code class="paramref">newValue</code> and returns the previous value.
       declaration: public T Exchange(T newValue)
       parameters:
@@ -49438,7 +49438,7 @@ categories:
         - T
     - name: Load()
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Load
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L32
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L30
       summary: Reads the current value.
       declaration: public T Load()
       returns:
@@ -49446,7 +49446,7 @@ categories:
         - T
     - name: Store(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Store(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L37
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L35
       summary: Overwrites the current value.
       declaration: public void Store(T newValue)
       parameters:
@@ -49455,7 +49455,7 @@ categories:
         - T
     - name: ToString()
       uid: SwiftlyS2.Shared.Misc.Atomic`1.ToString
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L70
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L58
       summary: Returns a string that represents the current object.
       declaration: public override string ToString()
       returns:
@@ -49465,7 +49465,7 @@ categories:
         description: A string that represents the current object.
     - name: TryCompareExchange(ref T, T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.TryCompareExchange(`0@,`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L53
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L51
       summary: '<code>compare_exchange_strong</code>: stores <code class="paramref">desired</code> only if the current value equals <code class="paramref">expected</code>. On failure <code class="paramref">expected</code> is overwritten with the value that was actually found.'
       declaration: public bool TryCompareExchange(ref T expected, T desired)
       parameters:
@@ -49482,7 +49482,7 @@ categories:
     operators:
     - name: implicit operator T(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.op_Implicit(SwiftlyS2.Shared.Misc.Atomic{`0})~`0
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L68
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L56
       summary: Reads the current value, like the C++ <code>operator T</code>.
       declaration: public static implicit operator T(Atomic<T> atomic)
       parameters:
@@ -49497,11 +49497,430 @@ categories:
       returns:
         type:
         - T
+  - name: AtomicArray`1
+    type: Class
+    uid: SwiftlyS2.Shared.Misc.AtomicArray`1
+    parent: SwiftlyS2.Shared.Misc
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L10
+    summary: A fixed-size array whose elements are each a thread-safe cell, like <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> but stored contiguously. Same rules as <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> apply to every element; indexes out of range throw <xref href="System.IndexOutOfRangeException" data-throw-if-not-resolved="false"></xref>.
+    declaration: 'public sealed class AtomicArray<T> where T : struct'
+    typeParameters:
+    - name: T
+      description: The value type to store.
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    constructors:
+    - name: AtomicArray(int)
+      uid: SwiftlyS2.Shared.Misc.AtomicArray`1.#ctor(System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L17
+      summary: Creates an array of <code class="paramref">length</code> default-initialized cells.
+      declaration: public AtomicArray(int length)
+      parameters:
+      - name: length
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+    properties:
+    - name: Length
+      uid: SwiftlyS2.Shared.Misc.AtomicArray`1.Length
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L23
+      declaration: public int Length { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    methods:
+    - name: CompareExchange(int, T, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArray`1.CompareExchange(System.Int32,`0,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L43
+      summary: Stores <code class="paramref">newValue</code> only if the element equals <code class="paramref">comparand</code>, and returns the previous value.
+      declaration: public T CompareExchange(int index, T newValue, T comparand)
+      parameters:
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: newValue
+        type:
+        - T
+      - name: comparand
+        type:
+        - T
+      returns:
+        type:
+        - T
+    - name: Exchange(int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArray`1.Exchange(System.Int32,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L38
+      summary: Stores <code class="paramref">newValue</code> at <code class="paramref">index</code> and returns the previous value.
+      declaration: public T Exchange(int index, T newValue)
+      parameters:
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: newValue
+        type:
+        - T
+      returns:
+        type:
+        - T
+    - name: Load(int)
+      uid: SwiftlyS2.Shared.Misc.AtomicArray`1.Load(System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L28
+      summary: Reads the element at <code class="paramref">index</code>.
+      declaration: public T Load(int index)
+      parameters:
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - T
+    - name: Store(int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArray`1.Store(System.Int32,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L33
+      summary: Overwrites the element at <code class="paramref">index</code>.
+      declaration: public void Store(int index, T newValue)
+      parameters:
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: newValue
+        type:
+        - T
+    - name: TryCompareExchange(int, ref T, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArray`1.TryCompareExchange(System.Int32,`0@,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L48
+      summary: <code>compare_exchange_strong</code> on one element, see <xref href="SwiftlyS2.Shared.Misc.Atomic%601.TryCompareExchange(%600%40%2c%600)" data-throw-if-not-resolved="false"></xref>.
+      declaration: public bool TryCompareExchange(int index, ref T expected, T desired)
+      parameters:
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: expected
+        type:
+        - T
+      - name: desired
+        type:
+        - T
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: AtomicArrayExtensions
+    type: Class
+    uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions
+    parent: SwiftlyS2.Shared.Misc
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L62
+    summary: Arithmetic and bitwise operations for <xref href="SwiftlyS2.Shared.Misc.AtomicArray%601" data-throw-if-not-resolved="false"></xref> over integer types.
+    declaration: public static class AtomicArrayExtensions
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    methods:
+    - name: Add<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.Add``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L70
+      declaration: 'public static T Add<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: And<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.And``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L72
+      declaration: 'public static T And<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Decrement<T>(AtomicArray<T>, int)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.Decrement``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L77
+      declaration: 'public static T Decrement<T>(this AtomicArray<T> array, int index) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchAdd<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.FetchAdd``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L64
+      declaration: 'public static T FetchAdd<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchAnd<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.FetchAnd``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L67
+      declaration: 'public static T FetchAnd<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchOr<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.FetchOr``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L68
+      declaration: 'public static T FetchOr<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchSub<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.FetchSub``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L65
+      declaration: 'public static T FetchSub<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchXor<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.FetchXor``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L66
+      declaration: 'public static T FetchXor<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Increment<T>(AtomicArray<T>, int)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.Increment``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L76
+      declaration: 'public static T Increment<T>(this AtomicArray<T> array, int index) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Or<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.Or``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L73
+      declaration: 'public static T Or<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Sub<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.Sub``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L71
+      declaration: 'public static T Sub<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Xor<T>(AtomicArray<T>, int, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicArrayExtensions.Xor``1(SwiftlyS2.Shared.Misc.AtomicArray{``0},System.Int32,``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L74
+      declaration: 'public static T Xor<T>(this AtomicArray<T> array, int index, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: array
+        type:
+        - text: AtomicArray
+          url: SwiftlyS2.Shared.Misc.AtomicArray-1.html
+          uid: SwiftlyS2.Shared.Misc.AtomicArray-1
+        - <
+        - T
+        - '>'
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
   - name: AtomicExtensions
     type: Class
     uid: SwiftlyS2.Shared.Misc.AtomicExtensions
     parent: SwiftlyS2.Shared.Misc
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L80
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L66
     summary: Arithmetic and bitwise operations for <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> over integer types.
     declaration: public static class AtomicExtensions
     inherits:
@@ -49510,7 +49929,7 @@ categories:
     methods:
     - name: Add<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Add``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L88
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L74
       declaration: 'public static T Add<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49531,7 +49950,7 @@ categories:
       - name: T
     - name: And<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.And``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L90
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L76
       declaration: 'public static T And<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49552,7 +49971,7 @@ categories:
       - name: T
     - name: Decrement<T>(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Decrement``1(SwiftlyS2.Shared.Misc.Atomic{``0})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L95
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L81
       declaration: 'public static T Decrement<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49570,7 +49989,7 @@ categories:
       - name: T
     - name: FetchAdd<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAdd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L82
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L68
       declaration: 'public static T FetchAdd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49591,7 +50010,7 @@ categories:
       - name: T
     - name: FetchAnd<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAnd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L84
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L71
       declaration: 'public static T FetchAnd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49612,7 +50031,7 @@ categories:
       - name: T
     - name: FetchOr<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchOr``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L85
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L72
       declaration: 'public static T FetchOr<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49633,7 +50052,7 @@ categories:
       - name: T
     - name: FetchSub<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchSub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L83
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L69
       declaration: 'public static T FetchSub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49654,7 +50073,7 @@ categories:
       - name: T
     - name: FetchXor<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchXor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L86
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L70
       declaration: 'public static T FetchXor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49675,7 +50094,7 @@ categories:
       - name: T
     - name: Increment<T>(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Increment``1(SwiftlyS2.Shared.Misc.Atomic{``0})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L94
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L80
       declaration: 'public static T Increment<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49693,7 +50112,7 @@ categories:
       - name: T
     - name: Or<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Or``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L91
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L77
       declaration: 'public static T Or<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49714,7 +50133,7 @@ categories:
       - name: T
     - name: Sub<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Sub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L89
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L75
       declaration: 'public static T Sub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49735,7 +50154,7 @@ categories:
       - name: T
     - name: Xor<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Xor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L92
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L78
       declaration: 'public static T Xor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49754,6 +50173,168 @@ categories:
         - T
       typeParameters:
       - name: T
+  - name: CBitVector
+    type: Class
+    uid: SwiftlyS2.Shared.Misc.CBitVector
+    parent: SwiftlyS2.Shared.Misc
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L9
+    summary: A fixed-size, thread-safe bit vector made of 64-bit words. This is not part of the game data types. Please use CBitVec for the game variant instead.
+    declaration: public sealed class CBitVector
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    constructors:
+    - name: CBitVector(int)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.#ctor(System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L33
+      summary: Creates a vector with every bit cleared.
+      declaration: public CBitVector(int length)
+      parameters:
+      - name: length
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        description: Number of bits, must not be negative.
+    properties:
+    - name: Count
+      uid: SwiftlyS2.Shared.Misc.CBitVector.Count
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L22
+      summary: Number of bits currently set, maintained incrementally so reading it is O(1).
+      declaration: public int Count { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: Length
+      uid: SwiftlyS2.Shared.Misc.CBitVector.Length
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L17
+      summary: Number of addressable bits.
+      declaration: public int Length { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: QWordCount
+      uid: SwiftlyS2.Shared.Misc.CBitVector.QWordCount
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L27
+      summary: Number of 64-bit words backing the vector.
+      declaration: public int QWordCount { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    methods:
+    - name: Clear(int)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.Clear(System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L75
+      summary: Clears <code class="paramref">bit</code>.
+      declaration: public bool Clear(int bit)
+      parameters:
+      - name: bit
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the bit was set before.
+    - name: ClearAll()
+      uid: SwiftlyS2.Shared.Misc.CBitVector.ClearAll
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L128
+      summary: Clears every bit.
+      declaration: public void ClearAll()
+    - name: CopyFrom(CBitVector)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.CopyFrom(SwiftlyS2.Shared.Misc.CBitVector)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L151
+      summary: Copies every word of <code class="paramref">source</code> into this vector.
+      declaration: public void CopyFrom(CBitVector source)
+      parameters:
+      - name: source
+        type:
+        - text: CBitVector
+          url: SwiftlyS2.Shared.Misc.CBitVector.html
+          uid: SwiftlyS2.Shared.Misc.CBitVector
+    - name: Filter(CBitVector)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.Filter(SwiftlyS2.Shared.Misc.CBitVector)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L164
+      summary: Clears every bit of this vector that is set in <code class="paramref">filter</code> (<code>this &amp;= ~filter</code>).
+      declaration: public void Filter(CBitVector filter)
+      parameters:
+      - name: filter
+        type:
+        - text: CBitVector
+          url: SwiftlyS2.Shared.Misc.CBitVector.html
+          uid: SwiftlyS2.Shared.Misc.CBitVector
+    - name: GetQWord(int)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.GetQWord(System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L95
+      summary: Reads a whole 64-bit word, or 0 if <code class="paramref">qword</code> is out of range.
+      declaration: public ulong GetQWord(int qword)
+      parameters:
+      - name: qword
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+    - name: GetSetBits()
+      uid: SwiftlyS2.Shared.Misc.CBitVector.GetSetBits
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L48
+      summary: Yields the index of every set bit in ascending order.
+      declaration: public SetBitEnumerable GetSetBits()
+      returns:
+        type:
+        - text: SetBitEnumerable
+          url: SwiftlyS2.Shared.Misc.SetBitEnumerable.html
+          uid: SwiftlyS2.Shared.Misc.SetBitEnumerable
+    - name: IsBitSet(int)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.IsBitSet(System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L43
+      summary: Returns whether <code class="paramref">bit</code> is set.
+      declaration: public bool IsBitSet(int bit)
+      parameters:
+      - name: bit
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Set(int)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.Set(System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L54
+      summary: Sets <code class="paramref">bit</code>.
+      declaration: public bool Set(int bit)
+      parameters:
+      - name: bit
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: Whether the bit was already set.
+    - name: SetAll()
+      uid: SwiftlyS2.Shared.Misc.CBitVector.SetAll
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L139
+      summary: Sets every bit in <xref href="SwiftlyS2.Shared.Misc.CBitVector.Length" data-throw-if-not-resolved="false"></xref>. Padding bits of the last word stay 0.
+      declaration: public void SetAll()
+    - name: SetDWord(int, uint)
+      uid: SwiftlyS2.Shared.Misc.CBitVector.SetDWord(System.Int32,System.UInt32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/CBitVector.cs#L100
+      summary: Overwrites one 32-bit half of a 64-bit word (dword 0 is the low half of qword 0) and leaves the other half untouched.
+      declaration: public void SetDWord(int dword, uint value)
+      parameters:
+      - name: dword
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      - name: value
+        type:
+        - text: uint
+          url: https://learn.microsoft.com/dotnet/api/system.uint32
   - name: GamePhase
     type: Enum
     uid: SwiftlyS2.Shared.Misc.GamePhase
@@ -49982,6 +50563,86 @@ categories:
         type:
         - text: uint
           url: https://learn.microsoft.com/dotnet/api/system.uint32
+  - name: SetBitEnumerable
+    type: Struct
+    uid: SwiftlyS2.Shared.Misc.SetBitEnumerable
+    parent: SwiftlyS2.Shared.Misc
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/SetBitEnumerable.cs#L6
+    summary: Allocation-free sequence of set bit indexes returned by <xref href="SwiftlyS2.Shared.Misc.CBitVector.GetSetBits" data-throw-if-not-resolved="false"></xref>.
+    declaration: 'public readonly struct SetBitEnumerable : IEnumerable<int>, IEnumerable'
+    implements:
+    - text: IEnumerable<int>
+      url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+    - text: IEnumerable
+      url: https://learn.microsoft.com/dotnet/api/system.collections.ienumerable
+    methods:
+    - name: GetEnumerator()
+      uid: SwiftlyS2.Shared.Misc.SetBitEnumerable.GetEnumerator
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/SetBitEnumerable.cs#L12
+      declaration: public SetBitEnumerator GetEnumerator()
+      returns:
+        type:
+        - text: SetBitEnumerator
+          url: SwiftlyS2.Shared.Misc.SetBitEnumerator.html
+          uid: SwiftlyS2.Shared.Misc.SetBitEnumerator
+  - name: SetBitEnumerator
+    type: Struct
+    uid: SwiftlyS2.Shared.Misc.SetBitEnumerator
+    parent: SwiftlyS2.Shared.Misc
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/SetBitEnumerator.cs#L8
+    summary: Struct enumerator over the set bits of a <xref href="SwiftlyS2.Shared.Misc.CBitVector" data-throw-if-not-resolved="false"></xref>, in ascending order.
+    declaration: 'public struct SetBitEnumerator : IEnumerator<int>, IEnumerator, IDisposable'
+    implements:
+    - text: IEnumerator<int>
+      url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1
+    - text: IEnumerator
+      url: https://learn.microsoft.com/dotnet/api/system.collections.ienumerator
+    - text: IDisposable
+      url: https://learn.microsoft.com/dotnet/api/system.idisposable
+    properties:
+    - name: Current
+      uid: SwiftlyS2.Shared.Misc.SetBitEnumerator.Current
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/SetBitEnumerator.cs#L20
+      summary: Gets the element in the collection at the current position of the enumerator.
+      declaration: public readonly int Current { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    methods:
+    - name: Dispose()
+      uid: SwiftlyS2.Shared.Misc.SetBitEnumerator.Dispose
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/SetBitEnumerator.cs#L72
+      summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+      declaration: public void Dispose()
+    - name: MoveNext()
+      uid: SwiftlyS2.Shared.Misc.SetBitEnumerator.MoveNext
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/SetBitEnumerator.cs#L24
+      summary: Advances the enumerator to the next element of the collection.
+      declaration: public bool MoveNext()
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the enumerator was successfully advanced to the next element; <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> if the enumerator has passed the end of the collection.
+      exceptions:
+      - type:
+        - text: InvalidOperationException
+          url: https://learn.microsoft.com/dotnet/api/system.invalidoperationexception
+        description: The collection was modified after the enumerator was created.
+    - name: Reset()
+      uid: SwiftlyS2.Shared.Misc.SetBitEnumerator.Reset
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/SetBitEnumerator.cs#L70
+      summary: Sets the enumerator to its initial position, which is before the first element in the collection.
+      declaration: public void Reset()
+      exceptions:
+      - type:
+        - text: InvalidOperationException
+          url: https://learn.microsoft.com/dotnet/api/system.invalidoperationexception
+        description: The collection was modified after the enumerator was created.
+      - type:
+        - text: NotSupportedException
+          url: https://learn.microsoft.com/dotnet/api/system.notsupportedexception
+        description: The enumerator does not support being reset.
   - name: ThreadUnsafeAttribute
     type: Class
     uid: SwiftlyS2.Shared.Misc.ThreadUnsafeAttribute
@@ -68280,7 +68941,7 @@ categories:
     methods:
     - name: AddTimer(Func<ITimerContext, TimerStep>)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.AddTimer(System.Func{SwiftlyS2.Shared.Scheduler.ITimerContext,SwiftlyS2.Shared.Scheduler.TimerStep})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L171
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L188
       summary: Add an advanced timer to the scheduler.
       declaration: CancellationTokenSource AddTimer(Func<ITimerContext, TimerStep> task)
       parameters:
@@ -68306,7 +68967,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: Delay(int, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.Delay(System.Int32,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L112
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L129
       summary: Add a delayed task to the scheduler.
       declaration: CancellationTokenSource Delay(int delayTick, Action task)
       parameters:
@@ -68327,7 +68988,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: DelayAndRepeat(int, int, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.DelayAndRepeat(System.Int32,System.Int32,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L130
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L147
       summary: Add a delayed and repeated task to the scheduler.
       declaration: CancellationTokenSource DelayAndRepeat(int delayTick, int periodTick, Action task)
       parameters:
@@ -68353,7 +69014,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: DelayAndRepeatBySeconds(float, float, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.DelayAndRepeatBySeconds(System.Single,System.Single,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L163
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L180
       summary: Add a delayed and repeated task to the scheduler. The timing is based on game tick, which means it becomes inaccurate when intervals approachs 1 tick (approximately 15ms).
       declaration: CancellationTokenSource DelayAndRepeatBySeconds(float delaySeconds, float periodSeconds, Action task)
       parameters:
@@ -68379,7 +69040,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: DelayBySeconds(float, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.DelayBySeconds(System.Single,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L141
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L158
       summary: Add a delayed task to the scheduler. The timing is based on game tick, which means it becomes inaccurate when intervals approachs 1 tick (approximately 15ms).
       declaration: CancellationTokenSource DelayBySeconds(float delaySeconds, Action task)
       parameters:
@@ -68707,9 +69368,62 @@ categories:
         - '>'
       typeParameters:
       - name: T
+    - name: QueueOrNow(Action, bool)
+      uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.QueueOrNow(System.Action,System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L112
+      summary: Executes the task immediately if called from the main thread, otherwise queues it for the next tick (or next world update).
+      declaration: Task QueueOrNow(Action task, bool onWorldUpdate = false)
+      parameters:
+      - name: task
+        type:
+        - text: Action
+          url: https://learn.microsoft.com/dotnet/api/system.action
+        description: The task to execute.
+      - name: onWorldUpdate
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: When queued, run on the next world update instead of the next tick.
+        optional: true
+      returns:
+        type:
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+        description: A task that is already completed when ran immediately, otherwise completes after the queued execution.
+    - name: QueueOrNow<T>(Func<T>, bool)
+      uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.QueueOrNow``1(System.Func{``0},System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L121
+      summary: Executes the task immediately if called from the main thread, otherwise queues it for the next tick (or next world update).
+      declaration: Task<T> QueueOrNow<T>(Func<T> task, bool onWorldUpdate = false)
+      parameters:
+      - name: task
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-1
+        - <
+        - T
+        - '>'
+        description: The task to execute.
+      - name: onWorldUpdate
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        description: When queued, run on the next world update instead of the next tick.
+        optional: true
+      returns:
+        type:
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+        - <
+        - T
+        - '>'
+        description: A task holding the result, already completed when ran immediately.
+      typeParameters:
+      - name: T
+        description: The result type.
     - name: Repeat(int, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.Repeat(System.Int32,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L121
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L138
       summary: Add a repeated task to the scheduler. This will be executed once immediately, and then every periodTick ticks.
       declaration: CancellationTokenSource Repeat(int periodTick, Action task)
       parameters:
@@ -68730,7 +69444,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: RepeatBySeconds(float, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.RepeatBySeconds(System.Single,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L152
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L169
       summary: Add a repeated task to the scheduler. This will be executed once immediately, and then every periodSeconds seconds. The timing is based on game tick, which means it becomes inaccurate when intervals approachs 1 tick (approximately 15ms).
       declaration: CancellationTokenSource RepeatBySeconds(float periodSeconds, Action task)
       parameters:
@@ -68751,7 +69465,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: StopOnMapChange(CancellationTokenSource)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.StopOnMapChange(System.Threading.CancellationTokenSource)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L177
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L194
       summary: Stop a timer when the map changes.
       declaration: void StopOnMapChange(CancellationTokenSource cts)
       parameters:
