@@ -68941,7 +68941,7 @@ categories:
     methods:
     - name: AddTimer(Func<ITimerContext, TimerStep>)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.AddTimer(System.Func{SwiftlyS2.Shared.Scheduler.ITimerContext,SwiftlyS2.Shared.Scheduler.TimerStep})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L188
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L204
       summary: Add an advanced timer to the scheduler.
       declaration: CancellationTokenSource AddTimer(Func<ITimerContext, TimerStep> task)
       parameters:
@@ -68967,7 +68967,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: Delay(int, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.Delay(System.Int32,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L129
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L145
       summary: Add a delayed task to the scheduler.
       declaration: CancellationTokenSource Delay(int delayTick, Action task)
       parameters:
@@ -68988,7 +68988,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: DelayAndRepeat(int, int, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.DelayAndRepeat(System.Int32,System.Int32,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L147
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L163
       summary: Add a delayed and repeated task to the scheduler.
       declaration: CancellationTokenSource DelayAndRepeat(int delayTick, int periodTick, Action task)
       parameters:
@@ -69014,7 +69014,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: DelayAndRepeatBySeconds(float, float, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.DelayAndRepeatBySeconds(System.Single,System.Single,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L180
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L196
       summary: Add a delayed and repeated task to the scheduler. The timing is based on game tick, which means it becomes inaccurate when intervals approachs 1 tick (approximately 15ms).
       declaration: CancellationTokenSource DelayAndRepeatBySeconds(float delaySeconds, float periodSeconds, Action task)
       parameters:
@@ -69040,7 +69040,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: DelayBySeconds(float, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.DelayBySeconds(System.Single,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L158
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L174
       summary: Add a delayed task to the scheduler. The timing is based on game tick, which means it becomes inaccurate when intervals approachs 1 tick (approximately 15ms).
       declaration: CancellationTokenSource DelayBySeconds(float delaySeconds, Action task)
       parameters:
@@ -69421,9 +69421,81 @@ categories:
       typeParameters:
       - name: T
         description: The result type.
+    - name: QueueOrNow(Func<Task?>, bool)
+      uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.QueueOrNow(System.Func{System.Threading.Tasks.Task},System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L128
+      summary: Never use this! you should never calls async callback in QueueOrNow, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        Task QueueOrNow(Func<Task?> task, bool onWorldUpdate = false)
+      parameters:
+      - name: task
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-1
+        - <
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+        - '?'
+        - '>'
+      - name: onWorldUpdate
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        optional: true
+      returns:
+        type:
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+      exceptions:
+      - type:
+        - text: InvalidOperationException
+          url: https://learn.microsoft.com/dotnet/api/system.invalidoperationexception
+        description: Thrown when this method is called.
+    - name: QueueOrNow<T>(Func<Task<T?>>, bool)
+      uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.QueueOrNow``1(System.Func{System.Threading.Tasks.Task{``0}},System.Boolean)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L136
+      summary: Never use this! you should never calls async callback in QueueOrNow, because async callback have chance to run in async context, which breaks the the synchronization safety this function gives.
+      declaration: >-
+        [Obsolete("Please remove the async modifier on your callback for safety reason. See comments for more details.")]
+
+        Task<T> QueueOrNow<T>(Func<Task<T?>> task, bool onWorldUpdate = false)
+      parameters:
+      - name: task
+        type:
+        - text: Func
+          url: https://learn.microsoft.com/dotnet/api/system.func-1
+        - <
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+        - <
+        - T
+        - '?'
+        - '>'
+        - '>'
+      - name: onWorldUpdate
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+        optional: true
+      returns:
+        type:
+        - text: Task
+          url: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+        - <
+        - T
+        - '>'
+      typeParameters:
+      - name: T
+      exceptions:
+      - type:
+        - text: InvalidOperationException
+          url: https://learn.microsoft.com/dotnet/api/system.invalidoperationexception
+        description: Thrown when this method is called.
     - name: Repeat(int, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.Repeat(System.Int32,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L138
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L154
       summary: Add a repeated task to the scheduler. This will be executed once immediately, and then every periodTick ticks.
       declaration: CancellationTokenSource Repeat(int periodTick, Action task)
       parameters:
@@ -69444,7 +69516,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: RepeatBySeconds(float, Action)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.RepeatBySeconds(System.Single,System.Action)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L169
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L185
       summary: Add a repeated task to the scheduler. This will be executed once immediately, and then every periodSeconds seconds. The timing is based on game tick, which means it becomes inaccurate when intervals approachs 1 tick (approximately 15ms).
       declaration: CancellationTokenSource RepeatBySeconds(float periodSeconds, Action task)
       parameters:
@@ -69465,7 +69537,7 @@ categories:
         description: A CancellationTokenSource that can be used to cancel the timer.
     - name: StopOnMapChange(CancellationTokenSource)
       uid: SwiftlyS2.Shared.Scheduler.ISchedulerService.StopOnMapChange(System.Threading.CancellationTokenSource)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L194
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Scheduler/ISchedulerService.cs#L210
       summary: Stop a timer when the map changes.
       declaration: void StopOnMapChange(CancellationTokenSource cts)
       parameters:
