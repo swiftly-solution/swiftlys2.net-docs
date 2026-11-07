@@ -17,7 +17,8 @@ SwiftlyS2 introduces several key improvements over CounterStrikeSharp:
 
 - **Modern .NET 10** - Takes advantage of the latest .NET features and performance improvements
 - **Improved API Design** - More intuitive and consistent API structure, split into discrete `Core.*` services
-- **Built-in Menu System** - Buttons, sliders and inputs out of the box, no extra dependency needed
+- **Built-in Menu System** - Component-based menus (buttons, toggles, sliders, inputs) via `Core.Menu`, no extra dependency needed
+- **Built-in Game Hooks** - Typed hooks for common native functions (damage, movement, item pickup, ...) via `Core.GameHooks`
 - **Database Abstraction** - Global connection configuration shared across plugins
 - **Per-Plugin GameData** - Each plugin manages its own signatures/offsets instead of relying on a shared gamedata file
 - **Cross-Plugin Interfaces** - A capability-style system for exposing and consuming APIs between plugins
@@ -293,7 +294,11 @@ Core.PlayerManager.SendCenter("center message");
 Core.PlayerManager.SendAlert("alert message");
 Core.PlayerManager.SendConsole("console message");
 Core.PlayerManager.SendCenterHTML("<b>HTML</b>", duration: 5000); // duration in milliseconds
+Core.PlayerManager.SendNotify("notify message");
+Core.PlayerManager.SendChatEOT("chat message, end-of-turn");
 ```
+
+Each of these also has an `*Async` variant (for example `SendChatAsync`) that is safe to call from other threads, and a generic `SendMessage(MessageType, ...)` overload.
 
 ## Chat Colors
 
@@ -344,6 +349,14 @@ See the [Chat & CenterHTML Styling](/docs/guides/chat-and-html-styling) guide fo
 </Tabs>
 
 Both `Delay` and `DelayAndRepeatBySeconds` return a `CancellationTokenSource` you can use to cancel the scheduled task early.
+
+CounterStrikeSharp's `TimerFlags.STOP_ON_MAPCHANGE` has no flag equivalent. Instead, pass the token to `StopOnMapChange`. Plain repeating timers (without an initial delay) are also available:
+
+```csharp
+var cts = Core.Scheduler.RepeatBySeconds(1, () => { /* code */ }); // every second
+Core.Scheduler.Repeat(64, () => { /* code */ });                   // every 64 ticks
+Core.Scheduler.StopOnMapChange(cts);                               // cancel automatically on map change
+```
 
 ## Commands
 
@@ -423,7 +436,13 @@ CounterStrikeSharp ships a full admin framework (`admins.json`, `admin_groups.js
 
 ## Menus
 
-SwiftlyS2 has a built-in full menu system with support for buttons, inputs, sliders, and more.
+SwiftlyS2 has a built-in, component-based menu system, available through `Core.Menu`. Menus are made of components (buttons, toggles, sliders, inputs, submenus, ...) and drawn by a renderer, so the server owner can switch between centre-screen HTML and chat output without any plugin change.
+
+<Callout type="warning">
+    `Core.MenusAPI` (the classic menu builder) is obsolete and will be removed
+    in a future version. Use `Core.Menu` for all new code. See the [Menu
+    System](/docs/development/menu-system) page for the full reference.
+</Callout>
 
 ### Creating a Menu
 
@@ -437,32 +456,34 @@ SwiftlyS2 has a built-in full menu system with support for buttons, inputs, slid
   </Tab>
   <Tab label="SwiftlyS2">
     ```csharp
-    var builder = Core.MenusAPI
-        .CreateBuilder()
-        .Design.SetMenuTitle("Title")
-        .Design.SetMenuTitleVisible(true)
+    using SwiftlyS2.Shared.Menu;
+    using SwiftlyS2.Shared.Menu.Components;
+
+    var menu = Core.Menu.CreateMenu("myplugin.main") // id, also the menu's configuration scope
+        .WithTitle("Title")
         // All options below are optional
-        .Design.SetMenuFooterVisible(true)
-        .Design.SetGlobalScrollStyle(MenuOptionScrollStyle.LinearScroll) // doesn't wrap when reaching the end
-        .SetAutoCloseDelay(10) // auto close after 10 seconds
-        .SetSelectButton(KeyBind.Space) // button to select option
-        .SetPlayerFrozen(false); // don't freeze player while menu is open
+        .WithItemsPerPage(5)
+        .WithAutoClose(TimeSpan.FromSeconds(10)) // auto close after 10 seconds
+        .Add(new ButtonComponent("Option 1", ctx =>
+        {
+            ctx.Player.SendChat("You clicked Option 1");
+            return ValueTask.CompletedTask;
+        }))
+        .Add(new ToggleComponent("Show damage", defaultValue: true, onChanged: change =>
+        {
+            change.Player.SendChat($"Show damage: {change.NewValue}");
+        }))
+        .Build();
 
-    var button = new ButtonMenuOption("Option 1");
-    button.Click += (sender, args) =>
-    {
-        var clickedBy = args.Player;
-        // handle click
-        return ValueTask.CompletedTask;
-    };
-    builder.AddOption(button);
-
-    var menu = builder.Build();
-    Core.MenusAPI.OpenMenuForPlayer(player, menu);
+    menu.Open(player);
     ```
 
   </Tab>
 </Tabs>
+
+Menu ids are namespaced by convention (`"myplugin.shop"`), because the id is also what server owners use to configure key binds, renderer and input method per menu. A player can only have one menu open at a time, so opening a menu replaces the previous one.
+
+Available components include `TextComponent`, `ButtonComponent`, `ToggleComponent`, `SliderComponent`, `ChoiceComponent`, `SelectorComponent<T>`, `InputComponent`, `SubmenuComponent`, `ProgressBarComponent`, `DividerComponent` and `SpacerComponent`.
 
 ### Closing Menus
 
@@ -475,14 +496,20 @@ SwiftlyS2 has a built-in full menu system with support for buttons, inputs, slid
   </Tab>
   <Tab label="SwiftlyS2">
     ```csharp
-    Core.MenusAPI.CloseMenuForPlayer(player, menu);
+    menu.Close(player);
 
-    // or, without holding a reference to the built menu:
-    Core.MenusAPI.CloseActiveMenu(player);
+    // or, without holding a reference to the menu:
+    Core.Menu.CloseFor(player);   // only closes the player's menu if it belongs to your plugin
+    Core.Menu.CloseAll();         // closes every open menu that belongs to your plugin
     ```
 
   </Tab>
 </Tabs>
+
+<Callout type="info">
+    Menus opened by your plugin are closed automatically when it unloads, so you
+    don't need to track them yourself in `Unload()`.
+</Callout>
 
 ## Cross-Plugin Capabilities
 
@@ -1031,6 +1058,14 @@ SwiftlyS2 provides a powerful system for working with game signatures, offsets, 
 <Callout type="info">
     This is an advanced topic. Most plugins won't need to use function hooking
     directly.
+</Callout>
+
+<Callout type="success">
+    Before writing your own hook, check `Core.GameHooks`. It already exposes
+    typed hooks for many functions CounterStrikeSharp plugins hook by
+    hand: `Entities` (`TakeDamage`, `Touch`, `AcceptInput`, `FireOutput`, ...),
+    `Items` (`CanAcquire`, `GetItemInLoadout`), `Weapons` (`CanUse`, `Drop`),
+    `Pawn`, `Controller` (`ProcessUsercmds`) and a full set of `Movement` hooks.
 </Callout>
 
 ### Delegate Definition
