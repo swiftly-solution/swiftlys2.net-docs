@@ -5798,10 +5798,13 @@ categories:
     fields:
     - name: Bot
       default: 1
+    - name: HLTV
+      default: 2
     - name: Player
       default: 0
     - name: Unknown
       default: 2
+      deprecated: Please use ClientKind.HLTV instead
   - name: EventDelegates.OnClientConnected
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientConnected
@@ -5837,6 +5840,13 @@ categories:
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L44
     summary: Called when a client is fully put in server.
     declaration: public delegate void EventDelegates.OnClientPutInServer(IOnClientPutInServerEvent @event)
+  - name: EventDelegates.OnClientSettingsChanged
+    type: Delegate
+    uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSettingsChanged
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L162
+    summary: Called when a client changed one or several replicated convars (name etc).
+    declaration: public delegate void EventDelegates.OnClientSettingsChanged(IOnClientSettingsChangedEvent @event)
   - name: EventDelegates.OnClientSteamAuthorize
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSteamAuthorize
@@ -5862,7 +5872,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnCommandExecuteHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L167
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L172
     summary: Called when a server command (ConCommand) is executed.
     declaration: public delegate void EventDelegates.OnCommandExecuteHook(IOnCommandExecuteHookEvent @event)
   - name: EventDelegates.OnConCommandCreated
@@ -5890,14 +5900,14 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConsoleOutput
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L162
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L167
     summary: Called when a console output is received on the dedicated console dispatch thread.
     declaration: public delegate void EventDelegates.OnConsoleOutput(IOnConsoleOutputEvent @event)
   - name: EventDelegates.OnCustomHudClicked
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnCustomHudClicked
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L201
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L206
     summary: Called when a custom hud element is clicked.
     declaration: public delegate void EventDelegates.OnCustomHudClicked(IOnCustomHudClickedEvent @event)
   - name: EventDelegates.OnEntityCreated
@@ -5928,7 +5938,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityFireOutputHookEvent
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L190
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L195
     summary: Called when an entity fires output.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.FireOutput instead.")]
@@ -5938,7 +5948,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityIdentityAcceptInputHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L184
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L189
     summary: Called when an entity identity accept input hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.AcceptInput instead.")]
@@ -6016,7 +6026,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMovementServicesRunCommandHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L172
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L177
     summary: Called when the movement services run command hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Movement.RunCommand instead.")]
@@ -6026,7 +6036,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnPlayerPawnPostThink
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L178
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L183
     summary: Called when the player pawn post think hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Pawn.PostThink instead.")]
@@ -6043,7 +6053,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnStartupServer
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L196
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L201
     summary: Called when the server is started.
     declaration: public delegate void EventDelegates.OnStartupServer()
   - name: EventDelegates.OnSteamAPIActivated
@@ -6552,6 +6562,22 @@ categories:
       uid: SwiftlyS2.Shared.Events.IOnClientPutInServerEvent.PlayerId
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientPutInServerEvent.cs#L11
       summary: The player ID of the client that was put in the server.
+      declaration: int PlayerId { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: IOnClientSettingsChangedEvent
+    type: Interface
+    uid: SwiftlyS2.Shared.Events.IOnClientSettingsChangedEvent
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientSettingsChangedEvent.cs#L6
+    summary: Called when a client changed one or several replicated convars (name etc).
+    declaration: public interface IOnClientSettingsChangedEvent
+    properties:
+    - name: PlayerId
+      uid: SwiftlyS2.Shared.Events.IOnClientSettingsChangedEvent.PlayerId
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientSettingsChangedEvent.cs#L11
+      summary: The player ID of the client whose settings changed.
       declaration: int PlayerId { get; }
       valueType:
       - text: int
@@ -49351,6 +49377,383 @@ categories:
       default: 5
     - name: ReachedGrenadeTypeLimit
       default: 4
+  - name: Atomic`1
+    type: Class
+    uid: SwiftlyS2.Shared.Misc.Atomic`1
+    parent: SwiftlyS2.Shared.Misc
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L12
+    summary: A thread-safe cell, the counterpart of C++ <code>std::atomic&lt;T&gt;</code>. Every operation is atomic and acts as a full memory barrier.
+    declaration: 'public sealed class Atomic<T> where T : struct'
+    typeParameters:
+    - name: T
+      description: The value type to store.
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    constructors:
+    - name: Atomic(T)
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.#ctor(`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L16
+      declaration: public Atomic(T initialValue = default)
+      parameters:
+      - name: initialValue
+        type:
+        - T
+        optional: true
+    properties:
+    - name: Value
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.Value
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L24
+      summary: Gets or sets the current value (<code>load</code> / <code>store</code>).
+      declaration: public T Value { get; set; }
+      valueType:
+      - T
+    methods:
+    - name: CompareExchange(T, T)
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.CompareExchange(`0,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L47
+      summary: Stores <code class="paramref">newValue</code> only if the current value equals <code class="paramref">comparand</code>.
+      declaration: public T CompareExchange(T newValue, T comparand)
+      parameters:
+      - name: newValue
+        type:
+        - T
+      - name: comparand
+        type:
+        - T
+      returns:
+        type:
+        - T
+    - name: Exchange(T)
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.Exchange(`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L42
+      summary: Stores <code class="paramref">newValue</code> and returns the previous value.
+      declaration: public T Exchange(T newValue)
+      parameters:
+      - name: newValue
+        type:
+        - T
+      returns:
+        type:
+        - T
+    - name: Load()
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.Load
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L32
+      summary: Reads the current value.
+      declaration: public T Load()
+      returns:
+        type:
+        - T
+    - name: Store(T)
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.Store(`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L37
+      summary: Overwrites the current value.
+      declaration: public void Store(T newValue)
+      parameters:
+      - name: newValue
+        type:
+        - T
+    - name: ToString()
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.ToString
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L70
+      summary: Returns a string that represents the current object.
+      declaration: public override string ToString()
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: A string that represents the current object.
+    - name: TryCompareExchange(ref T, T)
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.TryCompareExchange(`0@,`0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L53
+      summary: '<code>compare_exchange_strong</code>: stores <code class="paramref">desired</code> only if the current value equals <code class="paramref">expected</code>. On failure <code class="paramref">expected</code> is overwritten with the value that was actually found.'
+      declaration: public bool TryCompareExchange(ref T expected, T desired)
+      parameters:
+      - name: expected
+        type:
+        - T
+      - name: desired
+        type:
+        - T
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    operators:
+    - name: implicit operator T(Atomic<T>)
+      uid: SwiftlyS2.Shared.Misc.Atomic`1.op_Implicit(SwiftlyS2.Shared.Misc.Atomic{`0})~`0
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L68
+      summary: Reads the current value, like the C++ <code>operator T</code>.
+      declaration: public static implicit operator T(Atomic<T> atomic)
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      returns:
+        type:
+        - T
+  - name: AtomicExtensions
+    type: Class
+    uid: SwiftlyS2.Shared.Misc.AtomicExtensions
+    parent: SwiftlyS2.Shared.Misc
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L80
+    summary: Arithmetic and bitwise operations for <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> over integer types.
+    declaration: public static class AtomicExtensions
+    inherits:
+    - text: object
+      url: https://learn.microsoft.com/dotnet/api/system.object
+    methods:
+    - name: Add<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Add``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L88
+      declaration: 'public static T Add<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: And<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.And``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L90
+      declaration: 'public static T And<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Decrement<T>(Atomic<T>)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Decrement``1(SwiftlyS2.Shared.Misc.Atomic{``0})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L95
+      declaration: 'public static T Decrement<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchAdd<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAdd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L82
+      declaration: 'public static T FetchAdd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchAnd<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAnd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L84
+      declaration: 'public static T FetchAnd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchOr<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchOr``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L85
+      declaration: 'public static T FetchOr<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchSub<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchSub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L83
+      declaration: 'public static T FetchSub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: FetchXor<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchXor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L86
+      declaration: 'public static T FetchXor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Increment<T>(Atomic<T>)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Increment``1(SwiftlyS2.Shared.Misc.Atomic{``0})
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L94
+      declaration: 'public static T Increment<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Or<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Or``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L91
+      declaration: 'public static T Or<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Sub<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Sub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L89
+      declaration: 'public static T Sub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
+    - name: Xor<T>(Atomic<T>, T)
+      uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Xor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L92
+      declaration: 'public static T Xor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
+      parameters:
+      - name: atomic
+        type:
+        - text: Atomic
+          url: SwiftlyS2.Shared.Misc.Atomic-1.html
+          uid: SwiftlyS2.Shared.Misc.Atomic-1
+        - <
+        - T
+        - '>'
+      - name: operand
+        type:
+        - T
+      returns:
+        type:
+        - T
+      typeParameters:
+      - name: T
   - name: GamePhase
     type: Enum
     uid: SwiftlyS2.Shared.Misc.GamePhase
