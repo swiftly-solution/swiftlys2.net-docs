@@ -202,14 +202,20 @@ Core.GameEvent.Unhook(postHookId);
 ### Getting Player from Event
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp var player = @event.Userid; var attacker = @event.Attacker;
-        ```
-    </Tab>
-    <Tab label="SwiftlyS2">
-        ```csharp var player = @event.Accessor.GetPlayer("userid"); var attacker
-        = @event.Accessor.GetPlayer("attacker"); ```
-    </Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    var player = @event.Userid;
+    var attacker = @event.Attacker;
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    var player = @event.Accessor.GetPlayer("userid");
+    var attacker = @event.Accessor.GetPlayer("attacker");
+    ```
+
+  </Tab>
 </Tabs>
 
 ## Player Operations
@@ -236,15 +242,22 @@ Core.GameEvent.Unhook(postHookId);
 ### Player Properties
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp var isValid = player.IsValid; var name = player.PlayerName;
-        var steamId = player.SteamID; ```
-    </Tab>
-    <Tab label="SwiftlyS2">
-        ```csharp var isValid = player.IsValid; var name = player.Name; //
-        convenience wrapper around player.Controller?.PlayerName var steamId =
-        player.SteamID; ```
-    </Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    var isValid = player.IsValid;
+    var name = player.PlayerName;
+    var steamId = player.SteamID;
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    var isValid = player.IsValid;
+    var name = player.Name; // convenience wrapper around player.Controller?.PlayerName
+    var steamId = player.SteamID;
+    ```
+
+  </Tab>
 </Tabs>
 
 ### Sending Messages
@@ -289,10 +302,18 @@ Core.PlayerManager.SendCenterHTML("<b>HTML</b>", duration: 5000); // duration in
 SwiftlyS2 uses square brackets instead of curly braces for colors:
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp $"{ChatColors.Red}Red text {ChatColors.Green}Green text" ```
-    </Tab>
-    <Tab label="SwiftlyS2">```csharp "[red]Red text [green]Green text" ```</Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    $"{ChatColors.Red}Red text {ChatColors.Green}Green text"
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    "[red]Red text [green]Green text"
+    ```
+
+  </Tab>
 </Tabs>
 
 See the [Chat & CenterHTML Styling](/docs/guides/chat-and-html-styling) guide for the full color list.
@@ -448,14 +469,21 @@ SwiftlyS2 has a built-in full menu system with support for buttons, inputs, slid
 ### Closing Menus
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp MenuManager.CloseActiveMenu(player); ```
-    </Tab>
-    <Tab label="SwiftlyS2">
-        ```csharp Core.MenusAPI.CloseMenuForPlayer(player, menu); // or, without
-        holding a reference to the built menu:
-        Core.MenusAPI.CloseActiveMenu(player); ```
-    </Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    MenuManager.CloseActiveMenu(player);
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    Core.MenusAPI.CloseMenuForPlayer(player, menu);
+
+    // or, without holding a reference to the built menu:
+    Core.MenusAPI.CloseActiveMenu(player);
+    ```
+
+  </Tab>
 </Tabs>
 
 ## Cross-Plugin Capabilities
@@ -528,15 +556,21 @@ In CSS you need to call `SetStateChanged` after modifying networked properties. 
 </Callout>
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp player.PlayerPawn.Value.Health = 100;
-        Utilities.SetStateChanged(player.PlayerPawn.Value, "CBaseEntity",
-        "m_iHealth"); ```
-    </Tab>
-    <Tab label="SwiftlyS2">
-        ```csharp var pawn = player.PlayerPawn; pawn.Health = 100;
-        pawn.HealthUpdated(); ```
-    </Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    player.PlayerPawn.Value.Health = 100;
+    Utilities.SetStateChanged(player.PlayerPawn.Value, "CBaseEntity", "m_iHealth");
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    var pawn = player.PlayerPawn;
+    pawn.Health = 100;
+    pawn.HealthUpdated();
+    ```
+
+  </Tab>
 </Tabs>
 
 ## Configuration
@@ -646,8 +680,12 @@ await connection.ExecuteAsync("SELECT * FROM players WHERE steamid = @SteamId", 
 ### File Location
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">``` lang/en.json ```</Tab>
-    <Tab label="SwiftlyS2">``` resources/translations/en.jsonc ```</Tab>
+  <Tab label="CounterStrikeSharp">
+    `lang/en.json`
+  </Tab>
+  <Tab label="SwiftlyS2">
+    `resources/translations/en.jsonc`
+  </Tab>
 </Tabs>
 
 ### Usage
@@ -683,13 +721,18 @@ await connection.ExecuteAsync("SELECT * FROM players WHERE steamid = @SteamId", 
 ## Logging
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp Logger.LogInformation("Loaded {Plugin}", ModuleName); ```
-    </Tab>
-    <Tab label="SwiftlyS2">
-        ```csharp Core.Logger.LogInformation("Loaded {Plugin}", "my.plugin");
-        ```
-    </Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    Logger.LogInformation("Loaded {Plugin}", ModuleName);
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    Core.Logger.LogInformation("Loaded {Plugin}", "my.plugin");
+    ```
+
+  </Tab>
 </Tabs>
 
 `Core.Logger` is a standard `Microsoft.Extensions.Logging.ILogger`, and `Core.LoggerFactory` is available if you need to create scoped loggers for other classes.
@@ -944,31 +987,43 @@ Core.Event.OnPrecacheResource += OnPrecacheResource;
 ### Teleportation
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp player.PlayerPawn.Value?.Teleport(position, angles, velocity);
-        ```
-    </Tab>
-    <Tab label="SwiftlyS2">
-        ```csharp player.Teleport(position, angles, velocity); // or with
-        Vector.Zero for no velocity change player.Teleport(position, angles,
-        Vector.Zero); ```
-    </Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    player.PlayerPawn.Value?.Teleport(position, angles, velocity);
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    player.Teleport(position, angles, velocity);
+
+    // or with Vector.Zero for no velocity change
+    player.Teleport(position, angles, Vector.Zero);
+    ```
+
+  </Tab>
 </Tabs>
 
 ### Reading Velocity and Position
 
 <Tabs>
-    <Tab label="CounterStrikeSharp">
-        ```csharp var velocity = player.PlayerPawn.Value?.AbsVelocity; var
-        position = player.PlayerPawn.Value?.AbsOrigin; var angles =
-        player.PlayerPawn.Value?.EyeAngles; ```
-    </Tab>
-    <Tab label="SwiftlyS2">
-        ```csharp var pawn = player.PlayerPawn; var velocity =
-        pawn?.AbsVelocity; var position =
-        pawn?.CBodyComponent?.SceneNode?.AbsOrigin; var angles =
-        pawn?.EyeAngles; ```
-    </Tab>
+  <Tab label="CounterStrikeSharp">
+    ```csharp
+    var velocity = player.PlayerPawn.Value?.AbsVelocity;
+    var position = player.PlayerPawn.Value?.AbsOrigin;
+    var angles = player.PlayerPawn.Value?.EyeAngles;
+    ```
+
+  </Tab>
+  <Tab label="SwiftlyS2">
+    ```csharp
+    var pawn = player.PlayerPawn;
+    var velocity = pawn?.AbsVelocity;
+    var position = pawn?.CBodyComponent?.SceneNode?.AbsOrigin;
+    var angles = pawn?.EyeAngles;
+    ```
+
+  </Tab>
 </Tabs>
 
 ## GameData & Function Hooking
