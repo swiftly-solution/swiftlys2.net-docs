@@ -49502,8 +49502,8 @@ categories:
     uid: SwiftlyS2.Shared.Misc.AtomicArray`1
     parent: SwiftlyS2.Shared.Misc
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/AtomicArray.cs#L10
-    summary: A fixed-size array whose elements are each a thread-safe cell, like <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> but stored contiguously. Same rules as <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> apply to every element; indexes out of range throw <xref href="System.IndexOutOfRangeException" data-throw-if-not-resolved="false"></xref>.
-    declaration: 'public sealed class AtomicArray<T> where T : struct'
+    summary: A fixed-size array whose elements are each a thread-safe cell, like <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> but stored contiguously. Supports value and reference types; reference loads are acquire loads and reference comparisons use identity. Indexes out of range throw <xref href="System.IndexOutOfRangeException" data-throw-if-not-resolved="false"></xref>.
+    declaration: public sealed class AtomicArray<T>
     typeParameters:
     - name: T
       description: The value type to store.
