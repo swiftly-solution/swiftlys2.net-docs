@@ -49381,19 +49381,19 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.Misc.Atomic`1
     parent: SwiftlyS2.Shared.Misc
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L10
-    summary: A thread-safe cell, the counterpart of C++ <code>std::atomic&lt;T&gt;</code>. Every operation is atomic and acts as a full memory barrier, except <xref href="SwiftlyS2.Shared.Misc.Atomic%601.Load" data-throw-if-not-resolved="false"></xref> on 4- and 8-byte types, which is an acquire load.
-    declaration: 'public sealed class Atomic<T> where T : struct'
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L12
+    summary: 'A thread-safe cell, the counterpart of C++ <code>std::atomic&lt;T&gt;</code>. Every operation is atomic and acts as a full memory barrier, except <xref href="SwiftlyS2.Shared.Misc.Atomic%601.Load" data-throw-if-not-resolved="false"></xref> on 4- and 8-byte types, which is an acquire load. For reference types (e.g. <xref href="System.String" data-throw-if-not-resolved="false"></xref>) the cell holds a reference: reads and writes are atomic, and <xref href="SwiftlyS2.Shared.Misc.Atomic%601.CompareExchange(%600%2c%600)" data-throw-if-not-resolved="false"></xref> / <xref href="SwiftlyS2.Shared.Misc.Atomic%601.TryCompareExchange(%600%40%2c%600)" data-throw-if-not-resolved="false"></xref> compare by reference, not by value.'
+    declaration: public sealed class Atomic<T>
     typeParameters:
     - name: T
-      description: The value type to store.
+      description: 'The type to store: a primitive, an enum, or a reference type.'
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
     constructors:
     - name: Atomic(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.#ctor(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L14
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L16
       declaration: public Atomic(T initialValue = default)
       parameters:
       - name: initialValue
@@ -49403,7 +49403,7 @@ categories:
     properties:
     - name: Value
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Value
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L22
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L24
       summary: Gets or sets the current value (<code>load</code> / <code>store</code>).
       declaration: public T Value { get; set; }
       valueType:
@@ -49411,7 +49411,7 @@ categories:
     methods:
     - name: CompareExchange(T, T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.CompareExchange(`0,`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L45
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L47
       summary: Stores <code class="paramref">newValue</code> only if the current value equals <code class="paramref">comparand</code>.
       declaration: public T CompareExchange(T newValue, T comparand)
       parameters:
@@ -49426,7 +49426,7 @@ categories:
         - T
     - name: Exchange(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Exchange(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L40
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L42
       summary: Stores <code class="paramref">newValue</code> and returns the previous value.
       declaration: public T Exchange(T newValue)
       parameters:
@@ -49438,7 +49438,7 @@ categories:
         - T
     - name: Load()
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Load
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L30
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L32
       summary: Reads the current value.
       declaration: public T Load()
       returns:
@@ -49446,7 +49446,7 @@ categories:
         - T
     - name: Store(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Store(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L35
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L37
       summary: Overwrites the current value.
       declaration: public void Store(T newValue)
       parameters:
@@ -49455,7 +49455,7 @@ categories:
         - T
     - name: ToString()
       uid: SwiftlyS2.Shared.Misc.Atomic`1.ToString
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L58
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L60
       summary: Returns a string that represents the current object.
       declaration: public override string ToString()
       returns:
@@ -49465,7 +49465,7 @@ categories:
         description: A string that represents the current object.
     - name: TryCompareExchange(ref T, T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.TryCompareExchange(`0@,`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L51
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L53
       summary: '<code>compare_exchange_strong</code>: stores <code class="paramref">desired</code> only if the current value equals <code class="paramref">expected</code>. On failure <code class="paramref">expected</code> is overwritten with the value that was actually found.'
       declaration: public bool TryCompareExchange(ref T expected, T desired)
       parameters:
@@ -49482,7 +49482,7 @@ categories:
     operators:
     - name: implicit operator T(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.op_Implicit(SwiftlyS2.Shared.Misc.Atomic{`0})~`0
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L56
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L58
       summary: Reads the current value, like the C++ <code>operator T</code>.
       declaration: public static implicit operator T(Atomic<T> atomic)
       parameters:
@@ -49920,7 +49920,7 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.Misc.AtomicExtensions
     parent: SwiftlyS2.Shared.Misc
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L66
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L68
     summary: Arithmetic and bitwise operations for <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> over integer types.
     declaration: public static class AtomicExtensions
     inherits:
@@ -49929,7 +49929,7 @@ categories:
     methods:
     - name: Add<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Add``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L74
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L76
       declaration: 'public static T Add<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49950,7 +49950,7 @@ categories:
       - name: T
     - name: And<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.And``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L76
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L78
       declaration: 'public static T And<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49971,7 +49971,7 @@ categories:
       - name: T
     - name: Decrement<T>(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Decrement``1(SwiftlyS2.Shared.Misc.Atomic{``0})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L81
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L83
       declaration: 'public static T Decrement<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49989,7 +49989,7 @@ categories:
       - name: T
     - name: FetchAdd<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAdd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L68
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L70
       declaration: 'public static T FetchAdd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50010,7 +50010,7 @@ categories:
       - name: T
     - name: FetchAnd<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAnd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L71
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L73
       declaration: 'public static T FetchAnd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50031,7 +50031,7 @@ categories:
       - name: T
     - name: FetchOr<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchOr``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L72
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L74
       declaration: 'public static T FetchOr<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50052,7 +50052,7 @@ categories:
       - name: T
     - name: FetchSub<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchSub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L69
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L71
       declaration: 'public static T FetchSub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50073,7 +50073,7 @@ categories:
       - name: T
     - name: FetchXor<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchXor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L70
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L72
       declaration: 'public static T FetchXor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50094,7 +50094,7 @@ categories:
       - name: T
     - name: Increment<T>(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Increment``1(SwiftlyS2.Shared.Misc.Atomic{``0})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L80
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L82
       declaration: 'public static T Increment<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50112,7 +50112,7 @@ categories:
       - name: T
     - name: Or<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Or``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L77
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L79
       declaration: 'public static T Or<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50133,7 +50133,7 @@ categories:
       - name: T
     - name: Sub<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Sub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L75
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L77
       declaration: 'public static T Sub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50154,7 +50154,7 @@ categories:
       - name: T
     - name: Xor<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Xor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L78
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L80
       declaration: 'public static T Xor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
