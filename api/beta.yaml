@@ -4068,7 +4068,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.single
     - name: GetAvgData(NetworkFlow)
       uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgData(SwiftlyS2.Shared.Engine.NetworkFlow)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L31
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L32
       declaration: float GetAvgData(NetworkFlow flow)
       parameters:
       - name: flow
@@ -4094,10 +4094,10 @@ categories:
         type:
         - text: float
           url: https://learn.microsoft.com/dotnet/api/system.single
-    - name: GetAvgPacketBytes(NetworkFlow)
-      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgPacketBytes(SwiftlyS2.Shared.Engine.NetworkFlow)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L32
-      declaration: float GetAvgPacketBytes(NetworkFlow flow)
+    - name: GetAvgPackets(NetworkFlow)
+      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgPackets(SwiftlyS2.Shared.Engine.NetworkFlow)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L33
+      declaration: float GetAvgPackets(NetworkFlow flow)
       parameters:
       - name: flow
         type:
@@ -4108,10 +4108,10 @@ categories:
         type:
         - text: float
           url: https://learn.microsoft.com/dotnet/api/system.single
-    - name: GetAvgPackets(NetworkFlow)
-      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgPackets(SwiftlyS2.Shared.Engine.NetworkFlow)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L33
-      declaration: float GetAvgPackets(NetworkFlow flow)
+    - name: GetPeakJitter(NetworkFlow)
+      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetPeakJitter(SwiftlyS2.Shared.Engine.NetworkFlow)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L31
+      declaration: float GetPeakJitter(NetworkFlow flow)
       parameters:
       - name: flow
         type:
