@@ -4220,14 +4220,6 @@ categories:
       valueType:
       - text: nint
         url: https://learn.microsoft.com/dotnet/api/system.intptr
-    - name: AsyncDisconnectFlags
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.AsyncDisconnectFlags
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L28
-      summary: Gets the asynchronous disconnect flags for the client.
-      declaration: byte AsyncDisconnectFlags { get; }
-      valueType:
-      - text: byte
-        url: https://learn.microsoft.com/dotnet/api/system.byte
     - name: AuthTicketSteamID
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.AuthTicketSteamID
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L55
@@ -4312,15 +4304,6 @@ categories:
       valueType:
       - text: int
         url: https://learn.microsoft.com/dotnet/api/system.int32
-    - name: DisconnectedSteamID
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.DisconnectedSteamID
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L52
-      summary: Gets the Steam ID of the client when they are disconnected.
-      declaration: ref CSteamID DisconnectedSteamID { get; }
-      valueType:
-      - text: CSteamID
-        url: SwiftlyS2.Shared.SteamAPI.CSteamID.html
-        uid: SwiftlyS2.Shared.SteamAPI.CSteamID
     - name: EntityIndex
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.EntityIndex
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L19
@@ -4415,6 +4398,15 @@ categories:
       valueType:
       - text: double
         url: https://learn.microsoft.com/dotnet/api/system.double
+    - name: LastSteamID
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LastSteamID
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L52
+      summary: Gets the last Steam ID of the client.
+      declaration: ref CSteamID LastSteamID { get; }
+      valueType:
+      - text: CSteamID
+        url: SwiftlyS2.Shared.SteamAPI.CSteamID.html
+        uid: SwiftlyS2.Shared.SteamAPI.CSteamID
     - name: LoadedSpawnGroups
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LoadedSpawnGroups
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L91
@@ -4436,19 +4428,19 @@ categories:
       valueType:
       - text: int
         url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: LogFullUpdate
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LogFullUpdate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L40
+      summary: Gets a value indicating whether the client's full update is logged.
+      declaration: bool LogFullUpdate { get; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: LowViolence
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LowViolence
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L106
       summary: Gets a value indicating whether the client is in low violence mode.
       declaration: bool LowViolence { get; }
-      valueType:
-      - text: bool
-        url: https://learn.microsoft.com/dotnet/api/system.boolean
-    - name: MarkedToKick
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.MarkedToKick
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L31
-      summary: Gets or sets a value indicating whether the client is marked to be kicked.
-      declaration: bool MarkedToKick { get; set; }
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
@@ -4494,14 +4486,22 @@ categories:
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
-    - name: SendingSnapshots
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendingSnapshots
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L40
-      summary: Gets a value indicating whether the client is currently sending snapshots.
-      declaration: bool SendingSnapshots { get; }
+    - name: SendJobIdle
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendJobIdle
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L31
+      summary: Gets or sets a value indicating whether the client's send job is idle.
+      declaration: bool SendJobIdle { get; set; }
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: SendJobState
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendJobState
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L28
+      summary: 'Gets the send job state (ClientSendJobState_t: 0 idle, 1 running, 2 finished) of the client.'
+      declaration: byte SendJobState { get; }
+      valueType:
+      - text: byte
+        url: https://learn.microsoft.com/dotnet/api/system.byte
     - name: SendtableCRC
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendtableCRC
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L73
@@ -4604,11 +4604,16 @@ categories:
         type:
         - text: int
           url: https://learn.microsoft.com/dotnet/api/system.int32
-    - name: MarkToKick()
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.MarkToKick
+    - name: OnSendJobFinished()
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.OnSendJobFinished
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L163
-      summary: Marks the client to be kicked from the server.
-      declaration: void MarkToKick()
+      summary: Called when the client's send job finishes.
+      declaration: void OnSendJobFinished()
+    - name: OnSendJobStarted()
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.OnSendJobStarted
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L166
+      summary: Called when the client's send job starts.
+      declaration: void OnSendJobStarted()
     - name: Reconnect()
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.Reconnect
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L130
@@ -4639,11 +4644,6 @@ categories:
         type:
         - text: float
           url: https://learn.microsoft.com/dotnet/api/system.single
-    - name: UnmarkToKick()
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.UnmarkToKick
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L166
-      summary: Unmarks the client to be kicked from the server.
-      declaration: void UnmarkToKick()
     - name: UpdateSendState()
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.UpdateSendState
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L153
