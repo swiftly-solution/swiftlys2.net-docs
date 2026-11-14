@@ -5998,6 +5998,13 @@ categories:
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.Touch instead.")]
 
       public delegate void EventDelegates.OnEntityTouch(IOnEntityTouchEvent @event)
+  - name: EventDelegates.OnFindTargettedPlayers
+    type: Delegate
+    uid: SwiftlyS2.Shared.Events.EventDelegates.OnFindTargettedPlayers
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L212
+    summary: Called for every candidate while resolving a target in FindTargettedPlayers. Lets plugins add their own target selectors or veto candidates.
+    declaration: public delegate void EventDelegates.OnFindTargettedPlayers(IOnFindTargettedPlayersEvent @event)
   - name: EventDelegates.OnItemServicesCanAcquireHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnItemServicesCanAcquireHook
@@ -7165,6 +7172,66 @@ categories:
       - text: CBaseEntity
         url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
         uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
+  - name: IOnFindTargettedPlayersEvent
+    type: Interface
+    uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L12
+    summary: Called for every candidate while <xref href="SwiftlyS2.Shared.Players.IPlayerManagerService.FindTargettedPlayers(SwiftlyS2.Shared.Players.IPlayer%2cSystem.String%2cSwiftlyS2.Shared.Players.TargetSearchMode%2cSystem.StringComparison)" data-throw-if-not-resolved="false"></xref> resolves a target. Use it to add your own target selectors (for example "@vip") or to veto candidates. Candidates that fail the <xref href="SwiftlyS2.Shared.Players.TargetSearchMode" data-throw-if-not-resolved="false"></xref> filters are not passed in. This callback runs once per candidate, so don't do anything expensive.
+    declaration: public interface IOnFindTargettedPlayersEvent
+    properties:
+    - name: Candidate
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Candidate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L32
+      summary: The player being tested against <xref href="SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Target" data-throw-if-not-resolved="false"></xref>.
+      declaration: IPlayer Candidate { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: IsMatch
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.IsMatch
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L38
+      summary: Whether <xref href="SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Candidate" data-throw-if-not-resolved="false"></xref> is included in the result. Starts as the built-in verdict (or the previous plugin's). Set it to true to include the candidate, false to exclude it.
+      declaration: bool IsMatch { get; set; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Player
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L17
+      summary: The player initiating the search.
+      declaration: IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Result
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Result
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L44
+      summary: Set to <xref href="SwiftlyS2.Shared.Misc.HookResult.Handled" data-throw-if-not-resolved="false"></xref> or <xref href="SwiftlyS2.Shared.Misc.HookResult.Stop" data-throw-if-not-resolved="false"></xref> to skip the remaining handlers for this candidate. The current <xref href="SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.IsMatch" data-throw-if-not-resolved="false"></xref> value is kept.
+      declaration: HookResult Result { get; set; }
+      valueType:
+      - text: HookResult
+        url: SwiftlyS2.Shared.Misc.HookResult.html
+        uid: SwiftlyS2.Shared.Misc.HookResult
+    - name: SearchMode
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.SearchMode
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L27
+      summary: The search mode requested by the caller.
+      declaration: TargetSearchMode SearchMode { get; }
+      valueType:
+      - text: TargetSearchMode
+        url: SwiftlyS2.Shared.Players.TargetSearchMode.html
+        uid: SwiftlyS2.Shared.Players.TargetSearchMode
+    - name: Target
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Target
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L22
+      summary: The raw target string, for example "@vip", "#3" or part of a name.
+      declaration: string Target { get; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
   - name: IOnItemServicesCanAcquireHookEvent
     type: Interface
     uid: SwiftlyS2.Shared.Events.IOnItemServicesCanAcquireHookEvent
