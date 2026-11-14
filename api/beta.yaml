@@ -5812,123 +5812,130 @@ categories:
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L29
     summary: Called when a client connects to the server.
     declaration: public delegate void EventDelegates.OnClientConnected(IOnClientConnectedEvent @event)
+  - name: EventDelegates.OnClientConnectionEstablished
+    type: Delegate
+    uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientConnectionEstablished
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L34
+    summary: Called when a client connection is established.
+    declaration: public delegate void EventDelegates.OnClientConnectionEstablished(IOnClientConnectionEstablishedEvent @event)
   - name: EventDelegates.OnClientDisconnected
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientDisconnected
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L34
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L39
     summary: Called when a client disconnects from the server.
     declaration: public delegate void EventDelegates.OnClientDisconnected(IOnClientDisconnectedEvent @event)
   - name: EventDelegates.OnClientKeyStateChanged
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientKeyStateChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L39
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L44
     summary: Called when a client's key state changes.
     declaration: public delegate void EventDelegates.OnClientKeyStateChanged(IOnClientKeyStateChangedEvent @event)
   - name: EventDelegates.OnClientProcessUsercmds
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientProcessUsercmds
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L90
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L95
     summary: Called when a client processes user commands. This callback is a hot path, be careful with it and don't do anything expensive.
     declaration: public delegate void EventDelegates.OnClientProcessUsercmds(IOnClientProcessUsercmdsEvent @event)
   - name: EventDelegates.OnClientPutInServer
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientPutInServer
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L44
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L49
     summary: Called when a client is fully put in server.
     declaration: public delegate void EventDelegates.OnClientPutInServer(IOnClientPutInServerEvent @event)
   - name: EventDelegates.OnClientSettingsChanged
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSettingsChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L162
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L167
     summary: Called when a client changed one or several replicated convars (name etc).
     declaration: public delegate void EventDelegates.OnClientSettingsChanged(IOnClientSettingsChangedEvent @event)
   - name: EventDelegates.OnClientSteamAuthorize
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSteamAuthorize
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L49
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L54
     summary: Called when a client is authorized by Steam.
     declaration: public delegate void EventDelegates.OnClientSteamAuthorize(IOnClientSteamAuthorizeEvent @event)
   - name: EventDelegates.OnClientSteamAuthorizeFail
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSteamAuthorizeFail
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L54
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L59
     summary: Called when a client's Steam authorization fails.
     declaration: public delegate void EventDelegates.OnClientSteamAuthorizeFail(IOnClientSteamAuthorizeFailEvent @event)
   - name: EventDelegates.OnClientVoice
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientVoice
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L157
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L162
     summary: Called when a client sends a voice packet.
     declaration: public delegate void EventDelegates.OnClientVoice(IOnClientVoiceEvent @event)
   - name: EventDelegates.OnCommandExecuteHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnCommandExecuteHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L172
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L177
     summary: Called when a server command (ConCommand) is executed.
     declaration: public delegate void EventDelegates.OnCommandExecuteHook(IOnCommandExecuteHookEvent @event)
   - name: EventDelegates.OnConCommandCreated
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConCommandCreated
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L100
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L105
     summary: Called when a ConCommand is created.
     declaration: public delegate void EventDelegates.OnConCommandCreated(IOnConCommandCreated @event)
   - name: EventDelegates.OnConVarCreated
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConVarCreated
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L105
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L110
     summary: Called when a ConVar is created.
     declaration: public delegate void EventDelegates.OnConVarCreated(IOnConVarCreated @event)
   - name: EventDelegates.OnConVarValueChanged
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConVarValueChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L95
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L100
     summary: Called when a ConVar value is changed.
     declaration: public delegate void EventDelegates.OnConVarValueChanged(IOnConVarValueChanged @event)
   - name: EventDelegates.OnConsoleOutput
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConsoleOutput
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L167
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L172
     summary: Called when a console output is received on the dedicated console dispatch thread.
     declaration: public delegate void EventDelegates.OnConsoleOutput(IOnConsoleOutputEvent @event)
   - name: EventDelegates.OnCustomHudClicked
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnCustomHudClicked
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L206
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L211
     summary: Called when a custom hud element is clicked.
     declaration: public delegate void EventDelegates.OnCustomHudClicked(IOnCustomHudClickedEvent @event)
   - name: EventDelegates.OnEntityCreated
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityCreated
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L59
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L64
     summary: Called when an entity is created.
     declaration: public delegate void EventDelegates.OnEntityCreated(IOnEntityCreatedEvent @event)
   - name: EventDelegates.OnEntityDeleted
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityDeleted
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L64
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L69
     summary: Called when an entity is deleted.
     declaration: public delegate void EventDelegates.OnEntityDeleted(IOnEntityDeletedEvent @event)
   - name: EventDelegates.OnEntityEndTouch
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityEndTouch
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L133
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L138
     summary: Called when an entity ends touching another entity.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.EndTouch instead.")]
@@ -5938,7 +5945,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityFireOutputHookEvent
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L195
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L200
     summary: Called when an entity fires output.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.FireOutput instead.")]
@@ -5948,7 +5955,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityIdentityAcceptInputHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L189
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L194
     summary: Called when an entity identity accept input hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.AcceptInput instead.")]
@@ -5958,21 +5965,21 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityParentChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L69
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L74
     summary: Called when an entity's parent changes.
     declaration: public delegate void EventDelegates.OnEntityParentChanged(IOnEntityParentChangedEvent @event)
   - name: EventDelegates.OnEntitySpawned
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntitySpawned
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L74
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L79
     summary: Called when an entity is spawned.
     declaration: public delegate void EventDelegates.OnEntitySpawned(IOnEntitySpawnedEvent @event)
   - name: EventDelegates.OnEntityStartTouch
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityStartTouch
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L121
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L126
     summary: Called when an entity starts touching another entity.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.StartTouch instead.")]
@@ -5982,7 +5989,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityTakeDamage
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L110
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L115
     summary: Called when an entity takes damage.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.TakeDamage instead.")]
@@ -5992,7 +5999,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityTouch
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L127
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L132
     summary: Called when an entity is touching another entity.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.Touch instead.")]
@@ -6002,14 +6009,14 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnFindTargettedPlayers
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L212
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L217
     summary: Called for every candidate while resolving a target in FindTargettedPlayers. Lets plugins add their own target selectors or veto candidates.
     declaration: public delegate void EventDelegates.OnFindTargettedPlayers(IOnFindTargettedPlayersEvent @event)
   - name: EventDelegates.OnItemServicesCanAcquireHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnItemServicesCanAcquireHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L139
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L144
     summary: Called when an item services can acquire hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Items.CanAcquire instead.")]
@@ -6019,21 +6026,21 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMapLoad
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L79
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L84
     summary: Called when a map is loaded.
     declaration: public delegate void EventDelegates.OnMapLoad(IOnMapLoadEvent @event)
   - name: EventDelegates.OnMapUnload
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMapUnload
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L84
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L89
     summary: Called when a map is unloaded.
     declaration: public delegate void EventDelegates.OnMapUnload(IOnMapUnloadEvent @event)
   - name: EventDelegates.OnMovementServicesRunCommandHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMovementServicesRunCommandHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L177
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L182
     summary: Called when the movement services run command hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Movement.RunCommand instead.")]
@@ -6043,7 +6050,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnPlayerPawnPostThink
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L183
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L188
     summary: Called when the player pawn post think hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Pawn.PostThink instead.")]
@@ -6053,14 +6060,14 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnPrecacheResource
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L116
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L121
     summary: Called when the game is precaching resources.
     declaration: public delegate void EventDelegates.OnPrecacheResource(IOnPrecacheResourceEvent @event)
   - name: EventDelegates.OnStartupServer
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnStartupServer
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L201
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L206
     summary: Called when the server is started.
     declaration: public delegate void EventDelegates.OnStartupServer()
   - name: EventDelegates.OnSteamAPIActivated
@@ -6081,7 +6088,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnWeaponServicesCanUseHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L145
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L150
     summary: Called when a weapon services can use hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.CanUse instead.")]
@@ -6091,7 +6098,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnWeaponServicesDropWeaponHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L151
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L156
     summary: Called when a weapon services drop weapon hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.DropWeapon instead.")]
@@ -6442,6 +6449,22 @@ categories:
       - text: HookResult
         url: SwiftlyS2.Shared.Misc.HookResult.html
         uid: SwiftlyS2.Shared.Misc.HookResult
+  - name: IOnClientConnectionEstablishedEvent
+    type: Interface
+    uid: SwiftlyS2.Shared.Events.IOnClientConnectionEstablishedEvent
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientConnectionEstablishedEvent.cs#L6
+    summary: Called when a client connection is established.
+    declaration: public interface IOnClientConnectionEstablishedEvent
+    properties:
+    - name: PlayerId
+      uid: SwiftlyS2.Shared.Events.IOnClientConnectionEstablishedEvent.PlayerId
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientConnectionEstablishedEvent.cs#L11
+      summary: The player ID of the client.
+      declaration: int PlayerId { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
   - name: IOnClientDisconnectedEvent
     type: Interface
     uid: SwiftlyS2.Shared.Events.IOnClientDisconnectedEvent
