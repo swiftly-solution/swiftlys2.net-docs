@@ -391,7 +391,7 @@ categories:
     methods:
     - name: Dispose()
       uid: SwiftlyS2.Core.Menus.OptionsBase.InputMenuOption.Dispose
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/InputMenuOption.cs#L229
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/InputMenuOption.cs#L227
       summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
       declaration: public override void Dispose()
     - name: GetDisplayText(IPlayer, int)
@@ -536,7 +536,7 @@ categories:
       remarks: "<p> When this property is set to a non-null function, the <xref href=\"SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text\" data-throw-if-not-resolved=\"false\"></xref> property's getter will invoke it to retrieve the current text value on each access. This enables automatic tracking of external string sources. The function can return null to indicate that it wants to fall back to the static <xref href=\"SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text\" data-throw-if-not-resolved=\"false\"></xref> value, or return an empty string to display nothing. </p> <p> Setting this property to null will revert to using only the static <xref href=\"SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text\" data-throw-if-not-resolved=\"false\"></xref> value stored in the backing field. </p> <p> Example usage: <pre><code class=\"lang-csharp\">string myText = \"Hello\"; option.BindingText = () =&gt; myText; myText = \"World\"; // option.Text now returns \"World\" // Return null to use fallback Text option.BindingText = () =&gt; condition ? playerName : null;</code></pre> </p>"
     - name: CloseAfterClick
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.CloseAfterClick
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L315
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L310
       summary: Gets or sets a value indicating whether the menu should be closed after handling the click.
       declaration: public bool CloseAfterClick { get; init; }
       valueType:
@@ -544,7 +544,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Comment
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Comment
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L232
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L229
       summary: Gets or sets the comment content displayed for this menu option.
       declaration: public string Comment { get; set; }
       valueType:
@@ -553,7 +553,7 @@ categories:
       remarks: This is a global property. Changing it will affect what all players see.
     - name: Enabled
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Enabled
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L290
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L286
       summary: Gets or sets a value indicating whether this option can be interacted with.
       declaration: public bool Enabled { get; set; }
       valueType:
@@ -570,7 +570,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: MaxWidth
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.MaxWidth
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L237
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L234
       summary: The maximum display width for menu option text in relative units.
       declaration: public float MaxWidth { get; set; }
       valueType:
@@ -589,7 +589,7 @@ categories:
       remarks: This property will be null until the option is added to a menu via <xref href="SwiftlyS2.Shared.Menus.IMenuAPI.AddOption(SwiftlyS2.Shared.Menus.IMenuOption)" data-throw-if-not-resolved="false"></xref>. When implementing custom menu options, avoid accessing this property in the constructor as it will not be set yet.
     - name: PlaySound
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.PlaySound
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L346
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L341
       summary: Gets or sets a value indicating whether a sound should play when this option is selected.
       declaration: public bool PlaySound { get; set; }
       valueType:
@@ -597,7 +597,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Tag
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Tag
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L320
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L315
       summary: Gets or sets an object that contains data about this option.
       declaration: public object? Tag { get; set; }
       valueType:
@@ -606,7 +606,7 @@ categories:
       - '?'
     - name: Text
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L185
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L184
       summary: Gets or sets the text content displayed for this menu option.
       declaration: public string Text { get; set; }
       valueType:
@@ -615,7 +615,7 @@ categories:
       remarks: <p>This is a global property. Changing it will affect what all players see.</p> <p> When <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> is set to a non-null function, the getter will invoke that function to retrieve the current text value dynamically. If the function returns null, it falls back to this property's static value. Otherwise, it returns the static value stored in the backing field. </p> <p> Setting this property directly will update the static fallback value without clearing any <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> binding. This allows <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> and static text to coexist, with <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> taking priority. The function is allowed to return an empty string, which will be displayed as-is. </p>
     - name: TextSize
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.TextSize
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L325
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L320
       summary: Gets or sets the text size for this option.
       declaration: public MenuOptionTextSize TextSize { get; set; }
       valueType:
@@ -624,7 +624,7 @@ categories:
         uid: SwiftlyS2.Shared.Menus.MenuOptionTextSize
     - name: TextStyle
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.TextStyle
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L330
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L325
       summary: Gets or sets the text overflow style for this option.
       declaration: public MenuOptionTextStyle TextStyle { get; set; }
       valueType:
@@ -633,7 +633,7 @@ categories:
         uid: SwiftlyS2.Shared.Menus.MenuOptionTextStyle
     - name: Visible
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Visible
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L262
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L259
       summary: Gets or sets a value indicating whether this option is visible in the menu.
       declaration: public bool Visible { get; set; }
       valueType:
@@ -652,7 +652,7 @@ categories:
       declaration: protected ~MenuOptionBase()
     - name: GetDisplayText(IPlayer, int)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.GetDisplayText(SwiftlyS2.Shared.Players.IPlayer,System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L490
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L485
       summary: Gets the display text for this option as it should appear to the specified player.
       declaration: public virtual string GetDisplayText(IPlayer player, int displayLine = 0)
       parameters:
@@ -676,7 +676,7 @@ categories:
       remarks: "When a menu option occupies multiple lines, MenuAPI may only need to display a specific line of that option. <ul><li>When <code>LineCount=1</code>: The <code>displayLine</code> parameter is not needed; return the HTML-formatted string directly.</li><li>When <code>LineCount&gt;=2</code>: Check the <code>displayLine</code> parameter: <ul><li><code>displayLine=0</code>: Return all content</li><li><code>displayLine=1</code>: Return only the first line content</li><li><code>displayLine=2</code>: Return only the second line content</li><li>And so on...</li></ul> </li></ul> Note: MenuAPI ensures that the <code>displayLine</code> parameter will not exceed the option's <code>LineCount</code>."
     - name: GetEnabled(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.GetEnabled(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L420
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L415
       summary: Determines whether this option is enabled for the specified player.
       declaration: public virtual bool GetEnabled(IPlayer player)
       parameters:
@@ -693,7 +693,7 @@ categories:
         description: True if the option is enabled for the player; otherwise, false.
     - name: GetVisible(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.GetVisible(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L401
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L396
       summary: Determines whether this option is visible to the specified player.
       declaration: public virtual bool GetVisible(IPlayer player)
       parameters:
@@ -710,7 +710,7 @@ categories:
         description: True if the option is visible to the player; otherwise, false.
     - name: IsClickTaskCompleted(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.IsClickTaskCompleted(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L393
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L388
       summary: Determines whether the click task for the specified player is completed.
       declaration: public virtual bool IsClickTaskCompleted(IPlayer player)
       parameters:
@@ -727,7 +727,7 @@ categories:
         description: True if the click task is completed; otherwise, false.
     - name: OnClickAsync(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.OnClickAsync(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L618
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L610
       summary: Handles the click action for this option.
       declaration: public virtual ValueTask OnClickAsync(IPlayer player)
       parameters:
@@ -744,7 +744,7 @@ categories:
         description: A task that represents the asynchronous operation.
     - name: OnValidatingAsync(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.OnValidatingAsync(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L558
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L551
       summary: Validates whether the specified player can interact with this option.
       declaration: public virtual ValueTask<bool> OnValidatingAsync(IPlayer player)
       parameters:
@@ -775,7 +775,7 @@ categories:
       declaration: public virtual void ResumeTextAnimation()
     - name: SetEnabled(IPlayer, bool)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.SetEnabled(SwiftlyS2.Shared.Players.IPlayer,System.Boolean)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L431
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L426
       summary: Sets the enabled state of this option for a specific player.
       declaration: public virtual void SetEnabled(IPlayer player, bool enabled)
       parameters:
@@ -793,7 +793,7 @@ categories:
       remarks: The per-player enabled state has lower priority than the global <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Enabled" data-throw-if-not-resolved="false"></xref> property.
     - name: SetVisible(IPlayer, bool)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.SetVisible(SwiftlyS2.Shared.Players.IPlayer,System.Boolean)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L412
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L407
       summary: Sets the visibility of this option for a specific player.
       declaration: public virtual void SetVisible(IPlayer player, bool visible)
       parameters:
@@ -811,7 +811,7 @@ categories:
       remarks: The per-player visibility has lower priority than the global <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Visible" data-throw-if-not-resolved="false"></xref> property.
     - name: AfterFormat
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.AfterFormat
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L386
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L381
       summary: Occurs after HTML markup is assembled, allowing customization of the final HTML output.
       declaration: public event EventHandler<MenuOptionFormattingEventArgs>? AfterFormat
       valueType:
@@ -825,7 +825,7 @@ categories:
       - '?'
     - name: BeforeFormat
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BeforeFormat
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L381
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L376
       summary: Occurs before HTML markup is assembled, allowing customization of the text content.
       declaration: public event EventHandler<MenuOptionFormattingEventArgs>? BeforeFormat
       valueType:
@@ -839,7 +839,7 @@ categories:
       - '?'
     - name: Click
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Click
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L371
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L366
       summary: Occurs when the option is clicked by a player.
       declaration: public event AsyncEventHandler<MenuOptionClickEventArgs>? Click
       valueType:
@@ -854,7 +854,7 @@ categories:
       - '?'
     - name: EnabledChanged
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.EnabledChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L356
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L351
       summary: Occurs when the enabled state of the option changes.
       declaration: public event EventHandler<MenuOptionEventArgs>? EnabledChanged
       valueType:
@@ -868,7 +868,7 @@ categories:
       - '?'
     - name: TextChanged
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.TextChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L361
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L356
       summary: Occurs when the text of the option changes.
       declaration: public event EventHandler<MenuOptionEventArgs>? TextChanged
       valueType:
@@ -882,7 +882,7 @@ categories:
       - '?'
     - name: Validating
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Validating
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L366
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L361
       summary: Occurs before a click is processed, allowing validation and cancellation.
       declaration: public event EventHandler<MenuOptionValidatingEventArgs>? Validating
       valueType:
@@ -896,7 +896,7 @@ categories:
       - '?'
     - name: VisibilityChanged
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.VisibilityChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L351
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L346
       summary: Occurs when the visibility of the option changes.
       declaration: public event EventHandler<MenuOptionEventArgs>? VisibilityChanged
       valueType:
@@ -1091,7 +1091,7 @@ categories:
       remarks: "When a menu option occupies multiple lines, MenuAPI may only need to display a specific line of that option. <ul><li>When <code>LineCount=1</code>: The <code>displayLine</code> parameter is not needed; return the HTML-formatted string directly.</li><li>When <code>LineCount&gt;=2</code>: Check the <code>displayLine</code> parameter: <ul><li><code>displayLine=0</code>: Return all content</li><li><code>displayLine=1</code>: Return only the first line content</li><li><code>displayLine=2</code>: Return only the second line content</li><li>And so on...</li></ul> </li></ul> Note: MenuAPI ensures that the <code>displayLine</code> parameter will not exceed the option's <code>LineCount</code>."
     - name: GetProgress(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.ProgressBarMenuOption.GetProgress(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L139
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L138
       summary: Gets the current progress value for the specified player.
       declaration: public float GetProgress(IPlayer player)
       parameters:
@@ -1108,7 +1108,7 @@ categories:
         description: The current progress value (0.0 to 1.0).
     - name: SetProgressProvider(IPlayer, Func<float>)
       uid: SwiftlyS2.Core.Menus.OptionsBase.ProgressBarMenuOption.SetProgressProvider(SwiftlyS2.Shared.Players.IPlayer,System.Func{System.Single})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L129
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L128
       summary: Sets or updates the progress provider function for a specific player.
       declaration: public void SetProgressProvider(IPlayer player, Func<float> progressProvider)
       parameters:
@@ -1603,7 +1603,7 @@ categories:
         description: The current slider value.
     - name: IncrementValue(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.SliderMenuOption.IncrementValue(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/SliderMenuOption.cs#L185
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/SliderMenuOption.cs#L184
       summary: Increments the slider value by the step amount for the specified player. Wraps to Min if the value goes above Max.
       declaration: public ValueTask IncrementValue(IPlayer player)
       parameters:
