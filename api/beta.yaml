@@ -38179,10 +38179,20 @@ categories:
     parent: SwiftlyS2.Shared.Memory
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L6
     declaration: public interface IMemoryService
+    properties:
+    - name: S2BinLib
+      uid: SwiftlyS2.Shared.Memory.IMemoryService.S2BinLib
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L11
+      summary: Binary analysis helpers (pattern scan, vtables, symbols, xrefs...).
+      declaration: IS2BinLib S2BinLib { get; }
+      valueType:
+      - text: IS2BinLib
+        url: SwiftlyS2.Shared.Memory.IS2BinLib.html
+        uid: SwiftlyS2.Shared.Memory.IS2BinLib
     methods:
     - name: Alloc(ulong)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.Alloc(System.UInt64)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L103
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L108
       summary: Allocate a block of memory.
       declaration: nint Alloc(ulong size)
       parameters:
@@ -38198,7 +38208,7 @@ categories:
         description: The address of the allocated memory block.
     - name: Free(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.Free(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L109
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L114
       summary: Free a block of memory.
       declaration: void Free(nint pointer)
       parameters:
@@ -38209,7 +38219,7 @@ categories:
         description: The address of the memory block to free.
     - name: GetAddressBySignature(string, string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetAddressBySignature(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L44
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L49
       summary: Get the address of a ida-style signature.
       declaration: nint? GetAddressBySignature(string library, string signature)
       parameters:
@@ -38231,7 +38241,7 @@ categories:
         description: The address of the function. Return null if not found.
     - name: GetInterfaceByName(string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetInterfaceByName(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L36
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L41
       summary: Get the address of an valve or swiftly native interface by its name.
       declaration: nint? GetInterfaceByName(string name)
       parameters:
@@ -38248,7 +38258,7 @@ categories:
         description: The address of the interface. Return null if not found.
     - name: GetObjectPtrVtableName(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetObjectPtrVtableName(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L66
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L71
       summary: Get the vtable name of an object pointer.
       declaration: string? GetObjectPtrVtableName(nint address)
       parameters:
@@ -38265,7 +38275,7 @@ categories:
         description: The vtable name. Return null if not found.
     - name: GetUnmanagedFunctionByAddress<TDelegate>(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetUnmanagedFunctionByAddress``1(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L14
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L19
       summary: Get an unmanaged function by its address.
       declaration: 'IUnmanagedFunction<TDelegate> GetUnmanagedFunctionByAddress<TDelegate>(nint address) where TDelegate : Delegate'
       parameters:
@@ -38288,7 +38298,7 @@ categories:
         description: The delegate type of the unmanaged function.
     - name: GetUnmanagedFunctionByVTable<TDelegate>(nint, int)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetUnmanagedFunctionByVTable``1(System.IntPtr,System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L23
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L28
       summary: Get an unmanaged function by its vtable address and index.
       declaration: 'IUnmanagedFunction<TDelegate> GetUnmanagedFunctionByVTable<TDelegate>(nint pVTable, int index) where TDelegate : Delegate'
       parameters:
@@ -38316,7 +38326,7 @@ categories:
         description: ''
     - name: GetUnmanagedMemoryByAddress(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetUnmanagedMemoryByAddress(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L29
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L34
       summary: Get an unmanaged memory block by its address.
       declaration: IUnmanagedMemory GetUnmanagedMemoryByAddress(nint address)
       parameters:
@@ -38332,7 +38342,7 @@ categories:
           uid: SwiftlyS2.Shared.Memory.IUnmanagedMemory
     - name: GetVTableAddress(string, string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetVTableAddress(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L52
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L57
       summary: Get the address of a vtable by its name.
       declaration: nint? GetVTableAddress(string library, string vtableName)
       parameters:
@@ -38354,7 +38364,7 @@ categories:
         description: The address of the vtable. Return null if not found.
     - name: ObjectPtrHasBaseClass(nint, string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ObjectPtrHasBaseClass(System.IntPtr,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L81
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L86
       summary: Check if an object pointer has a base class.
       declaration: bool ObjectPtrHasBaseClass(nint address, string baseClassName)
       parameters:
@@ -38375,7 +38385,7 @@ categories:
         description: True if the object pointer has the base class, false otherwise.
     - name: ObjectPtrHasVtable(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ObjectPtrHasVtable(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L73
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L78
       summary: Check if an object pointer has a vtable.
       declaration: bool ObjectPtrHasVtable(nint address)
       parameters:
@@ -38391,7 +38401,7 @@ categories:
         description: True if the object pointer has a vtable, false otherwise.
     - name: Resize(nint, ulong)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.Resize(System.IntPtr,System.UInt64)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L117
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L122
       summary: Resize a block of memory.
       declaration: nint Resize(nint pointer, ulong newSize)
       parameters:
@@ -38412,7 +38422,7 @@ categories:
         description: The address of the resized memory block.
     - name: ResolveXrefAddress(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ResolveXrefAddress(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L59
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L64
       summary: Resolve the address of a xref signature.
       declaration: nint ResolveXrefAddress(nint xrefAddress)
       parameters:
@@ -38428,7 +38438,7 @@ categories:
         description: The resolved address.
     - name: ToSchemaClass<T>(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ToSchemaClass``1(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L89
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L94
       summary: Convert a raw address to a schema class.
       declaration: 'T ToSchemaClass<T>(nint address) where T : class, ISchemaClass<T>'
       parameters:
@@ -38446,7 +38456,7 @@ categories:
         description: The schema class type.
     - name: ToServerSideClient(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ToServerSideClient(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L96
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L101
       summary: Convert a raw address to a server-side client.
       declaration: IServerSideClient ToServerSideClient(nint address)
       parameters:
@@ -38461,6 +38471,1143 @@ categories:
           url: SwiftlyS2.Shared.Engine.IServerSideClient.html
           uid: SwiftlyS2.Shared.Engine.IServerSideClient
         description: The server-side client.
+  - name: IS2BinLib
+    type: Interface
+    uid: SwiftlyS2.Shared.Memory.IS2BinLib
+    parent: SwiftlyS2.Shared.Memory
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L27
+    summary: Binary analysis helpers (pattern scan, vtables, symbols, xrefs...) backed by S2BinLib. <p> <code>binary</code> is the module name, e.g. <code>"server"</code> or <code>"engine2"</code>. Methods return <code>null</code>, <code>false</code> or an empty list when nothing was found or the lookup failed. Methods ending in <code>Rva</code> work with offsets relative to the module base, the others with runtime addresses. </p>
+    declaration: public interface IS2BinLib
+    methods:
+    - name: ClearModuleBase(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ClearModuleBase(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L36
+      summary: Clear a module base that was set manually.
+      declaration: bool ClearModuleBase(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: DumpVTables(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.DumpVTables(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L116
+      summary: Cache vtable metadata of a binary. Needed before vtable-based lookups on some binaries.
+      declaration: bool DumpVTables(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: DumpXrefs(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.DumpXrefs(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L151
+      summary: Cache every cross-reference of a binary. Needed before the xref-based lookups.
+      declaration: bool DumpXrefs(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: FindCallWithStringArg(string, nint, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithStringArg(System.String,System.IntPtr,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L196
+      summary: Find the call inside <code class="paramref">funcStart</code> that has the given string as argument and return the called function.
+      declaration: nint? FindCallWithStringArg(string binary, nint funcStart, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStart
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindCallWithStringArgRva(string, ulong, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithStringArgRva(System.String,System.UInt64,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L199
+      summary: Find the call inside <code class="paramref">funcStart</code> that has the given string as argument and return the called function.
+      declaration: ulong? FindCallWithStringArgRva(string binary, ulong funcStartRva, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStartRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindCallWithXrefArg(string, nint, nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithXrefArg(System.String,System.IntPtr,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L190
+      summary: Find the call inside <code class="paramref">funcStart</code> that has an argument referencing <code class="paramref">target</code> and return the called function.
+      declaration: nint? FindCallWithXrefArg(string binary, nint funcStart, nint target)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStart
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: target
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindCallWithXrefArgRva(string, ulong, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithXrefArgRva(System.String,System.UInt64,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L193
+      summary: Find the call inside <code class="paramref">funcStart</code> that has an argument referencing <code class="paramref">target</code> and return the called function.
+      declaration: ulong? FindCallWithXrefArgRva(string binary, ulong funcStartRva, ulong targetRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStartRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: targetRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindExport(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindExport(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L131
+      declaration: nint? FindExport(string binary, string exportName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: exportName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindExportRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindExportRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L133
+      declaration: ulong? FindExportRva(string binary, string exportName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: exportName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindFuncStart(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncStart(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L166
+      summary: Find the start of the function that contains the given RVA.
+      declaration: nint? FindFuncStart(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindFuncStartRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncStartRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L169
+      summary: Find the start of the function that contains the given RVA.
+      declaration: ulong? FindFuncStartRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindFuncWithString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncWithString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L178
+      summary: Find the function that references the given string.
+      declaration: nint? FindFuncWithString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindFuncWithStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncWithStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L181
+      summary: Find the function that references the given string.
+      declaration: ulong? FindFuncWithStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindNetworkVarStateChangedIndex(ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindNetworkVarStateChangedIndex(System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L110
+      summary: Find the vtable index of <code>NetworkStateChanged</code> for the vtable at <code class="paramref">vtableAddress</code>.
+      declaration: int? FindNetworkVarStateChangedIndex(ulong vtableAddress)
+      parameters:
+      - name: vtableAddress
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: FindNetworkVarStateChangedIndexRva(ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindNetworkVarStateChangedIndexRva(System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L113
+      summary: Find the vtable index of <code>NetworkStateChanged</code> for the vtable at <code class="paramref">vtableRva</code>.
+      declaration: int? FindNetworkVarStateChangedIndexRva(ulong vtableRva)
+      parameters:
+      - name: vtableRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: FindString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L136
+      summary: Find a string literal inside the binary.
+      declaration: nint? FindString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L139
+      summary: Find a string literal inside the binary.
+      declaration: ulong? FindStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindSymbol(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindSymbol(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L127
+      declaration: nint? FindSymbol(string binary, string symbolName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: symbolName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindSymbolRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindSymbolRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L129
+      declaration: ulong? FindSymbolRva(string binary, string symbolName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: symbolName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVFunc(string, string, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFunc(System.String,System.String,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L86
+      summary: Find a virtual function by vtable name and index.
+      declaration: nint? FindVFunc(string binary, string vtableName, int index)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVFunc(nint, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFunc(System.IntPtr,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L92
+      summary: Find a virtual function by vtable pointer and index.
+      declaration: nint? FindVFunc(nint vtable, int index)
+      parameters:
+      - name: vtable
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVFuncContaining(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncContaining(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L98
+      summary: Find the virtual function that contains the given RVA.
+      declaration: S2VFunc? FindVFuncContaining(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: S2VFunc
+          url: SwiftlyS2.Shared.Memory.S2VFunc.html
+          uid: SwiftlyS2.Shared.Memory.S2VFunc
+        - '?'
+    - name: FindVFuncContainingRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncContainingRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L101
+      summary: Find the virtual function that contains the given RVA.
+      declaration: S2VFuncRva? FindVFuncContainingRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: S2VFuncRva
+          url: SwiftlyS2.Shared.Memory.S2VFuncRva.html
+          uid: SwiftlyS2.Shared.Memory.S2VFuncRva
+        - '?'
+    - name: FindVFuncRva(string, string, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncRva(System.String,System.String,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L89
+      summary: Find a virtual function by vtable name and index.
+      declaration: ulong? FindVFuncRva(string binary, string vtableName, int index)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVFuncRva(nint, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncRva(System.IntPtr,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L95
+      summary: Find a virtual function by vtable pointer and index.
+      declaration: ulong? FindVFuncRva(nint vtable, int index)
+      parameters:
+      - name: vtable
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVFuncWithString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncWithString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L104
+      summary: Find the virtual function that references the given string.
+      declaration: S2VFunc? FindVFuncWithString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: S2VFunc
+          url: SwiftlyS2.Shared.Memory.S2VFunc.html
+          uid: SwiftlyS2.Shared.Memory.S2VFunc
+        - '?'
+    - name: FindVFuncWithStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncWithStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L107
+      summary: Find the virtual function that references the given string.
+      declaration: S2VFuncRva? FindVFuncWithStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: S2VFuncRva
+          url: SwiftlyS2.Shared.Memory.S2VFuncRva.html
+          uid: SwiftlyS2.Shared.Memory.S2VFuncRva
+        - '?'
+    - name: FindVTable(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTable(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L68
+      summary: Find a vtable by class name. Use <code>"Outer::Inner"</code> for nested classes (2 levels max).
+      declaration: nint? FindVTable(string binary, string vtableName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVTableMangled(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTableMangled(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L74
+      summary: Find a vtable by its mangled name.
+      declaration: nint? FindVTableMangled(string binary, string mangledName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: mangledName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVTableMangledRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTableMangledRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L77
+      summary: Find a vtable by its mangled name.
+      declaration: ulong? FindVTableMangledRva(string binary, string mangledName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: mangledName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVTableRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTableRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L71
+      summary: Find a vtable by class name. Use <code>"Outer::Inner"</code> for nested classes (2 levels max).
+      declaration: ulong? FindVTableRva(string binary, string vtableName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindXrefFuncStart(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncStart(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L172
+      summary: Find the start of the function that contains the given RVA, using cross-references.
+      declaration: nint? FindXrefFuncStart(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindXrefFuncStartRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncStartRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L175
+      summary: Find the start of the function that contains the given RVA, using cross-references.
+      declaration: ulong? FindXrefFuncStartRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindXrefFuncWithString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncWithString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L184
+      summary: Find the function that references the given string, using cross-references.
+      declaration: nint? FindXrefFuncWithString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindXrefFuncWithStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncWithStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L187
+      summary: Find the function that references the given string, using cross-references.
+      declaration: ulong? FindXrefFuncWithStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FollowXref(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FollowXref(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L157
+      summary: Follow the cross-reference at a runtime address and return its target address.
+      declaration: nint? FollowXref(nint address)
+      parameters:
+      - name: address
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FollowXrefRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FollowXrefRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L163
+      summary: Follow the cross-reference at an RVA and return its target RVA.
+      declaration: ulong? FollowXrefRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FollowXrefRvaToAddress(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FollowXrefRvaToAddress(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L160
+      summary: Follow the cross-reference at an RVA and return its target address.
+      declaration: nint? FollowXrefRvaToAddress(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: GetBinaryPath(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetBinaryPath(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L42
+      summary: Get the file path of a binary.
+      declaration: string? GetBinaryPath(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+    - name: GetModuleBase(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetModuleBase(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L30
+      summary: Get the runtime base address of a module.
+      declaration: nint? GetModuleBase(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: GetObjectPtrVtableName(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetObjectPtrVtableName(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L119
+      summary: Get the vtable class name of an object. Returns <code>null</code> when the object has no vtable.
+      declaration: string? GetObjectPtrVtableName(nint objectPtr)
+      parameters:
+      - name: objectPtr
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+    - name: GetVTableFuncCount(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetVTableFuncCount(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L80
+      summary: Get the number of virtual functions of a vtable.
+      declaration: int? GetVTableFuncCount(string binary, string vtableName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: GetVTableFuncCount(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetVTableFuncCount(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L83
+      summary: Get the number of virtual functions of the vtable located at <code class="paramref">vtableRva</code>.
+      declaration: int? GetVTableFuncCount(string binary, ulong vtableRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: GetXrefs(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetXrefs(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L154
+      summary: Get the cached cross-references to <code class="paramref">targetRva</code>.
+      declaration: IReadOnlyList<nint> GetXrefs(string binary, ulong targetRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: targetRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '>'
+    - name: InstallTrampoline(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.InstallTrampoline(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L205
+      summary: Install a JIT trampoline at a runtime address and return the trampoline address.
+      declaration: nint? InstallTrampoline(nint address)
+      parameters:
+      - name: address
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: IsBinaryLoaded(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.IsBinaryLoaded(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L45
+      summary: Check whether a binary is loaded in S2BinLib.
+      declaration: bool IsBinaryLoaded(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: LoadBinary(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.LoadBinary(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L48
+      summary: Load a binary into S2BinLib.
+      declaration: bool LoadBinary(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: MakeSignature(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.MakeSignature(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L202
+      summary: Build an ida-style signature for the function at <code class="paramref">funcRva</code>.
+      declaration: string? MakeSignature(string binary, ulong funcRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+    - name: ObjectPtrHasBaseClass(nint, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ObjectPtrHasBaseClass(System.IntPtr,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L125
+      summary: Check whether an object derives from the given class.
+      declaration: bool ObjectPtrHasBaseClass(nint objectPtr, string baseClassName)
+      parameters:
+      - name: objectPtr
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: baseClassName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: ObjectPtrHasVtable(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ObjectPtrHasVtable(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L122
+      summary: Check whether an object has a vtable.
+      declaration: bool ObjectPtrHasVtable(nint objectPtr)
+      parameters:
+      - name: objectPtr
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: PatternScan(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScan(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L54
+      summary: Scan for an ida-style pattern and return its address.
+      declaration: nint? PatternScan(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: PatternScanAll(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScanAll(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L60
+      summary: Find every match of an ida-style pattern.
+      declaration: IReadOnlyList<nint> PatternScanAll(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '>'
+    - name: PatternScanAllRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScanAllRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L63
+      summary: Find the RVA of every match of an ida-style pattern.
+      declaration: IReadOnlyList<ulong> PatternScanAllRva(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '>'
+    - name: PatternScanRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScanRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L57
+      summary: Scan for an ida-style pattern and return its RVA.
+      declaration: ulong? PatternScanRva(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: ReadByAddress(string, ulong, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ReadByAddress(System.String,System.UInt64,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L148
+      summary: Read <code class="paramref">size</code> bytes from the binary at a runtime address.
+      declaration: byte[]? ReadByAddress(string binary, ulong address, int size)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: address
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: size
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: byte
+          url: https://learn.microsoft.com/dotnet/api/system.byte
+        - '['
+        - ']'
+        - '?'
+    - name: ReadByFileOffset(string, ulong, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ReadByFileOffset(System.String,System.UInt64,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L142
+      summary: Read <code class="paramref">size</code> bytes from the binary file at a file offset.
+      declaration: byte[]? ReadByFileOffset(string binary, ulong fileOffset, int size)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: fileOffset
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: size
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: byte
+          url: https://learn.microsoft.com/dotnet/api/system.byte
+        - '['
+        - ']'
+        - '?'
+    - name: ReadByRva(string, ulong, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ReadByRva(System.String,System.UInt64,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L145
+      summary: Read <code class="paramref">size</code> bytes from the binary at an RVA.
+      declaration: byte[]? ReadByRva(string binary, ulong rva, int size)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: size
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: byte
+          url: https://learn.microsoft.com/dotnet/api/system.byte
+        - '['
+        - ']'
+        - '?'
+    - name: SetCustomBinaryPath(string, string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.SetCustomBinaryPath(System.String,System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L39
+      summary: Use a custom file for a binary on the given OS (<code>"windows"</code> or <code>"linux"</code>).
+      declaration: bool SetCustomBinaryPath(string binary, string path, string os)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: path
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: os
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: SetModuleBase(string, nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.SetModuleBase(System.String,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L33
+      summary: Set the module base from any pointer that lives inside the module.
+      declaration: bool SetModuleBase(string binary, nint pointerInsideModule)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pointerInsideModule
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: UnloadBinary(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.UnloadBinary(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L51
+      summary: Unload a binary from S2BinLib.
+      declaration: bool UnloadBinary(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
   - name: IUnmanagedFunction`1
     type: Interface
     uid: SwiftlyS2.Shared.Memory.IUnmanagedFunction`1
@@ -38896,6 +40043,120 @@ categories:
     parent: SwiftlyS2.Shared.Memory
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IUnmanagedMemory.cs#L49
     declaration: public delegate void MidHookDelegate(ref MidHookContext context)
+  - name: S2VFunc
+    type: Struct
+    uid: SwiftlyS2.Shared.Memory.S2VFunc
+    parent: SwiftlyS2.Shared.Memory
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+    summary: A virtual function found by S2BinLib, addressed at runtime.
+    declaration: 'public readonly record struct S2VFunc : IEquatable<S2VFunc>'
+    implements:
+    - text: IEquatable<S2VFunc>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    constructors:
+    - name: S2VFunc(string, int, nint)
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.#ctor(System.String,System.Int32,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: A virtual function found by S2BinLib, addressed at runtime.
+      declaration: public S2VFunc(string VTableName, int Index, nint Address)
+      parameters:
+      - name: VTableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: Class name of the vtable that owns the function.
+      - name: Index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        description: Index of the function inside the vtable.
+      - name: Address
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        description: Runtime memory address of the function.
+    properties:
+    - name: Address
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.Address
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: Runtime memory address of the function.
+      declaration: public nint Address { get; init; }
+      valueType:
+      - text: nint
+        url: https://learn.microsoft.com/dotnet/api/system.intptr
+    - name: Index
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.Index
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: Index of the function inside the vtable.
+      declaration: public int Index { get; init; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: VTableName
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.VTableName
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: Class name of the vtable that owns the function.
+      declaration: public string VTableName { get; init; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+  - name: S2VFuncRva
+    type: Struct
+    uid: SwiftlyS2.Shared.Memory.S2VFuncRva
+    parent: SwiftlyS2.Shared.Memory
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+    summary: A virtual function found by S2BinLib, addressed relative to the module base.
+    declaration: 'public readonly record struct S2VFuncRva : IEquatable<S2VFuncRva>'
+    implements:
+    - text: IEquatable<S2VFuncRva>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    constructors:
+    - name: S2VFuncRva(string, int, ulong)
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.#ctor(System.String,System.Int32,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: A virtual function found by S2BinLib, addressed relative to the module base.
+      declaration: public S2VFuncRva(string VTableName, int Index, ulong Rva)
+      parameters:
+      - name: VTableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: Class name of the vtable that owns the function.
+      - name: Index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        description: Index of the function inside the vtable.
+      - name: Rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        description: Relative virtual address of the function.
+    properties:
+    - name: Index
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.Index
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: Index of the function inside the vtable.
+      declaration: public int Index { get; init; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: Rva
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.Rva
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: Relative virtual address of the function.
+      declaration: public ulong Rva { get; init; }
+      valueType:
+      - text: ulong
+        url: https://learn.microsoft.com/dotnet/api/system.uint64
+    - name: VTableName
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.VTableName
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: Class name of the vtable that owns the function.
+      declaration: public string VTableName { get; init; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
   - name: Xmm
     type: Struct
     uid: SwiftlyS2.Shared.Memory.Xmm
