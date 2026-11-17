@@ -391,7 +391,7 @@ categories:
     methods:
     - name: Dispose()
       uid: SwiftlyS2.Core.Menus.OptionsBase.InputMenuOption.Dispose
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/InputMenuOption.cs#L229
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/InputMenuOption.cs#L227
       summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
       declaration: public override void Dispose()
     - name: GetDisplayText(IPlayer, int)
@@ -536,7 +536,7 @@ categories:
       remarks: "<p> When this property is set to a non-null function, the <xref href=\"SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text\" data-throw-if-not-resolved=\"false\"></xref> property's getter will invoke it to retrieve the current text value on each access. This enables automatic tracking of external string sources. The function can return null to indicate that it wants to fall back to the static <xref href=\"SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text\" data-throw-if-not-resolved=\"false\"></xref> value, or return an empty string to display nothing. </p> <p> Setting this property to null will revert to using only the static <xref href=\"SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text\" data-throw-if-not-resolved=\"false\"></xref> value stored in the backing field. </p> <p> Example usage: <pre><code class=\"lang-csharp\">string myText = \"Hello\"; option.BindingText = () =&gt; myText; myText = \"World\"; // option.Text now returns \"World\" // Return null to use fallback Text option.BindingText = () =&gt; condition ? playerName : null;</code></pre> </p>"
     - name: CloseAfterClick
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.CloseAfterClick
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L315
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L310
       summary: Gets or sets a value indicating whether the menu should be closed after handling the click.
       declaration: public bool CloseAfterClick { get; init; }
       valueType:
@@ -544,7 +544,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Comment
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Comment
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L232
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L229
       summary: Gets or sets the comment content displayed for this menu option.
       declaration: public string Comment { get; set; }
       valueType:
@@ -553,7 +553,7 @@ categories:
       remarks: This is a global property. Changing it will affect what all players see.
     - name: Enabled
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Enabled
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L290
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L286
       summary: Gets or sets a value indicating whether this option can be interacted with.
       declaration: public bool Enabled { get; set; }
       valueType:
@@ -570,7 +570,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.int32
     - name: MaxWidth
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.MaxWidth
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L237
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L234
       summary: The maximum display width for menu option text in relative units.
       declaration: public float MaxWidth { get; set; }
       valueType:
@@ -589,7 +589,7 @@ categories:
       remarks: This property will be null until the option is added to a menu via <xref href="SwiftlyS2.Shared.Menus.IMenuAPI.AddOption(SwiftlyS2.Shared.Menus.IMenuOption)" data-throw-if-not-resolved="false"></xref>. When implementing custom menu options, avoid accessing this property in the constructor as it will not be set yet.
     - name: PlaySound
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.PlaySound
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L346
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L341
       summary: Gets or sets a value indicating whether a sound should play when this option is selected.
       declaration: public bool PlaySound { get; set; }
       valueType:
@@ -597,7 +597,7 @@ categories:
         url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: Tag
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Tag
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L320
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L315
       summary: Gets or sets an object that contains data about this option.
       declaration: public object? Tag { get; set; }
       valueType:
@@ -606,7 +606,7 @@ categories:
       - '?'
     - name: Text
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Text
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L185
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L184
       summary: Gets or sets the text content displayed for this menu option.
       declaration: public string Text { get; set; }
       valueType:
@@ -615,7 +615,7 @@ categories:
       remarks: <p>This is a global property. Changing it will affect what all players see.</p> <p> When <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> is set to a non-null function, the getter will invoke that function to retrieve the current text value dynamically. If the function returns null, it falls back to this property's static value. Otherwise, it returns the static value stored in the backing field. </p> <p> Setting this property directly will update the static fallback value without clearing any <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> binding. This allows <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> and static text to coexist, with <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BindingText" data-throw-if-not-resolved="false"></xref> taking priority. The function is allowed to return an empty string, which will be displayed as-is. </p>
     - name: TextSize
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.TextSize
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L325
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L320
       summary: Gets or sets the text size for this option.
       declaration: public MenuOptionTextSize TextSize { get; set; }
       valueType:
@@ -624,7 +624,7 @@ categories:
         uid: SwiftlyS2.Shared.Menus.MenuOptionTextSize
     - name: TextStyle
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.TextStyle
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L330
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L325
       summary: Gets or sets the text overflow style for this option.
       declaration: public MenuOptionTextStyle TextStyle { get; set; }
       valueType:
@@ -633,7 +633,7 @@ categories:
         uid: SwiftlyS2.Shared.Menus.MenuOptionTextStyle
     - name: Visible
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Visible
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L262
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L259
       summary: Gets or sets a value indicating whether this option is visible in the menu.
       declaration: public bool Visible { get; set; }
       valueType:
@@ -652,7 +652,7 @@ categories:
       declaration: protected ~MenuOptionBase()
     - name: GetDisplayText(IPlayer, int)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.GetDisplayText(SwiftlyS2.Shared.Players.IPlayer,System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L490
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L485
       summary: Gets the display text for this option as it should appear to the specified player.
       declaration: public virtual string GetDisplayText(IPlayer player, int displayLine = 0)
       parameters:
@@ -676,7 +676,7 @@ categories:
       remarks: "When a menu option occupies multiple lines, MenuAPI may only need to display a specific line of that option. <ul><li>When <code>LineCount=1</code>: The <code>displayLine</code> parameter is not needed; return the HTML-formatted string directly.</li><li>When <code>LineCount&gt;=2</code>: Check the <code>displayLine</code> parameter: <ul><li><code>displayLine=0</code>: Return all content</li><li><code>displayLine=1</code>: Return only the first line content</li><li><code>displayLine=2</code>: Return only the second line content</li><li>And so on...</li></ul> </li></ul> Note: MenuAPI ensures that the <code>displayLine</code> parameter will not exceed the option's <code>LineCount</code>."
     - name: GetEnabled(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.GetEnabled(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L420
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L415
       summary: Determines whether this option is enabled for the specified player.
       declaration: public virtual bool GetEnabled(IPlayer player)
       parameters:
@@ -693,7 +693,7 @@ categories:
         description: True if the option is enabled for the player; otherwise, false.
     - name: GetVisible(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.GetVisible(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L401
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L396
       summary: Determines whether this option is visible to the specified player.
       declaration: public virtual bool GetVisible(IPlayer player)
       parameters:
@@ -710,7 +710,7 @@ categories:
         description: True if the option is visible to the player; otherwise, false.
     - name: IsClickTaskCompleted(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.IsClickTaskCompleted(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L393
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L388
       summary: Determines whether the click task for the specified player is completed.
       declaration: public virtual bool IsClickTaskCompleted(IPlayer player)
       parameters:
@@ -727,7 +727,7 @@ categories:
         description: True if the click task is completed; otherwise, false.
     - name: OnClickAsync(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.OnClickAsync(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L618
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L610
       summary: Handles the click action for this option.
       declaration: public virtual ValueTask OnClickAsync(IPlayer player)
       parameters:
@@ -744,7 +744,7 @@ categories:
         description: A task that represents the asynchronous operation.
     - name: OnValidatingAsync(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.OnValidatingAsync(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L558
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L551
       summary: Validates whether the specified player can interact with this option.
       declaration: public virtual ValueTask<bool> OnValidatingAsync(IPlayer player)
       parameters:
@@ -775,7 +775,7 @@ categories:
       declaration: public virtual void ResumeTextAnimation()
     - name: SetEnabled(IPlayer, bool)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.SetEnabled(SwiftlyS2.Shared.Players.IPlayer,System.Boolean)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L431
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L426
       summary: Sets the enabled state of this option for a specific player.
       declaration: public virtual void SetEnabled(IPlayer player, bool enabled)
       parameters:
@@ -793,7 +793,7 @@ categories:
       remarks: The per-player enabled state has lower priority than the global <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Enabled" data-throw-if-not-resolved="false"></xref> property.
     - name: SetVisible(IPlayer, bool)
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.SetVisible(SwiftlyS2.Shared.Players.IPlayer,System.Boolean)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L412
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L407
       summary: Sets the visibility of this option for a specific player.
       declaration: public virtual void SetVisible(IPlayer player, bool visible)
       parameters:
@@ -811,7 +811,7 @@ categories:
       remarks: The per-player visibility has lower priority than the global <xref href="SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Visible" data-throw-if-not-resolved="false"></xref> property.
     - name: AfterFormat
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.AfterFormat
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L386
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L381
       summary: Occurs after HTML markup is assembled, allowing customization of the final HTML output.
       declaration: public event EventHandler<MenuOptionFormattingEventArgs>? AfterFormat
       valueType:
@@ -825,7 +825,7 @@ categories:
       - '?'
     - name: BeforeFormat
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.BeforeFormat
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L381
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L376
       summary: Occurs before HTML markup is assembled, allowing customization of the text content.
       declaration: public event EventHandler<MenuOptionFormattingEventArgs>? BeforeFormat
       valueType:
@@ -839,7 +839,7 @@ categories:
       - '?'
     - name: Click
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Click
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L371
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L366
       summary: Occurs when the option is clicked by a player.
       declaration: public event AsyncEventHandler<MenuOptionClickEventArgs>? Click
       valueType:
@@ -854,7 +854,7 @@ categories:
       - '?'
     - name: EnabledChanged
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.EnabledChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L356
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L351
       summary: Occurs when the enabled state of the option changes.
       declaration: public event EventHandler<MenuOptionEventArgs>? EnabledChanged
       valueType:
@@ -868,7 +868,7 @@ categories:
       - '?'
     - name: TextChanged
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.TextChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L361
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L356
       summary: Occurs when the text of the option changes.
       declaration: public event EventHandler<MenuOptionEventArgs>? TextChanged
       valueType:
@@ -882,7 +882,7 @@ categories:
       - '?'
     - name: Validating
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.Validating
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L366
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L361
       summary: Occurs before a click is processed, allowing validation and cancellation.
       declaration: public event EventHandler<MenuOptionValidatingEventArgs>? Validating
       valueType:
@@ -896,7 +896,7 @@ categories:
       - '?'
     - name: VisibilityChanged
       uid: SwiftlyS2.Core.Menus.OptionsBase.MenuOptionBase.VisibilityChanged
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L351
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/MenuOptionBase.cs#L346
       summary: Occurs when the visibility of the option changes.
       declaration: public event EventHandler<MenuOptionEventArgs>? VisibilityChanged
       valueType:
@@ -1091,7 +1091,7 @@ categories:
       remarks: "When a menu option occupies multiple lines, MenuAPI may only need to display a specific line of that option. <ul><li>When <code>LineCount=1</code>: The <code>displayLine</code> parameter is not needed; return the HTML-formatted string directly.</li><li>When <code>LineCount&gt;=2</code>: Check the <code>displayLine</code> parameter: <ul><li><code>displayLine=0</code>: Return all content</li><li><code>displayLine=1</code>: Return only the first line content</li><li><code>displayLine=2</code>: Return only the second line content</li><li>And so on...</li></ul> </li></ul> Note: MenuAPI ensures that the <code>displayLine</code> parameter will not exceed the option's <code>LineCount</code>."
     - name: GetProgress(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.ProgressBarMenuOption.GetProgress(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L139
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L138
       summary: Gets the current progress value for the specified player.
       declaration: public float GetProgress(IPlayer player)
       parameters:
@@ -1108,7 +1108,7 @@ categories:
         description: The current progress value (0.0 to 1.0).
     - name: SetProgressProvider(IPlayer, Func<float>)
       uid: SwiftlyS2.Core.Menus.OptionsBase.ProgressBarMenuOption.SetProgressProvider(SwiftlyS2.Shared.Players.IPlayer,System.Func{System.Single})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L129
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/ProgressBarMenuOption.cs#L128
       summary: Sets or updates the progress provider function for a specific player.
       declaration: public void SetProgressProvider(IPlayer player, Func<float> progressProvider)
       parameters:
@@ -1603,7 +1603,7 @@ categories:
         description: The current slider value.
     - name: IncrementValue(IPlayer)
       uid: SwiftlyS2.Core.Menus.OptionsBase.SliderMenuOption.IncrementValue(SwiftlyS2.Shared.Players.IPlayer)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/SliderMenuOption.cs#L185
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Core/Modules/Menus/OptionsBase/SliderMenuOption.cs#L184
       summary: Increments the slider value by the step amount for the specified player. Wraps to Min if the value goes above Max.
       declaration: public ValueTask IncrementValue(IPlayer player)
       parameters:
@@ -4068,7 +4068,7 @@ categories:
           url: https://learn.microsoft.com/dotnet/api/system.single
     - name: GetAvgData(NetworkFlow)
       uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgData(SwiftlyS2.Shared.Engine.NetworkFlow)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L31
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L32
       declaration: float GetAvgData(NetworkFlow flow)
       parameters:
       - name: flow
@@ -4094,10 +4094,10 @@ categories:
         type:
         - text: float
           url: https://learn.microsoft.com/dotnet/api/system.single
-    - name: GetAvgPacketBytes(NetworkFlow)
-      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgPacketBytes(SwiftlyS2.Shared.Engine.NetworkFlow)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L32
-      declaration: float GetAvgPacketBytes(NetworkFlow flow)
+    - name: GetAvgPackets(NetworkFlow)
+      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgPackets(SwiftlyS2.Shared.Engine.NetworkFlow)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L33
+      declaration: float GetAvgPackets(NetworkFlow flow)
       parameters:
       - name: flow
         type:
@@ -4108,10 +4108,10 @@ categories:
         type:
         - text: float
           url: https://learn.microsoft.com/dotnet/api/system.single
-    - name: GetAvgPackets(NetworkFlow)
-      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetAvgPackets(SwiftlyS2.Shared.Engine.NetworkFlow)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L33
-      declaration: float GetAvgPackets(NetworkFlow flow)
+    - name: GetPeakJitter(NetworkFlow)
+      uid: SwiftlyS2.Shared.Engine.INetChannelInfo.GetPeakJitter(SwiftlyS2.Shared.Engine.NetworkFlow)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/INetChannelInfo.cs#L31
+      declaration: float GetPeakJitter(NetworkFlow flow)
       parameters:
       - name: flow
         type:
@@ -4220,14 +4220,6 @@ categories:
       valueType:
       - text: nint
         url: https://learn.microsoft.com/dotnet/api/system.intptr
-    - name: AsyncDisconnectFlags
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.AsyncDisconnectFlags
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L28
-      summary: Gets the asynchronous disconnect flags for the client.
-      declaration: byte AsyncDisconnectFlags { get; }
-      valueType:
-      - text: byte
-        url: https://learn.microsoft.com/dotnet/api/system.byte
     - name: AuthTicketSteamID
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.AuthTicketSteamID
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L55
@@ -4312,15 +4304,6 @@ categories:
       valueType:
       - text: int
         url: https://learn.microsoft.com/dotnet/api/system.int32
-    - name: DisconnectedSteamID
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.DisconnectedSteamID
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L52
-      summary: Gets the Steam ID of the client when they are disconnected.
-      declaration: ref CSteamID DisconnectedSteamID { get; }
-      valueType:
-      - text: CSteamID
-        url: SwiftlyS2.Shared.SteamAPI.CSteamID.html
-        uid: SwiftlyS2.Shared.SteamAPI.CSteamID
     - name: EntityIndex
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.EntityIndex
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L19
@@ -4415,6 +4398,15 @@ categories:
       valueType:
       - text: double
         url: https://learn.microsoft.com/dotnet/api/system.double
+    - name: LastSteamID
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LastSteamID
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L52
+      summary: Gets the last Steam ID of the client.
+      declaration: ref CSteamID LastSteamID { get; }
+      valueType:
+      - text: CSteamID
+        url: SwiftlyS2.Shared.SteamAPI.CSteamID.html
+        uid: SwiftlyS2.Shared.SteamAPI.CSteamID
     - name: LoadedSpawnGroups
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LoadedSpawnGroups
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L91
@@ -4436,19 +4428,19 @@ categories:
       valueType:
       - text: int
         url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: LogFullUpdate
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LogFullUpdate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L40
+      summary: Gets a value indicating whether the client's full update is logged.
+      declaration: bool LogFullUpdate { get; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
     - name: LowViolence
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.LowViolence
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L106
       summary: Gets a value indicating whether the client is in low violence mode.
       declaration: bool LowViolence { get; }
-      valueType:
-      - text: bool
-        url: https://learn.microsoft.com/dotnet/api/system.boolean
-    - name: MarkedToKick
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.MarkedToKick
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L31
-      summary: Gets or sets a value indicating whether the client is marked to be kicked.
-      declaration: bool MarkedToKick { get; set; }
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
@@ -4494,14 +4486,22 @@ categories:
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
-    - name: SendingSnapshots
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendingSnapshots
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L40
-      summary: Gets a value indicating whether the client is currently sending snapshots.
-      declaration: bool SendingSnapshots { get; }
+    - name: SendJobIdle
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendJobIdle
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L31
+      summary: Gets or sets a value indicating whether the client's send job is idle.
+      declaration: bool SendJobIdle { get; set; }
       valueType:
       - text: bool
         url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: SendJobState
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendJobState
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L28
+      summary: 'Gets the send job state (ClientSendJobState_t: 0 idle, 1 running, 2 finished) of the client.'
+      declaration: byte SendJobState { get; }
+      valueType:
+      - text: byte
+        url: https://learn.microsoft.com/dotnet/api/system.byte
     - name: SendtableCRC
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.SendtableCRC
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L73
@@ -4604,11 +4604,16 @@ categories:
         type:
         - text: int
           url: https://learn.microsoft.com/dotnet/api/system.int32
-    - name: MarkToKick()
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.MarkToKick
+    - name: OnSendJobFinished()
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.OnSendJobFinished
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L163
-      summary: Marks the client to be kicked from the server.
-      declaration: void MarkToKick()
+      summary: Called when the client's send job finishes.
+      declaration: void OnSendJobFinished()
+    - name: OnSendJobStarted()
+      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.OnSendJobStarted
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L166
+      summary: Called when the client's send job starts.
+      declaration: void OnSendJobStarted()
     - name: Reconnect()
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.Reconnect
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L130
@@ -4639,11 +4644,6 @@ categories:
         type:
         - text: float
           url: https://learn.microsoft.com/dotnet/api/system.single
-    - name: UnmarkToKick()
-      uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.UnmarkToKick
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L166
-      summary: Unmarks the client to be kicked from the server.
-      declaration: void UnmarkToKick()
     - name: UpdateSendState()
       uid: SwiftlyS2.Shared.Engine.IServerSideClientBase.UpdateSendState
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Engine/IServerSideClientBase.cs#L153
@@ -5812,123 +5812,130 @@ categories:
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L29
     summary: Called when a client connects to the server.
     declaration: public delegate void EventDelegates.OnClientConnected(IOnClientConnectedEvent @event)
+  - name: EventDelegates.OnClientConnectionEstablished
+    type: Delegate
+    uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientConnectionEstablished
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L34
+    summary: Called when a client connection is established.
+    declaration: public delegate void EventDelegates.OnClientConnectionEstablished(IOnClientConnectionEstablishedEvent @event)
   - name: EventDelegates.OnClientDisconnected
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientDisconnected
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L34
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L39
     summary: Called when a client disconnects from the server.
     declaration: public delegate void EventDelegates.OnClientDisconnected(IOnClientDisconnectedEvent @event)
   - name: EventDelegates.OnClientKeyStateChanged
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientKeyStateChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L39
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L44
     summary: Called when a client's key state changes.
     declaration: public delegate void EventDelegates.OnClientKeyStateChanged(IOnClientKeyStateChangedEvent @event)
   - name: EventDelegates.OnClientProcessUsercmds
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientProcessUsercmds
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L90
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L95
     summary: Called when a client processes user commands. This callback is a hot path, be careful with it and don't do anything expensive.
     declaration: public delegate void EventDelegates.OnClientProcessUsercmds(IOnClientProcessUsercmdsEvent @event)
   - name: EventDelegates.OnClientPutInServer
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientPutInServer
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L44
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L49
     summary: Called when a client is fully put in server.
     declaration: public delegate void EventDelegates.OnClientPutInServer(IOnClientPutInServerEvent @event)
   - name: EventDelegates.OnClientSettingsChanged
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSettingsChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L162
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L167
     summary: Called when a client changed one or several replicated convars (name etc).
     declaration: public delegate void EventDelegates.OnClientSettingsChanged(IOnClientSettingsChangedEvent @event)
   - name: EventDelegates.OnClientSteamAuthorize
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSteamAuthorize
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L49
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L54
     summary: Called when a client is authorized by Steam.
     declaration: public delegate void EventDelegates.OnClientSteamAuthorize(IOnClientSteamAuthorizeEvent @event)
   - name: EventDelegates.OnClientSteamAuthorizeFail
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientSteamAuthorizeFail
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L54
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L59
     summary: Called when a client's Steam authorization fails.
     declaration: public delegate void EventDelegates.OnClientSteamAuthorizeFail(IOnClientSteamAuthorizeFailEvent @event)
   - name: EventDelegates.OnClientVoice
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnClientVoice
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L157
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L162
     summary: Called when a client sends a voice packet.
     declaration: public delegate void EventDelegates.OnClientVoice(IOnClientVoiceEvent @event)
   - name: EventDelegates.OnCommandExecuteHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnCommandExecuteHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L172
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L177
     summary: Called when a server command (ConCommand) is executed.
     declaration: public delegate void EventDelegates.OnCommandExecuteHook(IOnCommandExecuteHookEvent @event)
   - name: EventDelegates.OnConCommandCreated
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConCommandCreated
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L100
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L105
     summary: Called when a ConCommand is created.
     declaration: public delegate void EventDelegates.OnConCommandCreated(IOnConCommandCreated @event)
   - name: EventDelegates.OnConVarCreated
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConVarCreated
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L105
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L110
     summary: Called when a ConVar is created.
     declaration: public delegate void EventDelegates.OnConVarCreated(IOnConVarCreated @event)
   - name: EventDelegates.OnConVarValueChanged
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConVarValueChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L95
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L100
     summary: Called when a ConVar value is changed.
     declaration: public delegate void EventDelegates.OnConVarValueChanged(IOnConVarValueChanged @event)
   - name: EventDelegates.OnConsoleOutput
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnConsoleOutput
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L167
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L172
     summary: Called when a console output is received on the dedicated console dispatch thread.
     declaration: public delegate void EventDelegates.OnConsoleOutput(IOnConsoleOutputEvent @event)
   - name: EventDelegates.OnCustomHudClicked
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnCustomHudClicked
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L206
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L211
     summary: Called when a custom hud element is clicked.
     declaration: public delegate void EventDelegates.OnCustomHudClicked(IOnCustomHudClickedEvent @event)
   - name: EventDelegates.OnEntityCreated
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityCreated
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L59
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L64
     summary: Called when an entity is created.
     declaration: public delegate void EventDelegates.OnEntityCreated(IOnEntityCreatedEvent @event)
   - name: EventDelegates.OnEntityDeleted
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityDeleted
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L64
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L69
     summary: Called when an entity is deleted.
     declaration: public delegate void EventDelegates.OnEntityDeleted(IOnEntityDeletedEvent @event)
   - name: EventDelegates.OnEntityEndTouch
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityEndTouch
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L133
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L138
     summary: Called when an entity ends touching another entity.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.EndTouch instead.")]
@@ -5938,7 +5945,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityFireOutputHookEvent
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L195
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L200
     summary: Called when an entity fires output.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.FireOutput instead.")]
@@ -5948,7 +5955,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityIdentityAcceptInputHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L189
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L194
     summary: Called when an entity identity accept input hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.AcceptInput instead.")]
@@ -5958,21 +5965,21 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityParentChanged
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L69
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L74
     summary: Called when an entity's parent changes.
     declaration: public delegate void EventDelegates.OnEntityParentChanged(IOnEntityParentChangedEvent @event)
   - name: EventDelegates.OnEntitySpawned
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntitySpawned
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L74
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L79
     summary: Called when an entity is spawned.
     declaration: public delegate void EventDelegates.OnEntitySpawned(IOnEntitySpawnedEvent @event)
   - name: EventDelegates.OnEntityStartTouch
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityStartTouch
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L121
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L126
     summary: Called when an entity starts touching another entity.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.StartTouch instead.")]
@@ -5982,7 +5989,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityTakeDamage
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L110
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L115
     summary: Called when an entity takes damage.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.TakeDamage instead.")]
@@ -5992,17 +5999,24 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnEntityTouch
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L127
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L132
     summary: Called when an entity is touching another entity.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Entities.Touch instead.")]
 
       public delegate void EventDelegates.OnEntityTouch(IOnEntityTouchEvent @event)
+  - name: EventDelegates.OnFindTargettedPlayers
+    type: Delegate
+    uid: SwiftlyS2.Shared.Events.EventDelegates.OnFindTargettedPlayers
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L217
+    summary: Called for every candidate while resolving a target in FindTargettedPlayers. Lets plugins add their own target selectors or veto candidates.
+    declaration: public delegate void EventDelegates.OnFindTargettedPlayers(IOnFindTargettedPlayersEvent @event)
   - name: EventDelegates.OnItemServicesCanAcquireHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnItemServicesCanAcquireHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L139
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L144
     summary: Called when an item services can acquire hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Items.CanAcquire instead.")]
@@ -6012,21 +6026,21 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMapLoad
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L79
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L84
     summary: Called when a map is loaded.
     declaration: public delegate void EventDelegates.OnMapLoad(IOnMapLoadEvent @event)
   - name: EventDelegates.OnMapUnload
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMapUnload
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L84
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L89
     summary: Called when a map is unloaded.
     declaration: public delegate void EventDelegates.OnMapUnload(IOnMapUnloadEvent @event)
   - name: EventDelegates.OnMovementServicesRunCommandHook
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnMovementServicesRunCommandHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L177
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L182
     summary: Called when the movement services run command hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Movement.RunCommand instead.")]
@@ -6036,7 +6050,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnPlayerPawnPostThink
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L183
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L188
     summary: Called when the player pawn post think hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Pawn.PostThink instead.")]
@@ -6046,14 +6060,14 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnPrecacheResource
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L116
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L121
     summary: Called when the game is precaching resources.
     declaration: public delegate void EventDelegates.OnPrecacheResource(IOnPrecacheResourceEvent @event)
   - name: EventDelegates.OnStartupServer
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnStartupServer
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L201
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L206
     summary: Called when the server is started.
     declaration: public delegate void EventDelegates.OnStartupServer()
   - name: EventDelegates.OnSteamAPIActivated
@@ -6074,7 +6088,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnWeaponServicesCanUseHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L145
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L150
     summary: Called when a weapon services can use hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.CanUse instead.")]
@@ -6084,7 +6098,7 @@ categories:
     type: Delegate
     uid: SwiftlyS2.Shared.Events.EventDelegates.OnWeaponServicesDropWeaponHook
     parent: SwiftlyS2.Shared.Events
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L151
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventDelegates.cs#L156
     summary: Called when a weapon services drop weapon hook is triggered.
     declaration: >-
       [Obsolete("This event is deprecated and will be removed in future versions. Use GameHooks.Weapons.DropWeapon instead.")]
@@ -6435,6 +6449,22 @@ categories:
       - text: HookResult
         url: SwiftlyS2.Shared.Misc.HookResult.html
         uid: SwiftlyS2.Shared.Misc.HookResult
+  - name: IOnClientConnectionEstablishedEvent
+    type: Interface
+    uid: SwiftlyS2.Shared.Events.IOnClientConnectionEstablishedEvent
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientConnectionEstablishedEvent.cs#L6
+    summary: Called when a client connection is established.
+    declaration: public interface IOnClientConnectionEstablishedEvent
+    properties:
+    - name: PlayerId
+      uid: SwiftlyS2.Shared.Events.IOnClientConnectionEstablishedEvent.PlayerId
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnClientConnectionEstablishedEvent.cs#L11
+      summary: The player ID of the client.
+      declaration: int PlayerId { get; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
   - name: IOnClientDisconnectedEvent
     type: Interface
     uid: SwiftlyS2.Shared.Events.IOnClientDisconnectedEvent
@@ -7165,6 +7195,66 @@ categories:
       - text: CBaseEntity
         url: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity.html
         uid: SwiftlyS2.Shared.SchemaDefinitions.CBaseEntity
+  - name: IOnFindTargettedPlayersEvent
+    type: Interface
+    uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent
+    parent: SwiftlyS2.Shared.Events
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L12
+    summary: Called for every candidate while <xref href="SwiftlyS2.Shared.Players.IPlayerManagerService.FindTargettedPlayers(SwiftlyS2.Shared.Players.IPlayer%2cSystem.String%2cSwiftlyS2.Shared.Players.TargetSearchMode%2cSystem.StringComparison)" data-throw-if-not-resolved="false"></xref> resolves a target. Use it to add your own target selectors (for example "@vip") or to veto candidates. Candidates that fail the <xref href="SwiftlyS2.Shared.Players.TargetSearchMode" data-throw-if-not-resolved="false"></xref> filters are not passed in. This callback runs once per candidate, so don't do anything expensive.
+    declaration: public interface IOnFindTargettedPlayersEvent
+    properties:
+    - name: Candidate
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Candidate
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L32
+      summary: The player being tested against <xref href="SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Target" data-throw-if-not-resolved="false"></xref>.
+      declaration: IPlayer Candidate { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: IsMatch
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.IsMatch
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L38
+      summary: Whether <xref href="SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Candidate" data-throw-if-not-resolved="false"></xref> is included in the result. Starts as the built-in verdict (or the previous plugin's). Set it to true to include the candidate, false to exclude it.
+      declaration: bool IsMatch { get; set; }
+      valueType:
+      - text: bool
+        url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: Player
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Player
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L17
+      summary: The player initiating the search.
+      declaration: IPlayer Player { get; }
+      valueType:
+      - text: IPlayer
+        url: SwiftlyS2.Shared.Players.IPlayer.html
+        uid: SwiftlyS2.Shared.Players.IPlayer
+    - name: Result
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Result
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L44
+      summary: Set to <xref href="SwiftlyS2.Shared.Misc.HookResult.Handled" data-throw-if-not-resolved="false"></xref> or <xref href="SwiftlyS2.Shared.Misc.HookResult.Stop" data-throw-if-not-resolved="false"></xref> to skip the remaining handlers for this candidate. The current <xref href="SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.IsMatch" data-throw-if-not-resolved="false"></xref> value is kept.
+      declaration: HookResult Result { get; set; }
+      valueType:
+      - text: HookResult
+        url: SwiftlyS2.Shared.Misc.HookResult.html
+        uid: SwiftlyS2.Shared.Misc.HookResult
+    - name: SearchMode
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.SearchMode
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L27
+      summary: The search mode requested by the caller.
+      declaration: TargetSearchMode SearchMode { get; }
+      valueType:
+      - text: TargetSearchMode
+        url: SwiftlyS2.Shared.Players.TargetSearchMode.html
+        uid: SwiftlyS2.Shared.Players.TargetSearchMode
+    - name: Target
+      uid: SwiftlyS2.Shared.Events.IOnFindTargettedPlayersEvent.Target
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Events/EventParams/IOnFindTargettedPlayersEvent.cs#L22
+      summary: The raw target string, for example "@vip", "#3" or part of a name.
+      declaration: string Target { get; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
   - name: IOnItemServicesCanAcquireHookEvent
     type: Interface
     uid: SwiftlyS2.Shared.Events.IOnItemServicesCanAcquireHookEvent
@@ -38089,10 +38179,20 @@ categories:
     parent: SwiftlyS2.Shared.Memory
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L6
     declaration: public interface IMemoryService
+    properties:
+    - name: S2BinLib
+      uid: SwiftlyS2.Shared.Memory.IMemoryService.S2BinLib
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L11
+      summary: Binary analysis helpers (pattern scan, vtables, symbols, xrefs...).
+      declaration: IS2BinLib S2BinLib { get; }
+      valueType:
+      - text: IS2BinLib
+        url: SwiftlyS2.Shared.Memory.IS2BinLib.html
+        uid: SwiftlyS2.Shared.Memory.IS2BinLib
     methods:
     - name: Alloc(ulong)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.Alloc(System.UInt64)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L103
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L108
       summary: Allocate a block of memory.
       declaration: nint Alloc(ulong size)
       parameters:
@@ -38108,7 +38208,7 @@ categories:
         description: The address of the allocated memory block.
     - name: Free(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.Free(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L109
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L114
       summary: Free a block of memory.
       declaration: void Free(nint pointer)
       parameters:
@@ -38119,7 +38219,7 @@ categories:
         description: The address of the memory block to free.
     - name: GetAddressBySignature(string, string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetAddressBySignature(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L44
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L49
       summary: Get the address of a ida-style signature.
       declaration: nint? GetAddressBySignature(string library, string signature)
       parameters:
@@ -38141,7 +38241,7 @@ categories:
         description: The address of the function. Return null if not found.
     - name: GetInterfaceByName(string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetInterfaceByName(System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L36
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L41
       summary: Get the address of an valve or swiftly native interface by its name.
       declaration: nint? GetInterfaceByName(string name)
       parameters:
@@ -38158,7 +38258,7 @@ categories:
         description: The address of the interface. Return null if not found.
     - name: GetObjectPtrVtableName(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetObjectPtrVtableName(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L66
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L71
       summary: Get the vtable name of an object pointer.
       declaration: string? GetObjectPtrVtableName(nint address)
       parameters:
@@ -38175,7 +38275,7 @@ categories:
         description: The vtable name. Return null if not found.
     - name: GetUnmanagedFunctionByAddress<TDelegate>(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetUnmanagedFunctionByAddress``1(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L14
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L19
       summary: Get an unmanaged function by its address.
       declaration: 'IUnmanagedFunction<TDelegate> GetUnmanagedFunctionByAddress<TDelegate>(nint address) where TDelegate : Delegate'
       parameters:
@@ -38198,7 +38298,7 @@ categories:
         description: The delegate type of the unmanaged function.
     - name: GetUnmanagedFunctionByVTable<TDelegate>(nint, int)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetUnmanagedFunctionByVTable``1(System.IntPtr,System.Int32)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L23
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L28
       summary: Get an unmanaged function by its vtable address and index.
       declaration: 'IUnmanagedFunction<TDelegate> GetUnmanagedFunctionByVTable<TDelegate>(nint pVTable, int index) where TDelegate : Delegate'
       parameters:
@@ -38226,7 +38326,7 @@ categories:
         description: ''
     - name: GetUnmanagedMemoryByAddress(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetUnmanagedMemoryByAddress(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L29
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L34
       summary: Get an unmanaged memory block by its address.
       declaration: IUnmanagedMemory GetUnmanagedMemoryByAddress(nint address)
       parameters:
@@ -38242,7 +38342,7 @@ categories:
           uid: SwiftlyS2.Shared.Memory.IUnmanagedMemory
     - name: GetVTableAddress(string, string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.GetVTableAddress(System.String,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L52
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L57
       summary: Get the address of a vtable by its name.
       declaration: nint? GetVTableAddress(string library, string vtableName)
       parameters:
@@ -38264,7 +38364,7 @@ categories:
         description: The address of the vtable. Return null if not found.
     - name: ObjectPtrHasBaseClass(nint, string)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ObjectPtrHasBaseClass(System.IntPtr,System.String)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L81
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L86
       summary: Check if an object pointer has a base class.
       declaration: bool ObjectPtrHasBaseClass(nint address, string baseClassName)
       parameters:
@@ -38285,7 +38385,7 @@ categories:
         description: True if the object pointer has the base class, false otherwise.
     - name: ObjectPtrHasVtable(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ObjectPtrHasVtable(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L73
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L78
       summary: Check if an object pointer has a vtable.
       declaration: bool ObjectPtrHasVtable(nint address)
       parameters:
@@ -38301,7 +38401,7 @@ categories:
         description: True if the object pointer has a vtable, false otherwise.
     - name: Resize(nint, ulong)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.Resize(System.IntPtr,System.UInt64)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L117
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L122
       summary: Resize a block of memory.
       declaration: nint Resize(nint pointer, ulong newSize)
       parameters:
@@ -38322,7 +38422,7 @@ categories:
         description: The address of the resized memory block.
     - name: ResolveXrefAddress(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ResolveXrefAddress(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L59
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L64
       summary: Resolve the address of a xref signature.
       declaration: nint ResolveXrefAddress(nint xrefAddress)
       parameters:
@@ -38338,7 +38438,7 @@ categories:
         description: The resolved address.
     - name: ToSchemaClass<T>(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ToSchemaClass``1(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L89
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L94
       summary: Convert a raw address to a schema class.
       declaration: 'T ToSchemaClass<T>(nint address) where T : class, ISchemaClass<T>'
       parameters:
@@ -38356,7 +38456,7 @@ categories:
         description: The schema class type.
     - name: ToServerSideClient(nint)
       uid: SwiftlyS2.Shared.Memory.IMemoryService.ToServerSideClient(System.IntPtr)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L96
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IMemoryService.cs#L101
       summary: Convert a raw address to a server-side client.
       declaration: IServerSideClient ToServerSideClient(nint address)
       parameters:
@@ -38371,6 +38471,1143 @@ categories:
           url: SwiftlyS2.Shared.Engine.IServerSideClient.html
           uid: SwiftlyS2.Shared.Engine.IServerSideClient
         description: The server-side client.
+  - name: IS2BinLib
+    type: Interface
+    uid: SwiftlyS2.Shared.Memory.IS2BinLib
+    parent: SwiftlyS2.Shared.Memory
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L27
+    summary: Binary analysis helpers (pattern scan, vtables, symbols, xrefs...) backed by S2BinLib. <p> <code>binary</code> is the module name, e.g. <code>"server"</code> or <code>"engine2"</code>. Methods return <code>null</code>, <code>false</code> or an empty list when nothing was found or the lookup failed. Methods ending in <code>Rva</code> work with offsets relative to the module base, the others with runtime addresses. </p>
+    declaration: public interface IS2BinLib
+    methods:
+    - name: ClearModuleBase(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ClearModuleBase(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L36
+      summary: Clear a module base that was set manually.
+      declaration: bool ClearModuleBase(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: DumpVTables(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.DumpVTables(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L116
+      summary: Cache vtable metadata of a binary. Needed before vtable-based lookups on some binaries.
+      declaration: bool DumpVTables(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: DumpXrefs(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.DumpXrefs(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L151
+      summary: Cache every cross-reference of a binary. Needed before the xref-based lookups.
+      declaration: bool DumpXrefs(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: FindCallWithStringArg(string, nint, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithStringArg(System.String,System.IntPtr,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L196
+      summary: Find the call inside <code class="paramref">funcStart</code> that has the given string as argument and return the called function.
+      declaration: nint? FindCallWithStringArg(string binary, nint funcStart, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStart
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindCallWithStringArgRva(string, ulong, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithStringArgRva(System.String,System.UInt64,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L199
+      summary: Find the call inside <code class="paramref">funcStart</code> that has the given string as argument and return the called function.
+      declaration: ulong? FindCallWithStringArgRva(string binary, ulong funcStartRva, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStartRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindCallWithXrefArg(string, nint, nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithXrefArg(System.String,System.IntPtr,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L190
+      summary: Find the call inside <code class="paramref">funcStart</code> that has an argument referencing <code class="paramref">target</code> and return the called function.
+      declaration: nint? FindCallWithXrefArg(string binary, nint funcStart, nint target)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStart
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: target
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindCallWithXrefArgRva(string, ulong, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindCallWithXrefArgRva(System.String,System.UInt64,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L193
+      summary: Find the call inside <code class="paramref">funcStart</code> that has an argument referencing <code class="paramref">target</code> and return the called function.
+      declaration: ulong? FindCallWithXrefArgRva(string binary, ulong funcStartRva, ulong targetRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcStartRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: targetRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindExport(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindExport(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L131
+      declaration: nint? FindExport(string binary, string exportName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: exportName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindExportRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindExportRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L133
+      declaration: ulong? FindExportRva(string binary, string exportName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: exportName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindFuncStart(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncStart(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L166
+      summary: Find the start of the function that contains the given RVA.
+      declaration: nint? FindFuncStart(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindFuncStartRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncStartRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L169
+      summary: Find the start of the function that contains the given RVA.
+      declaration: ulong? FindFuncStartRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindFuncWithString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncWithString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L178
+      summary: Find the function that references the given string.
+      declaration: nint? FindFuncWithString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindFuncWithStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindFuncWithStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L181
+      summary: Find the function that references the given string.
+      declaration: ulong? FindFuncWithStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindNetworkVarStateChangedIndex(ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindNetworkVarStateChangedIndex(System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L110
+      summary: Find the vtable index of <code>NetworkStateChanged</code> for the vtable at <code class="paramref">vtableAddress</code>.
+      declaration: int? FindNetworkVarStateChangedIndex(ulong vtableAddress)
+      parameters:
+      - name: vtableAddress
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: FindNetworkVarStateChangedIndexRva(ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindNetworkVarStateChangedIndexRva(System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L113
+      summary: Find the vtable index of <code>NetworkStateChanged</code> for the vtable at <code class="paramref">vtableRva</code>.
+      declaration: int? FindNetworkVarStateChangedIndexRva(ulong vtableRva)
+      parameters:
+      - name: vtableRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: FindString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L136
+      summary: Find a string literal inside the binary.
+      declaration: nint? FindString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L139
+      summary: Find a string literal inside the binary.
+      declaration: ulong? FindStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindSymbol(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindSymbol(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L127
+      declaration: nint? FindSymbol(string binary, string symbolName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: symbolName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindSymbolRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindSymbolRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L129
+      declaration: ulong? FindSymbolRva(string binary, string symbolName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: symbolName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVFunc(string, string, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFunc(System.String,System.String,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L86
+      summary: Find a virtual function by vtable name and index.
+      declaration: nint? FindVFunc(string binary, string vtableName, int index)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVFunc(nint, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFunc(System.IntPtr,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L92
+      summary: Find a virtual function by vtable pointer and index.
+      declaration: nint? FindVFunc(nint vtable, int index)
+      parameters:
+      - name: vtable
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVFuncContaining(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncContaining(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L98
+      summary: Find the virtual function that contains the given RVA.
+      declaration: S2VFunc? FindVFuncContaining(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: S2VFunc
+          url: SwiftlyS2.Shared.Memory.S2VFunc.html
+          uid: SwiftlyS2.Shared.Memory.S2VFunc
+        - '?'
+    - name: FindVFuncContainingRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncContainingRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L101
+      summary: Find the virtual function that contains the given RVA.
+      declaration: S2VFuncRva? FindVFuncContainingRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: S2VFuncRva
+          url: SwiftlyS2.Shared.Memory.S2VFuncRva.html
+          uid: SwiftlyS2.Shared.Memory.S2VFuncRva
+        - '?'
+    - name: FindVFuncRva(string, string, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncRva(System.String,System.String,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L89
+      summary: Find a virtual function by vtable name and index.
+      declaration: ulong? FindVFuncRva(string binary, string vtableName, int index)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVFuncRva(nint, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncRva(System.IntPtr,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L95
+      summary: Find a virtual function by vtable pointer and index.
+      declaration: ulong? FindVFuncRva(nint vtable, int index)
+      parameters:
+      - name: vtable
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVFuncWithString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncWithString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L104
+      summary: Find the virtual function that references the given string.
+      declaration: S2VFunc? FindVFuncWithString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: S2VFunc
+          url: SwiftlyS2.Shared.Memory.S2VFunc.html
+          uid: SwiftlyS2.Shared.Memory.S2VFunc
+        - '?'
+    - name: FindVFuncWithStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVFuncWithStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L107
+      summary: Find the virtual function that references the given string.
+      declaration: S2VFuncRva? FindVFuncWithStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: S2VFuncRva
+          url: SwiftlyS2.Shared.Memory.S2VFuncRva.html
+          uid: SwiftlyS2.Shared.Memory.S2VFuncRva
+        - '?'
+    - name: FindVTable(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTable(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L68
+      summary: Find a vtable by class name. Use <code>"Outer::Inner"</code> for nested classes (2 levels max).
+      declaration: nint? FindVTable(string binary, string vtableName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVTableMangled(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTableMangled(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L74
+      summary: Find a vtable by its mangled name.
+      declaration: nint? FindVTableMangled(string binary, string mangledName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: mangledName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindVTableMangledRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTableMangledRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L77
+      summary: Find a vtable by its mangled name.
+      declaration: ulong? FindVTableMangledRva(string binary, string mangledName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: mangledName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindVTableRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindVTableRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L71
+      summary: Find a vtable by class name. Use <code>"Outer::Inner"</code> for nested classes (2 levels max).
+      declaration: ulong? FindVTableRva(string binary, string vtableName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindXrefFuncStart(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncStart(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L172
+      summary: Find the start of the function that contains the given RVA, using cross-references.
+      declaration: nint? FindXrefFuncStart(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindXrefFuncStartRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncStartRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L175
+      summary: Find the start of the function that contains the given RVA, using cross-references.
+      declaration: ulong? FindXrefFuncStartRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FindXrefFuncWithString(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncWithString(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L184
+      summary: Find the function that references the given string, using cross-references.
+      declaration: nint? FindXrefFuncWithString(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FindXrefFuncWithStringRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FindXrefFuncWithStringRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L187
+      summary: Find the function that references the given string, using cross-references.
+      declaration: ulong? FindXrefFuncWithStringRva(string binary, string value)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: value
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FollowXref(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FollowXref(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L157
+      summary: Follow the cross-reference at a runtime address and return its target address.
+      declaration: nint? FollowXref(nint address)
+      parameters:
+      - name: address
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: FollowXrefRva(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FollowXrefRva(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L163
+      summary: Follow the cross-reference at an RVA and return its target RVA.
+      declaration: ulong? FollowXrefRva(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: FollowXrefRvaToAddress(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.FollowXrefRvaToAddress(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L160
+      summary: Follow the cross-reference at an RVA and return its target address.
+      declaration: nint? FollowXrefRvaToAddress(string binary, ulong rva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: GetBinaryPath(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetBinaryPath(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L42
+      summary: Get the file path of a binary.
+      declaration: string? GetBinaryPath(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+    - name: GetModuleBase(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetModuleBase(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L30
+      summary: Get the runtime base address of a module.
+      declaration: nint? GetModuleBase(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: GetObjectPtrVtableName(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetObjectPtrVtableName(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L119
+      summary: Get the vtable class name of an object. Returns <code>null</code> when the object has no vtable.
+      declaration: string? GetObjectPtrVtableName(nint objectPtr)
+      parameters:
+      - name: objectPtr
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+    - name: GetVTableFuncCount(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetVTableFuncCount(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L80
+      summary: Get the number of virtual functions of a vtable.
+      declaration: int? GetVTableFuncCount(string binary, string vtableName)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: GetVTableFuncCount(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetVTableFuncCount(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L83
+      summary: Get the number of virtual functions of the vtable located at <code class="paramref">vtableRva</code>.
+      declaration: int? GetVTableFuncCount(string binary, ulong vtableRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: vtableRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        - '?'
+    - name: GetXrefs(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.GetXrefs(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L154
+      summary: Get the cached cross-references to <code class="paramref">targetRva</code>.
+      declaration: IReadOnlyList<nint> GetXrefs(string binary, ulong targetRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: targetRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '>'
+    - name: InstallTrampoline(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.InstallTrampoline(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L205
+      summary: Install a JIT trampoline at a runtime address and return the trampoline address.
+      declaration: nint? InstallTrampoline(nint address)
+      parameters:
+      - name: address
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: IsBinaryLoaded(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.IsBinaryLoaded(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L45
+      summary: Check whether a binary is loaded in S2BinLib.
+      declaration: bool IsBinaryLoaded(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: LoadBinary(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.LoadBinary(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L48
+      summary: Load a binary into S2BinLib.
+      declaration: bool LoadBinary(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: MakeSignature(string, ulong)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.MakeSignature(System.String,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L202
+      summary: Build an ida-style signature for the function at <code class="paramref">funcRva</code>.
+      declaration: string? MakeSignature(string binary, ulong funcRva)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: funcRva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      returns:
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        - '?'
+    - name: ObjectPtrHasBaseClass(nint, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ObjectPtrHasBaseClass(System.IntPtr,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L125
+      summary: Check whether an object derives from the given class.
+      declaration: bool ObjectPtrHasBaseClass(nint objectPtr, string baseClassName)
+      parameters:
+      - name: objectPtr
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      - name: baseClassName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: ObjectPtrHasVtable(nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ObjectPtrHasVtable(System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L122
+      summary: Check whether an object has a vtable.
+      declaration: bool ObjectPtrHasVtable(nint objectPtr)
+      parameters:
+      - name: objectPtr
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: PatternScan(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScan(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L54
+      summary: Scan for an ida-style pattern and return its address.
+      declaration: nint? PatternScan(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '?'
+    - name: PatternScanAll(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScanAll(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L60
+      summary: Find every match of an ida-style pattern.
+      declaration: IReadOnlyList<nint> PatternScanAll(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        - '>'
+    - name: PatternScanAllRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScanAllRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L63
+      summary: Find the RVA of every match of an ida-style pattern.
+      declaration: IReadOnlyList<ulong> PatternScanAllRva(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: IReadOnlyList
+          url: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+        - <
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '>'
+    - name: PatternScanRva(string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.PatternScanRva(System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L57
+      summary: Scan for an ida-style pattern and return its RVA.
+      declaration: ulong? PatternScanRva(string binary, string pattern)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pattern
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        - '?'
+    - name: ReadByAddress(string, ulong, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ReadByAddress(System.String,System.UInt64,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L148
+      summary: Read <code class="paramref">size</code> bytes from the binary at a runtime address.
+      declaration: byte[]? ReadByAddress(string binary, ulong address, int size)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: address
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: size
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: byte
+          url: https://learn.microsoft.com/dotnet/api/system.byte
+        - '['
+        - ']'
+        - '?'
+    - name: ReadByFileOffset(string, ulong, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ReadByFileOffset(System.String,System.UInt64,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L142
+      summary: Read <code class="paramref">size</code> bytes from the binary file at a file offset.
+      declaration: byte[]? ReadByFileOffset(string binary, ulong fileOffset, int size)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: fileOffset
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: size
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: byte
+          url: https://learn.microsoft.com/dotnet/api/system.byte
+        - '['
+        - ']'
+        - '?'
+    - name: ReadByRva(string, ulong, int)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.ReadByRva(System.String,System.UInt64,System.Int32)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L145
+      summary: Read <code class="paramref">size</code> bytes from the binary at an RVA.
+      declaration: byte[]? ReadByRva(string binary, ulong rva, int size)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+      - name: size
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+      returns:
+        type:
+        - text: byte
+          url: https://learn.microsoft.com/dotnet/api/system.byte
+        - '['
+        - ']'
+        - '?'
+    - name: SetCustomBinaryPath(string, string, string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.SetCustomBinaryPath(System.String,System.String,System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L39
+      summary: Use a custom file for a binary on the given OS (<code>"windows"</code> or <code>"linux"</code>).
+      declaration: bool SetCustomBinaryPath(string binary, string path, string os)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: path
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: os
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: SetModuleBase(string, nint)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.SetModuleBase(System.String,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L33
+      summary: Set the module base from any pointer that lives inside the module.
+      declaration: bool SetModuleBase(string binary, nint pointerInsideModule)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      - name: pointerInsideModule
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
+    - name: UnloadBinary(string)
+      uid: SwiftlyS2.Shared.Memory.IS2BinLib.UnloadBinary(System.String)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L51
+      summary: Unload a binary from S2BinLib.
+      declaration: bool UnloadBinary(string binary)
+      parameters:
+      - name: binary
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+      returns:
+        type:
+        - text: bool
+          url: https://learn.microsoft.com/dotnet/api/system.boolean
   - name: IUnmanagedFunction`1
     type: Interface
     uid: SwiftlyS2.Shared.Memory.IUnmanagedFunction`1
@@ -38806,6 +40043,120 @@ categories:
     parent: SwiftlyS2.Shared.Memory
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IUnmanagedMemory.cs#L49
     declaration: public delegate void MidHookDelegate(ref MidHookContext context)
+  - name: S2VFunc
+    type: Struct
+    uid: SwiftlyS2.Shared.Memory.S2VFunc
+    parent: SwiftlyS2.Shared.Memory
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+    summary: A virtual function found by S2BinLib, addressed at runtime.
+    declaration: 'public readonly record struct S2VFunc : IEquatable<S2VFunc>'
+    implements:
+    - text: IEquatable<S2VFunc>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    constructors:
+    - name: S2VFunc(string, int, nint)
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.#ctor(System.String,System.Int32,System.IntPtr)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: A virtual function found by S2BinLib, addressed at runtime.
+      declaration: public S2VFunc(string VTableName, int Index, nint Address)
+      parameters:
+      - name: VTableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: Class name of the vtable that owns the function.
+      - name: Index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        description: Index of the function inside the vtable.
+      - name: Address
+        type:
+        - text: nint
+          url: https://learn.microsoft.com/dotnet/api/system.intptr
+        description: Runtime memory address of the function.
+    properties:
+    - name: Address
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.Address
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: Runtime memory address of the function.
+      declaration: public nint Address { get; init; }
+      valueType:
+      - text: nint
+        url: https://learn.microsoft.com/dotnet/api/system.intptr
+    - name: Index
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.Index
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: Index of the function inside the vtable.
+      declaration: public int Index { get; init; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: VTableName
+      uid: SwiftlyS2.Shared.Memory.S2VFunc.VTableName
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L9
+      summary: Class name of the vtable that owns the function.
+      declaration: public string VTableName { get; init; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
+  - name: S2VFuncRva
+    type: Struct
+    uid: SwiftlyS2.Shared.Memory.S2VFuncRva
+    parent: SwiftlyS2.Shared.Memory
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+    summary: A virtual function found by S2BinLib, addressed relative to the module base.
+    declaration: 'public readonly record struct S2VFuncRva : IEquatable<S2VFuncRva>'
+    implements:
+    - text: IEquatable<S2VFuncRva>
+      url: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+    constructors:
+    - name: S2VFuncRva(string, int, ulong)
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.#ctor(System.String,System.Int32,System.UInt64)
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: A virtual function found by S2BinLib, addressed relative to the module base.
+      declaration: public S2VFuncRva(string VTableName, int Index, ulong Rva)
+      parameters:
+      - name: VTableName
+        type:
+        - text: string
+          url: https://learn.microsoft.com/dotnet/api/system.string
+        description: Class name of the vtable that owns the function.
+      - name: Index
+        type:
+        - text: int
+          url: https://learn.microsoft.com/dotnet/api/system.int32
+        description: Index of the function inside the vtable.
+      - name: Rva
+        type:
+        - text: ulong
+          url: https://learn.microsoft.com/dotnet/api/system.uint64
+        description: Relative virtual address of the function.
+    properties:
+    - name: Index
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.Index
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: Index of the function inside the vtable.
+      declaration: public int Index { get; init; }
+      valueType:
+      - text: int
+        url: https://learn.microsoft.com/dotnet/api/system.int32
+    - name: Rva
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.Rva
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: Relative virtual address of the function.
+      declaration: public ulong Rva { get; init; }
+      valueType:
+      - text: ulong
+        url: https://learn.microsoft.com/dotnet/api/system.uint64
+    - name: VTableName
+      uid: SwiftlyS2.Shared.Memory.S2VFuncRva.VTableName
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Modules/Memory/IS2BinLib.cs#L17
+      summary: Class name of the vtable that owns the function.
+      declaration: public string VTableName { get; init; }
+      valueType:
+      - text: string
+        url: https://learn.microsoft.com/dotnet/api/system.string
   - name: Xmm
     type: Struct
     uid: SwiftlyS2.Shared.Memory.Xmm
@@ -49381,19 +50732,19 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.Misc.Atomic`1
     parent: SwiftlyS2.Shared.Misc
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L10
-    summary: A thread-safe cell, the counterpart of C++ <code>std::atomic&lt;T&gt;</code>. Every operation is atomic and acts as a full memory barrier, except <xref href="SwiftlyS2.Shared.Misc.Atomic%601.Load" data-throw-if-not-resolved="false"></xref> on 4- and 8-byte types, which is an acquire load.
-    declaration: 'public sealed class Atomic<T> where T : struct'
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L12
+    summary: 'A thread-safe cell, the counterpart of C++ <code>std::atomic&lt;T&gt;</code>. Every operation is atomic and acts as a full memory barrier, except <xref href="SwiftlyS2.Shared.Misc.Atomic%601.Load" data-throw-if-not-resolved="false"></xref> on 4- and 8-byte types, which is an acquire load. For reference types (e.g. <xref href="System.String" data-throw-if-not-resolved="false"></xref>) the cell holds a reference: reads and writes are atomic, and <xref href="SwiftlyS2.Shared.Misc.Atomic%601.CompareExchange(%600%2c%600)" data-throw-if-not-resolved="false"></xref> / <xref href="SwiftlyS2.Shared.Misc.Atomic%601.TryCompareExchange(%600%40%2c%600)" data-throw-if-not-resolved="false"></xref> compare by reference, not by value.'
+    declaration: public sealed class Atomic<T>
     typeParameters:
     - name: T
-      description: The value type to store.
+      description: 'The type to store: a primitive, an enum, or a reference type.'
     inherits:
     - text: object
       url: https://learn.microsoft.com/dotnet/api/system.object
     constructors:
     - name: Atomic(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.#ctor(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L14
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L16
       declaration: public Atomic(T initialValue = default)
       parameters:
       - name: initialValue
@@ -49403,7 +50754,7 @@ categories:
     properties:
     - name: Value
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Value
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L22
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L24
       summary: Gets or sets the current value (<code>load</code> / <code>store</code>).
       declaration: public T Value { get; set; }
       valueType:
@@ -49411,7 +50762,7 @@ categories:
     methods:
     - name: CompareExchange(T, T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.CompareExchange(`0,`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L45
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L47
       summary: Stores <code class="paramref">newValue</code> only if the current value equals <code class="paramref">comparand</code>.
       declaration: public T CompareExchange(T newValue, T comparand)
       parameters:
@@ -49426,7 +50777,7 @@ categories:
         - T
     - name: Exchange(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Exchange(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L40
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L42
       summary: Stores <code class="paramref">newValue</code> and returns the previous value.
       declaration: public T Exchange(T newValue)
       parameters:
@@ -49438,7 +50789,7 @@ categories:
         - T
     - name: Load()
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Load
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L30
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L32
       summary: Reads the current value.
       declaration: public T Load()
       returns:
@@ -49446,7 +50797,7 @@ categories:
         - T
     - name: Store(T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.Store(`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L35
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L37
       summary: Overwrites the current value.
       declaration: public void Store(T newValue)
       parameters:
@@ -49455,7 +50806,7 @@ categories:
         - T
     - name: ToString()
       uid: SwiftlyS2.Shared.Misc.Atomic`1.ToString
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L58
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L60
       summary: Returns a string that represents the current object.
       declaration: public override string ToString()
       returns:
@@ -49465,7 +50816,7 @@ categories:
         description: A string that represents the current object.
     - name: TryCompareExchange(ref T, T)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.TryCompareExchange(`0@,`0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L51
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L53
       summary: '<code>compare_exchange_strong</code>: stores <code class="paramref">desired</code> only if the current value equals <code class="paramref">expected</code>. On failure <code class="paramref">expected</code> is overwritten with the value that was actually found.'
       declaration: public bool TryCompareExchange(ref T expected, T desired)
       parameters:
@@ -49482,7 +50833,7 @@ categories:
     operators:
     - name: implicit operator T(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.Atomic`1.op_Implicit(SwiftlyS2.Shared.Misc.Atomic{`0})~`0
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L56
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L58
       summary: Reads the current value, like the C++ <code>operator T</code>.
       declaration: public static implicit operator T(Atomic<T> atomic)
       parameters:
@@ -49920,7 +51271,7 @@ categories:
     type: Class
     uid: SwiftlyS2.Shared.Misc.AtomicExtensions
     parent: SwiftlyS2.Shared.Misc
-    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L66
+    sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L68
     summary: Arithmetic and bitwise operations for <xref href="SwiftlyS2.Shared.Misc.Atomic%601" data-throw-if-not-resolved="false"></xref> over integer types.
     declaration: public static class AtomicExtensions
     inherits:
@@ -49929,7 +51280,7 @@ categories:
     methods:
     - name: Add<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Add``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L74
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L76
       declaration: 'public static T Add<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49950,7 +51301,7 @@ categories:
       - name: T
     - name: And<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.And``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L76
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L78
       declaration: 'public static T And<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49971,7 +51322,7 @@ categories:
       - name: T
     - name: Decrement<T>(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Decrement``1(SwiftlyS2.Shared.Misc.Atomic{``0})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L81
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L83
       declaration: 'public static T Decrement<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -49989,7 +51340,7 @@ categories:
       - name: T
     - name: FetchAdd<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAdd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L68
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L70
       declaration: 'public static T FetchAdd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50010,7 +51361,7 @@ categories:
       - name: T
     - name: FetchAnd<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchAnd``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L71
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L73
       declaration: 'public static T FetchAnd<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50031,7 +51382,7 @@ categories:
       - name: T
     - name: FetchOr<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchOr``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L72
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L74
       declaration: 'public static T FetchOr<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50052,7 +51403,7 @@ categories:
       - name: T
     - name: FetchSub<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchSub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L69
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L71
       declaration: 'public static T FetchSub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50073,7 +51424,7 @@ categories:
       - name: T
     - name: FetchXor<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.FetchXor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L70
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L72
       declaration: 'public static T FetchXor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50094,7 +51445,7 @@ categories:
       - name: T
     - name: Increment<T>(Atomic<T>)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Increment``1(SwiftlyS2.Shared.Misc.Atomic{``0})
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L80
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L82
       declaration: 'public static T Increment<T>(this Atomic<T> atomic) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50112,7 +51463,7 @@ categories:
       - name: T
     - name: Or<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Or``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L77
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L79
       declaration: 'public static T Or<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50133,7 +51484,7 @@ categories:
       - name: T
     - name: Sub<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Sub``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L75
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L77
       declaration: 'public static T Sub<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
@@ -50154,7 +51505,7 @@ categories:
       - name: T
     - name: Xor<T>(Atomic<T>, T)
       uid: SwiftlyS2.Shared.Misc.AtomicExtensions.Xor``1(SwiftlyS2.Shared.Misc.Atomic{``0},``0)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L78
+      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/master/managed/src/SwiftlyS2.Shared/Misc/Atomic.cs#L80
       declaration: 'public static T Xor<T>(this Atomic<T> atomic, T operand) where T : struct, IBinaryInteger<T>'
       parameters:
       - name: atomic
