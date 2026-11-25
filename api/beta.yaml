@@ -70242,22 +70242,6 @@ categories:
     sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Profiler/IContextedProfilerService.cs#L3
     declaration: public interface IContextedProfilerService
     methods:
-    - name: RecordTime(string, double)
-      uid: SwiftlyS2.Shared.Profiler.IContextedProfilerService.RecordTime(System.String,System.Double)
-      sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Profiler/IContextedProfilerService.cs#L22
-      summary: Record the time taken for the given profile.
-      declaration: void RecordTime(string name, double duration)
-      parameters:
-      - name: name
-        type:
-        - text: string
-          url: https://learn.microsoft.com/dotnet/api/system.string
-        description: The name of the profile to record the time for.
-      - name: duration
-        type:
-        - text: double
-          url: https://learn.microsoft.com/dotnet/api/system.double
-        description: The duration to record.
     - name: StartRecording(string)
       uid: SwiftlyS2.Shared.Profiler.IContextedProfilerService.StartRecording(System.String)
       sourceUrl: https://github.com/swiftly-solution/swiftlys2/blob/beta/managed/src/SwiftlyS2.Shared/Modules/Profiler/IContextedProfilerService.cs#L9
