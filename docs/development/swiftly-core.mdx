@@ -35,6 +35,11 @@ public sealed class MyPlugin : BasePlugin
     rather than reaching for a static/global reference.
 </Callout>
 
+Besides the constructor, a single service can be injected into a field or
+property marked with <ApiRef name="SwiftlyInject" />, which takes no arguments
+and applies to one member at a time - see
+[Getting Started](/docs/development/getting-started) for an example.
+
 ## Core Services at a Glance
 
 | Property                              | Service                                                                                                                  |
@@ -75,6 +80,20 @@ Full member list for any of these: <ApiRef name="ISwiftlyCore" />.
 `Core.Menu` is the component-based menu framework described in [Menu System](/docs/development/menu-system). It replaces `Core.MenusAPI`, which is `[Obsolete]` and documented in [Menus](/docs/development/menus) for plugins that still use it.
 
 Runtime paths are exposed on `Core` as well: `Core.PluginPath` (current plugin's directory), `Core.PluginDataDirectory` (per-plugin data directory, created by the framework if needed), `Core.GameFilesDirectory` (`game/csgo`) and `Core.GameDirectory` (game root). `Core.CSGODirectory` points at `game/csgo` too, but it is `[Obsolete]` - use `Core.GameFilesDirectory` instead.
+
+## Core in Dependency Injection
+
+`services.AddSwiftly(Core)` (`SwiftlyCoreInjection.AddSwiftly(IServiceCollection self, ISwiftlyCore core, bool addLogger = true, bool addConfiguration = true)`) registers `ISwiftlyCore` and most of the services above as singletons, so helper classes can take them as constructor parameters:
+
+```csharp
+var services = new ServiceCollection();
+services.AddSwiftly(Core);
+services.AddSingleton<MyService>();
+```
+
+Everything in the table above is registered except `Game`, `GameHooks`, `Helpers`, `ConsoleOutput`, `Extension`, `Registrator`, `Menu` and `StringTable` - add those yourself with `services.AddSingleton(Core.Game)` and so on if a helper class needs them. `Configuration` is only registered when `addConfiguration` is `true` and `BasePathExists`, while `LoggerFactory` and `ILogger<T>` are only registered when `addLogger` is `true` - `Core.Logger` (`ILogger`) itself is not registered.
+
+See [Dependency Injection](/docs/guides/dependency-injection) for the full pattern.
 
 ## Thread Awareness
 

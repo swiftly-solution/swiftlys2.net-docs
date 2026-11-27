@@ -19,7 +19,7 @@ SwiftlyS2's configuration system lets your plugin create config files, bind type
 | <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> | <ApiRef name="IPluginConfigurationService" /> | Initializes a TOML file from a model, for `(string name, string sectionName)` and `(string name, string sectionName, bool addMissingKeys)` |
 | <ApiRef name="IPluginConfigurationService" member="Configure" /> | <ApiRef name="IPluginConfigurationService" /> | Configures the internal manager, for `(Action<IConfigurationBuilder> configure)` |
 
-Every method returns <ApiRef name="IPluginConfigurationService" />, so calls chain.
+<ApiRef name="IPluginConfigurationService" member="InitializeWithTemplate" />, <ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" />, <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> and <ApiRef name="IPluginConfigurationService" member="Configure" /> all return <ApiRef name="IPluginConfigurationService" />, so calls chain. <ApiRef name="IPluginConfigurationService" member="GetConfigPath" /> returns the path as a `string`.
 
 ## Paths
 
@@ -44,7 +44,7 @@ Core.Configuration.InitializeTomlWithModel<DatabaseConfig>("database.toml", "Dat
 
 <ApiRef name="IPluginConfigurationService" member="InitializeWithTemplate" /> takes `(name, templateName)` and initializes `name` from `templateName`, which must be packaged in a `templates/` folder inside your plugin.
 
-<ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" /> and <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> take `(name, sectionName)` and write the file from the model's defaults, using `sectionName` as the section the options are later bound to. `T` must be a class with a parameterless constructor (`where T : class, new()`).
+<ApiRef name="IPluginConfigurationService" member="InitializeJsonWithModel" /> and <ApiRef name="IPluginConfigurationService" member="InitializeTomlWithModel" /> take `(name, sectionName)` and write the file from the model's defaults, with `sectionName` as the name of the section in the file. Bind to that same name later with `BindConfiguration(sectionName)`. `T` must be a class with a parameterless constructor (`where T : class, new()`).
 
 Properties and fields marked with `[Description]` are written with the description as a comment above the key:
 
@@ -139,7 +139,7 @@ public override void Load(bool hotReload)
 
 `services.AddSwiftly(Core, addLogger = true, addConfiguration = true)` registers <ApiRef name="IPluginConfigurationService" />, its `IConfigurationManager` (<ApiRef name="IPluginConfigurationService" member="Manager" />) and an `IConfiguration` resolving to that same manager as singletons - but only when <ApiRef name="IPluginConfigurationService" member="BasePathExists" /> is `true`, so pass `addConfiguration: false` to leave them out. See [Dependency Injection](/docs/guides/dependency-injection) for more on `services.AddSwiftly(Core)`.
 
-`AddSwiftly` also replaces the default options factory with <ApiRef name="SwiftlyOptionsFactory`1" />, so values read from the file replace the model's code defaults instead of merging with them - a list or dictionary in the file replaces the default collection instead of being appended to it. A default collection is only cleared for a key the configuration actually contains, and members are matched by `[ConfigurationKeyName]`, then `[JsonPropertyName]`, then the member name. The factory also runs every `IValidateOptions<T>` registered in the container and throws `OptionsValidationException` when one of them fails.
+`AddSwiftly` also replaces the default options factory with <ApiRef name="SwiftlyOptionsFactory`1" />, so values read from the file replace the model's code defaults instead of merging with them - a list or dictionary in the file replaces the default collection instead of being appended to it. A default collection is only cleared for a key the configuration actually contains, and members are matched by `[ConfigurationKeyName]`, then `[JsonPropertyName]`, then the member name. `IPostConfigureOptions<T>` still runs after binding, and the factory also runs every `IValidateOptions<T>` registered in the container, throwing `OptionsValidationException` when one of them fails. When no configuration section is bound to `T`, the factory falls back to running the registered `IConfigureOptions<T>` actions, like Microsoft's default factory.
 
 Consume with `IOptionsMonitor<T>` to react to reloads:
 

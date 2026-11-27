@@ -38,7 +38,7 @@ bool isAdmin = Core.Permission.PlayerHasPermission(player.SteamID, "myplugin.adm
 
 <ApiRef name="IPermissionManager" member="AddPermission" /> and
 <ApiRef name="IPermissionManager" member="RemovePermission" /> each take a
-`(ulong steamId, string permission)` pair;
+`(ulong steamId, string permission)` pair and return nothing;
 <ApiRef name="IPermissionManager" member="ClearPermissions" /> takes only the
 SteamID and clears all of the player's permissions, both base and temporary:
 
@@ -108,13 +108,16 @@ See the [Commands](/docs/development/commands) page for the full attribute refer
 
 ## Reference
 
+Every member of <ApiRef name="IPermissionManager" />:
+
 | Member | Signature | Returns |
 | --- | --- | --- |
 | <ApiRef name="IPermissionManager" member="PlayerHasPermission" /> | `bool PlayerHasPermission(ulong steamId, string permission)` | `true` if the player has `permission`; supports `xxx.*` wildcards |
-| <ApiRef name="IPermissionManager" member="PlayerHasPermissions" /> | `bool PlayerHasPermissions(ulong steamId, IEnumerable<string> permissions)` | `true` if the player has every key in `permissions` |
+| <ApiRef name="IPermissionManager" member="PlayerHasPermissions" /> | `bool PlayerHasPermissions(ulong steamId, IEnumerable<string> permissions)` | `true` if the player has every key in `permissions`; supports `xxx.*` wildcards |
 | <ApiRef name="IPermissionManager" member="AddPermission" /> | `void AddPermission(ulong steamId, string permission)` | - |
 | <ApiRef name="IPermissionManager" member="RemovePermission" /> | `void RemovePermission(ulong steamId, string permission)` | - |
 | <ApiRef name="IPermissionManager" member="AddSubPermission" /> | `void AddSubPermission(string permission, string subPermission)` | - |
 | <ApiRef name="IPermissionManager" member="RemoveSubPermission" /> | `void RemoveSubPermission(string permission, string subPermission)` | - |
 | <ApiRef name="IPermissionManager" member="ClearPermissions" /> | `void ClearPermissions(ulong steamId)` | - |
+| <ApiRef name="IPermissionManager" member="ClearPermission" /> | `void ClearPermission(ulong steamId)` (obsolete, forwards to `ClearPermissions`) | - |
 | <ApiRef name="IPermissionManager" member="GetPlayerPermissions" /> | `IEnumerable<string> GetPlayerPermissions(ulong steamId)` | every permission the player has, including inherited ones |

@@ -4,12 +4,14 @@ title: Sound Events
 
 <ApiRef name="SoundEvent" /> lets plugins emit game sound events with custom
 parameters and recipient filters. There is no `Core` service for it - you
-construct the class yourself (`SwiftlyS2.Shared.Sounds`) and dispose it once
-you're done.
+construct the class yourself from the `SwiftlyS2.Shared.Sounds` namespace and
+dispose it once you're done.
 
 ## Creating Sound Events
 
 ```csharp
+using SwiftlyS2.Shared.Sounds;
+
 using var soundEvent = new SoundEvent();
 soundEvent.Name = "Weapon_AK47.Single";
 soundEvent.Volume = 0.8f;
@@ -37,7 +39,9 @@ soundEvent.SourceEntityIndex = -1;      // source entity index; -1 (default) = n
 soundEvent.SetSourceEntity(entity);     // helper instead of assigning entity.Index yourself
 ```
 
-`Name` is the sound event name as used in the game's scripts and prefabs, e.g. `Weapon_AK47.Single`. `Volume` and `Pitch` are convenience wrappers around the float fields `public.volume` and `public.pitch`, so `SetFloat("public.volume", 0.6f)` does the same thing. Setting a name, a parameter or `SourceEntityIndex` only changes the instance - the values are sent on the next emit.
+`Name` is the sound event name as used in the game's scripts and prefabs, e.g. `Weapon_AK47.Single`; an instance with an empty `Name` has no sound to play. `Volume` and `Pitch` are convenience wrappers around the float fields `public.volume` and `public.pitch`, so `SetFloat("public.volume", 0.6f)` does the same thing - and since the getters read the field back, a just-constructed instance reports `1.0f` for both. <ApiRef name="SoundEvent" member="SetSourceEntity" /> takes a <ApiRef name="CEntityInstance" /> and assigns its `Index` to `SourceEntityIndex`.
+
+Setting a name, a parameter or `SourceEntityIndex` only changes the instance - the values are sent on the next emit. None of these members touch native state, so they can be used from any thread.
 
 ## Setting Custom Sound Fields
 
@@ -65,7 +69,7 @@ Every setter takes the field name and the value, every getter the field name:
 | `SetFloat` / `GetFloat`   | `float`    |
 | `SetFloat3` / `GetFloat3` | `Vector`   |
 
-Getters return the type's default (`false`, `0`, `0.0f`, or a zero `Vector`) when the field was never set, or was set with a different type. Fields set on an instance stay set, so every later `Emit()` sends them again.
+`Vector` is <ApiRef name="Vector" /> (`SwiftlyS2.Shared.Natives`). Getters return the type's default (`false`, `0`, `0.0f`, or a zero `Vector`) when the field was never set, or was set with a different type. Setting the same field name again overwrites the previous value, and fields set on an instance stay set, so every later `Emit()` sends them again.
 
 ## Configuring Recipients
 
@@ -78,7 +82,7 @@ soundEvent.Recipients.AddAllPlayers();
 // Or target specific players
 soundEvent.Recipients.RemoveAllPlayers();
 soundEvent.Recipients.AddRecipient(0);
-soundEvent.Recipients.AddRecipient(1);
+soundEvent.Recipients.AddRecipient(player.Slot);
 
 // Remove one player again
 soundEvent.Recipients.RemoveRecipient(1);
@@ -103,10 +107,12 @@ soundEvent.Recipients = CRecipientFilter.FromMask(0b11UL);
 
 ```csharp
 uint guid = soundEvent.Emit();             // main thread only
-uint guid = await soundEvent.EmitAsync();  // schedules the emit onto the main thread
+uint guid = await soundEvent.EmitAsync();  // dispatches onto the game thread
 ```
 
-`Emit()` returns the `uint` guid of the started sound event; you can observe the outgoing `CMsgSosStartSoundEvent` in a server net-message hook (see [Network Messages](/docs/development/netmessages)). Calling `Emit()` again on the same instance starts another event with a new guid.
+<ApiRef name="SoundEvent" member="Emit" /> builds the sound event message from the current name, parameters, source entity and recipient filter, then sends it; the returned `uint` is the guid of the started sound event, which you can observe in a server net-message hook on the outgoing `CMsgSosStartSoundEvent` (see [Network Messages](/docs/development/netmessages)). Calling `Emit()` again on the same instance starts another event with a new guid and the state the instance has at that moment.
+
+<ApiRef name="SoundEvent" member="EmitAsync" /> returns `Task<uint>` and hands the call to <ApiRef name="ISchedulerService" member="QueueOrNow" />: when you are already on the game thread it emits right away and the task is already completed, otherwise the emit is queued for the next tick - see [Scheduler](/docs/development/scheduler).
 
 <Callout type="warning">
     `Emit()` is thread-unsafe (<ApiRef name="ThreadUnsafeAttribute" />) and must
@@ -118,7 +124,7 @@ uint guid = await soundEvent.EmitAsync();  // schedules the emit onto the main t
 
 ## Disposing
 
-`SoundEvent` implements `IDisposable` - wrap it in `using` (or call `Dispose()`) so its native resources are released once you're done emitting.
+`SoundEvent` implements `IDisposable` - wrap it in `using` (or call `Dispose()`) so its native resources are released once you're done emitting. A new instance allocates nothing native until the first `Emit()`/`EmitAsync()`, so disposing before emitting is harmless; a disposed instance shouldn't be emitted again, create a new `SoundEvent` instead.
 
 ## Members at a Glance
 
@@ -130,9 +136,9 @@ uint guid = await soundEvent.EmitAsync();  // schedules the emit onto the main t
 | `Pitch`                                                                                  | `float`                        | `public.pitch` field, `1.0f` by default                 |
 | `SourceEntityIndex`                                                                      | `int`                          | Source entity index, `-1` by default (no source entity) |
 | `Recipients`                                                                             | `ref CRecipientFilter`         | Recipient filter, empty by default; assignable          |
-| `SetSourceEntity`                                                                        | `void (CEntityInstance)`       | Assigns `entity.Index` to `SourceEntityIndex`           |
+| <ApiRef name="SoundEvent" member="SetSourceEntity" />                                    | `void (CEntityInstance entity)` | Assigns `entity.Index` to `SourceEntityIndex`           |
 | `SetBool` / `GetBool`, `SetInt32` / `GetInt32`, `SetUInt32` / `GetUInt32`, `SetFloat` / `GetFloat` | `bool`, `int`, `uint`, `float` | Custom sound fields, by field name                      |
 | `SetFloat3` (three `float`s or a `Vector`) / `GetFloat3`                                 | `Vector`                       | Custom 3D sound fields                                  |
-| `Emit`                                                                                   | `uint`                         | Thread-unsafe; returns the started event's guid         |
-| `EmitAsync`                                                                              | `Task<uint>`                   | Main-thread dispatch of `Emit`                          |
+| <ApiRef name="SoundEvent" member="Emit" />                                               | `uint`                         | Thread-unsafe; returns the started event's guid         |
+| <ApiRef name="SoundEvent" member="EmitAsync" />                                          | `Task<uint>`                   | Main-thread dispatch of `Emit`                          |
 | `Dispose`                                                                                | `void`                         | `IDisposable` implementation                            |

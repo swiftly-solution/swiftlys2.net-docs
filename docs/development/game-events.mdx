@@ -9,7 +9,7 @@ title: Game Events
     Events](/docs/development/core-events) when an equivalent exists.
 </Callout>
 
-SwiftlyS2 generates a strongly-typed interface for every CS2 game event, exposed through the plugin-scoped `Core.GameEvent` service (<ApiRef name="ISwiftlyCore" member="GameEvent" />, type <ApiRef name="IGameEventService" />). Every generated event implements <ApiRef name="IGameEvent`1" />.
+SwiftlyS2 generates a strongly-typed interface for every CS2 game event, exposed through the plugin-scoped `Core.GameEvent` service (<ApiRef name="ISwiftlyCore" member="GameEvent" />, type <ApiRef name="IGameEventService" />). Every generated event implements <ApiRef name="IGameEvent`1" />, which gives it an `Accessor` property (<ApiRef name="IGameEventAccessor" />) and a settable `DontBroadcast` flag.
 
 ## Firing Events
 
@@ -47,7 +47,7 @@ await Core.GameEvent.FireAsync<EventShowSurvivalRespawnStatus>();
     callback's duration - don't stash and read it later.
 </Callout>
 
-Every event has a settable `DontBroadcast` flag - set it inside the configure callback to build the event without broadcasting it to clients.
+Every event has a settable `DontBroadcast` flag - set it inside the configure callback to build the event without broadcasting it to clients. The same flag is exposed on `IGameEventAccessor`.
 
 ## Hooking Events
 
@@ -99,7 +99,7 @@ Register hooks by attribute or manually through the service. The handler is the 
   </Tab>
 </Tabs>
 
-<ApiRef name="GameEventHandler" /> takes the mode in its constructor, exposes it as the settable `HookMode` property, and takes the event type from the method's single parameter - a method can carry only one (`AllowMultiple = false`). The attribute-based equivalents of `HookPre`/`HookPost` are discovered on the registered instances of your plugin - see [Using Attributes](/docs/development/using-attributes).
+<ApiRef name="GameEventHandler" /> takes the mode in its constructor (`GameEventHandler(HookMode hookMode)`), exposes it as the settable `HookMode` property, and takes the event type from the method's single parameter - a method can carry only one (`AllowMultiple = false`). The attribute-based equivalents of `HookPre`/`HookPost` are discovered on the registered instances of your plugin - see [Using Attributes](/docs/development/using-attributes).
 
 <Callout type="warning">
     In a pre hook, `HookResult.Stop` cancels the event and skips the remaining
@@ -126,7 +126,7 @@ bool typed = Core.GameEvent.IsListeningToEvent<EventPlayerDeath>(0);
 
 ## Reading and Setting Event Data
 
-Every generated event implements <ApiRef name="IGameEvent`1" />, giving you `Accessor` (<ApiRef name="IGameEventAccessor" />) and a settable `DontBroadcast` flag. Recognized fields get typed properties directly on the event - for `EventPlayerDeath`: `int UserId`/`Attacker`/`Assister`, `string Weapon`, `bool Headshot`, `float Distance`, `int ActualDmgHealth`, plus `IPlayer?` convenience wrappers (`UserIdPlayer`, `AttackerPlayer`, `AssisterPlayer`) resolved through the player manager:
+Recognized fields get typed properties directly on the event - for `EventPlayerDeath`: `int UserId`/`Attacker`/`Assister`, `string Weapon`, `bool Headshot`, `float Distance`, `int ActualDmgHealth`, plus `IPlayer?` convenience wrappers (`UserIdPlayer`, `AttackerPlayer`, `AssisterPlayer`) resolved through the player manager:
 
 ```csharp
 [GameEventHandler(HookMode.Post)]
@@ -141,7 +141,19 @@ private HookResult OnPlayerDeath(EventPlayerDeath @event)
 }
 ```
 
-Fall back to `Accessor` for fields without a generated property - it reads and writes the raw payload fields by name (the same `DontBroadcast` flag sits on it too):
+Fall back to `Accessor` for fields without a generated property - it reads and writes the raw payload fields by name. Every getter takes the field name, every setter the field name and the value:
+
+| Getter / setter                     | Payload type                  |
+| ----------------------------------- | ----------------------------- |
+| `GetBool` / `SetBool`               | `bool`                        |
+| `GetInt32` / `SetInt32`             | `int`                         |
+| `GetUInt64` / `SetUInt64`           | `ulong`                       |
+| `GetFloat` / `SetFloat`             | `float`                       |
+| `GetString` / `SetString`           | `string`                      |
+| `GetEntity<K>` / `SetEntity<K>`     | entity, `K : CEntityInstance` |
+| `GetEntityIndex` / `SetEntityIndex` | `int`                         |
+| `GetPlayerSlot` / `SetPlayerSlot`   | `int`                         |
+| `GetPtr` / `SetPtr`                 | `nint`                        |
 
 ```csharp
 string weapon = @event.Accessor.GetString("weapon");
@@ -151,20 +163,40 @@ int attackerSlot = @event.Accessor.GetPlayerSlot("attacker");
 @event.Accessor.SetBool("headshot", true);
 ```
 
-Every getter takes the field name, every setter the field name and the value:
+<ApiRef name="IGameEventAccessor" /> also exposes read-only helpers, resolved through the player manager:
 
-| Getter / setter                                 | Payload type                  |
-| ----------------------------------------------- | ----------------------------- |
-| `GetBool` / `SetBool`                           | `bool`                        |
-| `GetInt32` / `SetInt32`                         | `int`                         |
-| `GetUInt64` / `SetUInt64`                       | `ulong`                       |
-| `GetFloat` / `SetFloat`                         | `float`                       |
-| `GetString` / `SetString`                       | `string`                      |
-| `GetEntity<K>` / `SetEntity<K>`                 | entity, `K : CEntityInstance` |
-| `GetEntityIndex` / `SetEntityIndex`             | `int`                         |
-| `GetPlayerSlot` / `SetPlayerSlot`               | `int`                         |
-| `GetPtr` / `SetPtr`                             | `nint`                        |
+| Method                            | Returns               | Meaning                                           |
+| --------------------------------- | --------------------- | ------------------------------------------------- |
+| `GetPlayer(string key)`           | `IPlayer?`            | The player the field points at, or `null`         |
+| `GetPlayerController(string key)` | `CCSPlayerController` | The player controller the field points at         |
+| `GetPlayerPawn(string key)`       | `CCSPlayerPawn`       | The player pawn the field points at               |
+| `GetPawnEntityIndex(string key)`  | `int`                 | The entity index of the pawn the field points at  |
+| `IsReliable()`                    | `bool`                | Whether the event is marked as reliable           |
+| `IsLocal()`                       | `bool`                | Whether the event is local to this server/client  |
 
-<ApiRef name="IGameEventAccessor" /> also exposes read-only helpers, resolved through the player manager: `GetPlayer(key)` (`IPlayer?`), `GetPlayerController(key)` (`CCSPlayerController`), `GetPlayerPawn(key)` (`CCSPlayerPawn`), `GetPawnEntityIndex(key)` (`int`), `IsReliable()` and `IsLocal()` (`bool`). Player references are stored as slots in the payload, which is why `userid`/`playerid` are read with `GetPlayerSlot`/`GetPlayer` (see [Terminologies](/docs/guides/terminologies)).
+Player references are stored as slots in the payload, which is why `userid`/`playerid` are read with `GetPlayerSlot`/`GetPlayer` (see [Terminologies](/docs/guides/terminologies)).
 
-As a native wrapper, the accessor is also an <ApiRef name="INativeHandle" /> - `IsValid` and `Address` are available on it.
+As a native wrapper, the accessor is also an <ApiRef name="INativeHandle" /> - `IsValid` and `Address` are available on it, next to the unsafe `DangerouslySetAddress(IntPtr address)`.
+
+## Reference
+
+Every event type on <ApiRef name="IGameEventService" /> is constrained to `where T : IGameEvent<T>`:
+
+| Member               | Signature                                                                                                       | Returns                                 |
+| -------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| `HookPre`            | `Guid HookPre<T>(GameEventHandler<T> callback)`                                                                  | the guid to pass to `Unhook`            |
+| `HookPost`           | `Guid HookPost<T>(GameEventHandler<T> callback)`                                                                 | the guid to pass to `Unhook`            |
+| `Unhook`             | `void Unhook(Guid guid)`                                                                                         | -                                       |
+| `UnhookPre`          | `void UnhookPre<T>()`                                                                                            | -                                       |
+| `UnhookPost`         | `void UnhookPost<T>()`                                                                                           | -                                       |
+| `Fire`               | `void Fire<T>()` / `void Fire<T>(Action<T> configureEvent)`, `[ThreadUnsafe]`                                    | -                                       |
+| `FireAsync`          | `Task FireAsync<T>()` / `Task FireAsync<T>(Action<T> configureEvent)`                                            | awaitable                               |
+| `FireToPlayer`       | `void FireToPlayer<T>(int slot)` / `void FireToPlayer<T>(int slot, Action<T> configureEvent)`, `[ThreadUnsafe]`   | -                                       |
+| `FireToPlayerAsync`  | `Task FireToPlayerAsync<T>(int slot)` / `Task FireToPlayerAsync<T>(int slot, Action<T> configureEvent)`           | awaitable                               |
+| `FireToServer`       | `void FireToServer<T>()` / `void FireToServer<T>(Action<T> configureEvent)`, `[ThreadUnsafe]`                     | -                                       |
+| `FireToServerAsync`  | `Task FireToServerAsync<T>()` / `Task FireToServerAsync<T>(Action<T> configureEvent)`                             | awaitable                               |
+| `IsListeningToEvent` | `bool IsListeningToEvent(int slot, string eventName)` / `bool IsListeningToEvent<T>(int slot)`                    | whether that slot listens for the event |
+
+The handler delegate is nested in the service: `GameEventHandler<T>` is `HookResult (T eventObj)`.
+
+`IGameEvent<T>` itself only exposes `Accessor` (`IGameEventAccessor`, get-only) and the settable `DontBroadcast` (`bool`); its remaining members are internal to the framework.

@@ -98,3 +98,24 @@ The service only writes. <ApiRef name="IContextedProfilerService" /> has no memb
 ## Reference
 
 See <ApiRef name="ISwiftlyCore" /> for the full service list, and [Swiftly Core](/docs/development/swiftly-core) for the other core services.
+
+## Beta Changes
+
+<Callout type="info">
+    Everything above documents the stable branch. The change below is available
+    on the beta branch only.
+</Callout>
+
+On beta, `RecordTime` is no longer part of <ApiRef name="IContextedProfilerService" /> - the interface declares only `StartRecording(string name)` and `StopRecording(string name)`, both returning `void`. A precomputed duration therefore has to be profiled by wrapping the work in a start/stop pair instead:
+
+```csharp
+Core.Profiler.StartRecording("Menu.Build");
+try
+{
+    BuildLargeMenu();
+}
+finally
+{
+    Core.Profiler.StopRecording("Menu.Build");
+}
+```

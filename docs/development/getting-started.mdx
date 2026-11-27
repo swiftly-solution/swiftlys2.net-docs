@@ -49,6 +49,8 @@ MyPlugin/
     `resources/gamedata`, independently from others.
 </Callout>
 
+The output directory is the plugin's directory at runtime, exposed as `Core.PluginPath` (<ApiRef name="ISwiftlyCore" member="PluginPath" />) - combine it with the paths above to read the packaged files. `Core.PluginDataDirectory` (<ApiRef name="ISwiftlyCore" member="PluginDataDirectory" />) is a separate per-plugin directory that the framework creates, meant for state that isn't part of the build output. Both are described in [Swiftly Core](/docs/development/swiftly-core).
+
 A freshly generated project may not reference the latest release - bump it in your `.csproj` if needed: `<PackageReference Include="SwiftlyS2.CS2" Version="*" ExcludeAssets="runtime" PrivateAssets="all" />`. `*` tracks latest stable; pin a version (e.g. `1.0.3`) for reproducible builds, or use `*-*` for preview releases.
 
 Main plugin class:
@@ -78,7 +80,7 @@ public partial class MyPlugin : BasePlugin
 
 ### Plugin Metadata
 
-`[PluginMetadata]` supplies the metadata SwiftlyS2 reports for your plugin, at runtime through <ApiRef name="IPluginManager" member="GetPluginMetadata" /> and <ApiRef name="IPluginManager" member="GetAllPluginMetadata" /> (see the member table under Managing Plugins at Runtime). `Id` and `Version` are required; `Name` falls back to `Id` when it isn't set, and the other properties have defaults:
+`[PluginMetadata]` supplies the metadata SwiftlyS2 reports for your plugin, at runtime through <ApiRef name="IPluginManager" member="GetPluginMetadata" /> and <ApiRef name="IPluginManager" member="GetAllPluginMetadata" /> (see the member table under Managing Plugins at Runtime). `Id` and `Version` are `required`, so the attribute doesn't compile without them; `Name` falls back to `Id` when it isn't set, and the other properties have defaults:
 
 | Property            | Required | Default                     |
 | ------------------- | -------- | --------------------------- |
@@ -90,7 +92,7 @@ public partial class MyPlugin : BasePlugin
 | `Website`           | no       | empty string                |
 | `MinimumAPIVersion` | no       | `"0.0.0"`                   |
 
-See <ApiRef name="PluginMetadata" /> for the full member list.
+See <ApiRef name="PluginMetadata" /> for the full member list; the attribute goes on the plugin class, see [Using Attributes](/docs/development/using-attributes).
 
 ### Plugin Lifecycle
 
@@ -121,6 +123,11 @@ public override void Unload()
 public override void ConfigureSharedInterface(IInterfaceManager interfaceManager)
 {
     // Register the interfaces this plugin provides.
+}
+
+public override void UseSharedInterface(IInterfaceManager interfaceManager)
+{
+    // Resolve interfaces provided by other plugins.
 }
 ```
 
@@ -158,7 +165,7 @@ else
 
 ### Injecting Services into the Plugin
 
-Besides the constructor, a service can be injected into a member: <ApiRef name="SwiftlyInject" /> (`SwiftlyS2.Shared`) is parameterless and applies to fields and properties, and SwiftlyS2 assigns the service to the marked member.
+Besides the constructor, a service can be injected into a member: <ApiRef name="SwiftlyInject" /> (`SwiftlyS2.Shared`) is parameterless, applies to fields and properties (one attribute per member) and injects the service matching the member's type, so SwiftlyS2 assigns it to the marked member.
 
 ```csharp
 public partial class MyPlugin : BasePlugin
@@ -170,6 +177,8 @@ public partial class MyPlugin : BasePlugin
     }
 }
 ```
+
+See [Dependency Injection](/docs/guides/dependency-injection) for the container-based alternative used by helper classes.
 
 ## Publishing
 

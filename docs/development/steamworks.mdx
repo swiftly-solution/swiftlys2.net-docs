@@ -21,7 +21,7 @@ private void OnSteamApiActivated()
 }
 ```
 
-<ApiRef name="InteropHelp" member="TestIfAvailableGameServer" /> is the synchronous equivalent: it throws an `InvalidOperationException` when the game server API isn't initialized yet, so it can be used as a guard from code that doesn't run off `OnSteamAPIActivated`.
+<ApiRef name="InteropHelp" member="TestIfAvailableGameServer" /> is the synchronous equivalent: it initializes the game server API context on first use and throws an `InvalidOperationException` when that fails, so it can be used as a guard from code that doesn't run off `OnSteamAPIActivated`.
 
 ## Converting Player IDs to Steam IDs
 
@@ -163,9 +163,17 @@ Steam surfaces two async patterns: <ApiRef name="Callback`1" /> fires whenever a
   </Tab>
 </Tabs>
 
-`Callback<T>` stays registered until you dispose it, so keep the instance in a field and dispose it in `Unload`; disposing twice is a no-op, but a disposed instance can't be registered again.
+`Callback<T>` stays registered until you dispose it, so keep the instance in a field and dispose it in `Unload`. Several `Callback<T>` instances can be registered for the same callback struct at once - each of them receives every post, which is how independent parts of a plugin can listen to the same callback.
+
+<Callout type="warning">
+    A handler stays registered with Steam until it is disposed, so subscribing
+    again from `Load` after every hot reload without disposing the previous
+    instance piles up handlers. Always dispose the stored instance in `Unload`.
+</Callout>
 
 `CallResult<T>` disposes itself right after its result fires, so keeping the instance in a field is only useful to cancel the pending call early. A disposed instance ignores further `Set` calls, so each request needs its own `CallResult<T>` instead of a re-pointed one.
+
+Exceptions thrown inside a handler are caught and written to the console instead of propagating into the Steam API, and the other handlers for the same callback still run.
 
 `T` has to be one of the generated Steam callback structs - it must carry a callback identity, otherwise `Callback<T>.Create` (through <ApiRef name="CallbackIdentities" member="GetCallbackIdentity" />) throws.
 
@@ -198,7 +206,7 @@ SteamGameServer.EndAuthSession(steamId);
 
 ## Helpers
 
-- <ApiRef name="InteropHelp" /> - `static void TestIfAvailableGameServer()` throws `InvalidOperationException` when the game server API isn't initialized yet, see [Waiting for the Steam API](#waiting-for-the-steam-api).
+- <ApiRef name="InteropHelp" /> - `static void TestIfAvailableGameServer()` initializes the game server API context if it isn't available yet and throws `InvalidOperationException` when that fails, see [Waiting for the Steam API](#waiting-for-the-steam-api).
 - <ApiRef name="CallbackIdentities" /> - `static int GetCallbackIdentity(Type callbackStruct)` takes a callback struct `Type` and returns its numeric Steam callback ID (`int`), throwing when the struct carries no identity. Mostly useful for logging which callback fired.
 - <ApiRef name="Packsize" /> - `Packsize.value` is the `const int` pack size (`8` on Windows, `4` on other platforms) the generated Steam structs are declared with.
 
@@ -212,6 +220,7 @@ SteamGameServer.EndAuthSession(steamId);
 | `SteamGameServerStats`                     | `SwiftlyS2.Shared.SteamAPI` | Server-managed user stats                         |
 | `GameServer`                               | `SwiftlyS2.Shared.SteamAPI` | Process-level handles, identity and VAC status    |
 | `CSteamID`, `AppId_t`, `PublishedFileId_t` | `SwiftlyS2.Shared.SteamAPI` | Core Steam identifier value types                 |
+| `HSteamPipe`, `HSteamUser`                 | `SwiftlyS2.Shared.SteamAPI` | Steam pipe and user handle value types            |
 | `Callback<T>` / `CallResult<T>`            | `SwiftlyS2.Shared.SteamAPI` | Async callback / call-result handling             |
 | `CallbackIdentities`                       | `SwiftlyS2.Shared.SteamAPI` | Callback ID lookup for callback structs           |
 | `InteropHelp`                              | `SwiftlyS2.Shared.SteamAPI` | Availability guard for the game server API        |

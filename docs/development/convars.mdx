@@ -143,6 +143,8 @@ private void OnConVarValueChanged(IOnConVarValueChanged @event)
 
 Useful for audit logging, debugging, and reacting to config changes without polling `Value` on a hot path.
 
+A client changing one or several of its own replicated convars (`name`, etc.) is reported separately by `Core.Event.OnClientSettingsChanged` (<ApiRef name="IOnClientSettingsChangedEvent" />), which carries the `PlayerId` of the client whose settings changed.
+
 <Callout type="info">
     The framework tears down every listener a plugin registered on hot reload or
     unload automatically - unsubscribe manually (`Core.Event.OnConVarCreated -=

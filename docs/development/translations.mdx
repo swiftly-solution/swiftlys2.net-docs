@@ -105,7 +105,7 @@ Lookup is all the API exposes. Both indexers return a non-nullable `string` and 
 
 ## Player-Specific Localization
 
-<ApiRef name="ITranslationService" /> exposes a single member: <ApiRef name="ITranslationService" member="GetPlayerLocalizer" /> takes an <ApiRef name="IPlayer" /> and returns the <ApiRef name="ILocalizer" /> for that player, with the same two indexers as above. Use it when the output should match the player's language:
+<ApiRef name="ITranslationService" /> exposes a single member, `ILocalizer GetPlayerLocalizer(IPlayer player)`: it takes an <ApiRef name="IPlayer" /> and returns the <ApiRef name="ILocalizer" /> for that player, with the same two indexers as above. Use it when the output should match the player's language:
 
 ```csharp
 public async Task GreetAsync(IPlayer player)
@@ -117,7 +117,7 @@ public async Task GreetAsync(IPlayer player)
 }
 ```
 
-`GetPlayerLocalizer` only returns a localizer - sending the text is up to you. The player-facing send methods on <ApiRef name="IPlayer" /> (`SendChat`/`SendChatAsync`, `SendCenter`/`SendCenterAsync`, `SendChatEOT`/`SendChatEOTAsync`, `SendAlert`/`SendAlertAsync`, `SendNotify`/`SendNotifyAsync`, `SendConsole`/`SendConsoleAsync` and `SendCenterHTML`/`SendCenterHTMLAsync`) all take the finished `string`.
+`GetPlayerLocalizer` only returns a localizer - sending the text is up to you. The player-facing send methods on <ApiRef name="IPlayer" /> (`SendChat`/`SendChatAsync`, `SendCenter`/`SendCenterAsync`, `SendChatEOT`/`SendChatEOTAsync`, `SendAlert`/`SendAlertAsync`, `SendNotify`/`SendNotifyAsync`, `SendConsole`/`SendConsoleAsync` and `SendCenterHTML`/`SendCenterHTMLAsync`) all take the finished `string`; the `CenterHTML` pair additionally takes the display `duration` in milliseconds.
 
 ### Broadcasting in Each Player's Language
 
@@ -143,7 +143,7 @@ Off the game thread, use the `Async` variants (or `Core.Scheduler`) - see [Threa
 
 ## The Language Type
 
-<ApiRef name="Language" /> is a sealed class wrapping a language code. <ApiRef name="IPlayer" member="PlayerLanguage" /> returns one, which is handy for diagnostics or conditional flows:
+<ApiRef name="Language" /> is a sealed class wrapping a language code. <ApiRef name="IPlayer" member="PlayerLanguage" /> returns one (read-only in the API), which is handy for diagnostics or conditional flows:
 
 ```csharp
 if (player.PlayerLanguage.Equals(Language.German))
@@ -152,11 +152,25 @@ if (player.PlayerLanguage.Equals(Language.German))
 }
 ```
 
+| Member | Type | Description |
+| --- | --- | --- |
+| `Value` | `string` | The language code, for example `de` |
+| `Language(string value)` | - | Builds a language from any code; the code is stored as-is |
+| `ToString()` | `string` | Returns `Value` |
+| `implicit operator string` | `string` | Returns `Value`, so a <ApiRef name="Language" /> can be assigned to a `string` |
+| `Equals(Language? other)` | `bool` | Whether both codes are equal; `false` when `other` is `null` |
+| `Equals(object? obj)` | `bool` | Same comparison; `false` when `obj` is not a <ApiRef name="Language" /> |
+| `GetHashCode()` | `int` | Derived from `Value` |
+
+The languages themselves are `public static` fields of the type (`Language.English`, `Language.German`, ...), one per code in the [Language Codes](#language-codes) table.
+
 <Callout type="warning">
     <ApiRef name="Language" /> does not overload `==`, so
     `player.PlayerLanguage == Language.German` compares references and only
     matches the very same instance. Use `Equals`, or compare `Value`, for value
-    comparison.
+    comparison. Comparing against a code string is fine -
+    `player.PlayerLanguage == "de"` goes through the implicit conversion and
+    compares the text.
 </Callout>
 
 `Value` is the code and `ToString()` returns it. The type converts implicitly to `string`, but not the other way round - building one from a code string takes the constructor:

@@ -27,14 +27,25 @@ else
 
 ## Dispatching to the Main Thread
 
-The `*Async` counterparts listed further down already dispatch for you, so an `async` flow can call them directly. Everything else goes through <ApiRef name="ISchedulerService" /> (<ApiRef name="ISwiftlyCore" member="Scheduler" />), which has four ways to hand a call back to the game thread:
+The `*Async` counterparts listed further down already dispatch for you, so an `async` flow can call them directly. Everything else goes through <ApiRef name="ISchedulerService" /> (<ApiRef name="ISwiftlyCore" member="Scheduler" />), which has these ways to hand a call back to the game thread:
 
-| Method                                                                    | Behavior                                                                |
-| ------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| <ApiRef name="ISchedulerService" member="NextTick" />                     | Runs the callback on the next server tick                               |
-| <ApiRef name="ISchedulerService" member="NextWorldUpdate" />              | Runs the callback on the next world update phase instead                |
-| <ApiRef name="ISchedulerService" member="NextTickAsync" />                | Same as `NextTick`, but awaitable and able to return a value            |
-| <ApiRef name="ISchedulerService" member="NextWorldUpdateAsync" />         | Same as `NextWorldUpdate`, but awaitable and able to return a value     |
+| Method                                                            | Behavior                                                                                                  |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="ISchedulerService" member="NextTick" />             | Runs the callback on the next server tick                                                                 |
+| <ApiRef name="ISchedulerService" member="NextWorldUpdate" />      | Runs the callback on the next world update phase instead                                                  |
+| <ApiRef name="ISchedulerService" member="NextTickAsync" />        | Same as `NextTick`, but awaitable and able to return a value                                              |
+| <ApiRef name="ISchedulerService" member="NextWorldUpdateAsync" /> | Same as `NextWorldUpdate`, but awaitable and able to return a value                                       |
+| <ApiRef name="ISchedulerService" member="QueueOrNow" />           | Runs the callback immediately when already on the game thread, otherwise on the next tick (or the next world update with `onWorldUpdate: true`); awaitable |
+| <ApiRef name="ISchedulerService" member="QueueOrNow" /> (`QueueOrNow<T>`) | Same as `QueueOrNow`, but returns the callback's value                                            |
+
+<ApiRef name="ISchedulerService" member="QueueOrNow" /> is the one to reach for in helper code that can be called from either context - on the game thread it runs the callback right away, off it queues the callback like `NextTick`:
+
+```csharp
+public Task NotifyAsync(IPlayer player)
+{
+    return Core.Scheduler.QueueOrNow(() => player.SendChat("Hello!"));
+}
+```
 
 The awaitable variants take either an `Action` (returning `Task`) or a `Func<T>` (returning `Task<T>`):
 
@@ -43,7 +54,7 @@ int computedValue = await Core.Scheduler.NextTickAsync(() => 42);
 ```
 
 <Callout type="warning">
-    Don't pass an async callback (`Func<Task>`/`Func<Task<T>>`) to `NextTick`, `NextWorldUpdate` or their awaitable variants - those overloads are `[Obsolete]` and throw `InvalidOperationException`, since an async callback isn't guaranteed to resume on the game thread. Use the plain `Action`/`Func<T>` overloads instead.
+    Don't pass an async callback (`Func<Task>`/`Func<Task<T>>`) to `NextTick`, `NextWorldUpdate`, `QueueOrNow` or their awaitable variants - those overloads are `[Obsolete]` and throw `InvalidOperationException`, since an async callback isn't guaranteed to resume on the game thread. Use the plain `Action`/`Func<T>` overloads instead.
 </Callout>
 
 The same service also has timer APIs (`Delay`, `Repeat`, `DelayAndRepeat`, `AddTimer`, ...) for work that is periodic rather than one-off - see [Scheduler](/docs/development/scheduler).
@@ -71,37 +82,31 @@ await Core.Scheduler.NextTickAsync(() => player.SendChat("Executed on the main t
 
 ## Common Thread-Unsafe APIs
 
-| Thread-Unsafe API                                                 | Async Alternative                                                                                         |
-| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <ApiRef name="IPlayer" member="SendChat" />                       | `SendChatAsync`                                                                                           |
-| <ApiRef name="IPlayer" member="SendMessage" />                    | `SendMessageAsync`                                                                                        |
-| <ApiRef name="IPlayer" member="SendConsole" />                    | `SendConsoleAsync`                                                                                        |
-| <ApiRef name="IPlayer" member="SendCenter" />                     | `SendCenterAsync`                                                                                         |
-| <ApiRef name="IPlayer" member="SendAlert" />                      | `SendAlertAsync`                                                                                          |
-| <ApiRef name="IPlayer" member="SendCenterHTML" />                 | `SendCenterHTMLAsync`                                                                                     |
-| <ApiRef name="IPlayer" member="SendChatEOT" />                    | `SendChatEOTAsync`                                                                                        |
-| <ApiRef name="IPlayer" member="SendNotify" />                     | `SendNotifyAsync`                                                                                         |
-| <ApiRef name="IPlayer" member="Kick" />                           | `KickAsync`                                                                                               |
-| <ApiRef name="IPlayer" member="ExecuteCommand" />                 | `ExecuteCommandAsync`                                                                                     |
-| <ApiRef name="IPlayer" member="Teleport" />                       | `TeleportAsync`                                                                                           |
-| <ApiRef name="IPlayer" member="TakeDamage" />                     | `TakeDamageAsync`                                                                                         |
-| <ApiRef name="IPlayer" member="SwitchTeam" /> / `ChangeTeam`      | `SwitchTeamAsync` / `ChangeTeamAsync`                                                                     |
-| <ApiRef name="IPlayer" member="GetLoadoutItem" />                 | None - dispatch it with `Core.Scheduler`                                                                  |
-| <ApiRef name="IPlayerManager" member="SendMessage" /> and friends | The matching `*Async` methods, e.g. `SendChatAsync`, `SendCenterAsync` and `SendNotifyAsync` (server-wide) |
-| <ApiRef name="SoundEvent" member="Emit" />                        | `EmitAsync`                                                                                               |
-| <ApiRef name="IGameEventService" member="Fire" /> and friends     | `FireAsync`, `FireToPlayerAsync`, `FireToServerAsync`                                                     |
-| <ApiRef name="IGameService" member="EmitHEGrenade" /> and friends | `EmitHEGrenadeAsync`, `EmitFlashbangAsync`, `EmitSmokeGrenadeAsync`, `EmitMolotovAsync`, `EmitDecoyAsync` |
-
-<Callout type="info">
-    <ApiRef name="IEngineService" member="DispatchParticleEffect" /> is documented
-    as thread-unsafe and has a `DispatchParticleEffectAsync` counterpart, and
-    <ApiRef name="IEngineService" member="ExecuteCommand" /> has an
-    `ExecuteCommandAsync` variant - use those from a background flow.
-</Callout>
+| Thread-Unsafe API                                                         | Async Alternative                                                                                         |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <ApiRef name="IPlayer" member="SendChat" />                               | `SendChatAsync`                                                                                           |
+| <ApiRef name="IPlayer" member="SendMessage" />                            | `SendMessageAsync`                                                                                        |
+| <ApiRef name="IPlayer" member="SendConsole" />                            | `SendConsoleAsync`                                                                                        |
+| <ApiRef name="IPlayer" member="SendCenter" />                             | `SendCenterAsync`                                                                                         |
+| <ApiRef name="IPlayer" member="SendAlert" />                              | `SendAlertAsync`                                                                                          |
+| <ApiRef name="IPlayer" member="SendCenterHTML" />                         | `SendCenterHTMLAsync`                                                                                     |
+| <ApiRef name="IPlayer" member="SendChatEOT" />                            | `SendChatEOTAsync`                                                                                        |
+| <ApiRef name="IPlayer" member="SendNotify" />                             | `SendNotifyAsync`                                                                                         |
+| <ApiRef name="IPlayer" member="Kick" />                                   | `KickAsync`                                                                                               |
+| <ApiRef name="IPlayer" member="ExecuteCommand" />                         | `ExecuteCommandAsync`                                                                                     |
+| <ApiRef name="IPlayer" member="Teleport" />                               | `TeleportAsync`                                                                                           |
+| <ApiRef name="IPlayer" member="TakeDamage" />                             | `TakeDamageAsync`                                                                                         |
+| <ApiRef name="IPlayer" member="SwitchTeam" /> / `ChangeTeam`              | `SwitchTeamAsync` / `ChangeTeamAsync`                                                                     |
+| <ApiRef name="IPlayer" member="GetLoadoutItem" />                         | None - dispatch it with `Core.Scheduler`                                                                  |
+| <ApiRef name="IPlayerManagerService" member="SendMessage" /> and friends  | The matching `*Async` methods, e.g. `SendChatAsync`, `SendCenterAsync` and `SendNotifyAsync` (server-wide) |
+| <ApiRef name="SoundEvent" member="Emit" />                                | `EmitAsync`                                                                                               |
+| <ApiRef name="IGameEventService" member="Fire" /> and friends             | `FireAsync`, `FireToPlayerAsync`, `FireToServerAsync`                                                     |
+| <ApiRef name="IGameService" member="EmitHEGrenade" /> and friends         | `EmitHEGrenadeAsync`, `EmitFlashbangAsync`, `EmitSmokeGrenadeAsync`, `EmitMolotovAsync`, `EmitDecoyAsync` |
+| <ApiRef name="IEngineService" member="DispatchParticleEffect" />          | `DispatchParticleEffectAsync`                                                                             |
 
 ## Checklist
 
-Find sync calls to thread-unsafe APIs running after an `await` (outside `Load`/event handlers), replace with the `Async` variant, or wrap with `Core.Scheduler.NextTick`/`NextWorldUpdate` (or their awaitable variants) if no `Async` variant exists. Don't fire-and-forget gameplay-critical calls - `await` them or handle failures explicitly.
+Find sync calls to thread-unsafe APIs running after an `await` (outside `Load`/event handlers), replace with the `Async` variant, or wrap with `Core.Scheduler.NextTick`/`NextWorldUpdate`/`QueueOrNow` (or their awaitable variants) if no `Async` variant exists. Don't fire-and-forget gameplay-critical calls - `await` them or handle failures explicitly.
 
 ## Reference
 

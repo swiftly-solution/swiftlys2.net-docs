@@ -48,21 +48,21 @@ Attributes either carry their configuration as constructor arguments (`[Command]
 
 `Valid target` is where each attribute goes; all of them allow one instance per target (`AllowMultiple = false`), except <ApiRef name="CommandAlias" />:
 
-| Attribute                                                                                       | Valid target                | Handler signature                                                     |
-| ----------------------------------------------------------------------------------------------- | --------------------------- | --------------------------------------------------------------------- |
-| <ApiRef name="PluginMetadata" />                                                                | plugin class                | -                                                                     |
-| <ApiRef name="Command" />                                                                       | method                      | `void (ICommandContext context)`                                      |
-| <ApiRef name="CommandAlias" />                                                                  | method carrying `[Command]` | same signature as `[Command]` on that method                          |
-| <ApiRef name="GameEventHandler" />                                                              | method                      | `HookResult (TEvent eventObj)`                                        |
-| <ApiRef name="EventListener`1" />                                                               | method                      | the signature of delegate `T`                                         |
-| <ApiRef name="GameHookHandler" />                                                               | method                      | the hooked delegate, e.g. `void (ref TakeDamageEntityPreContext ctx)` |
-| <ApiRef name="ClientCommandHookHandler" />                                                      | method                      | `HookResult (int playerId, string commandLine)`                       |
-| <ApiRef name="ClientChatHookHandler" />                                                         | method                      | `HookResult (int playerId, string text, bool teamonly)`               |
-| <ApiRef name="ServerNetMessageHandler" />                                                       | method                      | `HookResult (T msg)`                                                  |
-| <ApiRef name="ServerNetMessageInternalHandler" />                                               | method                      | `HookResult (T msg, int playerId)`                                    |
-| <ApiRef name="ClientNetMessageHandler" />                                                       | method                      | `HookResult (T msg, int playerId)`                                    |
-| <ApiRef name="EntityOutputHandlerAttribute" /> / <ApiRef name="EntityOutputHandlerAttribute`1" /> | method                    | `void (IOnEntityFireOutputHookEvent @event)`                          |
-| <ApiRef name="EntityInputHandlerAttribute" /> / <ApiRef name="EntityInputHandlerAttribute`1" />   | method                    | `void (IOnEntityIdentityAcceptInputHookEvent @event)`                 |
+| Attribute                                                                                       | Valid target                | Parameters                                                                                | Handler signature                                                     |
+| ----------------------------------------------------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| <ApiRef name="PluginMetadata" />                                                                | plugin class                | named properties only, `Id` and `Version` required                                        | -                                                                     |
+| <ApiRef name="Command" />                                                                       | method                      | `(name, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")` | `void (ICommandContext context)`                                      |
+| <ApiRef name="CommandAlias" />                                                                  | method carrying `[Command]` | `(alias, registerRaw = false)`                                                            | same signature as `[Command]` on that method                          |
+| <ApiRef name="GameEventHandler" />                                                              | method                      | `(hookMode)`                                                                              | `HookResult (TEvent eventObj)`                                        |
+| <ApiRef name="EventListener`1" />                                                               | method                      | type parameter `T`, no arguments (`T : Delegate`)                                         | the signature of delegate `T`                                         |
+| <ApiRef name="GameHookHandler" />                                                               | method                      | `(hookMode)`                                                                              | the hooked delegate, e.g. `void (ref TakeDamageEntityPreContext ctx)` |
+| <ApiRef name="ClientCommandHookHandler" />                                                      | method                      | parameterless                                                                             | `HookResult (int playerId, string commandLine)`                       |
+| <ApiRef name="ClientChatHookHandler" />                                                         | method                      | parameterless                                                                             | `HookResult (int playerId, string text, bool teamonly)`               |
+| <ApiRef name="ServerNetMessageHandler" />                                                       | method                      | parameterless, the message type comes from the method parameter                           | `HookResult (T msg)`                                                  |
+| <ApiRef name="ServerNetMessageInternalHandler" />                                               | method                      | parameterless, the message type comes from the method parameter                           | `HookResult (T msg, int playerId)`                                    |
+| <ApiRef name="ClientNetMessageHandler" />                                                       | method                      | parameterless, the message type comes from the method parameter                           | `HookResult (T msg, int playerId)`                                    |
+| <ApiRef name="EntityOutputHandlerAttribute" /> / <ApiRef name="EntityOutputHandlerAttribute`1" /> | method                    | `(designerName, outputName)` or `<T>(outputName)` (`T : class, ISchemaClass<T>`)          | `void (IOnEntityFireOutputHookEvent @event)`                          |
+| <ApiRef name="EntityInputHandlerAttribute" /> / <ApiRef name="EntityInputHandlerAttribute`1" />   | method                    | `(designerName, inputName)` or `<T>(inputName)` (`T : class, ISchemaClass<T>`)            | `void (IOnEntityIdentityAcceptInputHookEvent @event)`                 |
 
 ### <ApiRef name="PluginMetadata" />
 
@@ -77,7 +77,7 @@ public partial class MyPlugin : BasePlugin
 
 ### <ApiRef name="Command" />
 
-Registers a chat/console command. The method must match `ICommandService.CommandListener` (`void (ICommandContext context)`), and the attribute takes `(name, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")`:
+Registers a chat/console command. The method must match `ICommandService.CommandListener` (`void (ICommandContext context)`), and the attribute takes `(name, registerRaw = false, permission = "", helpText = "SwiftlyS2 registered command")` - an overload taking `(name, registerRaw, permission)` without `helpText` is kept for backward compatibility:
 
 - `name` is the command name as typed by the user - it registers as `sw_<name>` unless `registerRaw` is `true`.
 - `registerRaw` registers the name as-is, without the `sw_` prefix.
@@ -112,7 +112,7 @@ public void OnHealCommand(ICommandContext context)
 
 ### <ApiRef name="GameEventHandler" />
 
-Hooks a generated game event (`EventPlayerDeath`, `EventRoundStart`, ...). Takes `(hookMode)`, where `HookMode.Pre` runs before the game processes the event and `HookMode.Post` after, and the method must match `IGameEventService.GameEventHandler<T>` (`HookResult (T eventObj)`) for the event type you want - see <ApiRef name="IGameEventService" /> and [Game Events](/docs/development/game-events) for the full hook/fire API:
+Hooks a generated game event (`EventPlayerDeath`, `EventRoundStart`, ...). Takes `(hookMode)`, where `HookMode.Pre` runs before the game processes the event and `HookMode.Post` after, and the method must match `IGameEventService.GameEventHandler<T>` (`HookResult (T eventObj)`, with `T` constrained to `IGameEvent<T>`) for the event type you want - see <ApiRef name="IGameEventService" /> and [Game Events](/docs/development/game-events) for the full hook/fire API. The mode is also exposed as the settable `HookMode` property:
 
 ```csharp
 [GameEventHandler(HookMode.Post)]
@@ -137,7 +137,7 @@ The attribute is parameterless and allows one per method (`AllowMultiple = false
 
 ### <ApiRef name="GameHookHandler" />
 
-Hooks one of the `Pre`/`Post` callbacks exposed by a category under <ApiRef name="IGameHooks" /> (e.g. entity take-damage). Takes `(hookMode)`, and the method signature has to match the delegate of the hook you want - for `Core.GameHooks.Entities.TakeDamage.Pre` that is `void (ref TakeDamageEntityPreContext ctx)`:
+Hooks one of the `Pre`/`Post` callbacks exposed by a category under <ApiRef name="IGameHooks" /> (e.g. entity take-damage). Takes `(hookMode)`, kept in the settable `HookMode` property, and the method signature has to match the delegate of the hook you want - for `Core.GameHooks.Entities.TakeDamage.Pre` that is `void (ref TakeDamageEntityPreContext ctx)`:
 
 ```csharp
 [GameHookHandler(HookMode.Pre)]
@@ -179,7 +179,7 @@ Returning `HookResult.Stop` from a chat hook drops the message and skips the rem
 
 ### <ApiRef name="EntityOutputHandlerAttribute" /> / <ApiRef name="EntityOutputHandlerAttribute`1" />
 
-Hooks an entity I/O output by designer name, or generically by schema class (`<T>` resolves `T.ClassName` for you, and throws `ArgumentException` when `T` has no designer name). The non-generic form takes `(designerName, outputName)`, the generic one `(outputName)`; both are exposed as the settable properties `DesignerName` and `OutputName`:
+Hooks an entity I/O output by designer name, or generically by schema class (`<T>` resolves `T.ClassName` for you, and throws `ArgumentException` when `T` has no designer name - `T` is constrained to `class, ISchemaClass<T>`). The non-generic form takes `(designerName, outputName)`, the generic one `(outputName)`; both are exposed as the settable properties `DesignerName` and `OutputName`:
 
 ```csharp
 [EntityOutputHandler("func_door", "OnOpen")]
@@ -262,6 +262,6 @@ public HookResult OnClientMove(CCLCMsg_Move msg, int playerId)
 
 ## Related Attributes
 
-Two more attributes are applied by plugins but don't register handlers: <ApiRef name="SwiftlyInject" /> on a field or property, which makes SwiftlyS2 inject the matching service into that member (see [Getting Started](/docs/development/getting-started)), and <ApiRef name="ThreadUnsafeAttribute" />, which annotates framework APIs that must only run on the game thread (see [Thread Safety](/docs/development/thread-safety)).
+Two more attributes are applied by plugins but don't register handlers: <ApiRef name="SwiftlyInject" /> (parameterless, on a field or property), which makes SwiftlyS2 inject the matching service into that member (see [Getting Started](/docs/development/getting-started)), and <ApiRef name="ThreadUnsafeAttribute" /> (parameterless, on a method), which annotates framework APIs that must only run on the game thread (see [Thread Safety](/docs/development/thread-safety)).
 
 Not every type named like an attribute is one: <ApiRef name="TraceCollisionAttributes" /> describes the collision shape of a trace hit and is read from <ApiRef name="TraceResult" /> (`ShapeAttributes`), not applied to your code.

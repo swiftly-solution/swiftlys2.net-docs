@@ -10,16 +10,16 @@ Edit the following file:
 
 `addons/swiftlys2/configs/core.jsonc`
 
-The file is created from `core.example.jsonc` on first startup. Missing keys, or keys with an incompatible type, are replaced with their default value and written back to this file on load. Change the location with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
+The file is created from `core.example.jsonc` on first startup. Missing keys, or keys with an incompatible type, are replaced with their default value and written back to this file on load - the file is rewritten from the parsed document, so comments in it are dropped when that happens. Change the location with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
 
 ## Global Settings
 
 | Key                            | Type       | Default                                                          | Description                                                                                                                                                    |
 | ------------------------------ | ---------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CommandPrefixes`              | `string[]` | `["!"]`                                                          | Prefixes recognized for normal command execution.                                                                                                              |
-| `CommandSilentPrefixes`        | `string[]` | `["/"]`                                                          | Prefixes recognized for silent command execution.                                                                                                              |
+| `CommandPrefixes`              | `string[]` | `["!"]`                                                          | Prefixes recognized for normal command execution. Entries are stored space-separated, so a prefix cannot contain a space.                                       |
+| `CommandSilentPrefixes`        | `string[]` | `["/"]`                                                          | Prefixes recognized for silent command execution. Entries are stored space-separated, so a prefix cannot contain a space.                                       |
 | `AutoHotReload`                | `boolean`  | `true`                                                           | Reloads a plugin automatically when its `.dll` file changes.                                                                                                   |
-| `ProfilerLevel`                | `number`   | `0`                                                              | Default profiler level. `0` disables profiling, `1` enables EventPipe profiling.                                                                               |
+| `ProfilerLevel`                | `number`   | `0`                                                              | Default profiler level, clamped between `0` and `1`. `0` disables profiling, `1` enables EventPipe profiling.                                                   |
 | `ConsoleFilter`                | `boolean`  | `true`                                                           | Enables console filtering on startup - see [Console Filter](/docs/resources/console-filter).                                                                   |
 | `PatchesToPerform`             | `string[]` | `[]`                                                             | Identifiers of the game data patches applied on startup. Identifiers that do not exist for the current game are logged and skipped.                            |
 | `CS2ServerGuidelines`          | `string`   | `"https://blog.counter-strike.net/index.php/server_guidelines/"` | URL of the CS2 server guidelines. Only registered on CS2, and not read by the core at the moment.                                                              |
@@ -27,7 +27,7 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 | `Language`                     | `string`   | `"en"`                                                           | Default language code, used when a player has no language of its own.                                                                                          |
 | `UsePlayerLanguage`            | `boolean`  | `true`                                                           | Prefers the language reported by the player's game client for translations.                                                                                    |
 | `ManualLoadPlugins`            | `boolean`  | `false`                                                          | Skips plugin loading on startup; plugins are then loaded with `sw plugins load` from the server console.                                                       |
-| `PluginLoadOrder`              | `string[]` | `[]`                                                             | Plugin IDs loaded on startup, in the listed order, when `ManualLoadPlugins` is `true`.                                                                         |
+| `PluginLoadOrder`              | `string[]` | `[]`                                                             | Plugin IDs loaded in the listed order. With `ManualLoadPlugins` enabled only these plugins are loaded on startup, otherwise every plugin is loaded and the listed ones load first. |
 | `DotnetCrashTracerLevel`       | `number`   | `0`                                                              | .NET crash tracer level. A value greater than `0` enables the tracer.                                                                                          |
 | `WindowsFullDump`              | `boolean`  | `false`                                                          | Windows-only crash dump toggle. Not read by the core at the moment, so it has no effect.                                                                       |
 
@@ -46,9 +46,9 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 
 | Key                             | Type       | Default                           | Description                                                                                  |
 | ------------------------------- | ---------- | --------------------------------- | -------------------------------------------------------------------------------------------- |
-| `Enable`                        | `boolean`  | `true`                            | Enables console logging to files in `logs/console/`.                                         |
+| `Enable`                        | `boolean`  | `true`                            | Enables console logging to files in `logs/console/`. When disabled, the other `ConsoleLogger` keys are not read. |
 | `ManagedEnable`                 | `boolean`  | `true`                            | Also writes managed (.NET) plugin logs to files in `logs/managed/`.                           |
-| `WriteIntervalMs`               | `number`   | `2000`                            | Interval, in milliseconds, between log file writes. Values below `1` fall back to `2000`.    |
+| `WriteIntervalMs`               | `number`   | `2000`                            | Interval, in milliseconds, between log file writes, used for both the console and the managed log files. Values below `1` fall back to `2000`. |
 | `Rotation.Enable`               | `boolean`  | `true`                            | Enables log file rotation, applied on startup and after every write.                         |
 | `Rotation.Mode`                 | `string`   | `"file_count"`                    | Rotation mode. Available: `"file_count"`, `"time_interval"`. Any other value leaves rotation inactive. |
 | `Rotation.AvailableModes`       | `string[]` | `["file_count", "time_interval"]` | Rotation modes listed for `Rotation.Mode`.                                                   |
@@ -62,9 +62,9 @@ The file is created from `core.example.jsonc` on first startup. Missing keys, or
 | Key                   | Type       | Default              | Description                                                                                        |
 | --------------------- | ---------- | -------------------- | -------------------------------------------------------------------------------------------------- |
 | `AvailableInputModes` | `string[]` | `["button", "wasd"]` | Menu input modes listed for `InputMode`.                                                           |
-| `InputMode`           | `string`   | `"button"`           | Active menu input mode. `"wasd"` enables WASD navigation, any other value uses the `Menu.Buttons` mappings. |
+| `InputMode`           | `string`   | `"button"`           | Active menu input mode. `"wasd"` enables WASD navigation, any other value uses the `Menu.Buttons` mappings; the classic menu API only binds keys when the value is `"button"` or `"wasd"`. |
 | `NavigationPrefix`    | `string`   | `"➤"`                | Prefix shown for the currently selected menu item.                                                 |
-| `ItemsPerPage`        | `number`   | `5`                  | Number of menu items shown per page, used by menus that do not set their own limit. Values are clamped between `1` and `5`. |
+| `ItemsPerPage`        | `number`   | `5`                  | Number of menu items shown per page, used by menus that do not set their own limit. The classic menu API clamps it between `1` and `5`. |
 
 ### Menu Buttons
 
@@ -94,11 +94,20 @@ Values are matched case-insensitively against a fixed set of key names: `mouse1`
 | Key              | Type       | Default                  | Description                                                                                                                 |
 | ---------------- | ---------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
 | `AvailableModes` | `string[]` | `["flexible", "strict"]` | Steam auth modes listed for `Mode`.                                                                                         |
-| `Mode`           | `string`   | `"flexible"`             | Active Steam auth mode. With `"flexible"` the Steam ID of a player who has not completed Steam authentication is still returned, any other value returns `0` until authentication succeeds. |
+| `Mode`           | `string`   | `"flexible"`             | Active Steam auth mode. `"strict"` returns `0` as the Steam ID of a player who has not completed Steam authentication, any other value returns the Steam ID regardless of authentication. |
 
 ## Notes
 
 - Every key is read while the core starts, so restart the server after editing `core.jsonc`. Console filtering is the exception: `sw confilter enable` and `sw confilter disable` toggle it at runtime without writing the change back to the file - see [Console Filter](/docs/resources/console-filter).
 - The `SetSchemaHammerUniqueId` patch is applied on startup even when `PatchesToPerform` is empty.
 - A key with an incompatible type is reset to its default, while an individual array entry with an incompatible type is skipped with a logged error and the remaining entries are kept.
+- A whole number written for a floating point key - `"Volume": 1` instead of `1.0` - counts as an incompatible type and is replaced with the default.
 - `ConsoleLogger.Rotation.AvailableModes`, `Menu.AvailableInputModes` and `SteamAuth.AvailableModes` only list the values their `Mode` counterpart understands; the core does not validate `Mode` against them.
+
+## Beta Changes
+
+The following only applies to the beta branch.
+
+| Key                      | Change                                                                                                                                                    |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DotnetCrashTracerLevel` | Removed. The .NET trace API is initialized on startup unconditionally, so a leftover entry in an existing `core.jsonc` is kept but neither read nor used.  |

@@ -47,14 +47,14 @@ hud.DispatchSpawn();
 
 `CCSCustomHudLayout` extends `CBaseEntity` and holds the layout state directly. After assigning a field, call the matching `...Updated()` method (`StrLayout`/`StrLayoutUpdated` above) so the change is picked up:
 
-| Member                                                      | Description                                        |
-| ----------------------------------------------------------- | -------------------------------------------------- |
-| `StrLayout` (`string`)                                      | Path of the layout file                            |
-| `Observable` (`bool`)                                       | Whether the layout is observable                   |
-| `PanelIds` (`CUtlVector<CUtlString>`)                       | Panel `id` values the layout state refers to       |
-| `ClassNames` (`CUtlVector<CUtlString>`)                     | CSS class names the layout state refers to         |
-| `DialogVariableNames` (`CUtlVector<CUtlString>`)            | Dialog variable names the layout state refers to   |
-| `GlobalLayoutState` (`CCSCustomHudLayoutState`)             | The layout state applied to every player           |
+| Member                                                       | Description                                        |
+| ------------------------------------------------------------ | -------------------------------------------------- |
+| `StrLayout` (`string`)                                       | Path of the layout file                            |
+| `Observable` (`bool`)                                        | Whether the layout is observable                   |
+| `PanelIds` (`CUtlVector<CUtlString>`)                        | Panel `id` values the layout state refers to       |
+| `ClassNames` (`CUtlVector<CUtlString>`)                      | CSS class names the layout state refers to         |
+| `DialogVariableNames` (`CUtlVector<CUtlString>`)             | Dialog variable names the layout state refers to   |
+| `GlobalLayoutState` (`CCSCustomHudLayoutState`)              | The layout state applied to every player           |
 | `PlayerLayoutStates` (`CUtlVector<CCSCustomHudLayoutState>`) | The per-player layout states, indexed by player id |
 
 Their update methods are `StrLayoutUpdated`, `ObservableUpdated`, `PanelIdsUpdated`, `ClassNamesUpdated`, `DialogVariableNamesUpdated`, `GlobalLayoutStateUpdated` and `PlayerLayoutStatesUpdated`.
@@ -63,33 +63,33 @@ Their update methods are `StrLayoutUpdated`, `ObservableUpdated`, `PanelIdsUpdat
 
 `CCSCustomHudLayoutState` is the state the global and per-player methods below read and write. `GlobalLayoutState` applies to everyone, `PlayerLayoutStates` holds one entry per player:
 
-| Member                                                                        | Description                                     |
-| ----------------------------------------------------------------------------- | ----------------------------------------------- |
-| `PlayerSlot` (`uint`)                                                         | The player the state belongs to                 |
-| `InputCaptureEnabled` (`bool`)                                                | Whether input capture is enabled for that player |
-| `DialogVariableStrings` (`CUtlVector<HUDPanelDialogVariableString_t>`)        | The dialog variable string overrides            |
-| `HasClasses` (`CUtlVector<HUDPanelHasClass_t>`)                               | The CSS class overrides                         |
+| Member                                                                 | Description                                      |
+| ---------------------------------------------------------------------- | ------------------------------------------------ |
+| `PlayerSlot` (`uint`)                                                  | The player the state belongs to                  |
+| `InputCaptureEnabled` (`bool`)                                         | Whether input capture is enabled for that player |
+| `DialogVariableStrings` (`CUtlVector<HUDPanelDialogVariableString_t>`) | The dialog variable string overrides             |
+| `HasClasses` (`CUtlVector<HUDPanelHasClass_t>`)                         | The CSS class overrides                          |
 
 Its update methods are `InputCaptureEnabledUpdated`, `DialogVariableStringsUpdated` and `HasClassesUpdated`.
 
 Both override lists store indices into the layout's id/name lists instead of the strings themselves:
 
-| `HUDPanelDialogVariableString_t`    | Description                                         |
-| ----------------------------------- | --------------------------------------------------- |
-| `PanelIdIndex` (`ushort`)           | Index into `CCSCustomHudLayout.PanelIds`            |
-| `DialogVariableIndex` (`ushort`)    | Index into `CCSCustomHudLayout.DialogVariableNames` |
-| `Value` (`string`)                  | The value to show                                   |
-| `IsSet` (`bool`)                    | Whether the override is set                         |
+| `HUDPanelDialogVariableString_t` | Description                                         |
+| -------------------------------- | --------------------------------------------------- |
+| `PanelIdIndex` (`ushort`)        | Index into `CCSCustomHudLayout.PanelIds`            |
+| `DialogVariableIndex` (`ushort`) | Index into `CCSCustomHudLayout.DialogVariableNames` |
+| `Value` (`string`)               | The value to show                                   |
+| `IsSet` (`bool`)                 | Whether the override is set                         |
 
-| `HUDPanelHasClass_t`                    | Description                              |
-| --------------------------------------- | ---------------------------------------- |
-| `PanelIdIndex` (`ushort`)               | Index into `CCSCustomHudLayout.PanelIds` |
-| `ClassNameIndex` (`ushort`)             | Index into `CCSCustomHudLayout.ClassNames` |
-| `ClassStatus` (`EHudPanelClassStatus_t`) | Whether the panel has the class          |
+| `HUDPanelHasClass_t`                     | Description                                |
+| ---------------------------------------- | ------------------------------------------ |
+| `PanelIdIndex` (`ushort`)                | Index into `CCSCustomHudLayout.PanelIds`   |
+| `ClassNameIndex` (`ushort`)              | Index into `CCSCustomHudLayout.ClassNames` |
+| `ClassStatus` (`EHudPanelClassStatus_t`) | Whether the panel has the class            |
 
 Each entry has its own `...Updated()` method as well - `PanelIdIndexUpdated`, `DialogVariableIndexUpdated`, `ValueUpdated` and `IsSetUpdated` for `HUDPanelDialogVariableString_t`; `PanelIdIndexUpdated`, `ClassNameIndexUpdated` and `ClassStatusUpdated` for `HUDPanelHasClass_t`.
 
-The methods in the sections below take the `panelId`, `variableName` and `className` strings directly, so you rarely need these indices yourself.
+The methods in the sections below take the `panelId`, `variableName` and `className` strings directly, so you rarely need these indices yourself. In the per-player methods, `playerId` is the player's slot.
 
 ## Dynamic Strings
 
@@ -105,19 +105,21 @@ string? playerValue = hud.GetDialogVariableStringForPlayer(playerId, "text1", "d
 hud.RemoveDialogVariableStringForPlayer(playerId, "text1", "dynamic");
 ```
 
+Only the per-player override can be removed - `SetDialogVariableString` always sets the global value.
+
 ## Dynamic CSS Classes
 
 Control whether a HUD element has a CSS class. `panelId` is the element's `id`; `className` is a class defined in the Panorama CSS.
 
 `EHudPanelClassStatus_t` states:
 
-| State                                     | Meaning                                                                                     |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `k_eHudPanelClassStatus_HasClass`         | The element has the class                                                                   |
-| `k_eHudPanelClassStatus_DoesNotHaveClass` | The element does not have the class                                                         |
-| `k_eHudPanelClassStatus_Undefined`        | Doesn't override the existing status; also returned when reading a state that doesn't exist |
+| State                                     | Meaning                                                                                                               |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `k_eHudPanelClassStatus_HasClass`         | The element has the class                                                                                             |
+| `k_eHudPanelClassStatus_DoesNotHaveClass` | The element does not have the class                                                                                   |
+| `k_eHudPanelClassStatus_Undefined`        | Doesn't override the existing status; also returned when reading a state that doesn't exist                           |
 
-Both getters return `k_eHudPanelClassStatus_Undefined` if the `panelId`/`className`/state doesn't exist, and `GetHasClassForPlayer` reads only the player's own state - it never falls back to the global class status.
+Both getters return `k_eHudPanelClassStatus_Undefined` if the `panelId`/`className`/state doesn't exist, and `GetHasClassForPlayer` reads only the player's own state - it never falls back to the global class status. Set `k_eHudPanelClassStatus_Undefined` to clear an existing override.
 
 ```csharp
 hud.SetHasClass("main_panel", "highlight", EHudPanelClassStatus_t.k_eHudPanelClassStatus_HasClass);
@@ -141,6 +143,8 @@ hud.SetInputCaptureEnabledForPlayer(playerId, true);
 bool enabledForPlayer = hud.IsInputCaptureEnabledForPlayer(playerId);
 hud.SetInputCaptureEnabledForPlayer(playerId, false); // disable once the interaction is complete
 ```
+
+`IsInputCaptureEnabledForPlayer` reads only the player's own state - it never falls back to the global value.
 
 ## Handling Button Clicks
 
@@ -168,11 +172,13 @@ private void OnCustomHudClicked(<ApiRef name="IOnCustomHudClickedEvent" /> @even
 }
 ```
 
-| Property                         | Description                                                      |
-| -------------------------------- | ---------------------------------------------------------------- |
-| `PlayerId` (`int`)               | The ID of the player who clicked the button                      |
-| `ButtonId` (`string`)            | The clicked button's `id` from the Panorama XML layout           |
-| `CustomHudLayout` (`CCSCustomHudLayout`) | The `CCSCustomHudLayout` entity that contains the clicked button |
+The matching delegate is `EventDelegates.OnCustomHudClicked` (`void(IOnCustomHudClickedEvent @event)`), so the handler can also be registered with `[EventListener<EventDelegates.OnCustomHudClicked>]` - see [Using Attributes](/docs/development/using-attributes).
+
+| Property                                 | Description                                                       |
+| ---------------------------------------- | ----------------------------------------------------------------- |
+| `PlayerId` (`int`)                       | The ID of the player who clicked the button                       |
+| `ButtonId` (`string`)                    | The clicked button's `id` from the Panorama XML layout            |
+| `CustomHudLayout` (`CCSCustomHudLayout`) | The `CCSCustomHudLayout` entity that contains the clicked button  |
 
 `OnCustomHudClicked` fires for clicks from every Custom HUD layout - if a plugin creates multiple layouts, compare against the layout entity you stored.
 
@@ -183,6 +189,8 @@ See [Core Events](/docs/development/core-events) for attribute-based listeners a
 Each thread-unsafe `CCSCustomHudLayout` extension method has an `Async` counterpart returning a `Task`, for use from background tasks or async code - it runs immediately on the game thread, or schedules onto it otherwise.
 
 ```csharp
+const int playerId = 0;
+
 await hud.SetDialogVariableStringAsync("text1", "dynamic", "Global text");
 
 await hud.SetHasClassForPlayerAsync(playerId, "main_panel", "highlight", EHudPanelClassStatus_t.k_eHudPanelClassStatus_HasClass);
