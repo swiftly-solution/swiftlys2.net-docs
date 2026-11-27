@@ -2,7 +2,7 @@
 title: Console Filter
 ---
 
-The console filter suppresses known noisy console lines so important logs remain visible. Lines that match a rule are dropped before they reach the engine logger, so they never show up in the console or in the log files.
+The console filter suppresses known noisy console lines so important logs remain visible. Lines that match a rule are dropped before they reach the engine logger, so they never show up in the console or in the log files, and plugins listening to console output do not receive them either.
 
 ## Config File
 
@@ -10,7 +10,7 @@ Edit the following file:
 
 `addons/swiftlys2/configs/confilter.jsonc`
 
-If the file does not exist yet, SwiftlyS2 creates it on startup from `addons/swiftlys2/configs/confilter.example.jsonc`, which ships with the default rules. Every `*.example.jsonc` in the configs directory is copied without the `.example` part when the matching file is missing, so deleting `confilter.jsonc` restores the default rules on the next start. Change the location with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
+The path resolves from the core directory, which is `-sw_path` (default `addons/swiftlys2`) relative to `game/csgo`. If the file does not exist yet, SwiftlyS2 creates it on startup from `addons/swiftlys2/configs/confilter.example.jsonc`, which ships with the default rules. Every `*.example.jsonc` in the configs directory is copied without the `.example` part when the matching file is missing, so deleting `confilter.jsonc` restores the default rules on the next start. Change the location with `-sw_path` if SwiftlyS2 is installed elsewhere - see [CLI Options](/docs/resources/cli-options).
 
 ## File Format
 
@@ -28,7 +28,7 @@ The file is a single JSONC object where each entry defines one filter rule:
 - Key: rule name used to identify the rule in `sw confilter status` and in error messages. Rule names are otherwise free-form and have to be unique.
 - Value: [PCRE2](https://www.pcre.org/) pattern matched against the console line. Values have to be JSON strings, so a backslash is escaped as `\\` - `"\\d+"` in the file is the pattern `\d+`.
 
-Both `//` and `/* */` comments are stripped before the file is parsed. The root has to be a flat object of string values - nested objects, arrays and trailing commas are not supported.
+Both `//` and `/* */` comments are stripped before the file is parsed. The root has to be a flat object of string values - nested objects, arrays and trailing commas are not supported, and a file with any of them yields no rules at all.
 
 The shipped `confilter.example.jsonc` contains the default rules:
 
@@ -84,12 +84,12 @@ The shipped `confilter.example.jsonc` contains the default rules:
 ## How It Works
 
 - Every value is compiled once as a PCRE2 regular expression when the file is loaded, and JIT-compiled.
+- Patterns are matched against the fully formatted line, after `%`-style placeholders are expanded.
 - Patterns are unanchored and case-sensitive, so they match anywhere in the line - use `^`/`$` when the pattern must match the whole line and `(?i)` for case-insensitive matching.
-- Rules are evaluated in alphabetical order of the rule name, not in the order they appear in the file. A line is dropped as soon as a rule matches it and that rule's counter is incremented, so a line matching several rules counts towards the rule whose name sorts first.
+- Rules are evaluated in ascending order of the rule name, not in the order they appear in the file. The order is byte-wise, so uppercase names sort before lowercase ones and `Framerate_Values` is checked before `discarding_suspicious`. A line is dropped as soon as a rule matches it and that rule's counter is incremented, so a line matching several rules counts towards the rule that sorts first.
 - If a regular expression fails to compile, the error is logged with the rule name and the failing offset, and only that rule is skipped.
-- Rules named `Framerate_Values` and `Framerate_Total` are handled specially: the next line that contains nothing but a newline is dropped as well, keeping the framerate report grouped.
-- Rule names are only labels for `sw confilter status` and for error messages.
-- If the file is missing or not valid JSON, no rule is loaded and nothing is filtered; none of these cases is logged, so check the file syntax first when filtering stops working.
+- Rules named `Framerate_Values` and `Framerate_Total` are handled specially: when one of them matches, the next line that contains nothing but a newline is dropped as well, keeping the framerate report grouped.
+- If the file is missing or not valid JSON, no rule is loaded and nothing is filtered; none of these cases is logged, so check the file syntax first when filtering stops working. Loading replaces the whole rule set, so a broken file also clears the rules that were loaded before.
 
 ## Enabling and Disabling
 
@@ -97,7 +97,7 @@ The shipped `confilter.example.jsonc` contains the default rules:
 
 ## Command Management
 
-`sw confilter` is restricted to the server console; `sw help` lists it as `Console Filter Menu`. Run it without a subcommand to print the subcommand list; an unrecognized subcommand prints `Unknown command`.
+`sw confilter` is restricted to the server console; `sw help` lists it as `Console Filter Menu`. Run it without a subcommand to print the subcommand list; an unrecognized subcommand prints `Unknown command`. Subcommands are matched case-insensitively.
 
 | Subcommand | Description                            |
 | ---------- | -------------------------------------- |

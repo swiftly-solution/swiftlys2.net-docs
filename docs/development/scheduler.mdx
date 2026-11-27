@@ -30,8 +30,26 @@ await Core.Scheduler.NextTickAsync(() => Console.WriteLine("Executed on next tic
 int computedValue = await Core.Scheduler.NextWorldUpdateAsync(() => 42);
 ```
 
+### Running Immediately on the Game Thread
+
+<ApiRef name="ISchedulerService" member="QueueOrNow" /> takes an
+`Action`/`Func<T>` plus an optional `onWorldUpdate` flag (default `false`). When
+the caller is already on the game thread the callback runs right away and the
+returned `Task`/`Task<T>` is already completed; otherwise the call is queued like
+`NextTick` (`onWorldUpdate: true` queues it onto the next world update instead):
+
+```csharp
+// Runs now when called on the game thread, otherwise on the next tick.
+await Core.Scheduler.QueueOrNow(() => player.SendChat("Hello!"));
+
+int value = await Core.Scheduler.QueueOrNow(() => 42, onWorldUpdate: true);
+```
+
+That makes it the one to reach for in helper code that can be called from either
+context; when you already know you are off the game thread, `NextTick` is enough.
+
 <Callout type="warning">
-Don't pass an async callback (`Func<Task>`/`Func<Task<T>>`) to `NextTick`, `NextTickAsync`, `NextWorldUpdate`, or `NextWorldUpdateAsync` - those overloads are `[Obsolete]` and throw `InvalidOperationException`, since an async callback can resume on a different thread and break the main-thread guarantee these methods exist for. Use the plain `Action`/`Func<T>` overloads instead.
+Don't pass an async callback (`Func<Task>`/`Func<Task<T>>`) to `NextTick`, `NextTickAsync`, `NextWorldUpdate`, `NextWorldUpdateAsync` or `QueueOrNow` - those overloads are `[Obsolete]` and throw `InvalidOperationException`, since an async callback can resume on a different thread and break the main-thread guarantee these methods exist for. Use the plain `Action`/`Func<T>` overloads instead.
 </Callout>
 
 ## Timer APIs
@@ -133,6 +151,8 @@ you always get one of the steps below from its static helpers:
 | <ApiRef name="ISchedulerService" member="NextWorldUpdate" />              | `void NextWorldUpdate(Action task)`                                           | -                                              |
 | <ApiRef name="ISchedulerService" member="NextWorldUpdateAsync" />         | `Task NextWorldUpdateAsync(Action task)`                                      | Completes once `task` has run on the next world update |
 | <ApiRef name="ISchedulerService" member="NextWorldUpdateAsync" />         | `Task<T> NextWorldUpdateAsync<T>(Func<T> task)`                               | The value returned by `task`                   |
+| <ApiRef name="ISchedulerService" member="QueueOrNow" />                   | `Task QueueOrNow(Action task, bool onWorldUpdate = false)`                     | Completes once `task` has run, already completed when it ran immediately |
+| <ApiRef name="ISchedulerService" member="QueueOrNow" />                   | `Task<T> QueueOrNow<T>(Func<T> task, bool onWorldUpdate = false)`              | The value returned by `task`                   |
 | <ApiRef name="ISchedulerService" member="Delay" />                        | `CancellationTokenSource Delay(int delayTick, Action task)`                   | Cancellation source for the timer              |
 | <ApiRef name="ISchedulerService" member="Repeat" />                       | `CancellationTokenSource Repeat(int periodTick, Action task)`                 | Cancellation source for the timer              |
 | <ApiRef name="ISchedulerService" member="DelayAndRepeat" />               | `CancellationTokenSource DelayAndRepeat(int delayTick, int periodTick, Action task)` | Cancellation source for the timer       |
@@ -142,9 +162,10 @@ you always get one of the steps below from its static helpers:
 | <ApiRef name="ISchedulerService" member="AddTimer" />                     | `CancellationTokenSource AddTimer(Func<ITimerContext, TimerStep> task)`       | Cancellation source for the timer              |
 | <ApiRef name="ISchedulerService" member="StopOnMapChange" />              | `void StopOnMapChange(CancellationTokenSource cts)`                           | -                                              |
 
-On top of those, `NextTick`, `NextTickAsync`, `NextWorldUpdate` and
-`NextWorldUpdateAsync` each declare two `[Obsolete]` overloads taking
-`Func<Task?>`/`Func<Task<T?>>`; they throw `InvalidOperationException` and are
+On top of those, the dispatch methods declare `[Obsolete]` overloads taking
+`Func<Task?>`/`Func<Task<T?>>` (two each for `NextTick`, `NextTickAsync`,
+`NextWorldUpdate` and `NextWorldUpdateAsync`, plus `QueueOrNow` with its
+`onWorldUpdate` parameter); they throw `InvalidOperationException` and are
 documented in the callout above only so you don't use them.
 
 ## Reference

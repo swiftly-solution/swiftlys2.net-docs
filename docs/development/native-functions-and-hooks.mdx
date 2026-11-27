@@ -64,6 +64,51 @@ nint? interfaceAddress = Core.Memory.GetInterfaceByName("VEngineServer");
 | `Library.Server`        | `server`        |
 | `Library.NetworkSystem` | `networksystem` |
 
+### Binary Analysis Helpers (S2BinLib)
+
+`Core.Memory.S2BinLib` exposes <ApiRef name="IS2BinLib" />, the binary analysis layer behind those lookups: pattern scans, vtables and virtual functions, symbols, exports, strings, cross-references, file reads and trampolines. Every member takes the module name as its first argument (`"server"`, `"engine2"`, ... - see <ApiRef name="Library" />); members ending in `Rva` work with offsets relative to the module base, the others with runtime addresses, and lookups return `null`, `false` or an empty list when nothing was found. The most used members:
+
+| Member                              | Signature                                                           | Returns                                                              |
+| ----------------------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `GetModuleBase`                     | `nint? GetModuleBase(string binary)`                                | runtime base address of the module                                   |
+| `IsBinaryLoaded`                    | `bool IsBinaryLoaded(string binary)`                                | whether the module is loaded in S2BinLib                             |
+| `LoadBinary` / `UnloadBinary`       | `bool LoadBinary(string binary)`                                    | whether the module was loaded/unloaded                               |
+| `PatternScan`                       | `nint? PatternScan(string binary, string pattern)`                  | address of the first IDA-style pattern match                         |
+| `PatternScanRva`                    | `ulong? PatternScanRva(string binary, string pattern)`              | the same match as an RVA                                             |
+| `PatternScanAll`                    | `IReadOnlyList<nint> PatternScanAll(string binary, string pattern)`  | every match                                                          |
+| `FindVTable`                        | `nint? FindVTable(string binary, string vtableName)`                | the vtable address; `"Outer::Inner"` for nested classes (2 levels max) |
+| `FindVFunc`                         | `nint? FindVFunc(string binary, string vtableName, int index)`      | the virtual function at `index`                                      |
+| `FindVFunc`                         | `nint? FindVFunc(nint vtable, int index)`                           | the same, from an already resolved vtable address                    |
+| `FindVFuncContaining`               | `S2VFunc? FindVFuncContaining(string binary, ulong rva)`            | the virtual function containing that RVA                             |
+| `FindVFuncWithString`               | `S2VFunc? FindVFuncWithString(string binary, string value)`         | the virtual function referencing that string                         |
+| `GetVTableFuncCount`                | `int? GetVTableFuncCount(string binary, string vtableName)`         | number of virtual functions in the vtable                            |
+| `FindSymbol`                        | `nint? FindSymbol(string binary, string symbolName)`                | the symbol address, `null` when not found                            |
+| `FindExport`                        | `nint? FindExport(string binary, string exportName)`                | the export address, `null` when not found                            |
+| `FindString`                        | `nint? FindString(string binary, string value)`                     | the address of the string literal, `null` when not found             |
+| `ReadByRva`                         | `byte[]? ReadByRva(string binary, ulong rva, int size)`             | `size` bytes at that RVA                                             |
+| `FollowXref`                        | `nint? FollowXref(nint address)`                                    | the target of the cross-reference at `address`                       |
+| `FindFuncStart`                     | `nint? FindFuncStart(string binary, ulong rva)`                     | start of the function containing the RVA                             |
+| `FindXrefFuncWithString`            | `nint? FindXrefFuncWithString(string binary, string value)`         | the function referencing that string                                 |
+| `MakeSignature`                     | `string? MakeSignature(string binary, ulong funcRva)`               | an IDA-style signature for the function                              |
+| `InstallTrampoline`                 | `nint? InstallTrampoline(nint address)`                             | the trampoline address installed at `address`                        |
+
+<ApiRef name="S2VFunc" /> is a `record struct` with `VTableName` (`string`), `Index` (`int`) and `Address` (`nint`); <ApiRef name="S2VFuncRva" /> carries `Rva` (`ulong`) instead of `Address`:
+
+```csharp
+if (Core.Memory.S2BinLib.FindVFuncWithString(Library.Server, "GiveNamedItem") is { } vFunc)
+{
+    Console.WriteLine($"{vFunc.VTableName}[{vFunc.Index}] = 0x{vFunc.Address:X}");
+}
+
+nint? pattern = Core.Memory.S2BinLib.PatternScan(Library.Server, "55 8B EC 83 EC 08");
+string? signature = Core.Memory.S2BinLib.MakeSignature(Library.Server, 0x1A2B3C0);
+```
+
+<Callout type="info">
+    `DumpVTables(binary)` and `DumpXrefs(binary)` cache metadata that some
+    vtable- and cross-reference-based lookups need before they work.
+</Callout>
+
 ### Other Memory Helpers
 
 The same service resolves cross-references, inspects object pointers, converts raw addresses and allocates memory:
@@ -162,7 +207,7 @@ Guid midHookId = mem.AddHook((ref MidHookContext ctx) =>
 mem.RemoveHook(midHookId);
 ```
 
-`AddHook` here takes a <ApiRef name="MidHookDelegate" /> (`void (ref MidHookContext)`) and returns a `Guid`, and the wrapper exposes `Address`. See <ApiRef name="MidHookContext" /> for the full register list - every general-purpose register (`RAX`, `RBX`, `RCX`, `RDX`, `RSI`, `RDI`, `RBP`, `RSP`, `R8`-`R15`, `RIP`, `RFLAGS`, plus the internal `TRAMPOLINE_RSP`) and `XMM0`-`XMM15` as <ApiRef name="Xmm" /> structs (fixed buffers `U8`, `U16`, `U32`, `U64`, `F32`, `F64`). `MidHookContext.ToString()` dumps every register in one go.
+`AddHook` here takes a <ApiRef name="MidHookDelegate" /> (`void (ref MidHookContext)`) and returns a `Guid`, and the wrapper exposes `Address`. See <ApiRef name="MidHookContext" /> for the full register list - every general-purpose register (`RAX`, `RBX`, `RCX`, `RDX`, `RSI`, `RDI`, `RBP`, `RSP`, `R8`-`R15`, `RIP`, `RFLAGS`, plus `TRAMPOLINE_RSP`) and `XMM0`-`XMM15` as <ApiRef name="Xmm" /> structs (fixed buffers `U8`, `U16`, `U32`, `U64`, `F32`, `F64`). `MidHookContext.ToString()` dumps every register in one go.
 
 ## Hook Modes and Results
 
@@ -202,6 +247,9 @@ private void OnTakeDamagePre(ref TakeDamageEntityPreContext ctx)
 
 // Register in Load():
 Core.GameHooks.Entities.TakeDamage.Pre += OnTakeDamagePre;
+
+// Unregister in Unload():
+Core.GameHooks.Entities.TakeDamage.Pre -= OnTakeDamagePre;
 ```
 
 The same handler can be registered by attribute instead. <ApiRef name="GameHookHandler" /> takes the mode in its constructor, sits on a method whose signature matches the hook's delegate, and allows one attribute per method (`AllowMultiple = false`); the methods are discovered on registered instances - see [Using Attributes](/docs/development/using-attributes):
@@ -251,7 +299,7 @@ Every hook has a `Pre` and a `Post` context, both carrying a `Params` field with
 
 Some hooks carry extra settable params: `Movement.AirAccelerate` adds `WishDirection` (`Vector`), `WishSpeed` (`float`) and `Acceleration` (`float`), `Movement.GroundAccelerate` adds `WishDirection`, `FrameTime` (`float`, read-only), `WishSpeed` and `Acceleration`, `Movement.TryPlayerMove` adds `FirstDest` (`Vector`), `FirstTrace` (<ApiRef name="TraceResult" />, read-only) and `IsSurfing` (`bool`), `Movement.CategorizePosition` a `StayOnGround` (`bool`), and `Movement.FullWalkMove` a `Ground` (`bool`).
 
-`IMoveData` and `IUserCmd` wrap native pointers - `IMoveData.From(address)` and `IUserCmd.From(address)` build one from an address, and `Address`/`TypedAddress` are exposed back.
+`IMoveData` and `IUserCmd` wrap native pointers - `IMoveData.From(address)` and `IUserCmd.From(address)` build one from an address, and both expose `Address`; `IMoveData` additionally exposes the typed pointer as `TypedAddress` (`CMoveData*`).
 
 ### Return Values
 

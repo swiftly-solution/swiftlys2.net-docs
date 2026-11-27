@@ -61,7 +61,10 @@ implementation registered under the key as a plain `TInterface`, without the
 `bool` result `TryGetSharedInterface` gives - use it for mandatory dependencies
 whose provider is always present.
 <ApiRef name="IInterfaceManager" member="HasSharedInterface" /> is a quick
-presence check.
+presence check: it takes only a key, so it tells you whether something is
+registered under it, not whether that value is usable as a particular
+`TInterface` - when the type matters, ask `TryGetSharedInterface<TInterface>`
+instead.
 
 ```csharp
 private IEconomyApi? _economyApi;
@@ -78,6 +81,7 @@ public override void UseSharedInterface(IInterfaceManager interfaceManager)
 
 ### <ApiRef name="IInterfaceManager" /> Members
 
+<ApiRef name="IInterfaceManager" /> is in the `SwiftlyS2.Shared` namespace, and
 `TInterface` is `class`-constrained on every generic member:
 
 | Member                                                             | Signature                                                                                 | Returns                                                                     |
@@ -85,7 +89,7 @@ public override void UseSharedInterface(IInterfaceManager interfaceManager)
 | <ApiRef name="IInterfaceManager" member="AddSharedInterface" />     | `void AddSharedInterface<TInterface, TImpl>(string key, TImpl implInstance)`               | -                                                                           |
 | <ApiRef name="IInterfaceManager" member="TryGetSharedInterface" />  | `bool TryGetSharedInterface<TInterface>(string key, out TInterface? instance)`             | `true` when the key is registered; `instance` is then non-null (annotated `[NotNullWhen(true)]`) |
 | <ApiRef name="IInterfaceManager" member="GetSharedInterface" />     | `TInterface GetSharedInterface<TInterface>(string key)`                                    | the implementation registered under `key`                                   |
-| <ApiRef name="IInterfaceManager" member="HasSharedInterface" />     | `bool HasSharedInterface(string key)`                                                      | whether a key is registered                                                 |
+| <ApiRef name="IInterfaceManager" member="HasSharedInterface" />     | `bool HasSharedInterface(string key)`                                                      | whether a key is registered (takes no type parameter)                       |
 
 ## Complete Example
 

@@ -14,10 +14,12 @@ SwiftlyS2's typed net-message API sends generated protobuf messages and intercep
 Every generated message (`CUserMessageShake`, `CCLCMsg_Move`, `CMsgSosStartSoundEvent`, ...) implements three interfaces:
 
 - <ApiRef name="INetMessage`1" /> - sending: <ApiRef name="INetMessage`1" member="Send" />, `SendToAllPlayers()`, `SendToPlayer(int playerId)` and the <ApiRef name="INetMessage`1" member="Recipients" /> filter, plus the static abstract `MessageId` (`int`) and `MessageName` (`string`), which generic code can read through its type parameter (`T.MessageId`).
-- <ApiRef name="ITypedProtobuf`1" /> - field-based access through <ApiRef name="ITypedProtobuf`1" member="Accessor" /> (<ApiRef name="IProtobufAccessor" />). It is an <ApiRef name="INativeHandle" /> as well, so `IsValid` and `Address` are available on the message itself.
+- <ApiRef name="ITypedProtobuf`1" /> - field-based access through <ApiRef name="ITypedProtobuf`1" member="Accessor" /> (<ApiRef name="IProtobufAccessor" />). It is an <ApiRef name="INativeHandle" /> as well, so `IsValid`, `Address` and `DangerouslySetAddress(IntPtr)` are available on the message itself.
 - `IDisposable` - only messages built with <ApiRef name="INetMessageService" member="Create" /> own a native handle, so dispose those (or wrap them in `using`) once you're done.
 
 Fields declared in the message's protobuf definition get typed properties directly on the generated type (`msg.Duration`, `msg.SoundeventHash`, ...). Declared repeated fields are typed as <ApiRef name="IProtobufRepeatedFieldValueType`1" /> - an `IList<T>` of scalar values - or <ApiRef name="IProtobufRepeatedFieldSubMessageType`1" /> for nested messages, which exposes `Count`, `Get(index)`, `Add()` and `Clear()` on top of enumeration. Both derive from the <ApiRef name="IRepeatedField" /> marker interface.
+
+Every generic API and every handler is constrained to `T : ITypedProtobuf<T>, INetMessage<T>, IDisposable` - every generated message satisfies that.
 
 ## Sending Net Messages
 
@@ -73,13 +75,17 @@ foreach (int slot in msg.Recipients.GetRecipients())
 }
 ```
 
-`AddRecipient`/`RemoveRecipient` take player slots `0`-`63` and throw `IndexOutOfRangeException` outside that range. The filter also exposes `RecipientsMask` (`ulong`, the raw mask) and `ToMask()`, the buffer type `BufferType` (<ApiRef name="NetChannelBufType_t" />: `BUF_DEFAULT`, `BUF_UNRELIABLE`, `BUF_RELIABLE`, `BUF_VOICE`, defaulting to `BUF_RELIABLE` for a newly constructed filter), and the `InitMessage`, `DisabledPrediction` and `PredictedSlot` fields. The static `FromMask(ulong)`, `FromPlayers(...)` and `FromSingle(int)` factories build a standalone filter for APIs that take one by value.
+`AddRecipient`/`RemoveRecipient` take player slots `0`-`63` and throw `IndexOutOfRangeException` outside that range. The filter also exposes `RecipientsMask` (`ulong`, the raw mask), `ToMask()`, the `BufferType` field (<ApiRef name="NetChannelBufType_t" />: `BUF_DEFAULT`, `BUF_UNRELIABLE`, `BUF_RELIABLE`, `BUF_VOICE`, defaulting to `BUF_RELIABLE` for a newly constructed filter) and the `InitMessage`, `DisabledPrediction` and `PredictedSlot` fields. Its constructor is `CRecipientFilter(NetChannelBufType_t bufType = BUF_RELIABLE, bool initMessage = false)`, so a standalone filter can be built directly for APIs that take one by value.
 
-`Recipients` is returned by reference, so next to changing the filter in place you can assign a whole one - useful when you already built a filter elsewhere:
+The static factories are `FromMask(ulong playerMask)`, `FromSingle(int player)`, `FromPlayers(params int[] players)` and two `IPlayer` overloads - `FromPlayers(params IPlayer[] players)` and `FromPlayers(IEnumerable<IPlayer> players)` - which skip invalid players and add the rest by `Slot`:
 
 ```csharp
 msg.Recipients = CRecipientFilter.FromSingle(0);
+msg.Recipients = CRecipientFilter.FromMask(0b11UL);
+msg.Recipients = CRecipientFilter.FromPlayers(player1, player2);
 ```
+
+`Recipients` is returned by reference, so next to changing the filter in place you can assign a whole one - useful when you already built a filter elsewhere.
 
 See [Sound Events](/docs/development/soundevents) for another user of the same struct.
 
@@ -161,7 +167,7 @@ public override void Load(bool hotReload)
 
 ## HookResult Behavior
 
-Net-message hooks return `HookResult.Continue` (allow) or `HookResult.Stop` (block) - in client hooks that blocks delivery to the server, in server/internal hooks it blocks delivery to clients.
+Net-message hooks return `HookResult.Continue` (allow) or `HookResult.Stop` (block) - in client hooks that blocks delivery to the server, in server/internal hooks it blocks delivery to clients. <ApiRef name="HookResult" /> also has `Handled` (skip the remaining hooks but let the message through) and `CancelOriginal` (run the remaining hooks but block the message), the same way the other hook pipelines use them - see [Commands](/docs/development/commands).
 
 ## Unhooking
 
@@ -238,6 +244,45 @@ The remaining members cover nested messages and untyped values:
 
 - `GetNestedMessage(fieldName)`, `GetRepeatedNestedMessage(fieldName, index)` and `AddNestedMessage(fieldName)` return a native pointer (`nint`) to a nested message - wrap it in a typed message again with <ApiRef name="Helper" member="AsProtobuf" />, `Helper.AsProtobuf<T>(nint ptr, bool manuallyAllocated)`, where `manuallyAllocated` tells the wrapper whether it owns the pointer (`true` for a message you allocated yourself, `false` for one borrowed from the game).
 - `HasField(fieldName)` checks for presence, `GetRepeatedFieldSize(fieldName)` counts the elements of a repeated field, `ClearRepeatedField(fieldName)` empties one repeated field and `Clear()` resets the whole message.
-- Generic `Set<T>`/`Get<T>`, `Add<T>` and `SetRepeated<T>`/`GetRepeated<T>` overloads are available alongside the typed helpers.
+- Generic `Set<T>(fieldName, value)`/`Get<T>(fieldName)`, `Add<T>(fieldName, value)` and `SetRepeated<T>(fieldName, index, value)`/`GetRepeated<T>(fieldName, index)` overloads are available alongside the typed helpers.
 
-As a native wrapper, the accessor is also an <ApiRef name="INativeHandle" /> - `IsValid` and `Address` are available on it.
+As a native wrapper, the accessor is also an <ApiRef name="INativeHandle" /> - `IsValid`, `Address` and `DangerouslySetAddress(IntPtr)` are available on it.
+
+## Reference
+
+Every handler delegate is nested in <ApiRef name="INetMessageService" />, with `T` constrained to `ITypedProtobuf<T>`, `INetMessage<T>` and `IDisposable`:
+
+| Delegate                            | Signature                       | Returns                                     |
+| ----------------------------------- | ------------------------------- | ------------------------------------------- |
+| `ClientNetMessageHandler<T>`        | `HookResult (T msg, int playerId)` | whether the message continues to be sent |
+| `ServerNetMessageHandler<T>`        | `HookResult (T msg)`               | whether the message continues to be sent |
+| `ServerNetMessageInternalHandler<T>` | `HookResult (T msg, int playerId)` | whether the message continues to be sent |
+
+Every member of <ApiRef name="INetMessageService" />:
+
+| Member                                                                   | Signature                                                                                  | Returns                                   |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| <ApiRef name="INetMessageService" member="HookClientMessage" />          | `Guid HookClientMessage<T>(ClientNetMessageHandler<T> callback)`                            | the guid to pass to `Unhook`              |
+| <ApiRef name="INetMessageService" member="HookServerMessage" />          | `Guid HookServerMessage<T>(ServerNetMessageHandler<T> callback)`                             | the guid to pass to `Unhook`              |
+| <ApiRef name="INetMessageService" member="HookServerMessageInternal" />  | `Guid HookServerMessageInternal<T>(ServerNetMessageInternalHandler<T> callback)`             | the guid to pass to `Unhook`              |
+| <ApiRef name="INetMessageService" member="Unhook" />                     | `void Unhook(Guid guid)`                                                                   | -                                         |
+| <ApiRef name="INetMessageService" member="UnhookClientMessage" />        | `void UnhookClientMessage<T>()`                                                            | -                                         |
+| <ApiRef name="INetMessageService" member="UnhookServerMessage" />        | `void UnhookServerMessage<T>()`                                                            | -                                         |
+| <ApiRef name="INetMessageService" member="UnhookServerMessageInternal" /> | `void UnhookServerMessageInternal<T>()`                                                   | -                                         |
+| <ApiRef name="INetMessageService" member="Create" />                     | `T Create<T>()`                                                                            | the new message; dispose it when done     |
+| <ApiRef name="INetMessageService" member="Send" />                       | `void Send<T>(Action<T> configureMessage)`                                                  | -                                         |
+
+Members a generated message type carries, through <ApiRef name="INetMessage`1" />, <ApiRef name="ITypedProtobuf`1" />, <ApiRef name="INativeHandle" /> and `IDisposable`:
+
+| Member                                                    | Type                        | Notes                                              |
+| --------------------------------------------------------- | --------------------------- | -------------------------------------------------- |
+| `MessageId`                                               | `int` (static abstract)     | readable through the type parameter, `T.MessageId` |
+| `MessageName`                                             | `string` (static abstract)  | readable through the type parameter, `T.MessageName` |
+| <ApiRef name="INetMessage`1" member="Recipients" />        | `ref CRecipientFilter`      | recipient filter, configurable and assignable      |
+| <ApiRef name="INetMessage`1" member="Send" />              | `void`                      | sends with the current recipient filter            |
+| `SendToAllPlayers()`                                      | `void`                      | sends to every player                              |
+| `SendToPlayer(int playerId)`                              | `void`                      | sends to one player slot                           |
+| <ApiRef name="ITypedProtobuf`1" member="Accessor" />       | <ApiRef name="IProtobufAccessor" /> | field-based access by protobuf field name   |
+| `IsValid`, `Address`                                      | `bool`, `IntPtr`            | from <ApiRef name="INativeHandle" />               |
+| `DangerouslySetAddress(IntPtr)`                           | `void`                      | from <ApiRef name="INativeHandle" />               |
+| `Dispose()`                                               | `void`                      | releases a message created with `Create<T>()`      |

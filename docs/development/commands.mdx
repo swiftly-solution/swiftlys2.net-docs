@@ -105,7 +105,21 @@ See <ApiRef name="ICommandService" member="RegisterCommandAlias" /> for the full
 
 `Core.Command` can enumerate what's registered, e.g. for a `/plugins commands` admin command: <ApiRef name="ICommandService" member="GetAllCommands" /> returns the registered names, <ApiRef name="ICommandService" member="GetCommandsByPlugin" /> takes a plugin name, <ApiRef name="ICommandService" member="GetAllCommandsByPlugin" /> maps every plugin name to its commands, and <ApiRef name="ICommandService" member="GetAllCommandsInfo" /> returns every command in one list - the latter three return <ApiRef name="CommandInfo" />.
 
-<ApiRef name="CommandInfo" /> is a `record` with four `required`, init-only properties: `CommandName`, `RegisterRaw`, `Permission` and `HelpText`.
+<ApiRef name="CommandInfo" /> is a `record` with four `required`, init-only properties:
+
+| Property      | Type     | Meaning                                                       |
+| ------------- | -------- | ------------------------------------------------------------- |
+| `CommandName` | `string` | The name of the command.                                      |
+| `RegisterRaw` | `bool`   | Whether the command was registered without the `sw_` prefix.  |
+| `Permission`  | `string` | The permission required to use the command.                   |
+| `HelpText`    | `string` | The help text for the command.                                |
+
+```csharp
+foreach (var info in Core.Command.GetAllCommandsInfo())
+{
+    Console.WriteLine($"{info.CommandName} ({info.Permission}): {info.HelpText}");
+}
+```
 
 ## Client Command Hooks
 
@@ -145,6 +159,35 @@ public HookResult OnClientChat(int playerId, string text, bool teamonly)
 <Callout type="warning">
     `HookResult.Stop` cancels the original call - the command is not processed and
     the chat message is not broadcast - and skips the remaining hooks, so use it
-    deliberately. See <ApiRef name="HookResult" /> for the other values
-    (`Continue`, `Handled`, `CancelOriginal`).
+    deliberately. `Handled` skips the remaining hooks but lets the original call
+    run, and `CancelOriginal` does the opposite - both are available on
+    <ApiRef name="HookResult" /> next to `Continue`.
 </Callout>
+
+## Reference
+
+The handler delegate types are nested in <ApiRef name="ICommandService" />:
+
+| Delegate                | Signature                                              | Returns                                  |
+| ----------------------- | ------------------------------------------------------ | ---------------------------------------- |
+| `CommandListener`       | `void (ICommandContext context)`                        | -                                        |
+| `ClientCommandHandler`  | `HookResult (int playerId, string commandLine)`         | whether the command continues to be sent |
+| `ClientChatHandler`     | `HookResult (int playerId, string text, bool teamonly)` | whether the message continues to be sent |
+
+Every member of <ApiRef name="ICommandService" />:
+
+| Member                                                          | Signature                                                                                                                                                | Returns                                         |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| <ApiRef name="ICommandService" member="RegisterCommand" />       | `Guid RegisterCommand(string commandName, CommandListener handler, bool registerRaw = false, string permission = "", string helpText = "SwiftlyS2 registered command")` | the guid of the command                         |
+| <ApiRef name="ICommandService" member="RegisterCommand" />       | `Guid RegisterCommand(string commandName, CommandListener handler, bool registerRaw, string permission)` (backward compatibility overload)                | the guid of the command                         |
+| <ApiRef name="ICommandService" member="RegisterCommandAlias" />  | `void RegisterCommandAlias(string commandName, string alias, bool registerRaw = false)`                                                                  | -                                               |
+| <ApiRef name="ICommandService" member="UnregisterCommand" />     | `void UnregisterCommand(Guid guid)` / `void UnregisterCommand(string commandName)`                                                                       | -                                               |
+| <ApiRef name="ICommandService" member="IsCommandRegistered" />   | `bool IsCommandRegistered(string commandName)`                                                                                                           | whether the command is registered               |
+| <ApiRef name="ICommandService" member="HookClientCommand" />     | `Guid HookClientCommand(ClientCommandHandler handler)`                                                                                                   | the guid to pass to `UnhookClientCommand`       |
+| <ApiRef name="ICommandService" member="UnhookClientCommand" />   | `void UnhookClientCommand(Guid guid)`                                                                                                                    | -                                               |
+| <ApiRef name="ICommandService" member="HookClientChat" />        | `Guid HookClientChat(ClientChatHandler handler)`                                                                                                         | the guid to pass to `UnhookClientChat`          |
+| <ApiRef name="ICommandService" member="UnhookClientChat" />      | `void UnhookClientChat(Guid guid)`                                                                                                                       | -                                               |
+| <ApiRef name="ICommandService" member="GetAllCommands" />        | `List<string> GetAllCommands()`                                                                                                                          | names of all plugin-registered commands         |
+| <ApiRef name="ICommandService" member="GetCommandsByPlugin" />   | `List<CommandInfo> GetCommandsByPlugin(string pluginName)`                                                                                                | the commands registered by that plugin          |
+| <ApiRef name="ICommandService" member="GetAllCommandsByPlugin" /> | `Dictionary<string, List<CommandInfo>> GetAllCommandsByPlugin()`                                                                                          | plugin name mapped to its commands              |
+| <ApiRef name="ICommandService" member="GetAllCommandsInfo" />    | `List<CommandInfo> GetAllCommandsInfo()`                                                                                                                  | every plugin-registered command                 |

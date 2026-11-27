@@ -136,13 +136,13 @@ Console.WriteLine(info.ToString()); // connection string built from the info
 
 `Options` is the one member outside the positional parameter list: it is an init-only property, set with an object initializer, and it holds the configured values as strings - including those written as numbers or booleans in the configuration.
 
-<ApiRef name="DatabaseConnectionInfo" member="ToString" /> renders the connection string: it returns `RawUri` unchanged when that is set, otherwise it builds the driver's own format - `Data Source=...` for `sqlite`, `Server=...;Port=...;Database=...;User ID=...;Password=...` (plus `Timeout` when it is greater than `0`) for `mysql` and `postgresql`, and `driver://user:pass@host:port/database` for any other driver - and appends every entry of `Options`. When `Port` is `0` on a `mysql` or `postgresql` connection, the default port is used (`3306` and `5432`). Values with leading or trailing whitespace, or containing `;`, `"`, `'` or `=`, are quoted.
+<ApiRef name="DatabaseConnectionInfo" member="ToString" /> renders the connection string: it returns `RawUri` unchanged when that is set, otherwise it builds the driver's own format - `Data Source=...` for `sqlite`, `Server=...;Port=...;Database=...;User ID=...;Password=...` (plus `Timeout` when it is greater than `0`) for `mysql` and `postgresql`, and `driver://user:pass@host:port/database` for any other driver. Every entry of `Options` is appended to the `sqlite`, `mysql` and `postgresql` forms only - the generic URI form gets none. When `Port` is `0` on a `mysql` or `postgresql` connection, the default port is used (`3306` and `5432`). Option values with leading or trailing whitespace, or containing `;`, `"`, `'` or `=`, are quoted, with a `"` inside a quoted value doubled.
 
 <Callout type="warning">
     Avoid logging secrets like `Pass` in production - a rendered connection string contains it.
 </Callout>
 
-`services.AddSwiftly(Core)` registers <ApiRef name="IDatabaseService" /> as a singleton next to the other core services, so it can be injected like any other dependency - see [Dependency Injection](/docs/guides/dependency-injection).
+`services.AddSwiftly(Core)` registers <ApiRef name="IDatabaseService" /> as a singleton next to the other core services (regardless of its `addLogger` and `addConfiguration` arguments), so it can be injected like any other dependency - see [Dependency Injection](/docs/guides/dependency-injection).
 
 ## Using ADO.NET or an ORM
 

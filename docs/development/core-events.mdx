@@ -2,7 +2,7 @@
 title: Core Events
 ---
 
-Core events are SwiftlyS2's own engine/framework callbacks - client lifecycle, entity lifecycle, convar and command changes, console output, server startup, tick/world update - separate from the CS2 [game events](/docs/development/game-events) system. They're exposed through `Core.Event` (<ApiRef name="IEventSubscriber" />), a set of plain C# events.
+Core events are SwiftlyS2's own engine/framework callbacks - client lifecycle, entity lifecycle, convar and command changes, console output, server startup, tick/world update, target resolution - separate from the CS2 [game events](/docs/development/game-events) system. They're exposed through `Core.Event` (<ApiRef name="IEventSubscriber" />), a set of plain C# events.
 
 ## Subscribing
 
@@ -55,7 +55,7 @@ public void OnClientConnected(IOnClientConnectedEvent @event)
 }
 ```
 
-The other events with a settable `Result` are `OnCommandExecuteHook` (only in the `Pre` pass) and the obsolete `OnEntityTakeDamage`, `OnWeaponServicesDropWeaponHook`, `OnEntityIdentityAcceptInputHook` and `OnEntityFireOutputHook`. What each <ApiRef name="HookResult" /> value does to the remaining hooks and the original call is described in [Native Functions and Hooks](/docs/development/native-functions-and-hooks#hook-modes-and-results).
+The other events with a settable `Result` are `OnCommandExecuteHook` (only in the `Pre` pass), `OnFindTargettedPlayers` (where it only skips the remaining handlers for the current candidate - veto candidates through `IsMatch` instead) and the obsolete `OnEntityTakeDamage`, `OnWeaponServicesDropWeaponHook`, `OnEntityIdentityAcceptInputHook` and `OnEntityFireOutputHook`. What each <ApiRef name="HookResult" /> value does to the remaining hooks and the original call is described in [Native Functions and Hooks](/docs/development/native-functions-and-hooks#hook-modes-and-results).
 
 ## Unsubscribing
 
@@ -84,7 +84,7 @@ public override void Unload()
 
 ## Hot Path Events
 
-`OnTick`, `OnWorldUpdate`, and the obsolete `OnClientProcessUsercmds` are the hot-path callbacks - the first two fire every tick/frame, `OnClientProcessUsercmds` once per user-command batch of a client. Keep handlers allocation-free and cheap; push anything heavier to a scheduled task or a flag.
+`OnTick`, `OnWorldUpdate`, and the obsolete `OnClientProcessUsercmds` are the hot-path callbacks - the first two fire every tick/frame, `OnClientProcessUsercmds` once per user-command batch of a client. `OnFindTargettedPlayers` also runs once per candidate while a target string is resolved. Keep handlers allocation-free and cheap; push anything heavier to a scheduled task or a flag.
 
 `OnTick` doesn't run while the server is in hibernation, `OnWorldUpdate` does.
 
@@ -105,7 +105,7 @@ Several `Core.Event` members that used to be the only way to intercept a native 
 | `OnEntityIdentityAcceptInputHook`                           | `Core.GameHooks.Entities.AcceptInput`                |
 | `OnEntityFireOutputHook`                                    | `Core.GameHooks.Entities.FireOutput`                 |
 
-The parameter interfaces of these events are `[Obsolete]` as well, so a handler that takes one of these event objects produces a compiler warning too.
+The event objects of these hooks are `[Obsolete]` as well, so a handler that takes one of them produces a compiler warning too. The exceptions are `IOnEntityStartTouchEvent`, `IOnEntityTouchEvent`, `IOnEntityEndTouchEvent`, `IOnEntityIdentityAcceptInputHookEvent` and `IOnEntityFireOutputHookEvent` - those stay non-obsolete, and the last two are also the event objects the entity I/O handlers receive (see [Entity](/docs/development/entity)).
 
 Their event objects still carry the parameters they always did:
 
@@ -131,11 +131,13 @@ Each parameter interface lives under `SwiftlyS2.Shared.Events` and exposes only 
 ### Client Lifecycle
 
 - `OnClientConnected` - <ApiRef name="IOnClientConnectedEvent" />: `PlayerId` (`int`), settable `Result` (`HookResult`).
+- `OnClientConnectionEstablished` - <ApiRef name="IOnClientConnectionEstablishedEvent" />: `PlayerId` (`int`).
 - `OnClientDisconnected` - <ApiRef name="IOnClientDisconnectedEvent" />: `PlayerId` (`int`), `Reason` (`ENetworkDisconnectionReason`).
 - `OnClientPutInServer` - <ApiRef name="IOnClientPutInServerEvent" />: `PlayerId` (`int`), `Kind` (<ApiRef name="ClientKind" />).
 - `OnClientSteamAuthorize` - <ApiRef name="IOnClientSteamAuthorizeEvent" />: `PlayerId` (`int`).
 - `OnClientSteamAuthorizeFail` - <ApiRef name="IOnClientSteamAuthorizeFailEvent" />: `PlayerId` (`int`).
 - `OnClientKeyStateChanged` - <ApiRef name="IOnClientKeyStateChangedEvent" />: `PlayerId` (`int`), `Key` (<ApiRef name="KeyKind" />), `Pressed` (`bool`).
+- `OnClientSettingsChanged` - <ApiRef name="IOnClientSettingsChangedEvent" />: `PlayerId` (`int`). Fires when a client changed one or several replicated convars (name etc).
 - `OnClientVoice` - <ApiRef name="IOnClientVoiceEvent" />: `PlayerId` (`int`).
 
 ### Entity Lifecycle
@@ -162,6 +164,25 @@ The convar events are covered in more detail in [Convars](/docs/development/conv
 - `OnPrecacheResource` - <ApiRef name="IOnPrecacheResourceEvent" />: `AddItem(string path)` adds a resource to the precache list.
 - `OnStartupServer`, `OnTick`, `OnWorldUpdate`, `OnSteamAPIActivated` - no event object, the handler takes no parameters.
 
+### Player Targeting
+
+- `OnFindTargettedPlayers` - <ApiRef name="IOnFindTargettedPlayersEvent" />: `Player` (`IPlayer`, the player that initiated the search), `Target` (`string`, the raw target string - e.g. `@vip`, `#3` or part of a name), `SearchMode` (<ApiRef name="TargetSearchMode" />), `Candidate` (`IPlayer`, the player being tested), settable `IsMatch` (`bool`), settable `Result` (`HookResult`).
+
+The event fires for every candidate while `Core.PlayerManager.FindTargettedPlayers(player, target, searchMode, nameComparison)` (<ApiRef name="IPlayerManagerService" />) resolves a target, which makes it the place to add your own target selectors (like `@vip`) or to veto candidates:
+
+```csharp
+[EventListener<EventDelegates.OnFindTargettedPlayers>]
+public void OnFindTargettedPlayers(IOnFindTargettedPlayersEvent @event)
+{
+    if (@event.Target.Equals("@vip", StringComparison.OrdinalIgnoreCase))
+    {
+        @event.IsMatch = IsVip(@event.Candidate);
+    }
+}
+```
+
+`IsMatch` starts as the built-in verdict for the candidate (or the previous handler's), and holds the inclusion verdict. Candidates that already fail the `TargetSearchMode` filters are not passed in at all. Setting `Result` to `HookResult.Handled` or `HookResult.Stop` skips the remaining handlers for that candidate and keeps the current `IsMatch` - it doesn't drop the candidate by itself, so veto through `IsMatch = false`. The callback runs once per candidate, so keep it cheap.
+
 ### UI
 
 - `OnCustomHudClicked` - <ApiRef name="IOnCustomHudClickedEvent" />: `PlayerId` (`int`), `CustomHudLayout` (`CCSCustomHudLayout`), `ButtonId` (`string`). See [Custom HUD](/docs/development/custom-hud).
@@ -172,11 +193,13 @@ Two enums are carried by event objects rather than configured:
 
 <ApiRef name="ClientKind" /> is reported by `IOnClientPutInServerEvent.Kind`:
 
-| Value     | Number |
-| --------- | ------ |
-| `Player`  | `0`    |
-| `Bot`     | `1`    |
-| `Unknown` | `2`    |
+| Value    | Number |
+| -------- | ------ |
+| `Player` | `0`    |
+| `Bot`    | `1`    |
+| `HLTV`   | `2`    |
+
+`Unknown` is still around as an `[Obsolete]` alias of `HLTV`, so prefer `ClientKind.HLTV`.
 
 <ApiRef name="KeyKind" /> is reported by `IOnClientKeyStateChangedEvent.Key`:
 
